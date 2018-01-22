@@ -1,0 +1,3 @@
+<td data-format="{!! get_export_format_by_value($attribute->getValue()->getValue()) !!}">{!! $attribute->getValue()->getValue() !!}</td>
+<td data-format="{!! get_export_format_by_value($attribute->getValue()->getLeftDeviation()) !!}">{!! $attribute->getValue()->getLeftDeviation() !!}</td>
+<td data-format="{!! get_export_format_by_value($attribute->getValue()->getRightDeviation()) !!}">{!! $attribute->getValue()->getRightDeviation() !!}</td>

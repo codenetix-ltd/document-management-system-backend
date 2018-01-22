@@ -1,0 +1,1 @@
+<a class="btn btn-xs btn-primary" href="{!! $attribute->getValue() !!}"><i class="fa fa-floppy-o"></i></a>

@@ -1,0 +1,1 @@
+<input type="checkbox" name="selected_documents[]" value="{{ $id }}">

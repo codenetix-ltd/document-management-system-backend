@@ -1,0 +1,1 @@
+@include('partials.outputs.export.'.$attribute->getTypeName(), ['attribute' => $attribute])

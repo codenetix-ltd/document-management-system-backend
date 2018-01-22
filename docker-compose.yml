@@ -1,0 +1,56 @@
+version: '2'
+services:
+  app:
+    image: registry.gitlab.com/document-management-system/laraveldms:master
+    environment:
+      APP_ENV: production
+      APP_DEBUG: 'false'
+      APP_KEY: '"base64:N5A11hYX5GxzTqEPRtoRHjtdtqg65hGpw2Qis1V4b8M="'
+      DB_DATABASE: laraveldms
+      DB_HOST: mysql
+      DB_PASSWORD: JV4yLWsPlzQkCvMz3E5j
+      DB_USERNAME: root
+    stdin_open: true
+    volumes:
+    - /mnt/storage:/var/www/storage/app
+    links:
+    - mysql:mysql
+    ports:
+    - 80:80/tcp
+    restart: "always"
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: daemon
+        tag: application
+  mysql:
+    image: mysql:latest
+    environment:
+      MYSQL_DATABASE: laraveldms
+      MYSQL_ROOT_PASSWORD: JV4yLWsPlzQkCvMz3E5j
+    volumes:
+    - /mnt/mysql:/var/lib/mysql
+    ports:
+    - 3306:3306/tcp
+    restart: "always"
+    logging:
+     driver: syslog
+     options:
+       syslog-facility: daemon
+       tag: mysql
+  zabbix-agent:
+    pid: "host"
+    privileged: true
+    image: registry.gitlab.com/zabbix_treesoft/zabbix-agent:master
+    environment:
+      ZBX_HOSTNAME: DMS
+      ZBX_SERVER_HOST: zabbix.codenetix.com
+    volumes:
+      - /:/rootfs
+    ports:
+      - 10050:10050/tcp
+    logging:
+      driver: syslog
+      options:
+        syslog-facility: daemon
+        tag: zabbix

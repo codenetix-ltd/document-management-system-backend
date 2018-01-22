@@ -1,0 +1,1 @@
+<td>{!! $attribute->getValue() !!}</td>

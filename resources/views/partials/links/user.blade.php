@@ -1,0 +1,1 @@
+<a href="{!! route('users.edit', $id) !!}" target="_blank">{!! $name !!}</a>

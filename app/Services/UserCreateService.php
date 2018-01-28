@@ -2,89 +2,32 @@
 
 namespace App\Services;
 
-use App\Contracts\CommandInvokers\IAtomCommandInvoker;
-use App\Contracts\Commands\Role\IRoleGetCommand;
-use App\Contracts\Commands\User\IUserCreateCommand;
-use App\Contracts\Commands\User\IUserSetAvatarCommand;
-use App\Contracts\Exceptions\ICommandException;
 use App\Contracts\Models\IUser;
+use App\Contracts\Repositories\IUserRepository;
+use App\Contracts\Services\IUserAvatarUpdateService;
 use App\Contracts\Services\IUserCreateService;
-use App\Events\User\UserCreateEvent;
-use App\Role;
-use Illuminate\Contracts\Container\Container;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Auth;
 
-class UserCreateService extends AService implements IUserCreateService
+class UserCreateService implements IUserCreateService
 {
-    /** @var array $userData */
-    private $userData;
+    private $repository;
 
-    /** @var UploadedFile $file */
-    private $file;
+    private $userAvatarUpdateService;
 
-    /** @var IUser $user */
-    private $user;
-
-    /**
-     * UserCreateService constructor.
-     * @param Container $container
-     * @param array $userData
-     * @param UploadedFile $file
-     */
-    public function __construct(Container $container, array $userData, UploadedFile $file = null)
+    public function __construct(IUserRepository $repository, IUserAvatarUpdateService $userAvatarUpdateService)
     {
-        parent::__construct($container);
-
-        $this->userData = $userData;
-        $this->file = $file;
+        $this->repository = $repository;
+        $this->userAvatarUpdateService = $userAvatarUpdateService;
     }
 
-
-    /**
-     * @throws ICommandException
-     * @return void
-     */
-    public function execute()
+    public function create(IUser $user, UploadedFile $file = null) : IUser
     {
-        $invoker = app()->make(IAtomCommandInvoker::class);
+        $user = $this->repository->create($user);
 
-        $userCreateCommand = app()->makeWith(IUserCreateCommand::class, [
-            'userData' => $this->userData
-        ]);
-        $invoker->invoke($userCreateCommand);
-        $user = $userCreateCommand->getResult();
-
-        if ($this->file) {
-            $userSetAvatarCommand = app()->makeWith(IUserSetAvatarCommand::class, [
-                'user' => $user,
-                'file' => $this->file
-            ]);
-            $invoker->invoke($userSetAvatarCommand);
-            $user = $userSetAvatarCommand->getResult();
+        if ($file) {
+            $user = $this->userAvatarUpdateService->update($user, $file);
         }
 
-        $role = Role::whereName('owner')->first();
-        if ($role) {
-            $user->roles()->syncWithoutDetaching($role->id);
-        }
-
-
-
-        $this->user = $user;
-
-        event(new UserCreateEvent(Auth::user(), $user));
-
-        $this->executed = true;
-    }
-
-    /**
-     * @return IUser
-     */
-    public function getResult()
-    {
-        $this->isExecuted();
-
-        return $this->user;
+        return $user;
     }
 }

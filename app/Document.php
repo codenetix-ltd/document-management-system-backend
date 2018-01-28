@@ -48,14 +48,9 @@ class Document extends Model implements IDocument, IHasOwnerId, IHasId
         return $this->hasMany(DocumentVersion::class)->orderBy('created_at', 'DESC');
     }
 
-    public function factories()
+    public function tags()
     {
-        return $this->belongsToMany(Factory::class, 'document_factories');
-    }
-
-    public function labels()
-    {
-        return $this->belongsToMany(Label::class, 'document_label');
+        return $this->belongsToMany(Tag::class, 'document_tag');
     }
 
     public function logs()

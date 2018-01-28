@@ -2,42 +2,28 @@
 
 namespace App;
 
-use App\Contracts\Entity\IHasId;
-use App\Contracts\Entity\IHasOwnerId;
 use App\Contracts\Models\IUser;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Laravel\Passport\HasApiTokens;
 
-class User extends Authenticatable implements IUser, IHasId, IHasOwnerId
+class User extends Authenticatable implements IUser
 {
-    use Notifiable;
+    use Notifiable, HasApiTokens;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
+    private $templates_ids;
+
     protected $fillable = [
         'full_name', 'email', 'password'
     ];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
     protected $hidden = [
-        'password', 'remember_token',
+        'password', 'remember_token', 'avatar_file_id'
     ];
 
     public function templates()
     {
         return $this->belongsToMany(Template::class, "user_template");
-    }
-
-    public function factories()
-    {
-        return $this->belongsToMany(Factory::class, "user_factory");
     }
 
     public function documents()
@@ -63,64 +49,87 @@ class User extends Authenticatable implements IUser, IHasId, IHasOwnerId
         $this->attributes['password'] = bcrypt($password);
     }
 
-    public function hasAnyRole($roles)
-    {
-        if (is_array($roles)) {
-            return $this->roles()->whereIn('name', $roles)->exists();
-        } else {
-            return $this->roles()->where('name', $roles)->exists();
-        }
-    }
-
-    public function hasAnyPermission($permissions)
-    {
-        if (is_array($permissions)) {
-            foreach ($permissions as $permission) {
-                foreach ($this->roles as $role) {
-                    if ($role->hasPermission($permission)) return true;
-                }
-            }
-        } else {
-            foreach ($this->roles as $role) {
-                if ($role->hasPermission($permissions)) return true;
-            }
-        }
-
-        return false;
-    }
-
-    public function roles()
-    {
-        return $this->belongsToMany(Role::class, 'user_role');
-    }
-
     public function logs()
     {
         return $this->morphMany(Log::class, 'reference');
     }
 
-    public function getName()
+    public function setId(int $id): IUser
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function setFullName(string $fullName): IUser
+    {
+        $this->full_name = $fullName;
+
+        return $this;
+    }
+
+    public function getFullName(): string
     {
         return $this->full_name;
     }
 
-    public function getId() : int
+    public function setEmail(string $email): IUser
     {
-        return $this->id;
+        $this->email = $email;
+
+        return $this;
     }
 
-    public function setId(int $id)
+    public function getEmail(): string
     {
-
+        return $this->email;
     }
 
-    public function getOwnerId() : int
+    public function setPassword(string $password): IUser
     {
-        return $this->id;
+        $this->password = $password;
+
+        return $this;
     }
 
-    public function setOwnerId(int $user) : void
+    public function setCreated(string $created): IUser
     {
-        // TODO: Implement setOwnerId() method.
+        $this->setCreatedAt($created);
+
+        return $this;
+    }
+
+    public function getCreated(): string
+    {
+        return $this->created_at;
+    }
+
+    public function setUpdated(string $updated): IUser
+    {
+        $this->setUpdatedAt($updated);
+
+        return $this;
+    }
+
+    public function getUpdated(): string
+    {
+        return $this->updated_at;
+    }
+
+    public function setTemplatesIds(array $ids): IUser
+    {
+        $this->templates_ids = $ids;
+
+        return $this;
+    }
+
+    public function getTemplatesIds(): ?array
+    {
+        return $this->templates_ids;
     }
 }

@@ -1,10 +1,8 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\User;
 
-use Illuminate\Foundation\Http\FormRequest;
-
-class ProfileUpdateRequest extends FormRequest
+class UserStoreRequest extends UserBaseRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,9 +22,11 @@ class ProfileUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'full_name' => 'bail|required|max:255',
-            'password' => 'sometimes|min:6|confirmed|nullable',
-            'file' => 'image'
+            'full_name' => 'required|max:255',
+            'email' => 'required|email|unique:users,email',
+            'templates_ids' => 'array',
+            'password' => 'required|min:6|confirmed',
+            'avatar' => 'image'
         ];
     }
 }

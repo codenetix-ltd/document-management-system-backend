@@ -30,9 +30,5 @@ class EventServiceProvider extends ServiceProvider
     }
 
     protected $subscribe = [
-        'App\Listeners\UserEventSubscriber',
-        'App\Listeners\TemplateEventSubscriber',
-        'App\Listeners\DocumentEventSubscriber',
-        'App\Listeners\LabelEventSubscriber'
     ];
 }

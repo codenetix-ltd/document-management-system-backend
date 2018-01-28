@@ -19,6 +19,7 @@ class CreateDocumentsTable extends Migration
             $table->unsignedInteger('template_id');
             $table->unsignedInteger('owner_id');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -32,11 +32,6 @@ class CreateForeignKeys extends Migration
             $table->foreign('attribute_id')->references('id')->on('attributes')->onDelete('no action')->onUpdate('no action');
             $table->foreign('document_version_id')->references('id')->on('document_versions')->onDelete('cascade')->onUpdate('no action');
         });
-
-        Schema::table('document_factories', function (Blueprint $table) {
-            $table->foreign('document_id')->references('id')->on('documents')->onDelete('cascade')->onUpdate('no action');
-            $table->foreign('factory_id')->references('id')->on('factories')->onDelete('cascade')->onUpdate('no action');
-        });
     }
 
     /**
@@ -46,11 +41,6 @@ class CreateForeignKeys extends Migration
      */
     public function down()
     {
-        Schema::table('document_factories', function (Blueprint $table) {
-            $table->dropForeign(['document_id']);
-            $table->dropForeign(['factory_id']);
-        });
-
         Schema::table('documents', function (Blueprint $table) {
             $table->dropForeign(['template_id']);
             $table->dropForeign(['owner_id']);

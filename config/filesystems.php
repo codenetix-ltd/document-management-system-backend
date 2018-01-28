@@ -70,4 +70,8 @@ return [
 
     ],
 
+    'paths' => [
+        'avatars' => 'avatars/'
+    ]
+
 ];

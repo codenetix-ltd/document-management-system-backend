@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\CommandInvokers\TransactionCommandInvoker;
-use App\Contracts\Commands\Factory\IFactoryListCommand;
 use App\Contracts\Commands\Paginators\IRolePaginatorCommand;
 use App\Contracts\Commands\Role\IRoleCreateCommand;
 use App\Contracts\Commands\Role\IRoleDeleteCommand;
@@ -45,13 +44,6 @@ class RolesController extends Controller
         $authorizer = AuthorizerFactory::make('role');
         $authorizer->authorize('role_create');
 
-        $factoryListCommand = app()->makeWith(IFactoryListCommand::class, [
-            'columns' => ['id', 'name'],
-            'container' => $container
-        ]);
-        $factoryListCommand->execute();
-        $factories = $factoryListCommand->getResult();
-
         $templateListCommand = app()->makeWith(ITemplateListCommand::class, [
             'columns' => ['id', 'name'],
             'container' => $container
@@ -59,7 +51,7 @@ class RolesController extends Controller
         $templateListCommand->execute();
         $templates = $templateListCommand->getResult();
 
-        return view('pages.roles.add_edit', compact('factories', 'templates'));
+        return view('pages.roles.add_edit', compact( 'templates'));
     }
 
     public function store(RoleCreateRequest $request)

@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use App\Ticket;
 
-class DatabaseSeeder extends Seeder
+class TestingDataSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -18,14 +18,14 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         //Create admin user
-//        $user = factory(User::class)->create([
-//            'full_name' => 'full_name',
-//            'email' => 'admin@example.com',
-//            'password' => bcrypt('admin'),
-//        ]);
+        $user = factory(User::class)->create([
+            'full_name' => 'admin',
+            'email' => 'admin@example.com',
+            'password' => bcrypt('admin'),
+        ]);
 
         //Create default templates
-        //$templates = factory(Template::class, 5)->create();
+        $templates = factory(Template::class, 5)->create();
 
 
 

@@ -14,45 +14,12 @@ use App\Contracts\Services\IUserCreateService;
 use App\Contracts\Services\IUserUpdateService;
 use App\Helpers\Builders\AuthorizerFactory;
 use App\Http\Requests\ProfileUpdateRequest;
-use App\Http\Requests\UserUpdateRequest;
+use App\Http\Requests\UserStoreRequest;
 use Illuminate\Container\Container;
 
 class UsersController extends Controller
 {
-    /**
-     * @param UserUpdateRequest $request
-     * @param Container $container
-     * @param ITransactionCommandInvoker $invoker
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function store(UserUpdateRequest $request, Container $container, ITransactionCommandInvoker $invoker)
-    {
-        $authorizer = AuthorizerFactory::make('user');
-        $authorizer->authorize('user_create');
-
-        $data = $this->filterOnNull($request->all());
-
-        $userCreateService = app()->makeWith(IUserCreateService::class, [
-            'container' => $container,
-            'userData' => $data,
-            'file' => $request->file('file')
-        ]);
-
-        $invoker->invoke($userCreateService);
-
-        $user = $userCreateService->getResult();
-
-        return redirect()->route('users.list')->with('success', 'User ' . $user->full_name . ' has been created with success!');
-    }
-
-    /**
-     * @param $id
-     * @param UserUpdateRequest $request
-     * @param Container $container
-     * @param ITransactionCommandInvoker $invoker
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function update($id, UserUpdateRequest $request, Container $container, ITransactionCommandInvoker $invoker)
+    public function update($id, UserStoreRequest $request, Container $container, ITransactionCommandInvoker $invoker)
     {
         $data = $this->filterOnNull($request->all());
 

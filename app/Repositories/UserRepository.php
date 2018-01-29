@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Contracts\Models\IUser;
 use App\Contracts\Repositories\IUserRepository;
 use App\User;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator as LengthAwarePaginatorContract;
 
 class UserRepository implements IUserRepository
 {
@@ -46,5 +47,15 @@ class UserRepository implements IUserRepository
         $user->save();
 
         return $user;
+    }
+
+    public function delete(int $id): ?bool
+    {
+        return User::where('id', $id)->delete();
+    }
+
+    public function list(): LengthAwarePaginatorContract
+    {
+        return User::paginate();
     }
 }

@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\User;
 
 use App\Contracts\Models\IUser;
 use App\Contracts\Repositories\IUserRepository;
-use App\Contracts\Services\IFileManager;
-use App\Contracts\Services\IUserAvatarUpdateService;
+use App\Contracts\Services\File\IFileManager;
+use App\Contracts\Services\User\IUserAvatarUpdateService;
 use Illuminate\Http\UploadedFile;
 
 class UserAvatarUpdateService implements IUserAvatarUpdateService

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\File;
 
 use App\Contracts\Models\IFile;
 use App\Contracts\Repositories\IFileRepository;
-use App\Contracts\Services\IFileCreateService;
+use App\Contracts\Services\File\IFileCreateService;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;

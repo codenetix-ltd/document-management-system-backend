@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\User;
 
 use App\Contracts\Models\IUser;
 use App\Contracts\Repositories\IUserRepository;
-use App\Contracts\Services\IUserAvatarUpdateService;
-use App\Contracts\Services\IUserUpdateService;
+use App\Contracts\Services\User\IUserAvatarUpdateService;
+use App\Contracts\Services\User\IUserCreateService;
 use Illuminate\Http\UploadedFile;
 
-class UserUpdateService implements IUserUpdateService
+class UserCreateService implements IUserCreateService
 {
     private $repository;
 
@@ -20,9 +20,9 @@ class UserUpdateService implements IUserUpdateService
         $this->userAvatarUpdateService = $userAvatarUpdateService;
     }
 
-    public function update(int $id, IUser $userInput, array $updatedFields, UploadedFile $file = null): IUser
+    public function create(IUser $user, UploadedFile $file = null) : IUser
     {
-        $user = $this->repository->update($id, $userInput, $updatedFields);
+        $user = $this->repository->create($user);
 
         if ($file) {
             $user = $this->userAvatarUpdateService->update($user, $file);

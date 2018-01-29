@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Contracts\Services\IUserCreateService;
-use App\Contracts\Services\IUserUpdateService;
+use App\Contracts\Services\User\IUserCreateService;
+use App\Contracts\Services\User\IUserDeleteService;
+use App\Contracts\Services\User\IUserGetService;
+use App\Contracts\Services\User\IUserListService;
+use App\Contracts\Services\User\IUserUpdateService;
 use App\Http\Requests\User\UserStoreRequest;
 use App\Http\Requests\User\UserUpdateRequest;
 use App\Http\Resources\UserResource;
@@ -11,16 +14,12 @@ use App\Http\Controllers\Controller;
 
 class UserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function index(IUserListService $userListService)
     {
-        //
-    }
+        $users = $userListService->list();
 
+        return (UserResource::collection($users))->response()->setStatusCode(200);
+    }
 
     public function store(UserStoreRequest $request, IUserCreateService $userCreateService)
     {
@@ -29,32 +28,24 @@ class UserController extends Controller
         return (new UserResource($user))->response()->setStatusCode(201);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    public function show(IUserGetService $userGetService, int $id)
     {
-        //
+        $user = $userGetService->get($id);
+
+        return (new UserResource($user))->response()->setStatusCode(200);
     }
 
-    public function update(UserUpdateRequest $request, IUserUpdateService $userUpdateService, $id)
+    public function update(UserUpdateRequest $request, IUserUpdateService $userUpdateService, int $id)
     {
         $user = $userUpdateService->update($id, $request->getEntity(), $request->getUpdatedFields(), $request->file('avatar'));
 
         return (new UserResource($user))->response()->setStatusCode(200);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    public function destroy(IUserDeleteService $userDeleteService, int $id)
     {
-        //
+        $userDeleteService->delete($id);
+
+        return response('', 204);
     }
 }

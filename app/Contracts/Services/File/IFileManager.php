@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Contracts\Services;
+namespace App\Contracts\Services\File;
 
 use App\Contracts\Models\IFile;
 use Illuminate\Http\UploadedFile;

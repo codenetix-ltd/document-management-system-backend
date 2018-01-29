@@ -10,18 +10,4 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
-
-    /**
-     * @param $data
-     * @return array
-     */
-    protected function filterOnNull($data)
-    {
-        return array_filter($data, function($value)
-        {
-            return ($value !== null);
-        });
-    }
-
-
 }

@@ -47,8 +47,9 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        if ($exception instanceof ModelNotFoundException || $exception instanceof NotFoundHttpException || $exception instanceof CommandException) {
-            return response()->view('errors.404', [], 404);
+        if ($exception instanceof ModelNotFoundException || $exception instanceof NotFoundHttpException) {
+            return response('Resource Not Found', 404);
+            //TODO - система ошибок
         }
 
         if ($exception instanceof AccessDeniedHttpException) {

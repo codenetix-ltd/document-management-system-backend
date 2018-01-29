@@ -17,10 +17,6 @@ use App\Type;
 Auth::routes();
 
 Route::group(['middleware' => ['auth', 'roles']], function () {
-    Route::get('/', function () {
-        return redirect(route('documents.list'));
-    })->name('home');
-
     Route::post('/document-attachments', ['uses' => 'DocumentAttachmentsController@store', 'as' => 'document_attachments.store']);
     Route::delete('/document-attachments/{id}', ['uses' => 'DocumentAttachmentsController@delete', 'as' => 'document_attachments.delete']);
 

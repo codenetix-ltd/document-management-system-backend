@@ -7,24 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Template extends Model implements ITemplate
 {
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        'name', 'email', 'password',
-    ];
-
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'password', 'remember_token',
-    ];
-
     public function documents()
     {
         return $this->hasMany(Document::class);
@@ -40,16 +22,39 @@ class Template extends Model implements ITemplate
         return $this->morphMany(Log::class, 'reference');
     }
 
-    public function getName()
+    public function setName(string $name): ITemplate
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function getName(): string
     {
         return $this->name;
     }
 
-    public function getViewURL(){
-        return route('templates.edit', ['id' => $this->id]);
+    public function setCreated(string $created): ITemplate
+    {
+        $this->setCreatedAt($created);
+
+        return $this;
     }
 
-    public function getViewURLLink(){
-        return '<a href="'.$this->getViewURL().'" target="blank">'. $this->name . '</a>';
+    public function getCreated(): string
+    {
+        return $this->created_at;
+    }
+
+    public function setUpdated(string $updated): ITemplate
+    {
+        $this->setUpdatedAt($updated);
+
+        return $this;
+    }
+
+    public function getUpdated(): string
+    {
+        return $this->updated_at;
     }
 }

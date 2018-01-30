@@ -10,5 +10,5 @@ interface IUserUpdateService
 {
     public function __construct(IUserRepository $repository, IUserAvatarUpdateService $userAvatarUpdateService);
 
-    public function update(int $id, IUser $user, array $updatedFields, UploadedFile $file = null) : IUser;
+    public function update(int $id, IUser $userInput, array $updatedFields, UploadedFile $file = null) : IUser;
 }

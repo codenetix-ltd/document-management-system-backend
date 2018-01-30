@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Contracts\Models\IUser;
 use App\Contracts\Repositories\IUserRepository;
+use App\Template;
 use App\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator as LengthAwarePaginatorContract;
 
@@ -15,7 +16,7 @@ class UserRepository implements IUserRepository
 
         if (is_array($user->getTemplatesIds())) {
             if (count($user->getTemplatesIds())) {
-                $user->templates()->sync($user->getTemplatesIds());
+                $user->templates()->sync(Template::findMany($user->getTemplatesIds())->pluck('id'));
             } else {
                 $user->templates()->detach();
             }

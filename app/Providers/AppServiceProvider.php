@@ -37,13 +37,19 @@ use App\Contracts\Commands\Template\ITemplateUpdateCommand;
 use App\Contracts\Commands\Type\ITypeListCommand;
 use App\Contracts\Commands\Paginators\IUserPaginatorCommand;
 use App\Contracts\Models\IFile;
+use App\Contracts\Models\ITemplate;
 use App\Contracts\Models\IUser;
 use App\Contracts\Repositories\IAttributeRepository;
 use App\Contracts\Repositories\IFileRepository;
+use App\Contracts\Repositories\ITemplateRepository;
 use App\Contracts\Repositories\IUserRepository;
 use App\Contracts\Services\File\IFileCreateService;
 use App\Contracts\Services\File\IFileManager;
-use App\Contracts\Services\ITemplateUpdateService;
+use App\Contracts\Services\Template\ITemplateCreateService;
+use App\Contracts\Services\Template\ITemplateDeleteService;
+use App\Contracts\Services\Template\ITemplateGetService;
+use App\Contracts\Services\Template\ITemplateListService;
+use App\Contracts\Services\Template\ITemplateUpdateService;
 use App\Contracts\Services\User\IUserAvatarUpdateService;
 use App\Contracts\Services\User\IUserCreateService;
 use App\Contracts\Services\User\IUserDeleteService;
@@ -53,6 +59,7 @@ use App\Contracts\Services\User\IUserUpdateService;
 use App\File;
 use App\Repositories\AttributeRepository;
 use App\Repositories\FileRepository;
+use App\Repositories\TemplateRepository;
 use App\Repositories\UserRepository;
 use App\Services\ADocumentCompareService;
 use App\Services\ADocumentGetService;
@@ -62,14 +69,20 @@ use App\Services\DocumentGetService;
 use App\Services\DocumentViewService;
 use App\Services\File\FileCreateService;
 use App\Services\File\FileManager;
-use App\Services\TemplateUpdateService;
+use App\Services\Template\TemplateCreateService;
+use App\Services\Template\TemplateDeleteService;
+use App\Services\Template\TemplateGetService;
+use App\Services\Template\TemplateListService;
+use App\Services\Template\TemplateUpdateService;
 use App\Services\User\UserAvatarUpdateService;
 use App\Services\User\UserCreateService;
 use App\Services\User\UserDeleteService;
 use App\Services\User\UserGetService;
 use App\Services\User\UserListService;
 use App\Services\User\UserUpdateService;
+use App\Template;
 use App\User;
+use Illuminate\Http\Resources\Json\Resource;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -81,6 +94,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Resource::withoutWrapping();
     }
 
     /**
@@ -106,8 +120,17 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(IFileCreateService::class, FileCreateService::class);
 
 
-//_____________________________________________________________________________________________________________________
+        $this->app->bind(ITemplate::class, Template::class);
+        $this->app->bind(ITemplateRepository::class, TemplateRepository::class);
+        $this->app->bind(ITemplateCreateService::class, TemplateCreateService::class);
+        $this->app->bind(ITemplateGetService::class, TemplateGetService::class);
         $this->app->bind(ITemplateUpdateService::class, TemplateUpdateService::class);
+        $this->app->bind(ITemplateDeleteService::class, TemplateDeleteService::class);
+        $this->app->bind(ITemplateListService::class, TemplateListService::class);
+
+
+
+//_____________________________________________________________________________________________________________________
         $this->app->bind(ADocumentCompareService::class, DocumentCompareService::class);
         $this->app->bind(ADocumentViewService::class, DocumentViewService::class);
         $this->app->bind(ADocumentGetService::class, DocumentGetService::class);

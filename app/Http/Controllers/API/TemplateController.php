@@ -2,16 +2,50 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Template;
-use Illuminate\Http\Request;
-use DB;
+use App\Contracts\Services\Template\ITemplateCreateService;
+use App\Contracts\Services\Template\ITemplateDeleteService;
+use App\Contracts\Services\Template\ITemplateGetService;
+use App\Contracts\Services\Template\ITemplateListService;
+use App\Contracts\Services\Template\ITemplateUpdateService;
+use App\Http\Requests\Template\TemplateStoreRequest;
+use App\Http\Requests\Template\TemplateUpdateRequest;
+use App\Http\Resources\TemplateResource;
+use App\Http\Controllers\Controller;
 
-class TemplateController extends APIController
+class TemplateController extends Controller
 {
-    public function getList(Request $request)
+    public function index(ITemplateListService $templateListService)
     {
-        $query = Template::where('name', 'LIKE', $request->query->get('query') . '%');
+        $users = $templateListService->list();
 
-        return json_encode($query->get()->toArray());
+        return (TemplateResource::collection($users))->response()->setStatusCode(200);
+    }
+
+    public function store(TemplateStoreRequest $request, ITemplateCreateService $templateCreateService)
+    {
+        $template = $templateCreateService->create($request->getEntity());
+
+        return (new TemplateResource($template))->response()->setStatusCode(201);
+    }
+
+    public function show(ITemplateGetService $templateGetService, int $id)
+    {
+        $template = $templateGetService->get($id);
+
+        return (new TemplateResource($template))->response()->setStatusCode(200);
+    }
+
+    public function update(TemplateUpdateRequest $request, ITemplateUpdateService $templateUpdateService, int $id)
+    {
+        $template = $templateUpdateService->update($id, $request->getEntity(), $request->getUpdatedFields());
+
+        return (new TemplateResource($template))->response()->setStatusCode(200);
+    }
+
+    public function destroy(ITemplateDeleteService $userDeleteService, int $id)
+    {
+        $userDeleteService->delete($id);
+
+        return response('', 204);
     }
 }

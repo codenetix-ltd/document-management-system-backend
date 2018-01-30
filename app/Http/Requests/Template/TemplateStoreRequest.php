@@ -1,10 +1,8 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Template;
 
-use Illuminate\Foundation\Http\FormRequest;
-
-class TemplateCreateRequest extends FormRequest
+class TemplateStoreRequest extends TemplateBaseRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +22,7 @@ class TemplateCreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'bail|required|unique:templates|max:255'
+            'name' => 'required|unique:templates|max:255'
         ];
     }
 }

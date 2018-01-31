@@ -8,5 +8,5 @@ interface ITemplateDeleteService
 {
     public function __construct(ITemplateRepository $repository);
 
-    public function delete(int $id) : bool;
+    public function delete(int $id) : ?bool;
 }

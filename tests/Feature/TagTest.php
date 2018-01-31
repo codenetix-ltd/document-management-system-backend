@@ -2,32 +2,32 @@
 
 namespace Tests\Feature;
 
-use App\Template;
+use App\Tag;
 use Illuminate\Foundation\Testing\TestResponse;
 use Tests\TestCase;
 
-class TemplateTest extends TestCase
+class TagTest extends TestCase
 {
-    public const PATH = 'templates';
+    public const PATH = 'tags';
 
-    public function testCreateTemplateSuccess()
+    public function testCreateTagSuccess()
     {
         //TODO - создать свою фабрику, где можно было бы получать модели по интерфейсу а не по классу напрямую
-        $template = factory(Template::class)->make();
+        $tag = factory(Tag::class)->make();
 
         $response = $this->actingAs($this->authUser)->json('POST', self::API_ROOT . self::PATH, [
-            'name' => $template->name,
+            'name' => $tag->name,
         ]);
 
         $response
             ->assertStatus(201)
             ->assertJson([
-                'name' => $template->name,
+                'name' => $tag->name,
             ]);
         $this->assertJsonStructure($response);
     }
 
-    public function testCreateTemplateFailName()
+    public function testCreateTagFailName()
     {
         $response = $this->actingAs($this->authUser)->json('POST', self::API_ROOT . self::PATH, []);
 
@@ -36,72 +36,75 @@ class TemplateTest extends TestCase
             ->assertJsonValidationErrors(['name']);
     }
 
-    public function testGetTemplateSuccess()
+    public function testGetTagSuccess()
     {
-        $template = factory(Template::class)->create();
+        $tag = factory(Tag::class)->create();
 
-        $response = $this->actingAs($this->authUser)->json('GET', self::API_ROOT . self::PATH . '/' .  $template->id);
+        $response = $this->actingAs($this->authUser)->json('GET', self::API_ROOT . self::PATH . '/' .  $tag->id);
 
         $response
             ->assertStatus(200)
             ->assertJson([
-                'name' => $template->name,
+                'name' => $tag->name,
             ]);
         $this->assertJsonStructure($response);
     }
 
-    public function testGetTemplateFail()
+    //TODO - убрать отсюда типичные тесты (возможно в TestCase)
+    public function testGetTagFail()
     {
         $response = $this->actingAs($this->authUser)->json('GET', self::API_ROOT . self::PATH .'/' . 0);
         $response->assertStatus(404);
     }
 
-    public function testUpdateTemplateSuccess()
+    public function testUpdateTagSuccess()
     {
-        $template = factory(Template::class)->create();
-        $templateNameNew = 'New Name';
+        $tag = factory(Tag::class)->create();
+        $tagNameNew = 'New Name';
 
-        $response = $this->actingAs($this->authUser)->json('PUT', self::API_ROOT . self::PATH .'/' . $template->id, [
-            'name' => $templateNameNew
+        $response = $this->actingAs($this->authUser)->json('PUT', self::API_ROOT . self::PATH .'/' . $tag->id, [
+            'name' => $tagNameNew
         ]);
 
         $response->assertStatus(200)->assertJson([
-            'name' => $templateNameNew,
+            'name' => $tagNameNew,
         ]);
         $this->assertJsonStructure($response);
     }
 
-    public function testDeleteTemplateSuccess()
+    public function testDeleteTagSuccess()
     {
-        $template = factory(Template::class)->create();
-        $response = $this->actingAs($this->authUser)->json('DELETE', self::API_ROOT . self::PATH . '/' . $template->id);
+        $tag = factory(Tag::class)->create();
+        $response = $this->actingAs($this->authUser)->json('DELETE', self::API_ROOT . self::PATH . '/' . $tag->id);
 
         $response->assertStatus(204);
-        $this->assertDatabaseMissing('templates', [
-            'id' => $template->id
+        $this->assertDatabaseMissing('tags', [
+            'id' => $tag->id
         ]);
     }
 
-    public function testDeleteTemplateNotExistSuccess()
+    public function testDeleteTagNotExistSuccess()
     {
-        $templateId = 0;
-        $response = $this->actingAs($this->authUser)->json('DELETE', self::API_ROOT . self::PATH . '/' . $templateId);
+        $tagId = 0;
+        $response = $this->actingAs($this->authUser)->json('DELETE', self::API_ROOT . self::PATH . '/' . $tagId);
 
+        //TODO - название таблицы вынести в константу
         $response->assertStatus(204);
-        $this->assertDatabaseMissing('templates', [
-            'id' => $templateId
+        $this->assertDatabaseMissing('tags', [
+            'id' => $tagId
         ]);
     }
 
-    public function testListOfTemplatesWithPaginationSuccess()
+    public function testListOfTagsWithPaginationSuccess()
     {
-        $templates = factory(Template::class, 20)->create();
+        $tags = factory(Tag::class, 20)->create();
 
         $response = $this->actingAs($this->authUser)->json('GET', self::API_ROOT . self::PATH);
         $response->assertStatus(200);
         $this->assetJsonPaginationStructure($response);
     }
 
+    //TODO - мб добавить в интерфейс
     private function assertJsonStructure(TestResponse $response)
     {
         $response->assertJsonStructure([

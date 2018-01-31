@@ -14,7 +14,7 @@ class TemplateDeleteService implements ITemplateDeleteService
         $this->repository = $repository;
     }
 
-    public function delete(int $id): bool
+    public function delete(int $id): ?bool
     {
         return $this->repository->delete($id);
     }

@@ -8,5 +8,5 @@ interface IUserDeleteService
 {
     public function __construct(IUserRepository $repository);
 
-    public function delete(int $id) : bool;
+    public function delete(int $id) : ?bool;
 }

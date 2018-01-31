@@ -10,6 +10,7 @@ class UserBaseRequest extends FormRequest implements IUserRequestTransformer
 {
     private $updatedFields = [];
 
+    //TODO - refactoring убрать отсюда в отдельный сервис
     public function getEntity(): IUser
     {
         $user = $this->container->make(IUser::class);

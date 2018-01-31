@@ -3,11 +3,9 @@
 namespace App\Contracts\Services\User;
 
 use App\Contracts\Repositories\IUserRepository;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator as LengthAwarePaginatorContract;
+use App\Contracts\Services\Base\IListService;
 
-interface IUserListService
+interface IUserListService extends IListService
 {
     public function __construct(IUserRepository $repository);
-
-    public function list(): LengthAwarePaginatorContract;
 }

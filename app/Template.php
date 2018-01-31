@@ -22,6 +22,19 @@ class Template extends Model implements ITemplate
         return $this->morphMany(Log::class, 'reference');
     }
 
+    //TODO - подумать можно ли вынести типовые геттеры и сеттеры в трэит
+    public function setId(int $id): ITemplate
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
     public function setName(string $name): ITemplate
     {
         $this->name = $name;

@@ -3,9 +3,8 @@
 namespace App\Contracts\Repositories;
 
 use App\Contracts\Models\IUser;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator as LengthAwarePaginatorContract;
 
-interface IUserRepository
+interface IUserRepository extends IRepository
 {
     public function create(IUser $user) : IUser;
 
@@ -16,6 +15,4 @@ interface IUserRepository
     public function update(int $id, IUser $userInput, array $updatedFields): IUser;
 
     public function delete(int $id): ?bool;
-
-    public function list(): LengthAwarePaginatorContract;
 }

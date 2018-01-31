@@ -4,57 +4,47 @@ namespace Tests\Feature;
 
 use App\Tag;
 use Illuminate\Foundation\Testing\TestResponse;
-use Tests\TestCase;
+use Tests\ApiTestCase;
 
-class TagTest extends TestCase
+class TagTest extends ApiTestCase
 {
-    public const PATH = 'tags';
+    private const PATH = 'tags';
+    protected const DB_TABLE = 'tags';
 
     public function testCreateTagSuccess()
     {
         //TODO - создать свою фабрику, где можно было бы получать модели по интерфейсу а не по классу напрямую
         $tag = factory(Tag::class)->make();
 
-        $response = $this->actingAs($this->authUser)->json('POST', self::API_ROOT . self::PATH, [
+        $response = $this->jsonRequestPostEntityWithSuccess(self::PATH, [
             'name' => $tag->name,
         ]);
-
-        $response
-            ->assertStatus(201)
-            ->assertJson([
-                'name' => $tag->name,
-            ]);
+        $response->assertJson([
+            'name' => $tag->name,
+        ]);
         $this->assertJsonStructure($response);
     }
 
-    public function testCreateTagFailName()
+    public function testCreateTagValidationError()
     {
-        $response = $this->actingAs($this->authUser)->json('POST', self::API_ROOT . self::PATH, []);
-
-        $response
-            ->assertStatus(422)
-            ->assertJsonValidationErrors(['name']);
+        $response = $this->jsonRequestPostEntityValidationError(self::PATH);
+        $response->assertJsonValidationErrors(['name']);
     }
 
     public function testGetTagSuccess()
     {
         $tag = factory(Tag::class)->create();
 
-        $response = $this->actingAs($this->authUser)->json('GET', self::API_ROOT . self::PATH . '/' .  $tag->id);
-
-        $response
-            ->assertStatus(200)
-            ->assertJson([
-                'name' => $tag->name,
-            ]);
+        $response = $this->jsonRequestGetEntitySuccess(self::PATH . '/' .  $tag->id);
+        $response->assertJson([
+            'name' => $tag->name,
+        ]);
         $this->assertJsonStructure($response);
     }
 
-    //TODO - убрать отсюда типичные тесты (возможно в TestCase)
-    public function testGetTagFail()
+    public function testGetTagNotFound()
     {
-        $response = $this->actingAs($this->authUser)->json('GET', self::API_ROOT . self::PATH .'/' . 0);
-        $response->assertStatus(404);
+        $this->jsonRequestGetEntityNotFound(self::PATH . '/' . 0);
     }
 
     public function testUpdateTagSuccess()
@@ -62,12 +52,11 @@ class TagTest extends TestCase
         $tag = factory(Tag::class)->create();
         $tagNameNew = 'New Name';
 
-        $response = $this->actingAs($this->authUser)->json('PUT', self::API_ROOT . self::PATH .'/' . $tag->id, [
+        $response = $this->jsonRequestPutEntityWithSuccess(self::PATH .'/' . $tag->id, [
             'name' => $tagNameNew
         ]);
-
-        $response->assertStatus(200)->assertJson([
-            'name' => $tagNameNew,
+        $response->assertJson([
+            'name' => $tagNameNew
         ]);
         $this->assertJsonStructure($response);
     }
@@ -75,36 +64,21 @@ class TagTest extends TestCase
     public function testDeleteTagSuccess()
     {
         $tag = factory(Tag::class)->create();
-        $response = $this->actingAs($this->authUser)->json('DELETE', self::API_ROOT . self::PATH . '/' . $tag->id);
-
-        $response->assertStatus(204);
-        $this->assertDatabaseMissing('tags', [
-            'id' => $tag->id
-        ]);
+        $this->jsonRequestDelete(self::PATH, $tag->id, self::DB_TABLE);
     }
 
     public function testDeleteTagNotExistSuccess()
     {
-        $tagId = 0;
-        $response = $this->actingAs($this->authUser)->json('DELETE', self::API_ROOT . self::PATH . '/' . $tagId);
-
-        //TODO - название таблицы вынести в константу
-        $response->assertStatus(204);
-        $this->assertDatabaseMissing('tags', [
-            'id' => $tagId
-        ]);
+        $this->jsonRequestDelete(self::PATH, 0, self::DB_TABLE);
     }
 
     public function testListOfTagsWithPaginationSuccess()
     {
-        $tags = factory(Tag::class, 20)->create();
+        factory(Tag::class, 20)->create();
 
-        $response = $this->actingAs($this->authUser)->json('GET', self::API_ROOT . self::PATH);
-        $response->assertStatus(200);
-        $this->assetJsonPaginationStructure($response);
+        $this->jsonRequestObjectsWithPagination(self::PATH);
     }
 
-    //TODO - мб добавить в интерфейс
     private function assertJsonStructure(TestResponse $response)
     {
         $response->assertJsonStructure([

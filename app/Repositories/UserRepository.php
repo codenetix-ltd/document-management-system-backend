@@ -47,6 +47,15 @@ class UserRepository implements IUserRepository
 
         $user->save();
 
+        //todo - вынести в отдельный метод
+        if (is_array($userInput->getTemplatesIds())) {
+            if (count($userInput->getTemplatesIds())) {
+                $user->templates()->sync(Template::findMany($userInput->getTemplatesIds())->pluck('id'));
+            } else {
+                $user->templates()->detach();
+            }
+        }
+
         return $user;
     }
 

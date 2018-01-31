@@ -4,56 +4,47 @@ namespace Tests\Feature;
 
 use App\Template;
 use Illuminate\Foundation\Testing\TestResponse;
-use Tests\TestCase;
+use Tests\ApiTestCase;
 
-class TemplateTest extends TestCase
+class TemplateTest extends ApiTestCase
 {
-    public const PATH = 'templates';
+    private const PATH = 'templates';
+    private const DB_TABLE = 'templates';
 
     public function testCreateTemplateSuccess()
     {
         //TODO - создать свою фабрику, где можно было бы получать модели по интерфейсу а не по классу напрямую
         $template = factory(Template::class)->make();
 
-        $response = $this->actingAs($this->authUser)->json('POST', self::API_ROOT . self::PATH, [
+        $response = $this->jsonRequestPostEntityWithSuccess(self::PATH, [
             'name' => $template->name,
         ]);
-
-        $response
-            ->assertStatus(201)
-            ->assertJson([
-                'name' => $template->name,
-            ]);
+        $response->assertJson([
+            'name' => $template->name,
+        ]);
         $this->assertJsonStructure($response);
     }
 
-    public function testCreateTemplateFailName()
+    public function testCreateTemplateValidationError()
     {
-        $response = $this->actingAs($this->authUser)->json('POST', self::API_ROOT . self::PATH, []);
-
-        $response
-            ->assertStatus(422)
-            ->assertJsonValidationErrors(['name']);
+        $response = $this->jsonRequestPostEntityValidationError(self::PATH);
+        $response->assertJsonValidationErrors(['name']);
     }
 
     public function testGetTemplateSuccess()
     {
         $template = factory(Template::class)->create();
 
-        $response = $this->actingAs($this->authUser)->json('GET', self::API_ROOT . self::PATH . '/' .  $template->id);
-
-        $response
-            ->assertStatus(200)
-            ->assertJson([
-                'name' => $template->name,
-            ]);
+        $response = $this->jsonRequestGetEntitySuccess(self::PATH . '/' .  $template->id);
+        $response->assertJson([
+            'name' => $template->name,
+        ]);
         $this->assertJsonStructure($response);
     }
 
-    public function testGetTemplateFail()
+    public function testGetTemplateNotFound()
     {
-        $response = $this->actingAs($this->authUser)->json('GET', self::API_ROOT . self::PATH .'/' . 0);
-        $response->assertStatus(404);
+        $this->jsonRequestGetEntityNotFound(self::PATH . '/' . 0);
     }
 
     public function testUpdateTemplateSuccess()
@@ -61,45 +52,31 @@ class TemplateTest extends TestCase
         $template = factory(Template::class)->create();
         $templateNameNew = 'New Name';
 
-        $response = $this->actingAs($this->authUser)->json('PUT', self::API_ROOT . self::PATH .'/' . $template->id, [
+        $response = $this->jsonRequestPutEntityWithSuccess(self::PATH .'/' . $template->id, [
             'name' => $templateNameNew
         ]);
-
-        $response->assertStatus(200)->assertJson([
-            'name' => $templateNameNew,
+        $response->assertJson([
+            'name' => $templateNameNew
         ]);
         $this->assertJsonStructure($response);
     }
 
-    public function testDeleteTemplateSuccess()
+    public function testDeleteTagSuccess()
     {
         $template = factory(Template::class)->create();
-        $response = $this->actingAs($this->authUser)->json('DELETE', self::API_ROOT . self::PATH . '/' . $template->id);
-
-        $response->assertStatus(204);
-        $this->assertDatabaseMissing('templates', [
-            'id' => $template->id
-        ]);
+        $this->jsonRequestDelete(self::PATH, $template->id, self::DB_TABLE);
     }
 
-    public function testDeleteTemplateNotExistSuccess()
+    public function testDeleteTagNotExistSuccess()
     {
-        $templateId = 0;
-        $response = $this->actingAs($this->authUser)->json('DELETE', self::API_ROOT . self::PATH . '/' . $templateId);
-
-        $response->assertStatus(204);
-        $this->assertDatabaseMissing('templates', [
-            'id' => $templateId
-        ]);
+        $this->jsonRequestDelete(self::PATH, 0, self::DB_TABLE);
     }
 
     public function testListOfTemplatesWithPaginationSuccess()
     {
-        $templates = factory(Template::class, 20)->create();
+        factory(Template::class, 20)->create();
 
-        $response = $this->actingAs($this->authUser)->json('GET', self::API_ROOT . self::PATH);
-        $response->assertStatus(200);
-        $this->assetJsonPaginationStructure($response);
+        $this->jsonRequestObjectsWithPagination(self::PATH);
     }
 
     private function assertJsonStructure(TestResponse $response)

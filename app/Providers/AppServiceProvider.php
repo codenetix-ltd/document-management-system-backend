@@ -7,11 +7,13 @@ use App\Contracts\Adapters\ITableAdapter;
 use App\Contracts\Models\IFile;
 use App\Contracts\Models\ITag;
 use App\Contracts\Models\ITemplate;
+use App\Contracts\Models\IType;
 use App\Contracts\Models\IUser;
 use App\Contracts\Repositories\IAttributeRepository;
 use App\Contracts\Repositories\IFileRepository;
 use App\Contracts\Repositories\ITagRepository;
 use App\Contracts\Repositories\ITemplateRepository;
+use App\Contracts\Repositories\ITypeRepository;
 use App\Contracts\Repositories\IUserRepository;
 use App\Contracts\Services\File\IFileCreateService;
 use App\Contracts\Services\File\IFileManager;
@@ -25,6 +27,7 @@ use App\Contracts\Services\Template\ITemplateDeleteService;
 use App\Contracts\Services\Template\ITemplateGetService;
 use App\Contracts\Services\Template\ITemplateListService;
 use App\Contracts\Services\Template\ITemplateUpdateService;
+use App\Contracts\Services\Type\ITypeListService;
 use App\Contracts\Services\User\IUserAvatarUpdateService;
 use App\Contracts\Services\User\IUserCreateService;
 use App\Contracts\Services\User\IUserDeleteService;
@@ -36,6 +39,7 @@ use App\Repositories\AttributeRepository;
 use App\Repositories\FileRepository;
 use App\Repositories\TagRepository;
 use App\Repositories\TemplateRepository;
+use App\Repositories\TypeRepository;
 use App\Repositories\UserRepository;
 use App\Services\ADocumentCompareService;
 use App\Services\ADocumentGetService;
@@ -55,6 +59,7 @@ use App\Services\Template\TemplateDeleteService;
 use App\Services\Template\TemplateGetService;
 use App\Services\Template\TemplateListService;
 use App\Services\Template\TemplateUpdateService;
+use App\Services\Type\TypeListService;
 use App\Services\User\UserAvatarUpdateService;
 use App\Services\User\UserCreateService;
 use App\Services\User\UserDeleteService;
@@ -63,6 +68,7 @@ use App\Services\User\UserListService;
 use App\Services\User\UserUpdateService;
 use App\Tag;
 use App\Template;
+use App\Type;
 use App\User;
 use Illuminate\Http\Resources\Json\Resource;
 use Illuminate\Support\ServiceProvider;
@@ -119,6 +125,10 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ITagDeleteService::class, TagDeleteService::class);
         $this->app->bind(ITagListService::class, TagListService::class);
 
+
+        $this->app->bind(IType::class, Type::class);
+        $this->app->bind(ITypeRepository::class, TypeRepository::class);
+        $this->app->bind(ITypeListService::class, TypeListService::class);
 
 //_____________________________________________________________________________________________________________________
         $this->app->bind(ADocumentCompareService::class, DocumentCompareService::class);

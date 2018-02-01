@@ -19,4 +19,6 @@ Route::prefix('v1')->group(function () {
     Route::apiResource('templates', 'API\TemplateController');
 
     Route::apiResource('tags', 'API\TagController');
+
+    Route::apiResource('types', 'API\TypeController', ['only' => ['index']]);
 });

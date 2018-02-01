@@ -57,7 +57,6 @@ class DatabaseSeeder extends Seeder
 //            'name' => 'Table',
 //            'machine_name' => 'table'
 //        ]);
-//
 //        DB::table('types')->insert([
 //            'name' => 'Value with deviations',
 //            'machine_name' => 'value_with_deviations'

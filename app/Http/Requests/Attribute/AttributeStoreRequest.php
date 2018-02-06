@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Requests\Tag;
+namespace App\Http\Requests\Attribute;
 
-class TagStoreRequest extends TagBaseRequest
+class AttributeStoreRequest extends AttributeBaseRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,12 +22,8 @@ class TagStoreRequest extends TagBaseRequest
     public function rules()
     {
         return [
-            'name' => 'required|unique:tags|max:255'
+            'name' => 'required|max:255',
+            'type_id' => 'required|integer|exists:types,id'
         ];
-    }
-
-    public function getModelStructure(): array
-    {
-        return config('models.tag_store_request');
     }
 }

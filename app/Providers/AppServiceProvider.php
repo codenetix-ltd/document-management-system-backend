@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use App\Adapters\TableAdapter;
+use App\Attribute;
 use App\Contracts\Adapters\ITableAdapter;
+use App\Contracts\Models\IAttribute;
 use App\Contracts\Models\IFile;
 use App\Contracts\Models\ITag;
 use App\Contracts\Models\ITemplate;
@@ -15,6 +17,7 @@ use App\Contracts\Repositories\ITagRepository;
 use App\Contracts\Repositories\ITemplateRepository;
 use App\Contracts\Repositories\ITypeRepository;
 use App\Contracts\Repositories\IUserRepository;
+use App\Contracts\Services\Attribute\IAttributeCreateService;
 use App\Contracts\Services\File\IFileCreateService;
 use App\Contracts\Services\File\IFileManager;
 use App\Contracts\Services\Tag\ITagCreateService;
@@ -34,6 +37,7 @@ use App\Contracts\Services\User\IUserDeleteService;
 use App\Contracts\Services\User\IUserGetService;
 use App\Contracts\Services\User\IUserListService;
 use App\Contracts\Services\User\IUserUpdateService;
+use App\Contracts\System\ITransformer;
 use App\File;
 use App\Repositories\AttributeRepository;
 use App\Repositories\FileRepository;
@@ -44,11 +48,13 @@ use App\Repositories\UserRepository;
 use App\Services\ADocumentCompareService;
 use App\Services\ADocumentGetService;
 use App\Services\ADocumentViewService;
+use App\Services\Attribute\AttributeCreateService;
 use App\Services\DocumentCompareService;
 use App\Services\DocumentGetService;
 use App\Services\DocumentViewService;
 use App\Services\File\FileCreateService;
 use App\Services\File\FileManager;
+use App\Services\System\Transformer;
 use App\Services\Tag\TagCreateService;
 use App\Services\Tag\TagDeleteService;
 use App\Services\Tag\TagGetService;
@@ -130,6 +136,14 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ITypeRepository::class, TypeRepository::class);
         $this->app->bind(ITypeListService::class, TypeListService::class);
 
+
+        $this->app->bind(IAttribute::class, Attribute::class);
+        $this->app->bind(IAttributeRepository::class, AttributeRepository::class);
+        $this->app->bind(IAttributeCreateService::class, AttributeCreateService::class);
+
+
+        $this->app->bind(ITransformer::class, Transformer::class);
+
 //_____________________________________________________________________________________________________________________
         $this->app->bind(ADocumentCompareService::class, DocumentCompareService::class);
         $this->app->bind(ADocumentViewService::class, DocumentViewService::class);
@@ -137,6 +151,5 @@ class AppServiceProvider extends ServiceProvider
         //Adapters
         $this->app->bind(ITableAdapter::class, TableAdapter::class);
         //Repositories
-        $this->app->bind(IAttributeRepository::class, AttributeRepository::class);
     }
 }

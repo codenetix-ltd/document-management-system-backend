@@ -81,11 +81,6 @@ class TagTest extends ApiTestCase
 
     private function assertJsonStructure(TestResponse $response)
     {
-        $response->assertJsonStructure([
-            'id',
-            'name',
-            'created_at',
-            'updated_at'
-        ]);
+        $response->assertJsonStructure(config('models.tag_response'));
     }
 }

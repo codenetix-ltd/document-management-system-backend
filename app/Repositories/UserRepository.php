@@ -41,6 +41,7 @@ class UserRepository implements IUserRepository
     {
         $user = User::findOrFail($id);
 
+        //TODO - remove, refactoring
         foreach ($updatedFields as $fieldKey) {
             $user->{dms_build_setter($fieldKey)}($userInput->{dms_build_getter($fieldKey)}());
         }

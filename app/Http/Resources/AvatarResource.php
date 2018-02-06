@@ -2,10 +2,10 @@
 
 namespace App\Http\Resources;
 
-class TagResource extends ApiResource
+class AvatarResource extends ApiResource
 {
     protected function getStructure(): array
     {
-        return config('models.tag_response');
+        return config('models.avatar');
     }
 }

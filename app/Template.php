@@ -47,26 +47,13 @@ class Template extends Model implements ITemplate
         return $this->name;
     }
 
-    public function setCreated(string $created): ITemplate
-    {
-        $this->setCreatedAt($created);
 
-        return $this;
-    }
-
-    public function getCreated(): string
+    public function getCreatedAt(): string
     {
         return $this->created_at;
     }
 
-    public function setUpdated(string $updated): ITemplate
-    {
-        $this->setUpdatedAt($updated);
-
-        return $this;
-    }
-
-    public function getUpdated(): string
+    public function getUpdatedAt(): string
     {
         return $this->updated_at;
     }

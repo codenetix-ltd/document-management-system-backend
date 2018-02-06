@@ -3,31 +3,14 @@
 namespace App\Http\Requests\Template;
 
 use App\Contracts\Models\ITemplate;
-use App\Contracts\Transformers\ITemplateRequestTransformer;
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\ApiRequest;
 
-class TemplateBaseRequest extends FormRequest implements ITemplateRequestTransformer
+abstract class TemplateBaseRequest extends ApiRequest
 {
-    private $updatedFields = [];
-
-    //TODO - refactoring убрать отсюда в отдельный сервис
     public function getEntity(): ITemplate
     {
-        $template = $this->container->make(ITemplate::class);
-
-        foreach ($this->all() as $fieldKey => $fieldValue) {
-            $methodName = dms_build_setter($fieldKey);
-            if (method_exists($template, $methodName)) {
-                $template->{$methodName}($fieldValue);
-                array_push($this->updatedFields, $fieldKey);
-            }
-        }
-
-        return $template;
+        return $this->transform(ITemplate::class, $this->getModelStructure());
     }
 
-    public function getUpdatedFields(): array
-    {
-        return $this->updatedFields;
-    }
+    public abstract function getModelStructure(): array;
 }

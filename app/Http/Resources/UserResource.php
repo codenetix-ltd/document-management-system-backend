@@ -2,23 +2,19 @@
 
 namespace App\Http\Resources;
 
-use Illuminate\Http\Resources\Json\Resource;
-
-class UserResource extends Resource
+class UserResource extends ApiResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
-     */
-    public function toArray($request)
+    protected function getComplexFields(): array
     {
-        $response =  parent::toArray($request);
+        //TODO - можно ли тут так
+        return [
+            'templatesIds' => $this->templates->pluck('id'),
+            'avatar' => $this->when($this->avatar, new AvatarResource($this->avatar))
+        ];
+    }
 
-        return array_merge($response, [
-            'templates_ids' => $this->templates->pluck('id'),
-            'avatar' => $this->when($this->avatar, $this->avatar)
-        ]);
+    protected function getStructure(): array
+    {
+        return config('models.user_response');
     }
 }

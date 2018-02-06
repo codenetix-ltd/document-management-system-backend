@@ -31,26 +31,12 @@ class Tag extends Model implements ITag
         return $this->name;
     }
 
-    public function setCreated(string $created): ITag
-    {
-        $this->setCreatedAt($created);
-
-        return $this;
-    }
-
-    public function getCreated(): string
+    public function getCreatedAt(): string
     {
         return $this->created_at;
     }
 
-    public function setUpdated(string $updated): ITag
-    {
-        $this->setUpdatedAt($updated);
-
-        return $this;
-    }
-
-    public function getUpdated(): string
+    public function getUpdatedAt(): string
     {
         return $this->updated_at;
     }

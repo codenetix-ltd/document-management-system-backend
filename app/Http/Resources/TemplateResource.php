@@ -2,18 +2,10 @@
 
 namespace App\Http\Resources;
 
-use Illuminate\Http\Resources\Json\Resource;
-
-class TemplateResource extends Resource
+class TemplateResource extends ApiResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
-     */
-    public function toArray($request)
+    protected function getStructure(): array
     {
-        return parent::toArray($request);
+        return config('models.template_response');
     }
 }

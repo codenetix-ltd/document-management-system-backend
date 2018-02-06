@@ -23,7 +23,6 @@ class UserCreateService implements IUserCreateService
     public function create(IUser $user, UploadedFile $file = null) : IUser
     {
         $user = $this->repository->create($user);
-
         if ($file) {
             $user = $this->userAvatarUpdateService->update($user, $file);
         }

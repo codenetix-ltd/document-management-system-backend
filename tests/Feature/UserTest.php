@@ -26,20 +26,20 @@ class UserTest extends ApiTestCase
         Storage::fake('avatars');
 
         $response = $this->jsonRequestPostEntityWithSuccess(self::PATH, [
-            'full_name' => $user->full_name,
+            'fullName' => $user->full_name,
             'email' => $user->email,
-            'templates_ids' => $templatesIds,
+            'templatesIds' => $templatesIds,
             'password' => $password,
-            'password_confirmation' => $password,
+            'passwordConfirmation' => $password,
             'avatar' => UploadedFile::fake()->image('avatar.jpg')
         ]);
 
         //Storage::disk('avatars')->assertExists('avatar.jpg'); TODO - check files, clear directory after test
 
         $response->assertJson([
-            'full_name' => $user->full_name,
+            'fullName' => $user->full_name,
             'email' => $user->email,
-            'templates_ids' => $templatesIds
+            'templatesIds' => $templatesIds
         ]);
         $this->assertJsonStructure($response, true);
     }
@@ -48,9 +48,9 @@ class UserTest extends ApiTestCase
     {
         $response = $this->jsonRequestPostEntityValidationError(self::PATH, [
             'password' => 'password',
-            'password_confirmation' => 'password'
+            'passwordConfirmation' => 'password'
         ]);
-        $response->assertJsonValidationErrors(['email', 'full_name']);
+        $response->assertJsonValidationErrors(['email', 'fullName']);
     }
 
     public function testGetUserSuccess()
@@ -59,7 +59,7 @@ class UserTest extends ApiTestCase
 
         $response = $this->jsonRequestGetEntitySuccess(self::PATH . '/' .  $user->id);
         $response->assertJson([
-            'full_name' => $user->full_name,
+            'fullName' => $user->full_name,
             'email' => $user->email,
         ]);
         $this->assertJsonStructure($response);
@@ -77,12 +77,12 @@ class UserTest extends ApiTestCase
         $templatesIds = Template::all()->take(1)->pluck('id')->toArray(); //TODO - можно ли тут так делать?
 
         $response = $this->jsonRequestPutEntityWithSuccess(self::PATH .'/' . $user->id, [
-            'full_name' => $userNameNew,
-            'templates_ids' => $templatesIds
+            'fullName' => $userNameNew,
+            'templatesIds' => $templatesIds
         ]);
         $response->assertJson([
-            'full_name' => $userNameNew,
-            'templates_ids' => $templatesIds
+            'fullName' => $userNameNew,
+            'templatesIds' => $templatesIds
         ]);
         $this->assertJsonStructure($response);
     }
@@ -107,22 +107,10 @@ class UserTest extends ApiTestCase
 
     private function assertJsonStructure(TestResponse $response, $withAvatar = false)
     {
-        $structure = [
-            'full_name',
-            'email',
-            'templates_ids',
-            'created_at',
-            'updated_at'
-        ];
+        $structure = config('models.user_response');
 
-        if ($withAvatar) {
-            $structure['avatar'] = [
-                'id',
-                'path',
-                'original_name',
-                'created_at',
-                'updated_at'
-            ];
+        if (!$withAvatar) {
+            unset($structure['avatar']);
         }
 
         $response->assertJsonStructure($structure);

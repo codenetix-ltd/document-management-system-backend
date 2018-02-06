@@ -25,4 +25,9 @@ class TemplateUpdateRequest extends TemplateBaseRequest
             'name' => 'sometimes|required|unique:templates|max:255'
         ];
     }
+
+    public function getModelStructure(): array
+    {
+        return config('models.template_update_request');
+    }
 }

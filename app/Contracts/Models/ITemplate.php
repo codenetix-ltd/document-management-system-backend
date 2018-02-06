@@ -11,9 +11,9 @@ interface ITemplate
     public function getName(): string;
 
     //TODO - вынести поля даты в отдельный интерфейс
-    public function setCreated(string $created): self;
-    public function getCreated(): string;
+    public function setCreatedAt($value);
+    public function getCreatedAt(): string;
 
-    public function setUpdated(string $updated): self;
-    public function getUpdated(): string;
+    public function setUpdatedAt($value);
+    public function getUpdatedAt(): string;
 }

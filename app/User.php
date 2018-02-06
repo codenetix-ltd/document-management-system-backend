@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Contracts\Models\IFile;
 use App\Contracts\Models\IUser;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -12,14 +13,6 @@ class User extends Authenticatable implements IUser
     use Notifiable, HasApiTokens;
 
     private $templates_ids;
-
-    protected $fillable = [
-        'full_name', 'email', 'password'
-    ];
-
-    protected $hidden = [
-        'password', 'remember_token', 'avatar_file_id'
-    ];
 
     public function templates()
     {
@@ -97,30 +90,6 @@ class User extends Authenticatable implements IUser
         return $this;
     }
 
-    public function setCreated(string $created): IUser
-    {
-        $this->setCreatedAt($created);
-
-        return $this;
-    }
-
-    public function getCreated(): string
-    {
-        return $this->created_at;
-    }
-
-    public function setUpdated(string $updated): IUser
-    {
-        $this->setUpdatedAt($updated);
-
-        return $this;
-    }
-
-    public function getUpdated(): string
-    {
-        return $this->updated_at;
-    }
-
     public function setTemplatesIds(array $ids): IUser
     {
         $this->templates_ids = $ids;
@@ -131,5 +100,20 @@ class User extends Authenticatable implements IUser
     public function getTemplatesIds(): ?array
     {
         return $this->templates_ids;
+    }
+
+    public function getAvatar(): IFile
+    {
+        return $this->avatar;
+    }
+
+    public function getCreatedAt(): string
+    {
+        return $this->created_at;
+    }
+
+    public function getUpdatedAt(): string
+    {
+        return $this->updated_at;
     }
 }

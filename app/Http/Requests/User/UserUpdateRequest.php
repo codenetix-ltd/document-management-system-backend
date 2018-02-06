@@ -22,11 +22,17 @@ class UserUpdateRequest extends UserBaseRequest
     public function rules()
     {
         return [
-            'full_name' => 'sometimes|required|max:255',
+            'fullName' => 'sometimes|required|max:255',
             'email' => 'sometimes|required|email|unique:users,email',
-            'templates_ids' => 'array',
-            'password' => 'sometimes|required|min:6|confirmed',
+            'templatesIds' => 'array',
+            'password' => 'sometimes|required|min:6',
+            'passwordConfirmation' => 'sometimes|required|same:password',
             'avatar' => 'image'
         ];
+    }
+
+    public function getModelStructure(): array
+    {
+        return config('models.user_update_request');
     }
 }

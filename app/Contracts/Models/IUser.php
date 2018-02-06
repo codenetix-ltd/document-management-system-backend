@@ -15,12 +15,14 @@ interface IUser
 
     public function setPassword(string $password): self;
 
-    public function setCreated(string $created): self;
-    public function getCreated(): string;
-
-    public function setUpdated(string $updated): self;
-    public function getUpdated(): string;
-
     public function setTemplatesIds(array $ids): self;
     public function getTemplatesIds(): ?array;
+
+    public function getAvatar(): IFile;
+
+    public function setCreatedAt($value);
+    public function getCreatedAt(): string;
+
+    public function setUpdatedAt($value);
+    public function getUpdatedAt(): string;
 }

@@ -25,4 +25,9 @@ class TemplateStoreRequest extends TemplateBaseRequest
             'name' => 'required|unique:templates|max:255'
         ];
     }
+
+    public function getModelStructure(): array
+    {
+        return config('models.template_store_request');
+    }
 }

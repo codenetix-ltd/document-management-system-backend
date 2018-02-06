@@ -21,4 +21,6 @@ Route::prefix('v1')->group(function () {
     Route::apiResource('tags', 'API\TagController');
 
     Route::apiResource('types', 'API\TypeController', ['only' => ['index']]);
+
+    Route::post('templates/{templateId}/attributes', 'API\AttributeController@store');
 });

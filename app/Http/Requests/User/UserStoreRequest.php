@@ -22,11 +22,17 @@ class UserStoreRequest extends UserBaseRequest
     public function rules()
     {
         return [
-            'full_name' => 'required|max:255',
+            'fullName' => 'required|max:255',
             'email' => 'required|email|unique:users,email',
-            'templates_ids' => 'array',
-            'password' => 'required|min:6|confirmed',
+            'templatesIds' => 'array',
+            'password' => 'required|min:6',
+            'passwordConfirmation' => 'required|same:password',
             'avatar' => 'image'
         ];
+    }
+
+    public function getModelStructure(): array
+    {
+        return config('models.user_store_request');
     }
 }

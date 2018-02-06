@@ -10,9 +10,9 @@ interface ITag
     public function setName(string $name): self;
     public function getName(): string;
 
-    public function setCreated(string $created): self;
-    public function getCreated(): string;
+    public function setCreatedAt($value);
+    public function getCreatedAt(): string;
 
-    public function setUpdated(string $updated): self;
-    public function getUpdated(): string;
+    public function setUpdatedAt($value);
+    public function getUpdatedAt(): string;
 }

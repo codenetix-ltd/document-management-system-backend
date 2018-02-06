@@ -2,10 +2,11 @@
 
 namespace App\Contracts\Repositories;
 
-/**
- * @author Andrey Vorobiov<andrew.sprw@gmail.com>
- */
+use App\Contracts\Models\IAttribute;
+
 interface IAttributeRepository
 {
     public function getAttributeValuesByDocumentVersionId($documentVersionId);
+
+    public function create(IAttribute $attribute): IAttribute;
 }

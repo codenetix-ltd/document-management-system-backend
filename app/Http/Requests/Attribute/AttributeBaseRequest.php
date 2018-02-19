@@ -9,6 +9,6 @@ class AttributeBaseRequest extends ApiRequest
 {
     public function getEntity(): IAttribute
     {
-        return $this->transform(IAttribute::class);
+        return $this->transform(IAttribute::class, $this->getModelStructure());
     }
 }

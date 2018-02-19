@@ -15,6 +15,7 @@ class AttributeController extends Controller
 
     public function store(AttributeStoreRequest $request, $templateId)
     {
+        dd($request->getEntity());
     }
 
     public function show($id)
@@ -30,5 +31,12 @@ class AttributeController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function stores(TagStoreRequest $request, ITagCreateService $tagCreateService)
+    {
+        $tag = $tagCreateService->create($request->getEntity());
+
+        return (new TagResource($tag))->response()->setStatusCode(201);
     }
 }

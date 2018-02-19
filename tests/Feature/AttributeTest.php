@@ -23,6 +23,9 @@ class AttributeTest extends ApiTestCase
             'type_id' => $type->id
         ]);
 
+        dd($response->getOriginalContent());
+
+
         dd($response->content());
         $response->assertJson([
             'name' => $attribute->name,
@@ -38,17 +41,6 @@ class AttributeTest extends ApiTestCase
 
     private function assertJsonStructure(TestResponse $response)
     {
-        $response->assertJsonStructure([
-            'id',
-            'name',
-            'template_id',
-            'created_at',
-            'updated_at',
-            'type' => [
-                'id',
-                'name',
-                'machine_name'
-            ]
-        ]);
+        $response->assertJsonStructure(config('models.tag_response'));
     }
 }

@@ -42,6 +42,7 @@ class TemplateController extends Controller
         return (new TemplateResource($template))->response()->setStatusCode(200);
     }
 
+    //TODO - добавить проверку, есть ли в наличии документы с таким шаблоном
     public function destroy(ITemplateDeleteService $userDeleteService, int $id)
     {
         $userDeleteService->delete($id);

@@ -1,83 +1,94 @@
 <?php
-//Common
-$dates = [
+//Avatar
+$avatar = [
     'createdAt',
-    'updatedAt'
+    'updatedAt',
+    'id',
+    'path',
+    'originalName',
 ];
 
-//Avatar
-$avatar = array_merge(
-    $dates,
-    [
-        'id',
-        'path',
-        'originalName',
-    ]
-);
 
 //User
-$user = [
+$user_store_request = [
     'fullName',
     'email',
+    'templatesIds',
+    'password',
+    'passwordConfirmed',
+    'avatar'
 ];
-$user_store_request = array_merge(
-    $user,
-    [
-        'templatesIds',
-        'password',
-        'passwordConfirmed',
-        'avatar'
-    ]
-);
-$user_response = array_merge(
-    $user,
-    $dates,
-    [
-        'id',
-        'templatesIds' => [],
-        'avatar' => $avatar
-    ]
-);
+$user_response = [
+    'fullName',
+    'email',
+    'createdAt',
+    'updatedAt',
+    'id',
+    'templatesIds' => [],
+    'avatar' => $avatar
+];
 
 
 //Tag
 $tag = [
     'name'
 ];
-$tag_response = array_merge(
-    [
-        'id'
-    ],
-    $tag,
-    $dates
-);
+$tag_response = [
+    'id',
+    'name',
+    'createdAt',
+    'updatedAt'
+];
 
 
 //Template
 $template = [
     'name'
 ];
-$template_response = array_merge(
-    [
-        'id'
-    ],
-    $template,
-    $dates
-);
+$template_response = [
+    'id',
+    'name',
+    'createdAt',
+    'updatedAt'
+];
 
 
 //Type
 $type = [
     'name'
 ];
-$type_response = array_merge(
-    [
-        'id'
-    ],
-    $type,
-    $dates
-);
+$type_response = [
+    'id',
+    'name',
+    'createdAt',
+    'updatedAt'
+];
 
+
+//Attribute
+$attribute_store_request = [
+    'name',
+    'typeId',
+    'table' => [
+        'rows' => [
+            [
+                'name',
+                'columns' => [
+                    [
+                        'typeId',
+                        'isLocked'
+                    ]
+                ]
+            ]
+        ],
+        'columns' => [
+            [
+                'name',
+                'typeId'
+            ]
+        ]
+    ]
+];
 
 
 return [

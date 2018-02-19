@@ -13,7 +13,6 @@ class TagTest extends ApiTestCase
 
     public function testCreateTagSuccess()
     {
-        //TODO - создать свою фабрику, где можно было бы получать модели по интерфейсу а не по классу напрямую
         $tag = factory(Tag::class)->make();
 
         $response = $this->jsonRequestPostEntityWithSuccess(self::PATH, [

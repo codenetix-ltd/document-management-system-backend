@@ -26,4 +26,9 @@ class AttributeStoreRequest extends AttributeBaseRequest
             'type_id' => 'required|integer|exists:types,id'
         ];
     }
+
+    public function getModelStructure(): array
+    {
+        return config('models.tag_store_request');
+    }
 }

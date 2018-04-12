@@ -10,6 +10,8 @@ use App\Contracts\Models\ITableTypeRow;
 use App\Contracts\Repositories\IAttributeRepository;
 use App\TableTypeColumn;
 use App\TableTypeRow;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class AttributeRepository implements IAttributeRepository
 {
@@ -58,5 +60,40 @@ class AttributeRepository implements IAttributeRepository
         } else {
             return $maxOrder + 1;
         }
+    }
+
+    public function findOrFail(int $id): IAttribute
+    {
+        return Attribute::findOrFail($id);
+    }
+
+    public function find(int $id): ?IAttribute
+    {
+        return Attribute::find($id);
+    }
+
+    public function getTableRowsByAttributeId(int $id): Collection
+    {
+        return TableTypeRow::where('parent_attribute_id', $id)->get();
+    }
+
+    public function getTableColumnsByAttributeId(int $id): Collection
+    {
+        return TableTypeColumn::where('parent_attribute_id', $id)->get();
+    }
+
+    public function getChildAttributes(int $id): Collection
+    {
+        return Attribute::where('parent_attribute_id', $id)->get();
+    }
+
+    public function delete(int $id): ?bool
+    {
+        return Attribute::where('id', $id)->delete();
+    }
+
+    public function list(): LengthAwarePaginator
+    {
+        return Attribute::where('parent_attribute_id', null)->paginate();
     }
 }

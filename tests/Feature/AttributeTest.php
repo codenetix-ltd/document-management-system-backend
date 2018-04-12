@@ -3,6 +3,8 @@
 namespace Tests\Feature;
 
 use App\Attribute;
+use App\Contracts\Models\IAttribute;
+use App\Contracts\Models\ITemplate;
 use App\Contracts\Repositories\ITypeRepository;
 use App\Services\Type\TypeService;
 use App\Template;
@@ -10,6 +12,8 @@ use Tests\ApiTestCase;
 
 class AttributeTest extends ApiTestCase
 {
+    protected const DB_TABLE = 'attributes';
+
     /** @var ITypeRepository $typeRepository */
     private $typeRepository;
 
@@ -24,11 +28,9 @@ class AttributeTest extends ApiTestCase
         $attribute = factory(Attribute::class)->make();
         $template = factory(Template::class)->create();
 
-        $type = $this->typeRepository->getTypeByMachineName(TypeService::TYPE_STRING);
-
         $response = $this->jsonRequestPostEntityWithSuccess('templates/' . $template->id . '/attributes', [
             'name' => $attribute->name,
-            'typeId' => $type->id
+            'typeId' => $attribute->type_id
         ]);
 
         $response->assertJson([
@@ -43,7 +45,7 @@ class AttributeTest extends ApiTestCase
         $this->assertJsonStructure($response, config('models.attribute_response'));
     }
 
-    public function testCreateAttributeTypeTableSuccess()
+    public function qtestCreateAttributeTypeTableSuccess()
     {
         $attribute = factory(Attribute::class)->states('table')->make();
         $template = factory(Template::class)->create();
@@ -56,7 +58,6 @@ class AttributeTest extends ApiTestCase
             'data' => $attribute->data
         ]);
 
-        dd($response->getOriginalContent());
         $response->assertJson([
             'name' => $attribute->name,
             'templateId' => $template->id,
@@ -67,5 +68,72 @@ class AttributeTest extends ApiTestCase
             ]
         ]);
         $this->assertJsonStructure($response, config('models.attribute_response'));
+        //todo - assert data properties
+    }
+
+    public function qtestCreateAttributeTypeStringWithoutDataValidationFail()
+    {
+        $template = factory(Template::class)->create();
+        $this->jsonRequestPostEntityValidationError('templates/' . $template->id . '/attributes', []);
+    }
+
+    public function qtestCreateAttributeTypeTableValidationFail()
+    {
+        $attribute = factory(Attribute::class)->states('table-broken')->make();
+        $template = factory(Template::class)->create();
+
+        $typeTable = $this->typeRepository->getTypeByMachineName(TypeService::TYPE_TABLE);
+
+        $response = $this->jsonRequestPostEntityValidationError('templates/' . $template->id . '/attributes', [
+            'name' => $attribute->name,
+            'typeId' => $typeTable->id,
+            'data' => $attribute->data
+        ]);
+    }
+
+    public function qtestGetAttributeSuccess()
+    {
+        /** @var IAttribute $attribute */
+        $attribute = factory(Attribute::class)->create();
+
+        $response = $this->jsonRequestGetEntitySuccess('attributes/' . $attribute->getId());
+        $response->assertJson([
+            'name' => $attribute->getName(),
+            'templateId' => $attribute->getTemplateId(),
+            'isLocked' => $attribute->isLocked(),
+            'parentAttributeId' => $attribute->getParentAttributeId(),
+            'type' => [
+                'id' => $attribute->getTypeId()
+            ]
+        ]);
+        $this->assertJsonStructure($response, config('models.attribute_response'));
+    }
+
+    public function qtestGetAttributeNotFound()
+    {
+        $this->jsonRequestGetEntityNotFound('attributes/' . 0);
+    }
+
+    public function qtestDeleteAttributeSuccess()
+    {
+        /** @var IAttribute $attribute */
+        $attribute = factory(Attribute::class)->create();
+        $this->jsonRequestDelete('attributes', $attribute->getId(), self::DB_TABLE);
+    }
+
+    public function qtestDeleteTagNotExistSuccess()
+    {
+        $this->jsonRequestDelete('attributes', 0, self::DB_TABLE);
+    }
+
+    public function testListOfTagsWithPaginationSuccess()
+    {
+        /** @var ITemplate $template */
+        $template = factory(Template::class)->create();
+        factory(Attribute::class, 20)->create([
+            'template_id' => $template->getId()
+        ]);
+
+        $this->jsonRequestObjectsWithPagination('templates/' . $template->getId() . '/attributes');
     }
 }

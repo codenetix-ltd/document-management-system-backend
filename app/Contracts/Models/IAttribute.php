@@ -19,7 +19,7 @@ interface IAttribute
     public function setLocked(bool $isLocked): self;
     public function isLocked(): bool;
 
-    public function setData(array $data): self;
+    public function setData(array $data = null): self;
     public function getData(): ?array;
 
     public function setOrder(int $order): self;

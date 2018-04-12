@@ -6,6 +6,7 @@ use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -49,13 +50,19 @@ class Handler extends ExceptionHandler
     {
         if ($exception instanceof ModelNotFoundException || $exception instanceof NotFoundHttpException) {
             return response('Resource Not Found', 404);
-            //TODO - система ошибок
         }
 
         if ($exception instanceof AccessDeniedHttpException) {
             return response()->view('errors.403', [], 403);
         }
-        //AccessDeniedHttpException
+
+        if ($exception instanceof InvalidAttributeDataStructureException || $exception instanceof InvalidAttributeTypeException) {
+            return response()->json([
+                'message' => $exception->getMessage(),
+            ], 422);
+        }
+
+        //TODO - catch FailedAttributeDeleteException, FailedAttributeCreateException
 
         return parent::render($request, $exception);
     }

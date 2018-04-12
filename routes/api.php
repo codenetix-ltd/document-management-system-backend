@@ -23,4 +23,7 @@ Route::prefix('v1')->group(function () {
     Route::apiResource('types', 'API\TypeController', ['only' => ['index']]);
 
     Route::post('templates/{templateId}/attributes', 'API\AttributeController@store');
+    Route::get('attributes/{id}', 'API\AttributeController@show');
+    Route::delete('attributes/{id}', 'API\AttributeController@destroy');
+    Route::get('templates/{id}/attributes', 'API\AttributeController@index');
 });

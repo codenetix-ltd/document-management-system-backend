@@ -7,9 +7,10 @@ use App\Contracts\Repositories\IAttributeRepository;
 use App\Contracts\Repositories\ITypeRepository;
 use App\Contracts\Services\Attribute\IAttributeCreateService;
 use App\Contracts\Services\Attribute\IAttributeGetService;
-use App\Exceptions\AttributeCreateFailException;
-use App\Exceptions\UnsupportedAttributeTypeException;
-use App\Exceptions\ValidationAttributeDataStructureException;
+use App\Contracts\Services\Attribute\IAttributeTypeTableValidator;
+use App\Exceptions\FailedAttributeCreateException;
+use App\Exceptions\InvalidAttributeTypeException;
+use App\Exceptions\InvalidAttributeDataStructureException;
 use App\Repositories\TransactionTrait;
 use App\Services\Type\TypeService;
 use Exception;
@@ -21,21 +22,23 @@ class AttributeCreateService implements IAttributeCreateService
     private $repository;
     private $typeRepository;
     private $attributeGetService;
+    private $attributeTypeTableValidator;
 
-    public function __construct(IAttributeRepository $repository, ITypeRepository $typeRepository, IAttributeGetService $attributeGetService)
+    public function __construct(IAttributeRepository $repository, ITypeRepository $typeRepository, IAttributeGetService $attributeGetService, IAttributeTypeTableValidator $attributeTypeTableValidator)
     {
         $this->repository = $repository;
         $this->typeRepository = $typeRepository;
         $this->attributeGetService = $attributeGetService;
+        $this->attributeTypeTableValidator = $attributeTypeTableValidator;
     }
 
     /**
      * @param IAttribute $attribute
      * @param int $templateId
      * @return IAttribute
-     * @throws AttributeCreateFailException
-     * @throws UnsupportedAttributeTypeException
-     * @throws ValidationAttributeDataStructureException
+     * @throws FailedAttributeCreateException
+     * @throws InvalidAttributeTypeException
+     * @throws InvalidAttributeDataStructureException
      */
     public function create(IAttribute $attribute, int $templateId) : IAttribute
     {
@@ -53,9 +56,9 @@ class AttributeCreateService implements IAttributeCreateService
     /**
      * @param IAttribute $attribute
      * @return IAttribute
-     * @throws AttributeCreateFailException
-     * @throws UnsupportedAttributeTypeException
-     * @throws ValidationAttributeDataStructureException
+     * @throws FailedAttributeCreateException
+     * @throws InvalidAttributeTypeException
+     * @throws InvalidAttributeDataStructureException
      */
     private function createComplexAttribute(IAttribute $attribute): IAttribute
     {
@@ -63,20 +66,19 @@ class AttributeCreateService implements IAttributeCreateService
         if ($type->getMachineName() == TypeService::TYPE_TABLE) {
             return $this->createAttributeWithTableType($attribute);
         } else {
-            //todo - catch
-            throw new UnsupportedAttributeTypeException('Unsupported attribute type');
+            throw new InvalidAttributeTypeException('Unsupported attribute type');
         }
     }
 
     /**
      * @param IAttribute $attribute
      * @return IAttribute
-     * @throws AttributeCreateFailException
-     * @throws ValidationAttributeDataStructureException
+     * @throws FailedAttributeCreateException
+     * @throws InvalidAttributeDataStructureException
      */
     private function createAttributeWithTableType(IAttribute $attribute): IAttribute
     {
-        $this->validationDataStructureForTableType($attribute->getData());
+        $this->attributeTypeTableValidator->validate($attribute);
 
         $this->beginTransaction();
         try {
@@ -100,58 +102,18 @@ class AttributeCreateService implements IAttributeCreateService
                     $this->repository->create($childAttribute);
                 }
             }
-
             $this->commit();
         } catch (Exception $e) {
             $this->rollback();
-            //todo - catch
-            throw new AttributeCreateFailException('The process of creating the attribute failed with an error', $e->getCode(), $e);
+            throw new FailedAttributeCreateException('The process of creating the attribute failed with an error', $e->getCode(), $e);
         }
 
         return $parentAttribute;
     }
 
-    /**
-     * @param array $data
-     * @return bool
-     * @throws ValidationAttributeDataStructureException
-     */
-    private function validationDataStructureForTableType(array $data): bool
-    {
-        //todo - catch
-        if (!key_exists('headers', $data)) {
-            throw new ValidationAttributeDataStructureException('Headers properties not found');
-        }
-        if (!is_array($data['headers']) || count($data['headers']) === 0) {
-            throw new ValidationAttributeDataStructureException('Headers properties is empty');
-        }
-        if (!key_exists('rows', $data)) {
-            throw new ValidationAttributeDataStructureException('Rows properties not found');
-        }
-        if (!is_array($data['rows']) || count($data['rows']) === 0) {
-            throw new ValidationAttributeDataStructureException('Rows properties is empty');
-        }
-
-        $availableTypeIds = $this->typeRepository->getTypeIds();
-        $totalColumns = count($data['headers']);
-        array_walk($data['rows'], function ($item) use ($totalColumns, $availableTypeIds) {
-            if (count($item['columns']) !== $totalColumns) {
-                throw new ValidationAttributeDataStructureException('Bad data structure');
-            }
-
-            array_walk($item['columns'], function($item) use ($availableTypeIds) {
-                if (!key_exists('typeId', $item) || !in_array($item['typeId'], $availableTypeIds)) {
-                    throw new UnsupportedAttributeTypeException('Unsupported attribute type');
-                }
-            });
-        });
-
-        return true;
-    }
-
     private function generateNameForCell(int $row, int $column, int $templateId)
     {
-        return $row . '*' . $column . '*' . $templateId;
+        return 'row_' . $row . '*' . 'column_' . $column . '*' . 'template_' . $templateId;
     }
 
     private function createTableTypeColumns(array $headers, int $parentAttributeId)

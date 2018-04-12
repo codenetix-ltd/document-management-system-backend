@@ -4,7 +4,7 @@ namespace App\Exceptions;
 
 use Exception;
 
-class UnsupportedAttributeTypeException extends Exception
+class FailedAttributeCreateException extends Exception
 {
     //
 }

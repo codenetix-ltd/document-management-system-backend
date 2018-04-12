@@ -20,7 +20,10 @@ use App\Contracts\Repositories\ITemplateRepository;
 use App\Contracts\Repositories\ITypeRepository;
 use App\Contracts\Repositories\IUserRepository;
 use App\Contracts\Services\Attribute\IAttributeCreateService;
+use App\Contracts\Services\Attribute\IAttributeDeleteService;
 use App\Contracts\Services\Attribute\IAttributeGetService;
+use App\Contracts\Services\Attribute\IAttributeListService;
+use App\Contracts\Services\Attribute\IAttributeTypeTableValidator;
 use App\Contracts\Services\File\IFileCreateService;
 use App\Contracts\Services\File\IFileManager;
 use App\Contracts\Services\Tag\ITagCreateService;
@@ -52,7 +55,10 @@ use App\Services\ADocumentCompareService;
 use App\Services\ADocumentGetService;
 use App\Services\ADocumentViewService;
 use App\Services\Attribute\AttributeCreateService;
+use App\Services\Attribute\AttributeDeleteService;
 use App\Services\Attribute\AttributeGetService;
+use App\Services\Attribute\AttributeListService;
+use App\Services\Attribute\AttributeTypeTableValidator;
 use App\Services\DocumentCompareService;
 use App\Services\DocumentGetService;
 use App\Services\DocumentViewService;
@@ -149,6 +155,9 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(IAttributeRepository::class, AttributeRepository::class);
         $this->app->bind(IAttributeCreateService::class, AttributeCreateService::class);
         $this->app->bind(IAttributeGetService::class, AttributeGetService::class);
+        $this->app->bind(IAttributeTypeTableValidator::class, AttributeTypeTableValidator::class);
+        $this->app->bind(IAttributeDeleteService::class, AttributeDeleteService::class);
+        $this->app->bind(IAttributeListService::class, AttributeListService::class);
 
 
         $this->app->bind(ITransformer::class, Transformer::class);

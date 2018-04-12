@@ -87,7 +87,7 @@ class Attribute extends Model implements IAttribute
         return $this->is_locked;
     }
 
-    public function setData(array $data): IAttribute
+    public function setData(array $data = null): IAttribute
     {
         $this->data = $data;
 

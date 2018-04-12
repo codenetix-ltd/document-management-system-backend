@@ -34,7 +34,6 @@ abstract class ApiTestCase extends BaseTestCase
     protected function jsonRequestPostEntityWithSuccess($relationPath, $data)
     {
         $response =  $this->jsonRequest('POST', $relationPath, $data);
-        dd($response->getOriginalContent());
         $response->assertStatus(201);
 
         return $response;
@@ -73,7 +72,6 @@ abstract class ApiTestCase extends BaseTestCase
     protected function jsonRequestDelete($path, $id, $table)
     {
         $response = $this->jsonRequest('DELETE', $path . '/' . $id);
-
         $response->assertStatus(204);
         $this->assertDatabaseMissing($table, [
             'id' => $id

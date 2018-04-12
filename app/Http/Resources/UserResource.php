@@ -2,11 +2,12 @@
 
 namespace App\Http\Resources;
 
+use Illuminate\Http\Request;
+
 class UserResource extends ApiResource
 {
-    protected function getComplexFields(): array
+    protected function getComplexFields(Request $request): array
     {
-        //TODO - можно ли тут так
         return [
             'templatesIds' => $this->templates->pluck('id'),
             'avatar' => $this->when($this->avatar, new AvatarResource($this->avatar))

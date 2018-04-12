@@ -24,5 +24,5 @@ abstract class ApiRequest extends FormRequest
         return $this->updatedFields;
     }
 
-    protected abstract function getModelStructure(): array;
+    public abstract function getModelStructure(): array;
 }

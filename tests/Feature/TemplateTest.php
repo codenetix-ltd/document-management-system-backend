@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use App\Template;
-use Illuminate\Foundation\Testing\TestResponse;
 use Tests\ApiTestCase;
 
 class TemplateTest extends ApiTestCase
@@ -22,7 +21,7 @@ class TemplateTest extends ApiTestCase
         $response->assertJson([
             'name' => $template->name,
         ]);
-        $this->assertJsonStructure($response);
+        $this->assertJsonStructure($response, config('models.template_response'));
     }
 
     public function testCreateTemplateValidationError()
@@ -39,7 +38,7 @@ class TemplateTest extends ApiTestCase
         $response->assertJson([
             'name' => $template->name,
         ]);
-        $this->assertJsonStructure($response);
+        $this->assertJsonStructure($response, config('models.template_response'));
     }
 
     public function testGetTemplateNotFound()
@@ -58,7 +57,7 @@ class TemplateTest extends ApiTestCase
         $response->assertJson([
             'name' => $templateNameNew
         ]);
-        $this->assertJsonStructure($response);
+        $this->assertJsonStructure($response, config('models.template_response'));
     }
 
     public function testDeleteTagSuccess()
@@ -77,10 +76,5 @@ class TemplateTest extends ApiTestCase
         factory(Template::class, 20)->create();
 
         $this->jsonRequestObjectsWithPagination(self::PATH);
-    }
-
-    private function assertJsonStructure(TestResponse $response)
-    {
-        $response->assertJsonStructure(config('models.template_response'));
     }
 }

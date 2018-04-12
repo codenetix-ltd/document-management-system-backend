@@ -23,7 +23,7 @@ class AttributeTest extends ApiTestCase
         $this->typeRepository = $this->app->make(ITypeRepository::class);
     }
 
-    public function qtestCreateAttributeTypeStringSuccess()
+    public function testCreateAttributeTypeStringSuccess()
     {
         $attribute = factory(Attribute::class)->make();
         $template = factory(Template::class)->create();
@@ -45,7 +45,7 @@ class AttributeTest extends ApiTestCase
         $this->assertJsonStructure($response, config('models.attribute_response'));
     }
 
-    public function qtestCreateAttributeTypeTableSuccess()
+    public function testCreateAttributeTypeTableSuccess()
     {
         $attribute = factory(Attribute::class)->states('table')->make();
         $template = factory(Template::class)->create();
@@ -71,13 +71,13 @@ class AttributeTest extends ApiTestCase
         //todo - assert data properties
     }
 
-    public function qtestCreateAttributeTypeStringWithoutDataValidationFail()
+    public function testCreateAttributeTypeStringWithoutDataValidationFail()
     {
         $template = factory(Template::class)->create();
         $this->jsonRequestPostEntityValidationError('templates/' . $template->id . '/attributes', []);
     }
 
-    public function qtestCreateAttributeTypeTableValidationFail()
+    public function testCreateAttributeTypeTableValidationFail()
     {
         $attribute = factory(Attribute::class)->states('table-broken')->make();
         $template = factory(Template::class)->create();
@@ -91,7 +91,7 @@ class AttributeTest extends ApiTestCase
         ]);
     }
 
-    public function qtestGetAttributeSuccess()
+    public function testGetAttributeSuccess()
     {
         /** @var IAttribute $attribute */
         $attribute = factory(Attribute::class)->create();
@@ -109,19 +109,19 @@ class AttributeTest extends ApiTestCase
         $this->assertJsonStructure($response, config('models.attribute_response'));
     }
 
-    public function qtestGetAttributeNotFound()
+    public function testGetAttributeNotFound()
     {
         $this->jsonRequestGetEntityNotFound('attributes/' . 0);
     }
 
-    public function qtestDeleteAttributeSuccess()
+    public function testDeleteAttributeSuccess()
     {
         /** @var IAttribute $attribute */
         $attribute = factory(Attribute::class)->create();
         $this->jsonRequestDelete('attributes', $attribute->getId(), self::DB_TABLE);
     }
 
-    public function qtestDeleteTagNotExistSuccess()
+    public function testDeleteTagNotExistSuccess()
     {
         $this->jsonRequestDelete('attributes', 0, self::DB_TABLE);
     }

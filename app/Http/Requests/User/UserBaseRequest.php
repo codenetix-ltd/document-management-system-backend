@@ -7,8 +7,6 @@ use App\Http\Requests\ApiRequest;
 
 abstract class UserBaseRequest extends ApiRequest
 {
-    public abstract function getModelStructure(): array;
-
     public function getEntity(): IUser
     {
         return $this->transform(IUser::class, $this->getModelStructure());

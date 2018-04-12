@@ -41,7 +41,7 @@ class UserTest extends ApiTestCase
             'email' => $user->email,
             'templatesIds' => $templatesIds
         ]);
-        $this->assertJsonStructure($response, true);
+        $this->assertJsonStructureForUser($response, true);
     }
 
     public function testCreateUserValidationError()
@@ -62,7 +62,7 @@ class UserTest extends ApiTestCase
             'fullName' => $user->full_name,
             'email' => $user->email,
         ]);
-        $this->assertJsonStructure($response);
+        $this->assertJsonStructureForUser($response);
     }
 
     public function testGetUserNotFound()
@@ -84,7 +84,7 @@ class UserTest extends ApiTestCase
             'fullName' => $userNameNew,
             'templatesIds' => $templatesIds
         ]);
-        $this->assertJsonStructure($response);
+        $this->assertJsonStructureForUser($response);
     }
 
     public function testDeleteTagSuccess()
@@ -105,14 +105,13 @@ class UserTest extends ApiTestCase
         $this->jsonRequestObjectsWithPagination(self::PATH);
     }
 
-    private function assertJsonStructure(TestResponse $response, $withAvatar = false)
+    private function assertJsonStructureForUser(TestResponse $response, $withAvatar = false)
     {
         $structure = config('models.user_response');
 
         if (!$withAvatar) {
             unset($structure['avatar']);
         }
-
-        $response->assertJsonStructure($structure);
+        $this->assertJsonStructure($response, $structure);
     }
 }

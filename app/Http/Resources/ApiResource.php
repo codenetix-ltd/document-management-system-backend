@@ -3,11 +3,12 @@
 namespace App\Http\Resources;
 
 use App\Services\System\Extractor;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\Resource;
 
 abstract class ApiResource extends Resource
 {
-    protected function getComplexFields(): array
+    protected function getComplexFields(Request $request): array
     {
         return [];
     }
@@ -19,8 +20,8 @@ abstract class ApiResource extends Resource
         $response = [];
         $structure = $this->getStructure();
         foreach ($structure as $fieldKey => $fieldValue) {
-            if (key_exists($fieldKey, static::getComplexFields())) {
-                $response[$fieldKey] = static::getComplexFields()[$fieldKey];
+            if (key_exists($fieldKey, static::getComplexFields($request))) {
+                $response[$fieldKey] = static::getComplexFields($request)[$fieldKey];
                 unset($structure[$fieldKey]);
             }
         }

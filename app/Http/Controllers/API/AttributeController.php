@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Contracts\Services\Attribute\IAttributeCreateService;
 use App\Http\Requests\Attribute\AttributeStoreRequest;
+use App\Http\Resources\AttributeResource;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -13,9 +15,11 @@ class AttributeController extends Controller
         //
     }
 
-    public function store(AttributeStoreRequest $request, $templateId)
+    public function store(AttributeStoreRequest $request, IAttributeCreateService $attributeCreateService, $templateId)
     {
-        dd($request->getEntity());
+        $attribute = $attributeCreateService->create($request->getEntity(), $templateId);
+
+        return (new AttributeResource($attribute))->response()->setStatusCode(201);
     }
 
     public function show($id)
@@ -31,12 +35,5 @@ class AttributeController extends Controller
     public function destroy($id)
     {
         //
-    }
-
-    public function stores(TagStoreRequest $request, ITagCreateService $tagCreateService)
-    {
-        $tag = $tagCreateService->create($request->getEntity());
-
-        return (new TagResource($tag))->response()->setStatusCode(201);
     }
 }

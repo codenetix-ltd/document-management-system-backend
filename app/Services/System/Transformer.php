@@ -15,13 +15,15 @@ class Transformer implements ITransformer
         $objectReflection = new ReflectionClass($object);
 
         foreach ($data as $field => $value) {
-            if (count($modelStructure) && !in_array($field, $modelStructure)) {
+            if (!in_array($field, $modelStructure)) {
+                //TODO - что делать если поле является массивом
                 continue;
             }
 
             $method = $this->tryGetSetterName($data, $field, $objectReflection);
 
             if (!$method) {
+                //todo - mb throw Exception?
                 continue;
             }
 

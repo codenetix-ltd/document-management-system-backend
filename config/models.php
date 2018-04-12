@@ -57,19 +57,20 @@ $template_response = [
 $type = [
     'name'
 ];
-$type_response = [
+$typeResponse = [
     'id',
     'name',
+    'machineName',
     'createdAt',
     'updatedAt'
 ];
 
 
 //Attribute
-$attribute_store_request = [
+$attributeStoreRequest = [
     'name',
     'typeId',
-    'table' => [
+    'data' /*=> [
         'rows' => [
             [
                 'name',
@@ -87,7 +88,22 @@ $attribute_store_request = [
                 'typeId'
             ]
         ]
-    ]
+    ]*/
+];
+$attributeResponse = [
+    'id',
+    'name',
+    'order',
+    'isLocked',
+    'templateId',
+    'parentAttributeId',
+    'type' => $typeResponse,
+    'data'/* => [
+        'rows',
+        'columns'
+    ]*/,
+    'createdAt',
+    'updatedAt'
 ];
 
 
@@ -107,5 +123,8 @@ return [
 
     'type_store_request' => $type,
     'type_update_request' => $type,
-    'type_response' => $type_response,
+    'type_response' => $typeResponse,
+
+    'attribute_store_request' => $attributeStoreRequest,
+    'attribute_response' => $attributeResponse
 ];

@@ -1,4 +1,4 @@
-<?php
+e<?php
 namespace App\Entity\Attributes\AttributeBuilders;
 
 use App\Contracts\Attributes\IAttribute;

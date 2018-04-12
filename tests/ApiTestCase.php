@@ -34,6 +34,7 @@ abstract class ApiTestCase extends BaseTestCase
     protected function jsonRequestPostEntityWithSuccess($relationPath, $data)
     {
         $response =  $this->jsonRequest('POST', $relationPath, $data);
+        dd($response->getOriginalContent());
         $response->assertStatus(201);
 
         return $response;
@@ -106,5 +107,15 @@ abstract class ApiTestCase extends BaseTestCase
                 'total'
             ]
         ]);
+    }
+
+    protected function assertJsonStructure(TestResponse $response, $structure, $unsetOptionalFields = false)
+    {
+        $response->assertJsonStructure($this->filterStructureFields($structure, $unsetOptionalFields));
+    }
+
+    protected function filterStructureFields($structure, $unsetOptionalFields = false)
+    {
+        return $structure;
     }
 }

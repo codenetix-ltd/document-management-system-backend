@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+  app:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    environment:
+      APP_ENV: local
+      APP_DEBUG: 'true'
+      APP_KEY: '"base64:N5A11hYX5GxzTqEPRtoRHjtdtqg65hGpw2Qis1V4b8M="'
+      DB_DATABASE: dms
+      DB_HOST: mysql
+      DB_PASSWORD: dms
+      DB_USERNAME: root
+      INSTALL_XDEBUG: 1
+    volumes:
+      - ./:/var/www
+    links:
+      - mysql:mysql
+    ports:
+      - 80:80/tcp
+    restart: "always"
+  mysql:
+    image: mysql:latest
+    environment:
+      MYSQL_DATABASE: dms
+      MYSQL_ROOT_PASSWORD: dms
+    volumes:
+      - mysql-data:/var/lib/mysql
+    ports:
+      - 3306:3306/tcp
+    restart: "always"
+
+volumes:
+  mysql-data:

@@ -21,7 +21,6 @@ class CreateTableTypeAttrTables extends Migration
 
         Schema::create('table_type_columns', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('type_id');
             $table->unsignedInteger('parent_attribute_id');
             $table->string('name', 255);
         });
@@ -32,7 +31,6 @@ class CreateTableTypeAttrTables extends Migration
 
         Schema::table('table_type_columns', function (Blueprint $table) {
             $table->foreign('parent_attribute_id')->references('id')->on('attributes')->onDelete('cascade')->onUpdate('no action');
-            $table->foreign('type_id')->references('id')->on('types')->onDelete('no action')->onUpdate('no action');
         });
     }
 
@@ -44,7 +42,6 @@ class CreateTableTypeAttrTables extends Migration
     public function down()
     {
         Schema::table('table_type_columns', function (Blueprint $table) {
-            $table->dropForeign(['type_id']);
             $table->dropForeign(['parent_attribute_id']);
         });
 

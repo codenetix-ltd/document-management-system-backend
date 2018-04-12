@@ -12,6 +12,7 @@ class TagRepository implements ITagRepository
     public function create(ITag $tag): ITag
     {
         $tag->save();
+        $tag = Tag::findOrFail($tag->getId());
 
         return $tag;
     }

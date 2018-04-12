@@ -7,6 +7,8 @@ use App\Attribute;
 use App\Contracts\Adapters\ITableAdapter;
 use App\Contracts\Models\IAttribute;
 use App\Contracts\Models\IFile;
+use App\Contracts\Models\ITableTypeColumn;
+use App\Contracts\Models\ITableTypeRow;
 use App\Contracts\Models\ITag;
 use App\Contracts\Models\ITemplate;
 use App\Contracts\Models\IType;
@@ -18,6 +20,7 @@ use App\Contracts\Repositories\ITemplateRepository;
 use App\Contracts\Repositories\ITypeRepository;
 use App\Contracts\Repositories\IUserRepository;
 use App\Contracts\Services\Attribute\IAttributeCreateService;
+use App\Contracts\Services\Attribute\IAttributeGetService;
 use App\Contracts\Services\File\IFileCreateService;
 use App\Contracts\Services\File\IFileManager;
 use App\Contracts\Services\Tag\ITagCreateService;
@@ -49,6 +52,7 @@ use App\Services\ADocumentCompareService;
 use App\Services\ADocumentGetService;
 use App\Services\ADocumentViewService;
 use App\Services\Attribute\AttributeCreateService;
+use App\Services\Attribute\AttributeGetService;
 use App\Services\DocumentCompareService;
 use App\Services\DocumentGetService;
 use App\Services\DocumentViewService;
@@ -72,6 +76,8 @@ use App\Services\User\UserDeleteService;
 use App\Services\User\UserGetService;
 use App\Services\User\UserListService;
 use App\Services\User\UserUpdateService;
+use App\TableTypeColumn;
+use App\TableTypeRow;
 use App\Tag;
 use App\Template;
 use App\Type;
@@ -138,8 +144,11 @@ class AppServiceProvider extends ServiceProvider
 
 
         $this->app->bind(IAttribute::class, Attribute::class);
+        $this->app->bind(ITableTypeRow::class, TableTypeRow::class);
+        $this->app->bind(ITableTypeColumn::class, TableTypeColumn::class);
         $this->app->bind(IAttributeRepository::class, AttributeRepository::class);
         $this->app->bind(IAttributeCreateService::class, AttributeCreateService::class);
+        $this->app->bind(IAttributeGetService::class, AttributeGetService::class);
 
 
         $this->app->bind(ITransformer::class, Transformer::class);

@@ -23,12 +23,13 @@ class AttributeStoreRequest extends AttributeBaseRequest
     {
         return [
             'name' => 'required|max:255',
-            'type_id' => 'required|integer|exists:types,id'
+            'typeId' => 'required|integer|exists:types,id',
+            'data' => 'sometimes|required|array'
         ];
     }
 
     public function getModelStructure(): array
     {
-        return config('models.tag_store_request');
+        return config('models.attribute_store_request');
     }
 }

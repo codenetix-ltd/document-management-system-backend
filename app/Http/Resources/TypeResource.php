@@ -6,6 +6,6 @@ class TypeResource extends ApiResource
 {
     protected function getStructure(): array
     {
-        return config('models.template_response');
+        return config('models.type_response');
     }
 }

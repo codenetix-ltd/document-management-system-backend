@@ -10,6 +10,9 @@ interface IType
     public function setName(string $name): self;
     public function getName(): string;
 
+    public function setMachineName(string $machineName): self;
+    public function getMachineName(): string;
+
     public function setCreatedAt($value);
     public function getCreatedAt(): string;
 

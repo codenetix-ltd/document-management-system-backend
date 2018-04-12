@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use App\Contracts\System\ITransformer;
 use Illuminate\Foundation\Http\FormRequest;
 
-class ApiRequest extends FormRequest
+abstract class ApiRequest extends FormRequest
 {
     private $updatedFields = [];
 
@@ -23,4 +23,6 @@ class ApiRequest extends FormRequest
     {
         return $this->updatedFields;
     }
+
+    protected abstract function getModelStructure(): array;
 }

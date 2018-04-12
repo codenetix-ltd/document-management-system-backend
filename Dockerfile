@@ -31,14 +31,15 @@ RUN apt-get clean
 
 RUN docker-php-ext-install -j$(nproc) iconv zip mcrypt pdo mysqli pdo_mysql \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
-    && docker-php-ext-install -j$(nproc) gd \
-    && curl https://getcomposer.org/composer.phar > /usr/local/bin/composer \
+    && docker-php-ext-install -j$(nproc) gd
+
+RUN curl https://getcomposer.org/composer.phar > /usr/local/bin/composer \
     && chmod +x /usr/local/bin/composer
 
 #####################################
 # xDebug:
 #####################################
-ARG INSTALL_XDEBUG=false
+ARG INSTALL_XDEBUG=true
 ENV INSTALL_XDEBUG ${INSTALL_XDEBUG}
 RUN if [ ${INSTALL_XDEBUG} = true ]; then \
     pecl install xdebug && \

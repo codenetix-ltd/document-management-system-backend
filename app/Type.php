@@ -41,4 +41,16 @@ class Type extends Model implements IType
     {
         return $this->updated_at;
     }
+
+    public function setMachineName(string $machineName): IType
+    {
+        $this->machine_name = $machineName;
+
+        return $this;
+    }
+
+    public function getMachineName(): string
+    {
+        return $this->machine_name;
+    }
 }

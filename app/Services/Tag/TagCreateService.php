@@ -2,9 +2,9 @@
 
 namespace App\Services\Tag;
 
-use App\Contracts\Models\ITag;
 use App\Contracts\Repositories\ITagRepository;
 use App\Contracts\Services\Tag\ITagCreateService;
+use App\Tag;
 
 class TagCreateService implements ITagCreateService
 {
@@ -15,7 +15,7 @@ class TagCreateService implements ITagCreateService
         $this->repository = $repository;
     }
 
-    public function create(ITag $tag) : ITag
+    public function create(Tag $tag) : Tag
     {
         $tag = $this->repository->create($tag);
 

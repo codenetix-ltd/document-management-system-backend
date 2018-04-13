@@ -2,9 +2,9 @@
 
 namespace App\Contracts\Services\Attribute;
 
-use App\Contracts\Models\IAttribute;
+use App\Attribute;
 
 interface IAttributeGetService
 {
-    public function get(int $id) : IAttribute;
+    public function get(int $id) : Attribute;
 }

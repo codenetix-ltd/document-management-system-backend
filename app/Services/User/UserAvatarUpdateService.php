@@ -2,10 +2,10 @@
 
 namespace App\Services\User;
 
-use App\Contracts\Models\IUser;
 use App\Contracts\Repositories\IUserRepository;
 use App\Contracts\Services\File\IFileManager;
 use App\Contracts\Services\User\IUserAvatarUpdateService;
+use App\User;
 use Illuminate\Http\UploadedFile;
 
 class UserAvatarUpdateService implements IUserAvatarUpdateService
@@ -20,7 +20,7 @@ class UserAvatarUpdateService implements IUserAvatarUpdateService
         $this->fileManager = $fileManager;
     }
 
-    public function update(IUser $user, UploadedFile $file): IUser
+    public function update(User $user, UploadedFile $file): User
     {
         $file = $this->fileManager->createImageFile($file, config('filesystems.paths.avatars'));
 

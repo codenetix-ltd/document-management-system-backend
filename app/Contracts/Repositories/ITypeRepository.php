@@ -1,13 +1,14 @@
 <?php
 
 namespace App\Contracts\Repositories;
-use App\Contracts\Models\IType;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator as LengthAwarePaginatorContract;
+
+use App\Type;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 interface ITypeRepository extends IRepository
 {
-    public function list(): LengthAwarePaginatorContract;
-    public function getTypeById(int $id): IType;
-    public function getTypeByMachineName(string $machineName): IType;
+    public function list(): LengthAwarePaginator;
+    public function getTypeById(int $id): Type;
+    public function getTypeByMachineName(string $machineName): Type;
     public function getTypeIds(): array;
 }

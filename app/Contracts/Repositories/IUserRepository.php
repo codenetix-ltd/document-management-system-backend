@@ -2,17 +2,17 @@
 
 namespace App\Contracts\Repositories;
 
-use App\Contracts\Models\IUser;
+use App\User;
 
 interface IUserRepository extends IRepository
 {
-    public function create(IUser $user) : IUser;
+    public function create(User $user) : User;
 
-    public function updateAvatar(IUser $user, int $fileId) : bool;
+    public function updateAvatar(User $user, int $fileId) : bool;
 
-    public function findOrFail(int $id) : IUser;
+    public function findOrFail(int $id) : User;
 
-    public function update(int $id, IUser $userInput, array $updatedFields): IUser;
+    public function update(int $id, User $userInput, array $updatedFields): User;
 
     public function delete(int $id): ?bool;
 }

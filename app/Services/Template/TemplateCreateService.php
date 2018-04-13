@@ -2,9 +2,9 @@
 
 namespace App\Services\Template;
 
-use App\Contracts\Models\ITemplate;
 use App\Contracts\Repositories\ITemplateRepository;
 use App\Contracts\Services\Template\ITemplateCreateService;
+use App\Template;
 
 class TemplateCreateService implements ITemplateCreateService
 {
@@ -15,7 +15,7 @@ class TemplateCreateService implements ITemplateCreateService
         $this->repository = $repository;
     }
 
-    public function create(ITemplate $template) : ITemplate
+    public function create(Template $template) : Template
     {
         $template = $this->repository->create($template);
 

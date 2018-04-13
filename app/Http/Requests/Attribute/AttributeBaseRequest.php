@@ -2,13 +2,13 @@
 
 namespace App\Http\Requests\Attribute;
 
-use App\Contracts\Models\IAttribute;
+use App\Attribute;
 use App\Http\Requests\ApiRequest;
 
 abstract class AttributeBaseRequest extends ApiRequest
 {
-    public function getEntity(): IAttribute
+    public function getEntity(): Attribute
     {
-        return $this->transform(IAttribute::class);
+        return $this->transform(Attribute::class);
     }
 }

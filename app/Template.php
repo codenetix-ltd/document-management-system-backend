@@ -2,10 +2,9 @@
 
 namespace App;
 
-use App\Contracts\Models\ITemplate;
 use Illuminate\Database\Eloquent\Model;
 
-class Template extends Model implements ITemplate
+class Template extends Model
 {
     public function documents()
     {
@@ -22,8 +21,7 @@ class Template extends Model implements ITemplate
         return $this->morphMany(Log::class, 'reference');
     }
 
-    //TODO - подумать можно ли вынести типовые геттеры и сеттеры в трэит
-    public function setId(int $id): ITemplate
+    public function setId(int $id): self
     {
         $this->id = $id;
 
@@ -35,7 +33,7 @@ class Template extends Model implements ITemplate
         return $this->id;
     }
 
-    public function setName(string $name): ITemplate
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -46,7 +44,6 @@ class Template extends Model implements ITemplate
     {
         return $this->name;
     }
-
 
     public function getCreatedAt(): string
     {

@@ -2,7 +2,6 @@
 
 namespace App\Repositories;
 
-use App\Contracts\Models\IUser;
 use App\Contracts\Repositories\IUserRepository;
 use App\Template;
 use App\User;
@@ -10,7 +9,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator as LengthAwarePaginator
 
 class UserRepository implements IUserRepository
 {
-    public function create(IUser $user) : IUser
+    public function create(User $user) : User
     {
         $user->save();
 
@@ -25,19 +24,19 @@ class UserRepository implements IUserRepository
         return $user;
     }
 
-    public function updateAvatar(IUser $user, int $fileId): bool
+    public function updateAvatar(User $user, int $fileId): bool
     {
         $user->avatar_file_id = $fileId;
 
         return $user->save();
     }
 
-    public function findOrFail(int $id): IUser
+    public function findOrFail(int $id): User
     {
         return User::findOrFail($id);
     }
 
-    public function update(int $id, IUser $userInput, array $updatedFields): IUser
+    public function update(int $id, User $userInput, array $updatedFields): User
     {
         $user = User::findOrFail($id);
 

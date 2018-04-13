@@ -2,9 +2,9 @@
 
 namespace App\Services\User;
 
-use App\Contracts\Models\IUser;
 use App\Contracts\Repositories\IUserRepository;
 use App\Contracts\Services\User\IUserGetService;
+use App\User;
 
 class UserGetService implements IUserGetService
 {
@@ -15,7 +15,7 @@ class UserGetService implements IUserGetService
         $this->repository = $repository;
     }
 
-    public function get(int $id): IUser
+    public function get(int $id): User
     {
         return $this->repository->findOrFail($id);
     }

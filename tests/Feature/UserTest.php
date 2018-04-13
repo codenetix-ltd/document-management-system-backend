@@ -33,7 +33,6 @@ class UserTest extends ApiTestCase
             'passwordConfirmation' => $password,
             'avatar' => UploadedFile::fake()->image('avatar.jpg')
         ]);
-
         //Storage::disk('avatars')->assertExists('avatar.jpg'); TODO - check files, clear directory after test
 
         $response->assertJson([

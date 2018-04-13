@@ -2,9 +2,9 @@
 
 namespace App\Contracts\Repositories;
 
-use App\Contracts\Models\IFile;
+use App\File;
 
 interface IFileRepository
 {
-    public function create(array $data) : IFile;
+    public function create(array $data) : File;
 }

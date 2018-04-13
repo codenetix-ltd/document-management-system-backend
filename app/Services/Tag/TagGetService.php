@@ -2,9 +2,9 @@
 
 namespace App\Services\Tag;
 
-use App\Contracts\Models\ITag;
 use App\Contracts\Repositories\ITagRepository;
 use App\Contracts\Services\Tag\ITagGetService;
+use App\Tag;
 
 class TagGetService implements ITagGetService
 {
@@ -15,7 +15,7 @@ class TagGetService implements ITagGetService
         $this->repository = $repository;
     }
 
-    public function get(int $id): ITag
+    public function get(int $id): Tag
     {
         return $this->repository->findOrFail($id);
     }

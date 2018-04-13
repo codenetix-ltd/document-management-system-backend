@@ -2,13 +2,13 @@
 
 namespace App\Http\Requests\Tag;
 
-use App\Contracts\Models\ITag;
 use App\Http\Requests\ApiRequest;
+use App\Tag;
 
 abstract class TagBaseRequest extends ApiRequest
 {
-    public function getEntity(): ITag
+    public function getEntity(): Tag
     {
-        return $this->transform(ITag::class);
+        return $this->transform(Tag::class);
     }
 }

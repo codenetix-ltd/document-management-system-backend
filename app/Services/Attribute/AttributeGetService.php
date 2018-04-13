@@ -2,13 +2,13 @@
 
 namespace App\Services\Attribute;
 
-use App\Contracts\Models\IAttribute;
-use App\Contracts\Models\ITableTypeColumn;
-use App\Contracts\Models\ITableTypeRow;
+use App\Attribute;
 use App\Contracts\Repositories\IAttributeRepository;
 use App\Contracts\Repositories\ITypeRepository;
 use App\Contracts\Services\Attribute\IAttributeGetService;
 use App\Services\Type\TypeService;
+use App\TableTypeColumn;
+use App\TableTypeRow;
 
 class AttributeGetService implements IAttributeGetService
 {
@@ -21,7 +21,7 @@ class AttributeGetService implements IAttributeGetService
         $this->typeRepository = $typeRepository;
     }
 
-    public function get(int $id): IAttribute
+    public function get(int $id): Attribute
     {
         $attribute = $this->repository->findOrFail($id);
         $attribute->setData($this->buildData($attribute));
@@ -29,7 +29,7 @@ class AttributeGetService implements IAttributeGetService
         return $attribute;
     }
 
-    private function buildData(IAttribute $attribute): ?array
+    private function buildData(Attribute $attribute): ?array
     {
         $type = $this->typeRepository->getTypeById($attribute->getTypeId());
         if ($type->getMachineName() == TypeService::TYPE_TABLE) {
@@ -46,13 +46,13 @@ class AttributeGetService implements IAttributeGetService
         $childAttributes = $this->repository->getChildAttributes($id);
 
         $data = [];
-        /** @var ITableTypeRow $row */
+        /** @var TableTypeRow $row */
         foreach ($rows as $row) {
             $dataRow['name'] = $row->getName();
             $dataRow['columns'] = [];
-            /** @var ITableTypeColumn $column */
+            /** @var TableTypeColumn $column */
             foreach ($columns as $column) {
-                /** @var IAttribute $childAttribute */
+                /** @var Attribute $childAttribute */
                 foreach ($childAttributes as $childAttribute) {
                     if ($childAttribute->getTableTypeRowId() == $row->getId() && $childAttribute->getTableTypeColumnId() == $column->getId()) {
                         $dataRow['columns'][] = [

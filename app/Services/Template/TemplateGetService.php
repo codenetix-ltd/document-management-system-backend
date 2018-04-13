@@ -2,9 +2,9 @@
 
 namespace App\Services\Template;
 
-use App\Contracts\Models\ITemplate;
 use App\Contracts\Repositories\ITemplateRepository;
 use App\Contracts\Services\Template\ITemplateGetService;
+use App\Template;
 
 class TemplateGetService implements ITemplateGetService
 {
@@ -15,7 +15,7 @@ class TemplateGetService implements ITemplateGetService
         $this->repository = $repository;
     }
 
-    public function get(int $id): ITemplate
+    public function get(int $id): Template
     {
         return $this->repository->findOrFail($id);
     }

@@ -2,10 +2,10 @@
 
 namespace App\Services\User;
 
-use App\Contracts\Models\IUser;
 use App\Contracts\Repositories\IUserRepository;
 use App\Contracts\Services\User\IUserAvatarUpdateService;
 use App\Contracts\Services\User\IUserUpdateService;
+use App\User;
 use Illuminate\Http\UploadedFile;
 
 class UserUpdateService implements IUserUpdateService
@@ -20,7 +20,7 @@ class UserUpdateService implements IUserUpdateService
         $this->userAvatarUpdateService = $userAvatarUpdateService;
     }
 
-    public function update(int $id, IUser $userInput, array $updatedFields, UploadedFile $file = null): IUser
+    public function update(int $id, User $userInput, array $updatedFields, UploadedFile $file = null): User
     {
         $user = $this->repository->update($id, $userInput, $updatedFields);
 

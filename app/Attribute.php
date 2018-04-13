@@ -2,14 +2,10 @@
 
 namespace App;
 
-use App\Contracts\Models\IAttribute;
 use Illuminate\Database\Eloquent\Model;
 
-class Attribute extends Model implements IAttribute
+class Attribute extends Model
 {
-//    protected $fillable = [
-//        'template_id', 'name', 'type_id', 'order', 'table_type_row_id', 'table_type_column_id', 'parent_attribute_id', 'is_locked'
-//    ];
     private $data;
 
     public function attributeValues()
@@ -27,7 +23,7 @@ class Attribute extends Model implements IAttribute
         return $this->belongsTo(Type::class);
     }
 
-    public function setId(int $id): IAttribute
+    public function setId(int $id): self
     {
         $this->id = $id;
 
@@ -39,7 +35,7 @@ class Attribute extends Model implements IAttribute
         return $this->id;
     }
 
-    public function setName(string $name): IAttribute
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -51,7 +47,7 @@ class Attribute extends Model implements IAttribute
         return $this->name;
     }
 
-    public function setTemplateId(int $templateId): IAttribute
+    public function setTemplateId(int $templateId): self
     {
         $this->template_id = $templateId;
 
@@ -63,7 +59,7 @@ class Attribute extends Model implements IAttribute
         return $this->template_id;
     }
 
-    public function setTypeId(int $typeId): IAttribute
+    public function setTypeId(int $typeId): self
     {
         $this->type_id = $typeId;
 
@@ -75,7 +71,7 @@ class Attribute extends Model implements IAttribute
         return $this->type_id;
     }
 
-    public function setLocked(bool $isLocked): IAttribute
+    public function setLocked(bool $isLocked): self
     {
         $this->is_locked = $isLocked;
 
@@ -87,7 +83,7 @@ class Attribute extends Model implements IAttribute
         return $this->is_locked;
     }
 
-    public function setData(array $data = null): IAttribute
+    public function setData(array $data = null): self
     {
         $this->data = $data;
 
@@ -109,7 +105,7 @@ class Attribute extends Model implements IAttribute
         return $this->updated_at;
     }
 
-    public function setOrder(int $order): IAttribute
+    public function setOrder(int $order): self
     {
         $this->order = $order;
 
@@ -121,7 +117,7 @@ class Attribute extends Model implements IAttribute
         return $this->order;
     }
 
-    public function setParentAttributeId(int $parentAttributeId): IAttribute
+    public function setParentAttributeId(int $parentAttributeId): self
     {
         $this->parent_attribute_id = $parentAttributeId;
 
@@ -133,7 +129,7 @@ class Attribute extends Model implements IAttribute
         return $this->parent_attribute_id;
     }
 
-    public function setTableTypeColumnId(int $tableTypeColumnId): IAttribute
+    public function setTableTypeColumnId(int $tableTypeColumnId): self
     {
         $this->table_type_column_id = $tableTypeColumnId;
 
@@ -145,7 +141,7 @@ class Attribute extends Model implements IAttribute
         return $this->table_type_column_id;
     }
 
-    public function setTableTypeRowId(int $tableTypeRowId): IAttribute
+    public function setTableTypeRowId(int $tableTypeRowId): self
     {
         $this->table_type_row_id = $tableTypeRowId;
 

@@ -2,7 +2,7 @@
 
 namespace App\Services\Attribute;
 
-use App\Contracts\Models\IAttribute;
+use App\Attribute;
 use App\Contracts\Repositories\IAttributeRepository;
 use App\Contracts\Repositories\ITypeRepository;
 use App\Contracts\Services\Attribute\IAttributeCreateService;
@@ -33,14 +33,14 @@ class AttributeCreateService implements IAttributeCreateService
     }
 
     /**
-     * @param IAttribute $attribute
+     * @param Attribute $attribute
      * @param int $templateId
-     * @return IAttribute
+     * @return Attribute
      * @throws FailedAttributeCreateException
      * @throws InvalidAttributeTypeException
      * @throws InvalidAttributeDataStructureException
      */
-    public function create(IAttribute $attribute, int $templateId) : IAttribute
+    public function create(Attribute $attribute, int $templateId) : Attribute
     {
         $attribute->setTemplateId($templateId);
 
@@ -54,13 +54,13 @@ class AttributeCreateService implements IAttributeCreateService
     }
 
     /**
-     * @param IAttribute $attribute
-     * @return IAttribute
+     * @param Attribute $attribute
+     * @return Attribute
      * @throws FailedAttributeCreateException
      * @throws InvalidAttributeTypeException
      * @throws InvalidAttributeDataStructureException
      */
-    private function createComplexAttribute(IAttribute $attribute): IAttribute
+    private function createComplexAttribute(Attribute $attribute): Attribute
     {
         $type = $this->typeRepository->getTypeById($attribute->getTypeId());
         if ($type->getMachineName() == TypeService::TYPE_TABLE) {
@@ -71,12 +71,12 @@ class AttributeCreateService implements IAttributeCreateService
     }
 
     /**
-     * @param IAttribute $attribute
-     * @return IAttribute
+     * @param Attribute $attribute
+     * @return Attribute
      * @throws FailedAttributeCreateException
      * @throws InvalidAttributeDataStructureException
      */
-    private function createAttributeWithTableType(IAttribute $attribute): IAttribute
+    private function createAttributeWithTableType(Attribute $attribute): Attribute
     {
         $this->attributeTypeTableValidator->validate($attribute);
 
@@ -91,8 +91,8 @@ class AttributeCreateService implements IAttributeCreateService
                 $row = $this->repository->createTableTypeRow($parentAttribute->getId(), $rowValue['name']);
 
                 foreach ($rowValue['columns'] as $columnKey => $columnValue) {
-                    /** @var IAttribute $childAttribute */
-                    $childAttribute = app()->make(IAttribute::class);
+                    /** @var Attribute $childAttribute */
+                    $childAttribute = app()->make(Attribute::class);
                     $childAttribute->setTypeId($columnValue['typeId']);
                     $childAttribute->setName($this->generateNameForCell($rowKey, $columnKey, $parentAttribute->getTemplateId()));
                     $childAttribute->setParentAttributeId($parentAttribute->getId());

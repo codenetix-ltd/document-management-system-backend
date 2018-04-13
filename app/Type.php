@@ -2,12 +2,11 @@
 
 namespace App;
 
-use App\Contracts\Models\IType;
 use Illuminate\Database\Eloquent\Model;
 
-class Type extends Model implements IType
+class Type extends Model
 {
-    public function setId(int $id): IType
+    public function setId(int $id): self
     {
         $this->id = $id;
 
@@ -19,7 +18,7 @@ class Type extends Model implements IType
         return $this->id;
     }
 
-    public function setName(string $name): IType
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -42,7 +41,7 @@ class Type extends Model implements IType
         return $this->updated_at;
     }
 
-    public function setMachineName(string $machineName): IType
+    public function setMachineName(string $machineName): self
     {
         $this->machine_name = $machineName;
 

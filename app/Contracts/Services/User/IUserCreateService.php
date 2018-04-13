@@ -2,13 +2,10 @@
 
 namespace App\Contracts\Services\User;
 
-use App\Contracts\Models\IUser;
-use App\Contracts\Repositories\IUserRepository;
+use App\User;
 use Illuminate\Http\UploadedFile;
 
 interface IUserCreateService
 {
-    public function __construct(IUserRepository $repository, IUserAvatarUpdateService $userAvatarUpdateService);
-
-    public function create(IUser $user, UploadedFile $file = null) : IUser;
+    public function create(User $user, UploadedFile $file = null) : User;
 }

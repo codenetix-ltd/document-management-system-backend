@@ -3,8 +3,6 @@
 namespace Tests\Feature;
 
 use App\Attribute;
-use App\Contracts\Models\IAttribute;
-use App\Contracts\Models\ITemplate;
 use App\Contracts\Repositories\ITypeRepository;
 use App\Services\Type\TypeService;
 use App\Template;
@@ -94,7 +92,7 @@ class AttributeTest extends ApiTestCase
 
     public function testGetAttributeSuccess()
     {
-        /** @var IAttribute $attribute */
+        /** @var Attribute $attribute */
         $attribute = factory(Attribute::class)->create();
 
         $response = $this->jsonRequestGetEntitySuccess('attributes/' . $attribute->getId());
@@ -117,7 +115,7 @@ class AttributeTest extends ApiTestCase
 
     public function testDeleteAttributeSuccess()
     {
-        /** @var IAttribute $attribute */
+        /** @var Attribute $attribute */
         $attribute = factory(Attribute::class)->create();
         $this->jsonRequestDelete('attributes', $attribute->getId(), self::DB_TABLE);
     }
@@ -129,7 +127,7 @@ class AttributeTest extends ApiTestCase
 
     public function testListOfTagsWithPaginationSuccess()
     {
-        /** @var ITemplate $template */
+        /** @var Template $template */
         $template = factory(Template::class)->create();
         factory(Attribute::class, 20)->create([
             'template_id' => $template->getId()

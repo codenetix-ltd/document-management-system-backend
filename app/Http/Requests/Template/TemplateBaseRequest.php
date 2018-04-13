@@ -2,13 +2,13 @@
 
 namespace App\Http\Requests\Template;
 
-use App\Contracts\Models\ITemplate;
 use App\Http\Requests\ApiRequest;
+use App\Template;
 
 abstract class TemplateBaseRequest extends ApiRequest
 {
-    public function getEntity(): ITemplate
+    public function getEntity(): Template
     {
-        return $this->transform(ITemplate::class);
+        return $this->transform(Template::class);
     }
 }

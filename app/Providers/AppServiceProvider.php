@@ -5,14 +5,6 @@ namespace App\Providers;
 use App\Adapters\TableAdapter;
 use App\Attribute;
 use App\Contracts\Adapters\ITableAdapter;
-use App\Contracts\Models\IAttribute;
-use App\Contracts\Models\IFile;
-use App\Contracts\Models\ITableTypeColumn;
-use App\Contracts\Models\ITableTypeRow;
-use App\Contracts\Models\ITag;
-use App\Contracts\Models\ITemplate;
-use App\Contracts\Models\IType;
-use App\Contracts\Models\IUser;
 use App\Contracts\Repositories\IAttributeRepository;
 use App\Contracts\Repositories\IFileRepository;
 use App\Contracts\Repositories\ITagRepository;
@@ -110,7 +102,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(IUser::class, User::class);
         $this->app->bind(IUserRepository::class, UserRepository::class);
         $this->app->bind(IUserCreateService::class, UserCreateService::class);
         $this->app->bind(IUserAvatarUpdateService::class, UserAvatarUpdateService::class);
@@ -120,13 +111,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(IUserListService::class, UserListService::class);
 
 
-        $this->app->bind(IFile::class, File::class);
         $this->app->bind(IFileRepository::class, FileRepository::class);
         $this->app->bind(IFileManager::class, FileManager::class);
         $this->app->bind(IFileCreateService::class, FileCreateService::class);
 
 
-        $this->app->bind(ITemplate::class, Template::class);
         $this->app->bind(ITemplateRepository::class, TemplateRepository::class);
         $this->app->bind(ITemplateCreateService::class, TemplateCreateService::class);
         $this->app->bind(ITemplateGetService::class, TemplateGetService::class);
@@ -135,7 +124,6 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ITemplateListService::class, TemplateListService::class);
 
 
-        $this->app->bind(ITag::class, Tag::class);
         $this->app->bind(ITagRepository::class, TagRepository::class);
         $this->app->bind(ITagCreateService::class, TagCreateService::class);
         $this->app->bind(ITagGetService::class, TagGetService::class);
@@ -144,14 +132,10 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ITagListService::class, TagListService::class);
 
 
-        $this->app->bind(IType::class, Type::class);
         $this->app->bind(ITypeRepository::class, TypeRepository::class);
         $this->app->bind(ITypeListService::class, TypeListService::class);
 
 
-        $this->app->bind(IAttribute::class, Attribute::class);
-        $this->app->bind(ITableTypeRow::class, TableTypeRow::class);
-        $this->app->bind(ITableTypeColumn::class, TableTypeColumn::class);
         $this->app->bind(IAttributeRepository::class, AttributeRepository::class);
         $this->app->bind(IAttributeCreateService::class, AttributeCreateService::class);
         $this->app->bind(IAttributeGetService::class, AttributeGetService::class);

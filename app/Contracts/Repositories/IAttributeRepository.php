@@ -2,20 +2,20 @@
 
 namespace App\Contracts\Repositories;
 
-use App\Contracts\Models\IAttribute;
-use App\Contracts\Models\ITableTypeColumn;
-use App\Contracts\Models\ITableTypeRow;
+use App\Attribute;
+use App\TableTypeColumn;
+use App\TableTypeRow;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 
 interface IAttributeRepository
 {
     public function getAttributeValuesByDocumentVersionId($documentVersionId);
-    public function create(IAttribute $attribute): IAttribute;
-    public function createTableTypeColumn(int $parentAttributeId, string $name): ITableTypeColumn;
-    public function createTableTypeRow(int $parentAttributeId, string $name): ITableTypeRow;
-    public function findOrFail(int $id): IAttribute;
-    public function find(int $id): ?IAttribute;
+    public function create(Attribute $attribute): Attribute;
+    public function createTableTypeColumn(int $parentAttributeId, string $name): TableTypeColumn;
+    public function createTableTypeRow(int $parentAttributeId, string $name): TableTypeRow;
+    public function findOrFail(int $id): Attribute;
+    public function find(int $id): ?Attribute;
     public function getTableRowsByAttributeId(int $id): Collection;
     public function getTableColumnsByAttributeId(int $id): Collection;
     public function getChildAttributes(int $id): Collection;

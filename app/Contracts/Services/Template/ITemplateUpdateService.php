@@ -2,12 +2,9 @@
 
 namespace App\Contracts\Services\Template;
 
-use App\Contracts\Models\ITemplate;
-use App\Contracts\Repositories\ITemplateRepository;
+use App\Template;
 
 interface ITemplateUpdateService
 {
-    public function __construct(ITemplateRepository $repository);
-
-    public function update(int $id, ITemplate $templateInput, array $updatedFields) : ITemplate;
+    public function update(int $id, Template $templateInput, array $updatedFields) : Template;
 }

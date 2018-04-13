@@ -40,6 +40,12 @@ class AttributeController extends Controller
 //        return (new TagResource($tag))->response()->setStatusCode(200);
 //    }
 
+    /**
+     * @param IAttributeDeleteService $attributeDeleteService
+     * @param $id
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     * @throws \App\Exceptions\FailedAttributeDeleteException
+     */
     public function destroy(IAttributeDeleteService $attributeDeleteService, $id)
     {
         $attributeDeleteService->delete($id);

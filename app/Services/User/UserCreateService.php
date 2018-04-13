@@ -2,10 +2,10 @@
 
 namespace App\Services\User;
 
-use App\Contracts\Models\IUser;
 use App\Contracts\Repositories\IUserRepository;
 use App\Contracts\Services\User\IUserAvatarUpdateService;
 use App\Contracts\Services\User\IUserCreateService;
+use App\User;
 use Illuminate\Http\UploadedFile;
 
 class UserCreateService implements IUserCreateService
@@ -20,7 +20,7 @@ class UserCreateService implements IUserCreateService
         $this->userAvatarUpdateService = $userAvatarUpdateService;
     }
 
-    public function create(IUser $user, UploadedFile $file = null) : IUser
+    public function create(User $user, UploadedFile $file = null) : User
     {
         $user = $this->repository->create($user);
         if ($file) {

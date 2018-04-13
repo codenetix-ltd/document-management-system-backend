@@ -2,9 +2,9 @@
 
 namespace App\Contracts\Services\Attribute;
 
-use App\Contracts\Models\IAttribute;
+use App\Attribute;
 
 interface IAttributeCreateService
 {
-    public function create(IAttribute $attribute, int $templateId) : IAttribute;
+    public function create(Attribute $attribute, int $templateId) : Attribute;
 }

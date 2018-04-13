@@ -2,15 +2,15 @@
 
 namespace App\Contracts\Repositories;
 
-use App\Contracts\Models\ITag;
+use App\Tag;
 
 interface ITagRepository extends IRepository
 {
-    public function create(ITag $tag) : ITag;
+    public function create(Tag $tag) : Tag;
 
-    public function findOrFail(int $id) : ITag;
+    public function findOrFail(int $id) : Tag;
 
-    public function update(int $id, ITag $tagInput, array $updatedFields): ITag;
+    public function update(int $id, Tag $tagInput, array $updatedFields): Tag;
 
     public function delete(int $id): ?bool;
 }

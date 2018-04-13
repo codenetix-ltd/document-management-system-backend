@@ -2,9 +2,9 @@
 
 namespace App\Services\Template;
 
-use App\Contracts\Models\ITemplate;
 use App\Contracts\Repositories\ITemplateRepository;
 use App\Contracts\Services\Template\ITemplateUpdateService;
+use App\Template;
 
 class TemplateUpdateService implements ITemplateUpdateService
 {
@@ -15,7 +15,7 @@ class TemplateUpdateService implements ITemplateUpdateService
         $this->repository = $repository;
     }
 
-    public function update(int $id, ITemplate $templateInput, array $updatedFields): ITemplate
+    public function update(int $id, Template $templateInput, array $updatedFields): Template
     {
         $template = $this->repository->update($id, $templateInput, $updatedFields);
 

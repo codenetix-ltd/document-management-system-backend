@@ -2,13 +2,11 @@
 
 namespace App;
 
-use App\Contracts\Models\IFile;
-use App\Contracts\Models\IUser;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Passport\HasApiTokens;
 
-class User extends Authenticatable implements IUser
+class User extends Authenticatable
 {
     use Notifiable, HasApiTokens;
 
@@ -47,7 +45,7 @@ class User extends Authenticatable implements IUser
         return $this->morphMany(Log::class, 'reference');
     }
 
-    public function setId(int $id): IUser
+    public function setId(int $id): self
     {
         $this->id = $id;
 
@@ -59,7 +57,7 @@ class User extends Authenticatable implements IUser
         return $this->id;
     }
 
-    public function setFullName(string $fullName): IUser
+    public function setFullName(string $fullName): self
     {
         $this->full_name = $fullName;
 
@@ -71,7 +69,7 @@ class User extends Authenticatable implements IUser
         return $this->full_name;
     }
 
-    public function setEmail(string $email): IUser
+    public function setEmail(string $email): self
     {
         $this->email = $email;
 
@@ -83,14 +81,14 @@ class User extends Authenticatable implements IUser
         return $this->email;
     }
 
-    public function setPassword(string $password): IUser
+    public function setPassword(string $password): self
     {
         $this->password = $password;
 
         return $this;
     }
 
-    public function setTemplatesIds(array $ids): IUser
+    public function setTemplatesIds(array $ids): self
     {
         $this->templates_ids = $ids;
 
@@ -102,7 +100,7 @@ class User extends Authenticatable implements IUser
         return $this->templates_ids;
     }
 
-    public function getAvatar(): IFile
+    public function getAvatar(): File
     {
         return $this->avatar;
     }

@@ -2,15 +2,15 @@
 
 namespace App\Contracts\Services\Attribute;
 
-use App\Contracts\Models\IAttribute;
+use App\Attribute;
 use App\Exceptions\InvalidAttributeDataStructureException;
 
 interface IAttributeTypeTableValidator
 {
     /**
-     * @param IAttribute $attribute
+     * @param Attribute $attribute
      * @return bool
      * @throws InvalidAttributeDataStructureException
      */
-    public function validate(IAttribute $attribute): bool;
+    public function validate(Attribute $attribute): bool;
 }

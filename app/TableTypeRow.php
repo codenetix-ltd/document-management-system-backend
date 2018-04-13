@@ -2,14 +2,13 @@
 
 namespace App;
 
-use App\Contracts\Models\ITableTypeRow;
 use Illuminate\Database\Eloquent\Model;
 
-class TableTypeRow extends Model implements ITableTypeRow
+class TableTypeRow extends Model
 {
     public $timestamps = false;
 
-    public function setParentAttributeId(int $parentAttributeId): ITableTypeRow
+    public function setParentAttributeId(int $parentAttributeId): self
     {
         $this->parent_attribute_id = $parentAttributeId;
 
@@ -21,7 +20,7 @@ class TableTypeRow extends Model implements ITableTypeRow
         return $this->parent_attribute_id;
     }
 
-    public function setName(string $name): ITableTypeRow
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -33,7 +32,7 @@ class TableTypeRow extends Model implements ITableTypeRow
         return $this->name;
     }
 
-    public function setId(int $id): ITableTypeRow
+    public function setId(int $id): self
     {
         $this->id = $id;
 

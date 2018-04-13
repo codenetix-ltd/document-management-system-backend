@@ -2,12 +2,11 @@
 
 namespace App;
 
-use App\Contracts\Models\ITag;
 use Illuminate\Database\Eloquent\Model;
 
-class Tag extends Model implements ITag
+class Tag extends Model
 {
-    public function setId(int $id): ITag
+    public function setId(int $id): self
     {
         $this->id = $id;
 
@@ -19,7 +18,7 @@ class Tag extends Model implements ITag
         return $this->id;
     }
 
-    public function setName(string $name): ITag
+    public function setName(string $name): self
     {
         $this->name = $name;
 

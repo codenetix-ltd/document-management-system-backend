@@ -2,10 +2,9 @@
 
 namespace App;
 
-use App\Contracts\Models\IFile;
 use Illuminate\Database\Eloquent\Model;
 
-class File extends Model implements IFile
+class File extends Model
 {
     //TODO - remove from here
     protected $fillable = ['path', 'original_name'];
@@ -20,7 +19,7 @@ class File extends Model implements IFile
         return $this->updated_at;
     }
 
-    public function setId(int $id): IFile
+    public function setId(int $id): self
     {
         $this->id = $id;
 
@@ -32,7 +31,7 @@ class File extends Model implements IFile
         return $this->id;
     }
 
-    public function setPath(string $path): IFile
+    public function setPath(string $path): self
     {
         $this->path = $path;
 
@@ -44,7 +43,7 @@ class File extends Model implements IFile
         return $this->path;
     }
 
-    public function setOriginalName(string $originalName): IFile
+    public function setOriginalName(string $originalName): self
     {
         $this->original_name = $originalName;
 

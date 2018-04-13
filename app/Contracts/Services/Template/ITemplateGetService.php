@@ -2,12 +2,9 @@
 
 namespace App\Contracts\Services\Template;
 
-use App\Contracts\Models\ITemplate;
-use App\Contracts\Repositories\ITemplateRepository;
+use App\Template;
 
 interface ITemplateGetService
 {
-    public function __construct(ITemplateRepository $repository);
-
-    public function get(int $id) : ITemplate;
+    public function get(int $id) : Template;
 }

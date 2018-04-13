@@ -2,12 +2,10 @@
 
 namespace App\Contracts\Services\File;
 
-use App\Contracts\Models\IFile;
+use App\File;
 use Illuminate\Http\UploadedFile;
 
 interface IFileManager
 {
-    public function __construct(IFileCreateService $fileCreateService);
-
-    public function createImageFile(UploadedFile $file, $path = '') : IFile;
+    public function createImageFile(UploadedFile $file, $path = '') : File;
 }

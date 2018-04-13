@@ -2,12 +2,9 @@
 
 namespace App\Contracts\Services\Tag;
 
-use App\Contracts\Models\ITag;
-use App\Contracts\Repositories\ITagRepository;
+use App\Tag;
 
 interface ITagGetService
 {
-    public function __construct(ITagRepository $repository);
-
-    public function get(int $id) : ITag;
+    public function get(int $id) : Tag;
 }

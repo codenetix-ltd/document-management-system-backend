@@ -2,14 +2,13 @@
 
 namespace App;
 
-use App\Contracts\Models\ITableTypeColumn;
 use Illuminate\Database\Eloquent\Model;
 
-class TableTypeColumn extends Model implements ITableTypeColumn
+class TableTypeColumn extends Model
 {
     public $timestamps = false;
 
-    public function setParentAttributeId(int $parentAttributeId): ITableTypeColumn
+    public function setParentAttributeId(int $parentAttributeId): self
     {
         $this->parent_attribute_id = $parentAttributeId;
 
@@ -21,7 +20,7 @@ class TableTypeColumn extends Model implements ITableTypeColumn
         return $this->parent_attribute_id;
     }
 
-    public function setName(string $name): ITableTypeColumn
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -33,7 +32,7 @@ class TableTypeColumn extends Model implements ITableTypeColumn
         return $this->name;
     }
 
-    public function setId(int $id): ITableTypeColumn
+    public function setId(int $id): self
     {
         $this->id = $id;
 

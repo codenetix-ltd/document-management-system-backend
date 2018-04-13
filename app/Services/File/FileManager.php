@@ -2,9 +2,9 @@
 
 namespace App\Services\File;
 
-use App\Contracts\Models\IFile;
 use App\Contracts\Services\File\IFileCreateService;
 use App\Contracts\Services\File\IFileManager;
+use App\File;
 use Illuminate\Http\UploadedFile;
 
 class FileManager implements IFileManager
@@ -16,7 +16,7 @@ class FileManager implements IFileManager
         $this->fileCreateService = $fileCreateService;
     }
 
-    public function createImageFile(UploadedFile $file, $path = ''): IFile
+    public function createImageFile(UploadedFile $file, $path = ''): File
     {
         return $this->fileCreateService->createImage($file, $path);
     }

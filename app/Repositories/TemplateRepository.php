@@ -2,26 +2,25 @@
 
 namespace App\Repositories;
 
-use App\Contracts\Models\ITemplate;
 use App\Contracts\Repositories\ITemplateRepository;
 use App\Template;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator as LengthAwarePaginatorContract;
 
 class TemplateRepository implements ITemplateRepository
 {
-    public function create(ITemplate $template): ITemplate
+    public function create(Template $template): Template
     {
         $template->save();
 
         return $template;
     }
 
-    public function findOrFail(int $id): ITemplate
+    public function findOrFail(int $id): Template
     {
         return Template::findOrFail($id);
     }
 
-    public function update(int $id, ITemplate $templateInput, array $updatedFields): ITemplate
+    public function update(int $id, Template $templateInput, array $updatedFields): Template
     {
         $template = Template::findOrFail($id);
 

@@ -2,7 +2,7 @@
 
 namespace App\Services\Attribute;
 
-use App\Contracts\Models\IAttribute;
+use App\Attribute;
 use App\Contracts\Repositories\ITypeRepository;
 use App\Contracts\Services\Attribute\IAttributeTypeTableValidator;
 use App\Exceptions\InvalidAttributeTypeException;
@@ -18,11 +18,11 @@ class AttributeTypeTableValidator implements IAttributeTypeTableValidator
     }
 
     /**
-     * @param IAttribute $attribute
+     * @param Attribute $attribute
      * @return bool
      * @throws InvalidAttributeDataStructureException
      */
-    public function validate(IAttribute $attribute): bool
+    public function validate(Attribute $attribute): bool
     {
         $data = $attribute->getData();
 

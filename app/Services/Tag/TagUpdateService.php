@@ -2,9 +2,9 @@
 
 namespace App\Services\Tag;
 
-use App\Contracts\Models\ITag;
 use App\Contracts\Repositories\ITagRepository;
 use App\Contracts\Services\Tag\ITagUpdateService;
+use App\Tag;
 
 class TagUpdateService implements ITagUpdateService
 {
@@ -15,7 +15,7 @@ class TagUpdateService implements ITagUpdateService
         $this->repository = $repository;
     }
 
-    public function update(int $id, ITag $tagInput, array $updatedFields): ITag
+    public function update(int $id, Tag $tagInput, array $updatedFields): Tag
     {
         $tag = $this->repository->update($id, $tagInput, $updatedFields);
 

@@ -2,7 +2,7 @@
 
 namespace App\Services\Attribute;
 
-use App\Contracts\Models\IAttribute;
+use App\Attribute;
 use App\Contracts\Repositories\IAttributeRepository;
 use App\Contracts\Services\Attribute\IAttributeGetService;
 use App\Contracts\Services\Attribute\IAttributeListService;
@@ -24,7 +24,7 @@ class AttributeListService implements IAttributeListService
         $attributes = $this->repository->list();
 
         $attributes->getCollection()->transform(function ($attribute) {
-            /** @var IAttribute $attribute */
+            /** @var Attribute $attribute */
             return $this->attributeGetService->get($attribute->getId());
         });
 

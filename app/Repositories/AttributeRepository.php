@@ -4,9 +4,6 @@ namespace App\Repositories;
 
 use App\Attribute;
 use App\AttributeValue;
-use App\Contracts\Models\IAttribute;
-use App\Contracts\Models\ITableTypeColumn;
-use App\Contracts\Models\ITableTypeRow;
 use App\Contracts\Repositories\IAttributeRepository;
 use App\TableTypeColumn;
 use App\TableTypeRow;
@@ -20,7 +17,7 @@ class AttributeRepository implements IAttributeRepository
         return AttributeValue::whereDocumentVersionId($documentVersionId)->get();
     }
 
-    public function create(IAttribute $attribute): IAttribute
+    public function create(Attribute $attribute): Attribute
     {
         $order = $this->getDefaultAttributeOrderByTemplateId($attribute->getTemplateId());
         $attribute->setOrder($order);
@@ -31,7 +28,7 @@ class AttributeRepository implements IAttributeRepository
         return $attribute;
     }
 
-    public function createTableTypeColumn(int $parentAttributeId, string $name): ITableTypeColumn
+    public function createTableTypeColumn(int $parentAttributeId, string $name): TableTypeColumn
     {
         $tableTypeColumn = new TableTypeColumn();
         $tableTypeColumn->setParentAttributeId($parentAttributeId);
@@ -41,7 +38,7 @@ class AttributeRepository implements IAttributeRepository
         return $tableTypeColumn;
     }
 
-    public function createTableTypeRow(int $parentAttributeId, string $name): ITableTypeRow
+    public function createTableTypeRow(int $parentAttributeId, string $name): TableTypeRow
     {
         $tableTypeRow = new TableTypeRow();
         $tableTypeRow->setParentAttributeId($parentAttributeId);
@@ -62,12 +59,12 @@ class AttributeRepository implements IAttributeRepository
         }
     }
 
-    public function findOrFail(int $id): IAttribute
+    public function findOrFail(int $id): Attribute
     {
         return Attribute::findOrFail($id);
     }
 
-    public function find(int $id): ?IAttribute
+    public function find(int $id): ?Attribute
     {
         return Attribute::find($id);
     }

@@ -2,13 +2,13 @@
 
 namespace App\Http\Requests\User;
 
-use App\Contracts\Models\IUser;
 use App\Http\Requests\ApiRequest;
+use App\User;
 
 abstract class UserBaseRequest extends ApiRequest
 {
-    public function getEntity(): IUser
+    public function getEntity(): User
     {
-        return $this->transform(IUser::class);
+        return $this->transform(User::class);
     }
 }

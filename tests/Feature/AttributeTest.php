@@ -25,6 +25,7 @@ class AttributeTest extends ApiTestCase
 
     public function testCreateAttributeTypeStringSuccess()
     {
+        //TODO - создать свою фабрику, где можно было бы получать модели по интерфейсу а не по классу напрямую
         $attribute = factory(Attribute::class)->make();
         $template = factory(Template::class)->create();
 

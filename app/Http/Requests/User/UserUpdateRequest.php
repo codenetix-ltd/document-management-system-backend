@@ -30,9 +30,4 @@ class UserUpdateRequest extends UserBaseRequest
             'avatar' => 'image'
         ];
     }
-
-    public function getModelStructure(): array
-    {
-        return config('models.user_update_request');
-    }
 }

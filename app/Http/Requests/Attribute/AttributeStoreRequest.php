@@ -27,9 +27,8 @@ class AttributeStoreRequest extends AttributeBaseRequest
             'data' => 'sometimes|required|array'
         ];
     }
-
-    public function getModelStructure(): array
+    public function getRulesFromRaml()
     {
-        return config('models.attribute_store_request');
+
     }
 }

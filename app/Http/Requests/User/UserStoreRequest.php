@@ -30,9 +30,4 @@ class UserStoreRequest extends UserBaseRequest
             'avatar' => 'image'
         ];
     }
-
-    public function getModelStructure(): array
-    {
-        return config('models.user_store_request');
-    }
 }

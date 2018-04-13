@@ -25,9 +25,4 @@ class TagUpdateRequest extends TagBaseRequest
             'name' => 'sometimes|required|unique:tags|max:255'
         ];
     }
-
-    public function getModelStructure(): array
-    {
-        return config('models.tag_update_request');
-    }
 }

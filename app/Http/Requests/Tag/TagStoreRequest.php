@@ -25,9 +25,4 @@ class TagStoreRequest extends TagBaseRequest
             'name' => 'required|unique:tags|max:255'
         ];
     }
-
-    public function getModelStructure(): array
-    {
-        return config('models.tag_store_request');
-    }
 }

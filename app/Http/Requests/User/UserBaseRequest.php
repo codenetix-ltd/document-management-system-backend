@@ -9,6 +9,6 @@ abstract class UserBaseRequest extends ApiRequest
 {
     public function getEntity(): IUser
     {
-        return $this->transform(IUser::class, $this->getModelStructure());
+        return $this->transform(IUser::class);
     }
 }

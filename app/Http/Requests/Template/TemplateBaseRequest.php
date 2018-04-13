@@ -9,6 +9,6 @@ abstract class TemplateBaseRequest extends ApiRequest
 {
     public function getEntity(): ITemplate
     {
-        return $this->transform(ITemplate::class, $this->getModelStructure());
+        return $this->transform(ITemplate::class);
     }
 }

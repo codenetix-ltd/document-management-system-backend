@@ -9,6 +9,6 @@ abstract class TagBaseRequest extends ApiRequest
 {
     public function getEntity(): ITag
     {
-        return $this->transform(ITag::class, $this->getModelStructure());
+        return $this->transform(ITag::class);
     }
 }

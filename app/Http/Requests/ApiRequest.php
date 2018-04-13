@@ -9,11 +9,11 @@ abstract class ApiRequest extends FormRequest
 {
     private $updatedFields = [];
 
-    public function transform(string $interface, array $modelStructure = [])
+    public function transform(string $interface)
     {
         $object = $this->container->make($interface);
         $transformer = $this->container->make(ITransformer::class);
-        $transformer->transform($this->all(), $object, $modelStructure);
+        $transformer->transform($this->only(array_keys($this->rules())), $object);
         $this->updatedFields = $transformer->getTransformedFields();
 
         return $object;
@@ -24,5 +24,5 @@ abstract class ApiRequest extends FormRequest
         return $this->updatedFields;
     }
 
-    public abstract function getModelStructure(): array;
+    public abstract function rules();
 }

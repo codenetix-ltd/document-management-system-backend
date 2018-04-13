@@ -10,16 +10,11 @@ class Transformer implements ITransformer
 {
     private $transformedFields = [];
 
-    public function transform(array $data, $object, array $modelStructure = [])
+    public function transform(array $data, $object)
     {
         $objectReflection = new ReflectionClass($object);
 
         foreach ($data as $field => $value) {
-            if (!in_array($field, $modelStructure)) {
-                //TODO - что делать если поле является массивом
-                continue;
-            }
-
             $method = $this->tryGetSetterName($data, $field, $objectReflection);
 
             if (!$method) {

@@ -2,6 +2,8 @@ version: '3'
 
 services:
   app:
+    image: dms_app
+    container_name: dms_app
     build:
       context: ./
       dockerfile: Dockerfile
@@ -23,6 +25,7 @@ services:
     restart: "always"
   mysql:
     image: mysql:latest
+    container_name: dms_mysql
     environment:
       MYSQL_DATABASE: dms
       MYSQL_ROOT_PASSWORD: dms

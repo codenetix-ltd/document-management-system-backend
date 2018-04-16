@@ -10,12 +10,12 @@ class AttributeResource extends ApiResource
     {
         return [
             'type' => (new TypeResource($this->type))->toArray($request),
-            'data' => $this->getData()
+            'table' => $this->getData()
         ];
     }
 
     protected function getStructure(): array
     {
-        return config('models.attribute_response');
+        return config('models.Attribute');
     }
 }

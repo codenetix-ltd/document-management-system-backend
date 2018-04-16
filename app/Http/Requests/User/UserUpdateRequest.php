@@ -4,15 +4,7 @@ namespace App\Http\Requests\User;
 
 class UserUpdateRequest extends UserBaseRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        return true;
-    }
+    protected $modelConfigName = 'UserPostRequest';
 
     /**
      * Get the validation rules that apply to the request.

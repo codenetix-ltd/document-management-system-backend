@@ -25,8 +25,9 @@ abstract class ApiResource extends Resource
                 unset($structure[$fieldKey]);
             }
         }
+
         $extractor = new Extractor();
-        $data = $extractor->extract($this->resource, $structure);
+        $data = $extractor->extract($this->resource, array_keys($structure));
 
         return array_merge($response, $data);
     }

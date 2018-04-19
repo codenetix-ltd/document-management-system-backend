@@ -1,7 +1,7 @@
 <?php
 
 
-return json_decode(file_get_contents('config/validation.json'), true);
+return json_decode(file_get_contents(config_path('validation.json')), true);
 
 //return [
 //    'user_store_request' => $user_store_request,

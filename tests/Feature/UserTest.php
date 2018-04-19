@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Contracts\Services\File\IFileManager;
 use App\Template;
 use App\User;
 use Illuminate\Foundation\Testing\TestResponse;
@@ -24,14 +25,18 @@ class UserTest extends ApiTestCase
         ]);
 
         Storage::fake('avatars');
-
+        $fileManager = $this->app->get(IFileManager::class);
+        $file = $fileManager->createImageFile(
+            UploadedFile::fake()->image('avatar.jpg'),
+            config('filesystems.paths.avatars')
+        );
         $response = $this->jsonRequestPostEntityWithSuccess(self::PATH, [
             'fullName' => $user->full_name,
             'email' => $user->email,
             'templatesIds' => $templatesIds,
             'password' => $password,
             'passwordConfirmation' => $password,
-            'avatar' => UploadedFile::fake()->image('avatar.jpg')
+            'avatarId' => $file->id
         ]);
         //Storage::disk('avatars')->assertExists('avatar.jpg'); TODO - check files, clear directory after test
 

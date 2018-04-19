@@ -114,4 +114,14 @@ class User extends Authenticatable
     {
         return $this->updated_at;
     }
+
+    public function getAvatarId(): ?int
+    {
+        return $this->avatar_file_id;
+    }
+
+    public function setAvatarId(int $avatarId)
+    {
+        $this->avatar_file_id = $avatarId;
+    }
 }

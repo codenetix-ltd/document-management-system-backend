@@ -31,17 +31,18 @@ class AttributeTest extends ApiTestCase
             'name' => $attribute->name,
             'typeId' => $attribute->type_id
         ]);
-
+        //TODO documentation doesn't have commented fields
         $response->assertJson([
             'name' => $attribute->name,
-            'templateId' => $template->id,
-            'isLocked' => false,
-            'order' => 0,
+//            'templateId' => $template->id,
+//            'isLocked' => false,
+//            'order' => 0,
             'type' => [
                 'machineName' => TypeService::TYPE_STRING
             ]
         ]);
-        $this->assertJsonStructure($response, config('models.attribute_response'));
+        //TODO validate by laravel validation tools
+        $this->assertJsonStructure($response, array_keys(config('models.Attribute')));
     }
 
     public function testCreateAttributeTypeTableSuccess()
@@ -57,16 +58,18 @@ class AttributeTest extends ApiTestCase
             'data' => $attribute->data
         ]);
 
+        //TODO documentation doesn't have commented fields
         $response->assertJson([
             'name' => $attribute->name,
-            'templateId' => $template->id,
-            'isLocked' => false,
-            'order' => 0,
+//            'templateId' => $template->id,
+//            'isLocked' => false,
+//            'order' => 0,
             'type' => [
                 'machineName' => TypeService::TYPE_TABLE
             ]
         ]);
-        $this->assertJsonStructure($response, config('models.attribute_response'));
+        //TODO validate by laravel validation tools
+        $this->assertJsonStructure($response, array_keys(config('models.Attribute')));
         //todo - assert data properties
     }
 
@@ -96,16 +99,19 @@ class AttributeTest extends ApiTestCase
         $attribute = factory(Attribute::class)->create();
 
         $response = $this->jsonRequestGetEntitySuccess('attributes/' . $attribute->getId());
+        //TODO documentation doesn't have commented fields
         $response->assertJson([
             'name' => $attribute->getName(),
-            'templateId' => $attribute->getTemplateId(),
-            'isLocked' => $attribute->isLocked(),
-            'parentAttributeId' => $attribute->getParentAttributeId(),
+//            'templateId' => $attribute->getTemplateId(),
+//            'isLocked' => $attribute->isLocked(),
+//            'parentAttributeId' => $attribute->getParentAttributeId(),
             'type' => [
                 'id' => $attribute->getTypeId()
             ]
         ]);
-        $this->assertJsonStructure($response, config('models.attribute_response'));
+
+        //TODO validate by laravel validation tools
+        $this->assertJsonStructure($response, array_keys(config('models.Attribute')));
     }
 
     public function testGetAttributeNotFound()

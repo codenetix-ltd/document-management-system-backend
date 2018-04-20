@@ -34,6 +34,7 @@ test:
     DB_PASSWORD: dms
     DB_USERNAME: root
   script:
+    - ls
     - ./vendor/bin/phpunit --coverage-text --colors=never
   artifacts:
     paths:

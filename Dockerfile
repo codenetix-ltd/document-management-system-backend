@@ -101,7 +101,9 @@ RUN find ./ -type d -exec chmod 755 {} + && \
     chmod -R ug+rwx ./storage && \
     chown -R codenetix:codenetix ./ && \
     chmod 700 /var/www/bin/run.sh && \
+    chmod 700 /var/www/bin/run_test.sh && \
     rm -rf /container && \
+    chmod 700 ./vendor/bin/phpunit && \
     php artisan storage:link
 
 EXPOSE 80 443

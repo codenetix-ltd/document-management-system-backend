@@ -1,7 +1,8 @@
-image: docker:latest
+image: docker
 
 stages:
   - build
+  - test
   - deploy
 
 variables:
@@ -14,13 +15,44 @@ build:
   stage: build
   script:
     - docker build --pull -t $CONTAINER_IMAGE .
-    - docker push $CONTAINER_IMAGE
+  tags:
+    - docker-build
 
-deploy_dev:
+test:
+  stage: test
+  services:
+    - mysql:latest
   variables:
-    GIT_STRATEGY: none
-  stage: deploy
-  only:
-    - dev
+    MYSQL_DATABASE: dms
+    MYSQL_ROOT_PASSWORD: dms
   script:
-    - docker run --env RANCHER_URL="http://rancher.codenetix.com/v1/projects/1a28" --env RANCHER_ACCESS_KEY="$RANCHER_ACCESS_KEY" --env RANCHER_SECRET_KEY="$RANCHER_SECRET_KEY" --env RANCHER_STACK_ID="1st16" --env RANCHER_STACK_NAME="dev" --env RANCHER_SERVICE_NAME="app" mildberrydigital/rancher-remote-upgrade:latest app
+    - docker run --rm --link mysql:mysql --entrypoint './bin/run_test.sh' -e APP_ENV=local -e DB_DATABASE=dms -e DB_HOST=mysql -e DB_PASSWORD=dms -e DB_USERNAME=root $CONTAINER_IMAGE
+  artifacts:
+    paths:
+      - tests/_reports/coverage/
+  tags:
+    - docker-build
+
+deploy_coverage:
+  stage: deploy
+  dependencies:
+    - test
+  script:
+    - mv tests/_reports/coverage/ public/
+  artifacts:
+    paths:
+      - public
+    expire_in: 30 days
+  tags:
+    - docker-build
+
+
+
+#deploy_dev:
+#  variables:
+#    GIT_STRATEGY: none
+#  stage: deploy
+#  only:
+#    - dev
+#  script:
+#    - docker run --env RANCHER_URL="http://rancher.codenetix.com/v1/projects/1a28" --env RANCHER_ACCESS_KEY="$RANCHER_ACCESS_KEY" --env RANCHER_SECRET_KEY="$RANCHER_SECRET_KEY" --env RANCHER_STACK_ID="1st16" --env RANCHER_STACK_NAME="dev" --env RANCHER_SERVICE_NAME="app" mildberrydigital/rancher-remote-upgrade:latest app

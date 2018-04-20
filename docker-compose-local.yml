@@ -15,15 +15,13 @@ services:
       DB_HOST: mysql
       DB_PASSWORD: dms
       DB_USERNAME: root
-      XDEBUG_CONFIG: remote_host=192.168.0.106
-      XDEBUG_REMOTE_HOST: 192.168.0.106
+      XDEBUG_CONFIG: remote_host=192.168.88.212
     volumes:
       - ./:/var/www
     links:
       - mysql:mysql
     ports:
       - 80:80/tcp
-#      - 9000:9000
     restart: "always"
   mysql:
     image: mysql:latest

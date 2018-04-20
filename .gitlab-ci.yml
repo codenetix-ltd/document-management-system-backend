@@ -20,13 +20,19 @@ build:
 
 test:
   stage: test
+  image:
+    name: $CONTAINER_IMAGE
+    entrypoint: ["./bin/run_test.sh"]
   services:
     - mysql:latest
   variables:
-    MYSQL_DATABASE: dms
-    MYSQL_ROOT_PASSWORD: dms
+    APP_ENV: test
+    DB_DATABASE: dms
+    DB_HOST: mysql
+    DB_PASSWORD: dms
+    DB_USERNAME: root
   script:
-    - docker run --rm --link mysql:mysql --entrypoint './bin/run_test.sh' -e APP_ENV=local -e DB_DATABASE=dms -e DB_HOST=mysql -e DB_PASSWORD=dms -e DB_USERNAME=root $CONTAINER_IMAGE
+    - ./vendor/bin/phpunit --coverage-text --colors=never
   artifacts:
     paths:
       - tests/_reports/coverage/

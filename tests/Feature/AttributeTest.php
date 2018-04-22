@@ -70,12 +70,6 @@ class AttributeTest extends ApiTestCase
         //todo - assert data properties
     }
 
-    public function testCreateAttributeTypeStringWithoutDataValidationFail()
-    {
-        $template = factory(Template::class)->create();
-        $this->jsonRequestPostEntityValidationError('templates/' . $template->id . '/attributes', []);
-    }
-
     public function testCreateAttributeTypeTableValidationFail()
     {
         $attribute = factory(Attribute::class)->states('table-broken')->make();

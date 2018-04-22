@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use App\Tag;
-use Illuminate\Foundation\Testing\TestResponse;
 use Tests\ApiTestCase;
 
 class TagTest extends ApiTestCase

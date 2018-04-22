@@ -43,15 +43,6 @@ class UserTest extends ApiTestCase
         $this->assertJsonStructureForUser($response, true);
     }
 
-    public function testCreateUserValidationError()
-    {
-        $response = $this->jsonRequestPostEntityValidationError(self::PATH, [
-            'password' => 'password',
-            'passwordConfirmation' => 'password'
-        ]);
-        $response->assertJsonValidationErrors(['email', 'fullName']);
-    }
-
     public function testGetUserSuccess()
     {
         $user = factory(User::class)->create();

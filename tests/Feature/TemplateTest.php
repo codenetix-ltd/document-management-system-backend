@@ -21,12 +21,6 @@ class TemplateTest extends ApiTestCase
         $this->assertJsonStructure($response, config('models.template_response'));
     }
 
-    public function testCreateTemplateValidationError()
-    {
-        $response = $this->jsonRequestPostEntityValidationError(self::PATH);
-        $response->assertJsonValidationErrors(['name']);
-    }
-
     public function testGetTemplateSuccess()
     {
         $template = factory(Template::class)->create();

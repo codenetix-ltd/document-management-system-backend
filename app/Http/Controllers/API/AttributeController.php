@@ -2,31 +2,42 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Contracts\Services\Attribute\IAttributeCreateService;
-use App\Contracts\Services\Attribute\IAttributeDeleteService;
-use App\Contracts\Services\Attribute\IAttributeGetService;
-use App\Contracts\Services\Attribute\IAttributeListService;
+use App\Exceptions\FailedAttributeCreateException;
+use App\Exceptions\InvalidAttributeDataStructureException;
+use App\Exceptions\InvalidAttributeTypeException;
 use App\Http\Requests\Attribute\AttributeStoreRequest;
 use App\Http\Resources\AttributeResource;
 use App\Http\Controllers\Controller;
+use App\Services\Attribute\AttributeTransactionService;
+use Illuminate\Http\JsonResponse;
 
 class AttributeController extends Controller
 {
-    public function index(IAttributeListService $attributeListService)
+    public function index(AttributeTransactionService $attributeListService)
     {
         $attributes = $attributeListService->list();
 
         return (AttributeResource::collection($attributes))->response()->setStatusCode(200);
     }
 
-    public function store(AttributeStoreRequest $request, IAttributeCreateService $attributeCreateService, $templateId)
+    /**
+     * @param AttributeStoreRequest $request
+     * @param AttributeTransactionService $attributeCreateService
+     * @param $templateId
+     *
+     * @return JsonResponse
+     * @throws FailedAttributeCreateException
+     * @throws InvalidAttributeDataStructureException
+     * @throws InvalidAttributeTypeException
+     */
+    public function store(AttributeStoreRequest $request, AttributeTransactionService $attributeCreateService, $templateId)
     {
         $attribute = $attributeCreateService->create($request->getEntity(), $templateId);
 
         return (new AttributeResource($attribute))->response()->setStatusCode(201);
     }
 
-    public function show($id, IAttributeGetService $attributeGetService)
+    public function show($id, AttributeTransactionService $attributeGetService)
     {
         $attribute = $attributeGetService->get($id);
 
@@ -41,12 +52,12 @@ class AttributeController extends Controller
 //    }
 
     /**
-     * @param IAttributeDeleteService $attributeDeleteService
+     * @param AttributeTransactionService $attributeDeleteService
      * @param $id
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
      * @throws \App\Exceptions\FailedAttributeDeleteException
      */
-    public function destroy(IAttributeDeleteService $attributeDeleteService, $id)
+    public function destroy(AttributeTransactionService $attributeDeleteService, $id)
     {
         $attributeDeleteService->delete($id);
 

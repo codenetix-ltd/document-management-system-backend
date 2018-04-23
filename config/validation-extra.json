@@ -1,0 +1,8 @@
+{
+  "AttributeRequest": {
+    "typeId": "exists:types,id"
+  },
+  "TemplateRequest": {
+    "name": "unique:templates"
+  }
+}

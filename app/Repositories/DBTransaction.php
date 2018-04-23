@@ -2,9 +2,13 @@
 
 namespace App\Repositories;
 
+use App\Contracts\Services\ITransaction;
 use Illuminate\Support\Facades\DB;
 
-trait TransactionTrait
+/**
+ * @author Vladimir Barmotin <barmotinvladimir@gmail.com>
+ */
+class DBTransaction implements ITransaction
 {
     public function beginTransaction()
     {

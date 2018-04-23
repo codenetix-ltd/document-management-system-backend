@@ -16,6 +16,6 @@ class UserResource extends ApiResource
 
     protected function getStructure(): array
     {
-        return config('models.user_response');
+        return config('models.User');
     }
 }

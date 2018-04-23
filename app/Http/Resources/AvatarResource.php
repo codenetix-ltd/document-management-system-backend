@@ -6,6 +6,6 @@ class AvatarResource extends ApiResource
 {
     protected function getStructure(): array
     {
-        return config('models.avatar');
+        return [];
     }
 }

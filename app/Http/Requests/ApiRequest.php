@@ -3,11 +3,15 @@
 namespace App\Http\Requests;
 
 use App\Contracts\System\ITransformer;
+use App\Services\Components\Validation\ValidationRulesKeeper;
+use Illuminate\Container\Container;
 use Illuminate\Foundation\Http\FormRequest;
 
 abstract class ApiRequest extends FormRequest
 {
     private $updatedFields = [];
+
+    protected $modelConfigName = '';
 
     public function transform(string $interface)
     {
@@ -24,5 +28,7 @@ abstract class ApiRequest extends FormRequest
         return $this->updatedFields;
     }
 
-    public abstract function rules();
+    public function rules() {
+        return $this->modelConfigName ? (new ValidationRulesKeeper(config()))->getRules($this->modelConfigName):[];
+    }
 }

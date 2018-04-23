@@ -13,8 +13,8 @@ start:
 test:
 	docker exec -it dms_app ./vendor/bin/phpunit
 
-#test_coverage:
-#	docker exec -it dms_app ./vendor/bin/phpunit --coverage-html /coverage
+test_coverage:
+	docker exec -it dms_app ./vendor/bin/phpunit --coverage-html tests/_reports/coverage
 
 test_stop_fail:
 	docker exec dms_app ./vendor/bin/phpunit --stop-on-failure

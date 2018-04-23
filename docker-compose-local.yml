@@ -15,16 +15,15 @@ services:
       DB_HOST: mysql
       DB_PASSWORD: dms
       DB_USERNAME: root
-      XDEBUG_CONFIG: remote_host=192.168.88.212
+      XDEBUG_CONFIG: 'remote_host=192.168.88.212 remote_connect_back=0 idekey=PHPSTORM'
     volumes:
       - ./:/var/www
     links:
       - mysql:mysql
     ports:
       - 80:80/tcp
-    restart: "always"
   mysql:
-    image: mysql:latest
+    image: mysql:5.7.22
     container_name: dms_mysql
     environment:
       MYSQL_DATABASE: dms
@@ -33,7 +32,6 @@ services:
       - mysql-data:/var/lib/mysql
     ports:
       - 3306:3306/tcp
-    restart: "always"
   validation-generator:
     image: registry.codenetix.com/documentation/laravel-validation-generator:master
     volumes:

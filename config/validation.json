@@ -50,6 +50,28 @@
     "name": "string|required|in:String,Numeric,Boolean,Table,Value with deviations",
     "machineName": "string|required|in:string,numeric,boolean,table,valueWithDeviations"
   },
+  "AccessType": {
+    "id": "string|required|in:none,allowed,own,any,qualify",
+    "label": "string|required"
+  },
+  "Qualifier": {
+    "id": "integer|required",
+    "label": "string|required",
+    "accessTypes": "array|required"
+  },
+  "Permission": {
+    "id": "integer|required",
+    "name": "string|required",
+    "label": "string|required",
+    "accessTypes": "array|required"
+  },
+  "PermissionGroup": {
+    "id": "integer|required",
+    "name": "string|required",
+    "label": "string|required",
+    "permissions": "array|required",
+    "qualifiers": "array|required"
+  },
   "RowColumn": {
     "id": "integer|required",
     "isLocked": "boolean|required",
@@ -144,6 +166,7 @@
     "name": "string|required",
     "templateId": "integer|required",
     "labelIds": "array|required",
+    "fileIds": "array|required",
     "comment": "string|required",
     "attributeValues": "array|required"
   },

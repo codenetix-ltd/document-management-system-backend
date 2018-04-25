@@ -48,6 +48,7 @@ release:
     - docker push $CONTAINER_IMAGE
   only:
     - dev
+    - master
   tags:
     - docker-build
 

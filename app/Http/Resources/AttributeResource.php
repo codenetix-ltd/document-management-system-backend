@@ -10,7 +10,7 @@ class AttributeResource extends ApiResource
     {
         return [
             'type' => (new TypeResource($this->type))->toArray($request),
-            'table' => $this->getData()
+            'data' => $this->getData()
         ];
     }
 

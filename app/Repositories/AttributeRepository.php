@@ -19,8 +19,6 @@ class AttributeRepository implements IAttributeRepository
 
     public function create(Attribute $attribute): Attribute
     {
-        $order = $this->getDefaultAttributeOrderByTemplateId($attribute->getTemplateId());
-        $attribute->setOrder($order);
         $attribute->save();
 
         $attribute = Attribute::findOrFail($attribute->getId());
@@ -48,7 +46,7 @@ class AttributeRepository implements IAttributeRepository
         return $tableTypeRow;
     }
 
-    private function getDefaultAttributeOrderByTemplateId(int $templateId)
+    public function getDefaultAttributeOrderByTemplateId(int $templateId): int
     {
         $maxOrder = Attribute::where('template_id', $templateId)->where('parent_attribute_id', null)->max('order');
 
@@ -89,8 +87,8 @@ class AttributeRepository implements IAttributeRepository
         return Attribute::where('id', $id)->delete();
     }
 
-    public function list(): LengthAwarePaginator
+    public function list(int $templateId): Collection
     {
-        return Attribute::where('parent_attribute_id', null)->paginate();
+        return Attribute::where('parent_attribute_id', null)->where('template_id', $templateId)->get();
     }
 }

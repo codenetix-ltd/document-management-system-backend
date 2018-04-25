@@ -14,6 +14,7 @@ use App\TableTypeColumn;
 use App\TableTypeRow;
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Collection;
 
 class AttributeService {
     private $repository;
@@ -36,6 +37,7 @@ class AttributeService {
     public function create(Attribute $attribute, int $templateId) : Attribute
     {
         $attribute->setTemplateId($templateId);
+        $attribute->setOrder($this->repository->getDefaultAttributeOrderByTemplateId($attribute->getTemplateId()));
 
         if (!$attribute->getData()) {
             $attribute = $this->repository->create($attribute);
@@ -73,10 +75,10 @@ class AttributeService {
         return $attribute;
     }
 
-    public function list(): LengthAwarePaginator
+    public function list(int $templateId): Collection
     {
-        $attributes = $this->repository->list();
-        $attributes->getCollection()->transform(function ($attribute) {
+        $attributes = $this->repository->list($templateId);
+        $attributes->transform(function ($attribute) {
             /** @var Attribute $attribute */
             return $this->get($attribute->getId());
         });
@@ -84,12 +86,13 @@ class AttributeService {
         return $attributes;
     }
 
+    //TODO - Move validation in request
     /**
      * @param Attribute $attribute
      * @return bool
      * @throws InvalidAttributeDataStructureException
      */
-    private function validate(Attribute $attribute): bool
+    private function validateTable(Attribute $attribute): bool
     {
         $data = $attribute->getData();
 
@@ -151,7 +154,7 @@ class AttributeService {
                     if ($childAttribute->getTableTypeRowId() == $row->getId() && $childAttribute->getTableTypeColumnId() == $column->getId()) {
                         $dataRow['columns'][] = [
                             //todo - refactoring, create special objects
-                            'typeId' => $childAttribute->getId(),
+                            'typeId' => $childAttribute->getTypeId(),
                             'isLocked' => $childAttribute->isLocked()
                         ];
                     }
@@ -177,8 +180,10 @@ class AttributeService {
     private function createComplexAttribute(Attribute $attribute): Attribute
     {
         $type = $this->typeRepository->getTypeById($attribute->getTypeId());
+
+        //TODO - create factory for different types
         if ($type->getMachineName() == TypeService::TYPE_TABLE) {
-            $this->validate($attribute);
+            $this->validateTable($attribute);
             return $this->createAttributeWithTableType($attribute);
         } else {
             throw new InvalidAttributeTypeException('Unsupported attribute type');
@@ -216,7 +221,6 @@ class AttributeService {
         } catch (Exception $e) {
             throw new FailedAttributeCreateException('The process of creating the attribute failed with an error', $e->getCode(), $e);
         }
-
         return $parentAttribute;
     }
 

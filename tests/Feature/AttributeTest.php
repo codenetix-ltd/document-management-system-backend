@@ -23,7 +23,6 @@ class AttributeTest extends ApiTestCase
 
     public function testCreateAttributeTypeStringSuccess()
     {
-        //TODO - создать свою фабрику, где можно было бы получать модели по интерфейсу а не по классу напрямую
         $attribute = factory(Attribute::class)->make();
         $template = factory(Template::class)->create();
 
@@ -87,6 +86,8 @@ class AttributeTest extends ApiTestCase
         ]);
     }
 
+    //todo - implement endpoint - attribute update
+
     public function testGetAttributeSuccess()
     {
         /** @var Attribute $attribute */
@@ -120,12 +121,12 @@ class AttributeTest extends ApiTestCase
         $this->jsonRequestDelete('attributes', $attribute->getId(), self::DB_TABLE);
     }
 
-    public function testDeleteTagNotExistSuccess()
+    public function testDeleteAttributeNotExistSuccess()
     {
         $this->jsonRequestDelete('attributes', 0, self::DB_TABLE);
     }
 
-    public function testListOfTagsWithPaginationSuccess()
+    public function testListOfAttributesWithPaginationSuccess()
     {
         /** @var Template $template */
         $template = factory(Template::class)->create();
@@ -133,6 +134,12 @@ class AttributeTest extends ApiTestCase
             'template_id' => $template->getId()
         ]);
 
-        $this->jsonRequestObjectsWithPagination('templates/' . $template->getId() . '/attributes');
+        $template = factory(Template::class)->create();
+        factory(Attribute::class, 14)->create([
+            'template_id' => $template->getId()
+        ]);
+
+        $response = $this->jsonRequest('GET', 'templates/' . $template->getId() . '/attributes');
+        $response->assertStatus(200);
     }
 }

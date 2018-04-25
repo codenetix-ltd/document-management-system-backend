@@ -34,6 +34,7 @@ abstract class ApiTestCase extends BaseTestCase
     protected function jsonRequestPostEntityWithSuccess($relationPath, $data)
     {
         $response = $this->jsonRequest('POST', $relationPath, $data);
+        //dd($response->getOriginalContent());
         $response->assertStatus(201);
 
         return $response;

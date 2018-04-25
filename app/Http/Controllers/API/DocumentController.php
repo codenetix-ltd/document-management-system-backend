@@ -4,6 +4,9 @@ namespace App\Http\Controllers\API;
 
 use App\Document;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Document\DocumentStoreRequest;
+use App\Http\Resources\DocumentResource;
+use App\Services\Document\DocumentService;
 use Exception;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Http\JsonResponse;
@@ -19,11 +22,11 @@ class DocumentController extends Controller
 //        return (TagResource::collection($users))->response()->setStatusCode(200);
 //    }
 
-    public function store(TagStoreRequest $request, ITagCreateService $tagCreateService)
+    public function store(DocumentStoreRequest $request, DocumentService $service)
     {
-        $tag = $tagCreateService->create($request->getEntity());
+        $document = $service->create($request->getEntity());
 
-        return (new TagResource($tag))->response()->setStatusCode(201);
+        return (new DocumentResource($document))->response()->setStatusCode(201);
     }
 
 //    public function show(ITagGetService $templateGetService, int $id)

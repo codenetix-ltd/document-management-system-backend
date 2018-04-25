@@ -73,6 +73,27 @@ services:
     volumes:
       - schema:/schema
 
+  app_php_unit:
+    image: dms_app
+    entrypoint: ./bin/run_test.sh
+    container_name: dms_app_php_unit
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    environment:
+      APP_ENV: local
+      APP_DEBUG: 'true'
+      APP_KEY: '"base64:N5A11hYX5GxzTqEPRtoRHjtdtqg65hGpw2Qis1V4b8M="'
+      DB_DATABASE: dms
+      DB_HOST: mysql
+      DB_PASSWORD: dms
+      DB_USERNAME: root
+      XDEBUG_CONFIG: 'remote_host=192.168.88.212 remote_connect_back=0 idekey=PHPSTORM'
+    volumes:
+      - ./:/var/www
+    links:
+      - mysql:mysql
+
 volumes:
   mysql-data:
   schema:

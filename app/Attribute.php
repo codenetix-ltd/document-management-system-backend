@@ -6,6 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Attribute extends Model
 {
+    protected $fillable = [
+        'name',
+        'type_id'
+    ];
+
     private $data;
 
     public function attributeValues()

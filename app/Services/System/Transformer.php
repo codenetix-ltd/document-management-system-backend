@@ -3,6 +3,7 @@
 namespace App\Services\System;
 
 use App\Contracts\System\ITransformer;
+use Illuminate\Database\Eloquent\Model;
 use ReflectionClass;
 use ReflectionMethod;
 
@@ -10,7 +11,7 @@ class Transformer implements ITransformer
 {
     private $transformedFields = [];
 
-    public function transform(array $data, $object)
+    public function transform(array $data, Model $object)
     {
         $objectReflection = new ReflectionClass($object);
 

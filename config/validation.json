@@ -172,12 +172,12 @@
   },
   "DocumentPostRequest": {
     "ownerId": "integer|required",
-    "substituteDocumentId": "integer|required",
+    "substituteDocumentId": "integer",
     "actualVersion": "array|required"
   },
   "DocumentPutRequest": {
     "ownerId": "integer|required",
-    "substituteDocumentId": "integer|required",
+    "substituteDocumentId": "integer",
     "actualVersion": "array|required"
   },
   "ResetEmailRequest": {

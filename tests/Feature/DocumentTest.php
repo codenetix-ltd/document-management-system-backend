@@ -2,25 +2,36 @@
 
 namespace Tests\Feature;
 
-use App\Tag;
+use App\Document;
+use App\DocumentVersion;
 use Tests\ApiTestCase;
 
 class DocumentTest extends ApiTestCase
 {
-    private const PATH = 'tags';
-    protected const DB_TABLE = 'tags';
+    private const PATH = 'documents';
+    protected const DB_TABLE = 'documents';
 
-    public function testCreateTagSuccess()
+    public function testCreateDocumentSuccess()
     {
-        $tag = factory(Tag::class)->make();
+        $document = factory(Document::class)->make();
+        $documentVersion = factory(DocumentVersion::class)->make();
 
         $response = $this->jsonRequestPostEntityWithSuccess(self::PATH, [
-            'name' => $tag->name,
+            'ownerId' => $document->owner_id,
+            'actualVersion' => [
+                'name' => $documentVersion->name,
+                'templateId' => $documentVersion->template_id,
+                'comment' => $documentVersion->comment,
+                'labelIds' => [],
+                'fileIds' => [],
+                'attributeValues' => [],
+            ]
         ]);
-        $response->assertJson([
-            'name' => $tag->name,
-        ]);
-        $this->assertJsonStructure($response, config('models.tag_response'));
+//        $response->assertJson([
+//            'name' => $tag->name,
+//        ]);
+//        dd($response->decodeResponseJson());
+        $this->assertJsonStructure($response, array_keys(config('models.Document')));
     }
 //
 //    public function testGetTagSuccess()

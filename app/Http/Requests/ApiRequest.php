@@ -9,7 +9,7 @@ use Illuminate\Foundation\Http\FormRequest;
 
 abstract class ApiRequest extends FormRequest
 {
-    private $updatedFields = [];
+    protected $updatedFields = [];
 
     protected $modelConfigName = '';
 

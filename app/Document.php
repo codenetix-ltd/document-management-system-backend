@@ -40,7 +40,7 @@ class Document extends Model implements IHasOwnerId, IHasId
     {
         return $this->hasOne(DocumentVersion::class)->whereIsActual(1);
     }
-
+    
     public function documentVersions()
     {
         return $this->hasMany(DocumentVersion::class)->orderBy('created_at', 'DESC');

@@ -5,7 +5,6 @@ namespace App\Contracts\Repositories;
 use App\Attribute;
 use App\TableTypeColumn;
 use App\TableTypeRow;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 
 interface IAttributeRepository
@@ -20,5 +19,6 @@ interface IAttributeRepository
     public function getTableColumnsByAttributeId(int $id): Collection;
     public function getChildAttributes(int $id): Collection;
     public function delete(int $id): ?bool;
-    public function list(): LengthAwarePaginator;
+    public function list(int $templateId): Collection;
+    public function getDefaultAttributeOrderByTemplateId(int $templateId): int;
 }

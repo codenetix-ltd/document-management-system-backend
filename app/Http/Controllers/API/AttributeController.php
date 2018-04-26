@@ -13,16 +13,16 @@ use Illuminate\Http\JsonResponse;
 
 class AttributeController extends Controller
 {
-    public function index(AttributeTransactionService $attributeListService)
+    public function index(AttributeTransactionService $attributeListService, $templateId)
     {
-        $attributes = $attributeListService->list();
+        $attributes = $attributeListService->list($templateId);
 
         return (AttributeResource::collection($attributes))->response()->setStatusCode(200);
     }
 
     /**
      * @param AttributeStoreRequest $request
-     * @param AttributeTransactionService $attributeCreateService
+     * @param AttributeTransactionService $attributeTransactionService
      * @param $templateId
      *
      * @return JsonResponse
@@ -30,9 +30,9 @@ class AttributeController extends Controller
      * @throws InvalidAttributeDataStructureException
      * @throws InvalidAttributeTypeException
      */
-    public function store(AttributeStoreRequest $request, AttributeTransactionService $attributeCreateService, $templateId)
+    public function store(AttributeStoreRequest $request, AttributeTransactionService $attributeTransactionService, $templateId)
     {
-        $attribute = $attributeCreateService->create($request->getEntity(), $templateId);
+        $attribute = $attributeTransactionService->create($request->getEntity(), $templateId);
 
         return (new AttributeResource($attribute))->response()->setStatusCode(201);
     }

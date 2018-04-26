@@ -7,7 +7,14 @@ use App\Contracts\Entity\IHasOwnerId;
 use App\Contracts\Models\IDocument;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 
+/**
+ * Class Document
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @package App
+ */
 class Document extends Model implements IHasOwnerId, IHasId
 {
     use SoftDeletes;
@@ -89,5 +96,27 @@ class Document extends Model implements IHasOwnerId, IHasId
         $this->actualVersion = $value;
 
         return $this;
+    }
+
+    public function getSubstituteDocumentId(): ?int
+    {
+        return $this->substitute_document_id;
+    }
+
+    public function setSubstituteDocumentId(?int $value): self
+    {
+        $this->substitute_document_id = $value;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): int
+    {
+        return $this->created_at->timestamp;
+    }
+
+    public function getUpdatedAt(): int
+    {
+        return $this->updated_at->timestamp;
     }
 }

@@ -25,7 +25,7 @@ class DocumentServiceTest extends TestCase
     {
         $documentVersion = new DocumentVersion();
         $documentVersion
-            ->setVersionName('123')
+            ->setVersionName('1')
             ->setActual(true)
             ->setComment('comment')
             ->setDocumentId(1)
@@ -100,16 +100,24 @@ class DocumentServiceTest extends TestCase
         require_once __DIR__.'/../../app/Helpers/SystemFunctions.php';
 
         $oldDocument = $this->createDocument();
+        $oldDocumentVersion = $this->createDocumentVersion();
+
         $newDocument = new Document();
         $newDocument->setOwnerId(2);
 
+        $newVersion = $this->createDocumentVersion();
+        $newVersion->setComment('NEW COMMENT');
+
+        $newDocument->setActualVersion($newVersion);
         $documentRepositoryMock = $this->createMock(IDocumentRepository::class);
         $documentRepositoryMock->method('findOrFail')->willReturn($oldDocument);
+        $documentRepositoryMock->method('getActualVersionRelation')->willReturn($oldDocumentVersion);
         $documentService = new DocumentService($documentRepositoryMock, $this->createEmptyDocumentVersionServiceStub());
 
         $result = $documentService->update(1, $newDocument, ['ownerId']);
 
         $this->assertEquals(2, $result->getOwnerId());
+        $this->assertEquals('2', $newVersion->getVersionName());
     }
 
     public function testUpdateWithoutUpdatedFieldNoUpdate()
@@ -118,16 +126,27 @@ class DocumentServiceTest extends TestCase
         require_once __DIR__.'/../../app/Helpers/SystemFunctions.php';
 
         $oldDocument = $this->createDocument();
+        $oldDocumentVersion = $this->createDocumentVersion();
+
         $newDocument = new Document();
         $newDocument->setOwnerId(2);
 
+        $newVersion = $this->createDocumentVersion();
+        $newVersion->setComment('NEW COMMENT');
+
+        $newDocument->setActualVersion($newVersion);
+
         $documentRepositoryMock = $this->createMock(IDocumentRepository::class);
         $documentRepositoryMock->method('findOrFail')->willReturn($oldDocument);
+        $documentRepositoryMock->method('getActualVersionRelation')->willReturn($oldDocumentVersion);
+
         $documentService = new DocumentService($documentRepositoryMock, $this->createEmptyDocumentVersionServiceStub());
 
         $result = $documentService->update(1, $newDocument, []);
 
         $this->assertEquals(1, $result->getOwnerId());
+        $this->assertEquals('2', $newVersion->getVersionName());
+
     }
 
     public function testDeleteSuccess()

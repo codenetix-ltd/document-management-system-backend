@@ -10,11 +10,13 @@ use Illuminate\Database\Eloquent\Model;
  */
 class EloquentTransformer implements ITransformer
 {
-
+    private $updatedFields = [];
     public function transform(array $data, Model $object)
     {
         $convertedData = [];
         foreach($data as $k=>$v) {
+            //TODO remove updated fields logic from project
+            $this->updatedFields[] = $k;
             $convertedData[snake_case($k)] = $v;
         }
         $object->fill($convertedData);
@@ -24,6 +26,6 @@ class EloquentTransformer implements ITransformer
 
     public function getTransformedFields(): array
     {
-        return [];
+        return $this->updatedFields;
     }
 }

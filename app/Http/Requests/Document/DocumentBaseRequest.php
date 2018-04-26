@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Document;
 
+use App\AttributeValue;
 use App\Document;
 use App\DocumentVersion;
 use App\Http\Requests\ApiRequest;
@@ -36,12 +37,23 @@ class DocumentBaseRequest extends ApiRequest
         $object = $this->container->make($interface);
         $transformer = $this->container->make(EloquentTransformer::class);
         $transformer->transform($data, $object);
-        $object->getOwnerId();
         $this->updatedFields = $transformer->getTransformedFields();
 
         $actualVersion = $this->container->make(DocumentVersion::class);
         $actualVersion->setVersionName($data['actualVersion']['name']);
+        $actualVersion->setLabelIds($data['actualVersion']['labelIds']);
         $transformer->transform($data['actualVersion'], $actualVersion);
+
+        $attributeValues = [];
+
+        foreach($data['actualVersion']['attributeValues'] as $attributeValue) {
+            $attributeValue['attribute_id'] = $attributeValue['id'];
+            unset($attributeValue['id']);
+            $value = new AttributeValue();
+            $attributeValues[] = $transformer->transform($attributeValue, $value);
+        }
+
+        $actualVersion->setAttributeValues($attributeValues);
         $object->setActualVersion($actualVersion);
 
         return $object;

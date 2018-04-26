@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class DocumentVersion extends Model
 {
+    private $_labelIds = [];
+    private $_attributeValues = [];
+
     protected $casts = [
         'is_actual' => 'boolean',
     ];
@@ -106,7 +109,7 @@ class DocumentVersion extends Model
 
     public function getName(): string
     {
-        return $this->comment;
+        return $this->name;
     }
 
     public function setName(string $value): self
@@ -124,6 +127,40 @@ class DocumentVersion extends Model
     public function setId(int $value): self
     {
         $this->id = $value;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getLabelIds(): array
+    {
+        return $this->_labelIds;
+    }
+
+    /**
+     * @param mixed $labelIds
+     * @return self
+     */
+    public function setLabelIds(array $labelIds): self
+    {
+        $this->_labelIds = $labelIds;
+
+        return $this;
+    }
+
+    /**
+     * @return AttributeValue[]
+     */
+    public function getAttributeValues(): array
+    {
+        return $this->_attributeValues;
+    }
+
+    public function setAttributeValues(array $value): self
+    {
+        $this->_attributeValues = $value;
 
         return $this;
     }

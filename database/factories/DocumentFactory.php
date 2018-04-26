@@ -9,5 +9,6 @@ $factory->define(Document::class, function (Faker $faker) {
         'owner_id' => function () {
             return factory(User::class)->create()->id;
         },
+
     ];
 });

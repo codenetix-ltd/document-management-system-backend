@@ -13,8 +13,9 @@ class DocumentVersionResource extends ApiResource
     protected function getComplexFields(Request $request): array
     {
         return [
-//            'type' => (new TypeResource($this->type))->toArray($request),
-//            'table' => $this->getData()
+            'labelIds' => $this->tags->pluck('id'),
+            'labels' => (new ArrayResource($this->tags, TagResource::class))->toArray($request),
+            'attributeValues' => (new ArrayResource($this->attributeValues, AttributeValueResource::class))->toArray($request),
         ];
     }
 

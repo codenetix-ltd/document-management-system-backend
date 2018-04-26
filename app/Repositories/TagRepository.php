@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Contracts\Repositories\ITagRepository;
 use App\Tag;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator as LengthAwarePaginatorContract;
+use Illuminate\Support\Collection;
 
 class TagRepository implements ITagRepository
 {
@@ -42,5 +43,10 @@ class TagRepository implements ITagRepository
     public function list(): LengthAwarePaginatorContract
     {
         return Tag::paginate();
+    }
+
+    public function findMany(array $ids): Collection
+    {
+        return Tag::findMany($ids);
     }
 }

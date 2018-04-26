@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Document;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Document\DocumentStoreRequest;
+use App\Http\Requests\Document\DocumentUpdateRequest;
 use App\Http\Resources\DocumentResource;
 use App\Services\Document\DocumentService;
 use Exception;
@@ -15,12 +16,12 @@ use DB;
 
 class DocumentController extends Controller
 {
-//    public function index(ITagListService $templateListService)
-//    {
-//        $users = $templateListService->list();
-//
-//        return (TagResource::collection($users))->response()->setStatusCode(200);
-//    }
+    public function index(DocumentService $documentService)
+    {
+        $documents = $documentService->list();
+
+        return (DocumentResource::collection($documents))->response()->setStatusCode(200);
+    }
 
     public function store(DocumentStoreRequest $request, DocumentService $service)
     {
@@ -29,26 +30,25 @@ class DocumentController extends Controller
         return (new DocumentResource($document))->response()->setStatusCode(201);
     }
 
-//    public function show(ITagGetService $templateGetService, int $id)
-//    {
-//        $template = $templateGetService->get($id);
-//
-//        return (new TagResource($template))->response()->setStatusCode(200);
-//    }
-//
-//    public function update(TagUpdateRequest $request, ITagUpdateService $tagUpdateService, int $id)
-//    {
-//        $tag = $tagUpdateService->update($id, $request->getEntity(), $request->getUpdatedFields());
-//
-//        return (new TagResource($tag))->response()->setStatusCode(200);
-//    }
-//
-//    public function destroy(ITagDeleteService $userDeleteService, int $id)
-//    {
-//        $userDeleteService->delete($id);
-//
-//        return response('', 204);
-//    }
+    public function show(DocumentService $documentService, int $id)
+    {
+        $document = $documentService->get($id);
+        return (new DocumentResource($document))->response()->setStatusCode(200);
+    }
+
+    public function update(DocumentUpdateRequest $request, DocumentService $documentService, int $id)
+    {
+        $tag = $documentService->update($id, $request->getEntity(), $request->getUpdatedFields());
+
+        return (new DocumentResource($tag))->response()->setStatusCode(200);
+    }
+
+    public function destroy(DocumentService $documentService, int $id)
+    {
+        $documentService->delete($id);
+
+        return response('', 204);
+    }
 
 
 

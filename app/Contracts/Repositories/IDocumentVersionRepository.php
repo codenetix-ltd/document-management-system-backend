@@ -10,4 +10,6 @@ use App\DocumentVersion;
 interface IDocumentVersionRepository extends RepositoryInterface
 {
     public function findOrFail($id): DocumentVersion;
+    public function syncTags(DocumentVersion $model, array $tagIds): array;
+    public function detachTags(DocumentVersion $model);
 }

@@ -12,7 +12,9 @@ class DocumentResource extends ApiResource
     protected function getComplexFields(Request $request): array
     {
         return [
-            'actualVersion' => (new DocumentVersionResource($this->actualVersion))->toArray($request),
+            'actualVersion' => (new DocumentVersionResource($this->documentActualVersion))->toArray($request),
+            'owner' => (new UserResource($this->owner))->toArray($request),
+            'version' => (int)($this->documentActualVersion->getVersionName())
         ];
     }
 

@@ -6,12 +6,6 @@ class TagResource extends ApiResource
 {
     protected function getStructure(): array
     {
-        //TODO There is no model tag in documentation
-        return [
-            'id',
-            'name',
-            'createdAt',
-            'updatedAt'
-        ];
+        return config('models.Label');
     }
 }

@@ -10,6 +10,7 @@ $factory->define(DocumentVersion::class, function (Faker $faker) {
         'is_actual' => true,
         'comment' => $faker->unique()->word,
         'name' => $faker->unique()->word,
+        'version_name' => 1,
         'template_id' => function () {
             return factory(Template::class)->create()->id;
         },

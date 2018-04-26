@@ -14,4 +14,14 @@ class DocumentVersionRepository extends EloquentRepository implements IDocumentV
     {
         return DocumentVersion::findOrFail($id);
     }
+
+    public function syncTags(DocumentVersion $model, array $tagIds): array
+    {
+        return $model->tags()->sync($tagIds);
+    }
+
+    public function detachTags(DocumentVersion $model)
+    {
+        $model->tags()->detach();
+    }
 }

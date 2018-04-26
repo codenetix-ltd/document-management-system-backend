@@ -4,6 +4,8 @@ namespace App\Services\Document;
 
 use App\Contracts\Repositories\IDocumentRepository;
 use App\Document;
+use App\DocumentVersion;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 /**
  * @author Vladimir Barmotin <barmotinvladimir@gmail.com>
@@ -35,6 +37,8 @@ class DocumentService
         if($document->getActualVersion()) {
             $actualVersion = $document->getActualVersion();
             $actualVersion->setDocumentId($id);
+            $actualVersion->setVersionName(1);
+            $actualVersion->setActual(true);
             $this->documentVersionService->create($actualVersion);
         }
 
@@ -52,19 +56,35 @@ class DocumentService
     {
         $document = $this->get($id);
 
-        //TODO - remove, refactoring
+
         foreach ($updatedFields as $fieldKey) {
             $document->{dms_build_setter($fieldKey)}($documentInput->{dms_build_getter($fieldKey)}());
         }
 
         $this->repository->save($document);
 
-        return $document;
+        $oldActualVersion = $this->repository->getActualVersionRelation($document);
+        $oldActualVersion->setActual(false);
+        $this->documentVersionService->update($oldActualVersion);
+
+        $newActualVersion = $documentInput->getActualVersion();
+        $newActualVersion->setDocumentId($id);
+        $newActualVersion->setVersionName((int)$oldActualVersion->getVersionName() + 1);
+        $newActualVersion->setActual(true);
+
+        $this->documentVersionService->create($newActualVersion);
+
+        return $this->get($id);
     }
 
     public function delete(int $id): ?bool
     {
         return $this->repository->delete($this->get($id));
+    }
+
+    public function list(): LengthAwarePaginator
+    {
+        return $this->repository->list();
     }
 
 }

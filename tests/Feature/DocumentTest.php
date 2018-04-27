@@ -94,6 +94,41 @@ class DocumentTest extends ApiTestCase
         $this->assertNotEmpty($responseArray['actualVersion']['attributeValues']);
     }
 
+    public function testUpdateDocumentNoCreateNewVersionSuccess()
+    {
+        $documentVersion = factory(DocumentVersion::class)->create();
+        $attribute = factory(Attribute::class)->create();
+        $tags = factory(Tag::class, 3)->create();
+
+        $newOwner = factory(User::class)->create();
+
+        $response = $this->jsonRequestPutEntityWithSuccess(self::PATH .'/' . $documentVersion->document_id, [
+            'createNewVersion' => false,
+            'ownerId' => $newOwner->id,
+            'actualVersion' => [
+                'name' => 'rename',
+                'templateId' => $documentVersion->template_id,
+                'comment' => $documentVersion->comment,
+                'labelIds' => $tags->pluck('id'),
+                'fileIds' => [],
+                'attributeValues' => [
+                    [
+                        'id' => $attribute->id,
+                        'value' => 'testValue',
+                    ]
+                ],
+            ]
+        ]);
+        $this->assertJsonStructure($response, array_keys(config('models.Document')));
+        $responseArray = $response->decodeResponseJson();
+        $this->assertEquals($newOwner->id, $responseArray['ownerId']);
+        $this->assertEquals('rename', $responseArray['actualVersion']['name']);
+        $this->assertEquals(1, $responseArray['version']);
+        $this->assertNotEmpty($responseArray['actualVersion']['labelIds']);
+        $this->assertNotEmpty($responseArray['actualVersion']['labels']);
+        $this->assertNotEmpty($responseArray['actualVersion']['attributeValues']);
+    }
+
     public function testDeleteDocumentSuccess()
     {
         $documentVersion = factory(DocumentVersion::class)->create();

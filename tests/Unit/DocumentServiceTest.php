@@ -120,6 +120,35 @@ class DocumentServiceTest extends TestCase
         $this->assertEquals('2', $newVersion->getVersionName());
     }
 
+    public function testUpdateNoNewVersionSuccess()
+    {
+        //TODO only for unit tests
+        require_once __DIR__.'/../../app/Helpers/SystemFunctions.php';
+
+        $oldDocument = $this->createDocument();
+        $oldDocumentVersion = $this->createDocumentVersion();
+
+        $newDocument = new Document();
+        $newDocument->setOwnerId(2);
+
+        $newVersion = $this->createDocumentVersion();
+        $newVersion->setComment('NEW COMMENT');
+
+        $newDocument->setActualVersion($newVersion);
+        $documentRepositoryMock = $this->createMock(IDocumentRepository::class);
+        $documentRepositoryMock->method('findOrFail')->willReturn($oldDocument);
+        $documentRepositoryMock->method('getActualVersionRelation')->willReturn($oldDocumentVersion);
+        $documentVersionServiceMock = $this->createEmptyDocumentVersionServiceStub();
+        $documentVersionServiceMock->expects($this->once())->method('delete');
+        $documentVersionServiceMock->expects($this->once())->method('create');
+        $documentService = new DocumentService($documentRepositoryMock, $documentVersionServiceMock);
+
+        $result = $documentService->update(1, $newDocument, ['ownerId'], false);
+
+        $this->assertEquals(2, $result->getOwnerId());
+        $this->assertEquals('1', $newVersion->getVersionName());
+    }
+
     public function testUpdateWithoutUpdatedFieldNoUpdate()
     {
         //TODO only for unit tests

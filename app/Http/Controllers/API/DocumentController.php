@@ -38,7 +38,8 @@ class DocumentController extends Controller
 
     public function update(DocumentUpdateRequest $request, DocumentService $documentService, int $id)
     {
-        $tag = $documentService->update($id, $request->getEntity(), $request->getUpdatedFields());
+        $createNewVersion = $request->get('createNewVersion', true);
+        $tag = $documentService->update($id, $request->getEntity(), $request->getUpdatedFields(), $createNewVersion);
 
         return (new DocumentResource($tag))->response()->setStatusCode(200);
     }

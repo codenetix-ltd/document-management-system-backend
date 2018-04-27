@@ -52,7 +52,7 @@ class DocumentService
         return $this->repository->findOrFail($id);
     }
 
-    public function update(int $id, Document $documentInput, $updatedFields): Document
+    public function update(int $id, Document $documentInput, $updatedFields, bool $createNewVersion = true): Document
     {
         $document = $this->get($id);
 
@@ -64,13 +64,18 @@ class DocumentService
         $this->repository->save($document);
 
         $oldActualVersion = $this->repository->getActualVersionRelation($document);
-        $oldActualVersion->setActual(false);
-        $this->documentVersionService->update($oldActualVersion);
-
         $newActualVersion = $documentInput->getActualVersion();
         $newActualVersion->setDocumentId($id);
-        $newActualVersion->setVersionName((int)$oldActualVersion->getVersionName() + 1);
         $newActualVersion->setActual(true);
+
+        if($createNewVersion) {
+            $oldActualVersion->setActual(false);
+            $this->documentVersionService->update($oldActualVersion);
+            $newActualVersion->setVersionName((int)$oldActualVersion->getVersionName() + 1);
+        } else {
+            $this->documentVersionService->delete($oldActualVersion->getId());
+            $newActualVersion->setVersionName($oldActualVersion->getVersionName());
+        }
 
         $this->documentVersionService->create($newActualVersion);
 

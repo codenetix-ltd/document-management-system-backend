@@ -24,4 +24,15 @@ class DocumentVersionRepository extends EloquentRepository implements IDocumentV
     {
         $model->tags()->detach();
     }
+
+    public function syncFiles(DocumentVersion $model, array $fileIds): array
+    {
+        return $model->files()->sync($fileIds);
+
+    }
+
+    public function detachFiles(DocumentVersion $model)
+    {
+        $model->files()->detach();
+    }
 }

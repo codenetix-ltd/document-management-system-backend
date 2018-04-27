@@ -47,6 +47,12 @@ class DocumentVersionService
             $this->repository->detachTags($documentVersion);
         }
 
+        if (count($documentVersion->getFileIds())) {
+            $this->repository->syncFiles($documentVersion, $documentVersion->getFileIds());
+        } else {
+            $this->repository->detachFiles($documentVersion);
+        }
+
         if (count($documentVersion->getAttributeValues())) {
             foreach($documentVersion->getAttributeValues() as $attributeValue) {
                 $attributeValue->setDocumentVersionId($id);

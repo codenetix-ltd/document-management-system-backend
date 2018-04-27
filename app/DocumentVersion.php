@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class DocumentVersion extends Model
 {
     private $_labelIds = [];
+    private $_fileIds = [];
     private $_attributeValues = [];
 
     protected $casts = [
@@ -146,6 +147,25 @@ class DocumentVersion extends Model
     public function setLabelIds(array $labelIds): self
     {
         $this->_labelIds = $labelIds;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getFileIds(): array
+    {
+        return $this->_fileIds;
+    }
+
+    /**
+     * @param mixed $fileIds
+     * @return self
+     */
+    public function setFileIds(array $fileIds): self
+    {
+        $this->_fileIds = $fileIds;
 
         return $this;
     }

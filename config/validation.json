@@ -46,6 +46,8 @@
     "templateId": "integer|required",
     "template": "array|required",
     "labelIds": "array|required",
+    "fileIds": "array|required",
+    "files": "array|required",
     "labels": "array|required",
     "comment": "string|required",
     "attributeValues": "array|required",
@@ -127,6 +129,11 @@
     "id": "integer|required"
   },
   "ValueUnion": {},
+  "File": {
+    "id": "integer|required",
+    "name": "string|required",
+    "url": "string|required"
+  },
   "SystemObject": {
     "id": "integer|required",
     "createdAt": "integer|required",

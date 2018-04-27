@@ -16,6 +16,8 @@ class DocumentVersionResource extends ApiResource
             'labelIds' => $this->tags->pluck('id'),
             'labels' => (new ArrayResource($this->tags, TagResource::class))->toArray($request),
             'attributeValues' => (new ArrayResource($this->attributeValues, AttributeValueResource::class))->toArray($request),
+            'fileIds' => $this->files->pluck('id'),
+            'files' => (new ArrayResource($this->files, FileResource::class))->toArray($request),
         ];
     }
 

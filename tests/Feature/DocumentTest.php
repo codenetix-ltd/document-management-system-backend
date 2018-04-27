@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Attribute;
 use App\Document;
 use App\DocumentVersion;
+use App\File;
 use App\Tag;
 use App\User;
 use Tests\ApiTestCase;
@@ -20,6 +21,7 @@ class DocumentTest extends ApiTestCase
         $documentVersion = factory(DocumentVersion::class)->make();
         $attribute = factory(Attribute::class)->create();
         $tags = factory(Tag::class, 3)->create();
+        $files = factory(File::class, 3)->create();
 
         $response = $this->jsonRequestPostEntityWithSuccess(self::PATH, [
             'ownerId' => $document->owner_id,
@@ -28,7 +30,7 @@ class DocumentTest extends ApiTestCase
                 'templateId' => $documentVersion->template_id,
                 'comment' => $documentVersion->comment,
                 'labelIds' => $tags->pluck('id'),
-                'fileIds' => [],
+                'fileIds' => $files->pluck('id'),
                 'attributeValues' => [
                     [
                         'id' => $attribute->id,
@@ -42,6 +44,7 @@ class DocumentTest extends ApiTestCase
         $this->assertNotEmpty($responseArray['actualVersion']['labelIds']);
         $this->assertNotEmpty($responseArray['actualVersion']['labels']);
         $this->assertNotEmpty($responseArray['actualVersion']['attributeValues']);
+        $this->assertNotEmpty($responseArray['actualVersion']['files']);
     }
 
     public function testGetDocumentSuccess()

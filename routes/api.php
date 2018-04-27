@@ -29,4 +29,7 @@ Route::prefix('v1')->group(function () {
     Route::get('attributes/{id}', 'API\AttributeController@show');
     Route::delete('attributes/{id}', 'API\AttributeController@destroy');
     Route::get('templates/{id}/attributes', 'API\AttributeController@index');
+
+    Route::post('files', 'FileController@uploadFile');
 });
+

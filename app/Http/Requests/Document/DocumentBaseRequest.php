@@ -42,6 +42,7 @@ class DocumentBaseRequest extends ApiRequest
         $actualVersion = $this->container->make(DocumentVersion::class);
         $actualVersion->setVersionName($data['actualVersion']['name']);
         $actualVersion->setLabelIds($data['actualVersion']['labelIds']);
+        $actualVersion->setFileIds($data['actualVersion']['fileIds']);
         $transformer->transform($data['actualVersion'], $actualVersion);
 
         $attributeValues = [];

@@ -8,6 +8,7 @@ use App\Http\Requests\Document\DocumentStoreRequest;
 use App\Http\Requests\Document\DocumentUpdateRequest;
 use App\Http\Resources\DocumentResource;
 use App\Services\Document\DocumentService;
+use App\Services\Document\TransactionDocumentService;
 use Exception;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Http\JsonResponse;
@@ -23,7 +24,7 @@ class DocumentController extends Controller
         return (DocumentResource::collection($documents))->response()->setStatusCode(200);
     }
 
-    public function store(DocumentStoreRequest $request, DocumentService $service)
+    public function store(DocumentStoreRequest $request, TransactionDocumentService $service)
     {
         $document = $service->create($request->getEntity());
 
@@ -36,7 +37,7 @@ class DocumentController extends Controller
         return (new DocumentResource($document))->response()->setStatusCode(200);
     }
 
-    public function update(DocumentUpdateRequest $request, DocumentService $documentService, int $id)
+    public function update(DocumentUpdateRequest $request, TransactionDocumentService $documentService, int $id)
     {
         $createNewVersion = $request->get('createNewVersion', true);
         $tag = $documentService->update($id, $request->getEntity(), $request->getUpdatedFields(), $createNewVersion);

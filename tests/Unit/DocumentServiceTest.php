@@ -186,4 +186,45 @@ class DocumentServiceTest extends TestCase
 
         $documentService->delete(1);
     }
+
+    public function testChangeActualVersionSuccess()
+    {
+        $oldDV = $this->createDocumentVersion()->setActual(true);
+        $newDV = $this->createDocumentVersion()->setActual(false);
+        $document = $this->createDocument();
+
+        $dvsMock = $this->createEmptyDocumentVersionServiceStub();
+        $dvsMock->expects($this->exactly(2))->method('update');
+        $dvsMock->method('get')->willReturn($newDV);
+
+        $documentRepositoryStub = $this->createMock(IDocumentRepository::class);
+        $documentRepositoryStub->method('getActualVersionRelation')->willReturn($oldDV);
+        $documentRepositoryStub->method('findOrFail')->willReturn($document);
+
+        $documentService = new DocumentService($documentRepositoryStub, $dvsMock);
+        $documentService->setActualVersion(1, 1);
+
+        $this->assertTrue($newDV->isActual());
+        $this->assertFalse($oldDV->isActual());
+    }
+
+    public function testChangeActualVersionFail()
+    {
+        $oldDV = $this->createDocumentVersion()->setActual(true);
+        $newDV = $this->createDocumentVersion()->setActual(false)->setDocumentId(0);
+        $document = $this->createDocument();
+
+        $dvsMock = $this->createEmptyDocumentVersionServiceStub();
+        $dvsMock->expects($this->never())->method('update');
+        $dvsMock->method('get')->willReturn($newDV);
+
+        $documentRepositoryStub = $this->createMock(IDocumentRepository::class);
+        $documentRepositoryStub->method('getActualVersionRelation')->willReturn($oldDV);
+        $documentRepositoryStub->method('findOrFail')->willReturn($document);
+
+        $documentService = new DocumentService($documentRepositoryStub, $dvsMock);
+        $this->expectException(ModelNotFoundException::class);
+
+        $documentService->setActualVersion(1, 1);
+    }
 }

@@ -5,6 +5,8 @@ namespace App\Services\Document;
 use App\Contracts\Repositories\IAttributeValueRepository;
 use App\Contracts\Repositories\IDocumentVersionRepository;
 use App\DocumentVersion;
+use App\Exceptions\FailedDeleteActualDocumentVersion;
+use Illuminate\Support\Collection;
 
 /**
  * @author Vladimir Barmotin <barmotinvladimir@gmail.com>
@@ -31,9 +33,22 @@ class DocumentVersionService
         return $this->repository->findOrFail($id);
     }
 
-    public function delete($id): ?bool
+    /**
+     * @param $id
+     *
+     * @param bool $force
+     * @return bool|null
+     * @throws FailedDeleteActualDocumentVersion
+     */
+    public function delete($id, $force = false): ?bool
     {
-        return $this->repository->delete($this->get($id));
+        $version = $this->get($id);
+
+        if(!$force && $version->isActual()) {
+            throw new FailedDeleteActualDocumentVersion();
+        }
+
+        return $this->repository->delete($version);
     }
 
     public function create(DocumentVersion $documentVersion): DocumentVersion
@@ -68,5 +83,20 @@ class DocumentVersionService
         $this->repository->save($documentVersion);
 
         return $documentVersion;
+    }
+
+    public function list(int $documentId): Collection
+    {
+        $versions = $this->repository->list($documentId);
+        /**
+         * TODO why is it necessary to use get method? it makes n queries to database
+         * @see \App\Services\Attribute\AttributeService::list()
+         */
+        $versions->transform(function ($version) {
+            /** @var DocumentVersion $version */
+            return $this->get($version->getId());
+        });
+
+        return $versions;
     }
 }

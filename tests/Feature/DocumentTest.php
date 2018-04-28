@@ -140,20 +140,21 @@ class DocumentTest extends ApiTestCase
 
     public function testListOfDocumentsWithPaginationSuccess()
     {
-        factory(DocumentVersion::class, 20)->create();
+        factory(DocumentVersion::class, 3)->create();
 
         $this->jsonRequestObjectsWithPagination(self::PATH);
     }
-//
-//    public function testDeleteTagNotExistSuccess()
-//    {
-//        $this->jsonRequestDelete(self::PATH, 0, self::DB_TABLE);
-//    }
-//
-//    public function testListOfTagsWithPaginationSuccess()
-//    {
-//        factory(Tag::class, 20)->create();
-//
-//        $this->jsonRequestObjectsWithPagination(self::PATH);
-//    }
+
+    public function testSetActualVersionSuccess()
+    {
+        $documentVersion = factory(DocumentVersion::class)->create();
+        $newDocumentVersion = factory(DocumentVersion::class)->create(['document_id' => $documentVersion->document_id]);
+
+        $response = $this->jsonRequestPutEntityWithSuccess(self::PATH .'/' . $documentVersion->document_id . '/actualVersion', [
+            'versionId' => $newDocumentVersion->id,
+        ]);
+        $this->assertJsonStructure($response, array_keys(config('models.Document')));
+        $responseArray = $response->decodeResponseJson();
+        $this->assertEquals($newDocumentVersion->id, $responseArray['actualVersion']['id']);
+    }
 }

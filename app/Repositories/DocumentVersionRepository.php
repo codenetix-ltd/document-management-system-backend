@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Contracts\Repositories\IDocumentVersionRepository;
 use App\DocumentVersion;
+use Illuminate\Support\Collection;
 
 /**
  * @author Vladimir Barmotin <barmotinvladimir@gmail.com>
@@ -34,5 +35,10 @@ class DocumentVersionRepository extends EloquentRepository implements IDocumentV
     public function detachFiles(DocumentVersion $model)
     {
         $model->files()->detach();
+    }
+
+    public function list(int $documentId): Collection
+    {
+        return DocumentVersion::where('document_id', $documentId)->get();
     }
 }

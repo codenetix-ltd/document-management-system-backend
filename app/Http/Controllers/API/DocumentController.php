@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Document;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Document\DocumentSetActualVersionRequest;
 use App\Http\Requests\Document\DocumentStoreRequest;
 use App\Http\Requests\Document\DocumentUpdateRequest;
 use App\Http\Resources\DocumentResource;
@@ -40,9 +41,9 @@ class DocumentController extends Controller
     public function update(DocumentUpdateRequest $request, TransactionDocumentService $documentService, int $id)
     {
         $createNewVersion = $request->get('createNewVersion', true);
-        $tag = $documentService->update($id, $request->getEntity(), $request->getUpdatedFields(), $createNewVersion);
+        $document = $documentService->update($id, $request->getEntity(), $request->getUpdatedFields(), $createNewVersion);
 
-        return (new DocumentResource($tag))->response()->setStatusCode(200);
+        return (new DocumentResource($document))->response()->setStatusCode(200);
     }
 
     public function destroy(DocumentService $documentService, int $id)
@@ -52,7 +53,11 @@ class DocumentController extends Controller
         return response('', 204);
     }
 
-
+    public function setActualVersion(DocumentSetActualVersionRequest $request, TransactionDocumentService $documentService, $id)
+    {
+        $document = $documentService->setActualVersion($id, $request->getVersionId());
+        return (new DocumentResource($document))->response()->setStatusCode(200);
+    }
 
 
 //    public function massArchive(Request $request, IAtomCommandInvoker $invoker)

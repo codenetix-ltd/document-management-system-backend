@@ -13,8 +13,6 @@ use App\Services\System\EloquentTransformer;
  */
 class DocumentBaseRequest extends ApiRequest
 {
-    protected $modelConfigName = 'DocumentRequest';
-
     /**
      * Determine if the user is authorized to make this request.
      *

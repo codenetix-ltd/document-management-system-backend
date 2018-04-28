@@ -78,6 +78,7 @@ class AttributeService {
     public function list(int $templateId): Collection
     {
         $attributes = $this->repository->list($templateId);
+        //TODO why is it necessary to use get method? it makes n queries to database
         $attributes->transform(function ($attribute) {
             /** @var Attribute $attribute */
             return $this->get($attribute->getId());

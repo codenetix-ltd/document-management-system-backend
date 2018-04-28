@@ -8,8 +8,10 @@ use App\Contracts\Repositories\IDocumentRepository;
 use App\Contracts\Repositories\IDocumentVersionRepository;
 use App\Document;
 use App\DocumentVersion;
+use App\Exceptions\FailedDeleteActualDocumentVersion;
 use App\Services\Document\DocumentVersionService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Collection;
 
 /**
  * @author Vladimir Barmotin <barmotinvladimir@gmail.com>
@@ -130,11 +132,28 @@ class DocumentVersionServiceTest extends TestCase
         $documentVersionService->get(1);
     }
 
+    public function testDeleteActualException()
+    {
+        $actualVersion = $this->createDocumentVersion()->setActual(true);
+        $documentVersionRepositoryMock = $this->createMock(IDocumentVersionRepository::class);
+        $documentVersionRepositoryMock->expects($this->once())->method('findOrFail')->willReturn($actualVersion);
+        $documentVersionRepositoryMock->expects($this->never())->method('delete');
+        $documentVersionService = new DocumentVersionService(
+            $documentVersionRepositoryMock,
+            $this->createAttributeValueRepositoryMock()
+        );
+        $this->expectException(FailedDeleteActualDocumentVersion::class);
+
+        $documentVersionService->delete(1);
+    }
 
     public function testDeleteSuccess()
     {
+        $version = $this->createDocumentVersion()->setActual(false);
         $documentVersionRepositoryMock = $this->createMock(IDocumentVersionRepository::class);
         $documentVersionRepositoryMock->expects($this->once())->method('delete');
+        $documentVersionRepositoryMock->expects($this->once())->method('findOrFail')->willReturn($version);
+
         $documentVersionService = new DocumentVersionService(
             $documentVersionRepositoryMock,
             $this->createAttributeValueRepositoryMock()
@@ -153,5 +172,22 @@ class DocumentVersionServiceTest extends TestCase
         );
 
         $documentVersionService->update($this->createDocumentVersion());
+    }
+
+    public function testGetListSuccess()
+    {
+        $documentVersion = $this->createDocumentVersion();
+        $returnCollection = new Collection([$documentVersion]);
+
+        $documentVersionRepositoryMock = $this->createMock(IDocumentVersionRepository::class);
+        $documentVersionRepositoryMock->method('findOrFail')->willReturn($documentVersion);
+        $documentVersionRepositoryMock->method('list')->willReturn($returnCollection);
+        $documentVersionService = new DocumentVersionService(
+            $documentVersionRepositoryMock,
+            $this->createAttributeValueRepositoryMock()
+        );
+
+        $result = $documentVersionService->list(1);
+        $this->assertEquals($returnCollection->count(), $result->count());
     }
 }

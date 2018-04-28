@@ -67,4 +67,24 @@ class TransactionDocumentService extends DocumentService
             throw $e;
         }
     }
+
+    /**
+     * @param $oldDV
+     * @param $newDV
+     * @throws Exception
+     */
+    protected function doSetActualVersion($oldDV, $newDV)
+    {
+        $this->transaction->beginTransaction();
+
+        try {
+            parent::doSetActualVersion($oldDV, $newDV);
+            $this->transaction->commit();
+        } catch (Exception $exception) {
+            $this->transaction->rollback();
+            throw $exception;
+        }
+    }
+
+
 }

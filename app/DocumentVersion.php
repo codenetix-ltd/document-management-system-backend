@@ -184,4 +184,14 @@ class DocumentVersion extends Model
 
         return $this;
     }
+
+    public function getCreatedAt(): int
+    {
+        return $this->created_at->timestamp;
+    }
+
+    public function getUpdatedAt(): int
+    {
+        return $this->updated_at->timestamp;
+    }
 }

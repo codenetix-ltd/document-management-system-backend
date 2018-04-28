@@ -5,7 +5,10 @@ namespace App\Services\Document;
 use App\Contracts\Repositories\IDocumentRepository;
 use App\Document;
 use App\DocumentVersion;
+use App\Http\Controllers\API\DocumentVersionController;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * @author Vladimir Barmotin <barmotinvladimir@gmail.com>
@@ -90,7 +93,7 @@ class DocumentService
             $this->documentVersionService->update($oldActualVersion);
             $newActualVersion->setVersionName((int)$oldActualVersion->getVersionName() + 1);
         } else {
-            $this->documentVersionService->delete($oldActualVersion->getId());
+            $this->documentVersionService->delete($oldActualVersion->getId(), true);
             $newActualVersion->setVersionName($oldActualVersion->getVersionName());
         }
 
@@ -107,4 +110,27 @@ class DocumentService
         return $this->repository->list();
     }
 
+    public function setActualVersion($documentId, $documentVersionId)
+    {
+        $document = $this->get($documentId);
+        $newDV = $this->documentVersionService->get($documentVersionId);
+
+        if ($newDV->getDocumentId() != $documentId) {
+            throw (new ModelNotFoundException())->setModel(DocumentVersion::class);
+        }
+
+        $oldDV = $this->repository->getActualVersionRelation($document);
+        $oldDV->setActual(false);
+        $newDV->setActual(true);
+
+        $this->doSetActualVersion($oldDV, $newDV);
+
+        return $this->get($documentId);
+    }
+
+    protected function doSetActualVersion($oldDV, $newDV)
+    {
+        $this->documentVersionService->update($oldDV);
+        $this->documentVersionService->update($newDV);
+    }
 }

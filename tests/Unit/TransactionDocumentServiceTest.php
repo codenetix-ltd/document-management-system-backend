@@ -8,6 +8,7 @@ use App\Document;
 use App\DocumentVersion;
 use App\Services\Document\DocumentVersionService;
 use App\Services\Document\TransactionDocumentService;
+use Exception;
 
 /**
  * @author Vladimir Barmotin <barmotinvladimir@gmail.com>
@@ -140,5 +141,53 @@ class TransactionDocumentServiceTest extends TestCase
 
         $documentService->update(1, $newDocument, ['ownerId']);
 
+    }
+
+    public function testChangeActualVersionSuccess()
+    {
+        $oldDV = $this->createDocumentVersion()->setActual(true);
+        $newDV = $this->createDocumentVersion()->setActual(false);
+        $document = $this->createDocument();
+
+        $dvsStub = $this->createEmptyDocumentVersionServiceStub();
+        $dvsStub->method('get')->willReturn($newDV);
+
+        $transactionMock = $this->createEmptyTransactionStub();
+        $transactionMock->expects($this->once())->method('beginTransaction');
+        $transactionMock->expects($this->once())->method('commit');
+        $transactionMock->expects($this->never())->method('rollback');
+
+        $documentRepositoryStub = $this->createMock(IDocumentRepository::class);
+        $documentRepositoryStub->method('getActualVersionRelation')->willReturn($oldDV);
+        $documentRepositoryStub->method('findOrFail')->willReturn($document);
+
+        $documentService = new TransactionDocumentService($documentRepositoryStub, $dvsStub, $transactionMock);
+        $documentService->setActualVersion(1, 1);
+    }
+
+    public function testChangeActualVersionRollbackException()
+    {
+        $exception = new Exception();
+
+        $oldDV = $this->createDocumentVersion()->setActual(true);
+        $newDV = $this->createDocumentVersion()->setActual(false);
+        $document = $this->createDocument();
+
+        $dvsStub = $this->createEmptyDocumentVersionServiceStub();
+        $dvsStub->method('get')->willReturn($newDV);
+        $dvsStub->method('update')->willThrowException($exception);
+
+        $transactionMock = $this->createEmptyTransactionStub();
+        $transactionMock->expects($this->once())->method('beginTransaction');
+        $transactionMock->expects($this->never())->method('commit');
+        $transactionMock->expects($this->once())->method('rollback');
+
+        $documentRepositoryStub = $this->createMock(IDocumentRepository::class);
+        $documentRepositoryStub->method('getActualVersionRelation')->willReturn($oldDV);
+        $documentRepositoryStub->method('findOrFail')->willReturn($document);
+        $this->expectExceptionObject($exception);
+
+        $documentService = new TransactionDocumentService($documentRepositoryStub, $dvsStub, $transactionMock);
+        $documentService->setActualVersion(1, 1);
     }
 }

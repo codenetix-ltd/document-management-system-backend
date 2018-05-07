@@ -15,8 +15,6 @@ class CreateDocumentsTable extends Migration
     {
         Schema::create('documents', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name', 255)->unique();
-            $table->unsignedInteger('template_id');
             $table->unsignedInteger('owner_id');
             $table->timestamps();
             $table->softDeletes();

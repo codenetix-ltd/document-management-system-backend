@@ -14,12 +14,13 @@ class CreateForeignKeys extends Migration
     public function up()
     {
         Schema::table('documents', function (Blueprint $table) {
-            $table->foreign('template_id')->references('id')->on('templates')->onDelete('no action')->onUpdate('no action');
             $table->foreign('owner_id')->references('id')->on('users')->onDelete('no action')->onUpdate('no action');
         });
 
         Schema::table('document_versions', function (Blueprint $table) {
             $table->foreign('document_id')->references('id')->on('documents')->onDelete('cascade')->onUpdate('no action');
+            $table->foreign('template_id')->references('id')->on('templates')->onDelete('no action')->onUpdate('no action');
+
         });
 
         Schema::table('attributes', function (Blueprint $table) {
@@ -42,12 +43,12 @@ class CreateForeignKeys extends Migration
     public function down()
     {
         Schema::table('documents', function (Blueprint $table) {
-            $table->dropForeign(['template_id']);
             $table->dropForeign(['owner_id']);
         });
 
         Schema::table('document_versions', function (Blueprint $table) {
             $table->dropForeign(['document_id']);
+            $table->dropForeign(['template_id']);
         });
 
         Schema::table('attributes', function (Blueprint $table) {

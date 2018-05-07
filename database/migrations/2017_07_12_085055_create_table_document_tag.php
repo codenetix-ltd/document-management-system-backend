@@ -13,13 +13,13 @@ class CreateTableDocumentTag extends Migration
      */
     public function up()
     {
-        Schema::create('document_tag', function (Blueprint $table) {
-            $table->unsignedInteger('document_id');
+        Schema::create('document_version_tag', function (Blueprint $table) {
+            $table->unsignedInteger('document_version_id');
             $table->unsignedInteger('tag_id');
         });
 
-        Schema::table('document_tag', function (Blueprint $table) {
-            $table->foreign('document_id')->references('id')->on('documents')->onDelete('cascade')->onUpdate('no action');
+        Schema::table('document_version_tag', function (Blueprint $table) {
+            $table->foreign('document_version_id')->references('id')->on('document_versions')->onDelete('cascade')->onUpdate('no action');
             $table->foreign('tag_id')->references('id')->on('tags')->onDelete('cascade')->onUpdate('no action');
         });
     }
@@ -31,10 +31,10 @@ class CreateTableDocumentTag extends Migration
      */
     public function down()
     {
-        Schema::table('document_tag', function (Blueprint $table) {
-            $table->dropForeign(['document_id']);
+        Schema::table('document_version_tag', function (Blueprint $table) {
+            $table->dropForeign(['document_version_id']);
             $table->dropForeign(['tag_id']);
         });
-        Schema::dropIfExists('document_tag');
+        Schema::dropIfExists('document_version_tag');
     }
 }

@@ -35,6 +35,20 @@ class FileCreateService implements IFileCreateService
         return $file;
     }
 
+    public function createFile(UploadedFile $file, $path = ''): FileModel
+    {
+        $storagePath = Storage::disk('public')->getDriver()->getAdapter()->getPathPrefix();
+        $fileName = str_random(16) . '.' . $file->extension();
+
+        $this->createDirectory($path);
+
+        $file = $file->move($storagePath . $path, $fileName);
+
+        $file = $this->repository->create(['path' => $path . $file->getBasename(), 'original_name' => $file->getBasename()]);
+
+        return $file;
+    }
+
     public function createDirectory($path): bool
     {
         return File::isDirectory($path) ? true : Storage::disk('public')->makeDirectory($path);

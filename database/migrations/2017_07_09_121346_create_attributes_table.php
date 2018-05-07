@@ -20,7 +20,7 @@ class CreateAttributesTable extends Migration
             $table->unsignedInteger('table_type_column_id')->nullable();
             $table->unsignedInteger('parent_attribute_id')->nullable();
             $table->string('name', 255);
-            $table->tinyInteger('type_id');
+            $table->unsignedInteger('type_id');
             $table->tinyInteger('is_locked')->default(0);
             $table->integer('order')->default(0);
             $table->timestamps();

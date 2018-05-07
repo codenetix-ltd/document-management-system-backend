@@ -71,7 +71,8 @@ return [
     ],
 
     'paths' => [
-        'avatars' => 'avatars/'
+        'avatars' => 'avatars/',
+        'files' => 'files/',
     ]
 
 ];

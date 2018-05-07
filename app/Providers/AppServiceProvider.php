@@ -6,6 +6,9 @@ use App\Adapters\TableAdapter;
 use App\Attribute;
 use App\Contracts\Adapters\ITableAdapter;
 use App\Contracts\Repositories\IAttributeRepository;
+use App\Contracts\Repositories\IAttributeValueRepository;
+use App\Contracts\Repositories\IDocumentRepository;
+use App\Contracts\Repositories\IDocumentVersionRepository;
 use App\Contracts\Repositories\IFileRepository;
 use App\Contracts\Repositories\ITagRepository;
 use App\Contracts\Repositories\ITemplateRepository;
@@ -17,7 +20,10 @@ use App\Contracts\Services\ITransaction;
 use App\Contracts\System\ITransformer;
 use App\File;
 use App\Repositories\AttributeRepository;
+use App\Repositories\AttributeValueRepository;
 use App\Repositories\DBTransaction;
+use App\Repositories\DocumentRepository;
+use App\Repositories\DocumentVersionRepository;
 use App\Repositories\FileRepository;
 use App\Repositories\TagRepository;
 use App\Repositories\TemplateRepository;
@@ -32,12 +38,6 @@ use App\Services\DocumentViewService;
 use App\Services\File\FileCreateService;
 use App\Services\File\FileManager;
 use App\Services\System\Transformer;
-use App\TableTypeColumn;
-use App\TableTypeRow;
-use App\Tag;
-use App\Template;
-use App\Type;
-use App\User;
 use Illuminate\Http\Resources\Json\Resource;
 use Illuminate\Support\ServiceProvider;
 
@@ -73,6 +73,12 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ITypeRepository::class, TypeRepository::class);
 
         $this->app->bind(IAttributeRepository::class, AttributeRepository::class);
+
+        $this->app->bind(IDocumentRepository::class, DocumentRepository::class);
+
+        $this->app->bind(IDocumentVersionRepository::class, DocumentVersionRepository::class);
+
+        $this->app->bind(IAttributeValueRepository::class, AttributeValueRepository::class);
 
         $this->app->bind(ITransformer::class, Transformer::class);
 

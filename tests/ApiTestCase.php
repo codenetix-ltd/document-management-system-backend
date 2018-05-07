@@ -34,7 +34,6 @@ abstract class ApiTestCase extends BaseTestCase
     protected function jsonRequestPostEntityWithSuccess($relationPath, $data)
     {
         $response = $this->jsonRequest('POST', $relationPath, $data);
-        //dd($response->getOriginalContent());
         $response->assertStatus(201);
 
         return $response;
@@ -70,13 +69,18 @@ abstract class ApiTestCase extends BaseTestCase
         return $response;
     }
 
-    protected function jsonRequestDelete($path, $id, $table)
+    protected function jsonRequestDelete($path, $id, $table, $soft=false)
     {
         $response = $this->jsonRequest('DELETE', $path . '/' . $id);
         $response->assertStatus(204);
-        $this->assertDatabaseMissing($table, [
-            'id' => $id
-        ]);
+        if($soft) {
+            //TODO check deleted_at field
+            $this->assertDatabaseHas($table, ['id' => $id]);
+        } else {
+            $this->assertDatabaseMissing($table, [
+                'id' => $id
+            ]);
+        }
     }
 
     protected function jsonRequestObjectsWithPagination($path)

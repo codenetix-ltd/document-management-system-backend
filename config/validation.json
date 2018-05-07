@@ -12,10 +12,23 @@
     "refreshToken": "string|required"
   },
   "Label": {
-    "name": "string|required"
+    "name": "string|required",
+    "id": "integer|required",
+    "createdAt": "integer|required",
+    "updatedAt": "integer|required"
+  },
+  "PermissionValue": {
+    "id": "integer|required",
+    "accessType": "array|required",
+    "qualifiers": "array|required"
   },
   "Role": {
-    "name": "string|required"
+    "name": "string|required",
+    "templateIds": "array|required",
+    "permissionValues": "array|required",
+    "id": "integer|required",
+    "createdAt": "integer|required",
+    "updatedAt": "integer|required"
   },
   "Template": {
     "id": "integer|required",
@@ -33,17 +46,24 @@
     "templateId": "integer|required",
     "template": "array|required",
     "labelIds": "array|required",
+    "fileIds": "array|required",
+    "files": "array|required",
     "labels": "array|required",
     "comment": "string|required",
-    "attributeValues": "array|required"
+    "attributeValues": "array|required",
+    "id": "integer|required",
+    "createdAt": "integer|required",
+    "updatedAt": "integer|required"
   },
   "Document": {
     "id": "integer|required",
     "ownerId": "integer|required",
-    "substituteDocumentId": "integer|required",
+    "substituteDocumentId": "integer",
     "actualVersion": "array|required",
     "owner": "array|required",
-    "version": "integer|required"
+    "version": "integer|required",
+    "createdAt": "integer|required",
+    "updatedAt": "integer|required"
   },
   "Type": {
     "id": "integer|required",
@@ -94,20 +114,30 @@
     "type": "string|required"
   },
   "ValueInteger": {
-    "type": "string|required|in:integer",
-    "value": "integer|required"
+    "type": "string|required",
+    "value": "integer|required",
+    "id": "integer|required"
   },
   "ValueString": {
     "value": "string|required",
-    "type": "string|required|in:string"
+    "type": "string|required",
+    "id": "integer|required"
   },
   "ValueBoolean": {
     "value": "boolean|required",
-    "type": "string|required|in:boolean"
+    "type": "string|required",
+    "id": "integer|required"
   },
   "ValueUnion": {},
+  "File": {
+    "id": "integer|required",
+    "name": "string|required",
+    "url": "string|required"
+  },
   "SystemObject": {
-    "id": "integer|required"
+    "id": "integer|required",
+    "createdAt": "integer|required",
+    "updatedAt": "integer|required"
   },
   "TimeStampObject": {
     "createdAt": "integer|required",
@@ -172,12 +202,12 @@
   },
   "DocumentPostRequest": {
     "ownerId": "integer|required",
-    "substituteDocumentId": "integer|required",
+    "substituteDocumentId": "integer",
     "actualVersion": "array|required"
   },
   "DocumentPutRequest": {
     "ownerId": "integer|required",
-    "substituteDocumentId": "integer|required",
+    "substituteDocumentId": "integer",
     "actualVersion": "array|required"
   },
   "ResetEmailRequest": {

@@ -5,6 +5,7 @@ namespace App\Services\Tag;
 use App\Contracts\Repositories\ITagRepository;
 use App\Tag;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator as LengthAwarePaginatorContract;
+use Illuminate\Support\Collection;
 
 class TagService
 {

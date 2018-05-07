@@ -7,10 +7,19 @@ use App\Contracts\Entity\IHasOwnerId;
 use App\Contracts\Models\IDocument;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 
-class Document extends Model implements IDocument, IHasOwnerId, IHasId
+/**
+ * Class Document
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @package App
+ */
+class Document extends Model implements IHasOwnerId, IHasId
 {
     use SoftDeletes;
+
+    private $actualVersion;
 
     protected $dates = ['deleted_at'];
     /**
@@ -19,13 +28,9 @@ class Document extends Model implements IDocument, IHasOwnerId, IHasId
      * @var array
      */
     protected $fillable = [
-        'name', 'template_id', 'owner_id', 'substitute_document_id'
+        'owner_id', 'substitute_document_id'
     ];
 
-    public function template()
-    {
-         return $this->belongsTo(Template::class);
-    }
 
     public function owner()
     {
@@ -48,19 +53,9 @@ class Document extends Model implements IDocument, IHasOwnerId, IHasId
         return $this->hasMany(DocumentVersion::class)->orderBy('created_at', 'DESC');
     }
 
-    public function tags()
-    {
-        return $this->belongsToMany(Tag::class, 'document_tag');
-    }
-
     public function logs()
     {
         return $this->morphMany(Log::class, 'reference');
-    }
-
-    public function getName()
-    {
-        return $this->name;
     }
 
     public function getViewURL(){
@@ -78,6 +73,7 @@ class Document extends Model implements IDocument, IHasOwnerId, IHasId
 
     public function setOwnerId(int $ownerId) : void
     {
+        $this->owner_id = $ownerId;
     }
 
     public function getId() : int
@@ -87,6 +83,40 @@ class Document extends Model implements IDocument, IHasOwnerId, IHasId
 
     public function setId(int $id)
     {
-        // TODO: Implement setId() method.
+        $this->id = $id;
+    }
+
+    public function getActualVersion(): ?DocumentVersion
+    {
+        return $this->actualVersion;
+    }
+
+    public function setActualVersion(DocumentVersion $value): self
+    {
+        $this->actualVersion = $value;
+
+        return $this;
+    }
+
+    public function getSubstituteDocumentId(): ?int
+    {
+        return $this->substitute_document_id;
+    }
+
+    public function setSubstituteDocumentId(?int $value): self
+    {
+        $this->substitute_document_id = $value;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): int
+    {
+        return $this->created_at->timestamp;
+    }
+
+    public function getUpdatedAt(): int
+    {
+        return $this->updated_at->timestamp;
     }
 }

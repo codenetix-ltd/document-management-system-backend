@@ -4,6 +4,12 @@ namespace App\Http\Controllers\API;
 
 use App\Document;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Document\DocumentSetActualVersionRequest;
+use App\Http\Requests\Document\DocumentStoreRequest;
+use App\Http\Requests\Document\DocumentUpdateRequest;
+use App\Http\Resources\DocumentResource;
+use App\Services\Document\DocumentService;
+use App\Services\Document\TransactionDocumentService;
 use Exception;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Http\JsonResponse;
@@ -12,42 +18,46 @@ use DB;
 
 class DocumentController extends Controller
 {
-//    public function index(ITagListService $templateListService)
-//    {
-//        $users = $templateListService->list();
-//
-//        return (TagResource::collection($users))->response()->setStatusCode(200);
-//    }
-
-    public function store(TagStoreRequest $request, ITagCreateService $tagCreateService)
+    public function index(DocumentService $documentService)
     {
-        $tag = $tagCreateService->create($request->getEntity());
+        $documents = $documentService->list();
 
-        return (new TagResource($tag))->response()->setStatusCode(201);
+        return (DocumentResource::collection($documents))->response()->setStatusCode(200);
     }
 
-//    public function show(ITagGetService $templateGetService, int $id)
-//    {
-//        $template = $templateGetService->get($id);
-//
-//        return (new TagResource($template))->response()->setStatusCode(200);
-//    }
-//
-//    public function update(TagUpdateRequest $request, ITagUpdateService $tagUpdateService, int $id)
-//    {
-//        $tag = $tagUpdateService->update($id, $request->getEntity(), $request->getUpdatedFields());
-//
-//        return (new TagResource($tag))->response()->setStatusCode(200);
-//    }
-//
-//    public function destroy(ITagDeleteService $userDeleteService, int $id)
-//    {
-//        $userDeleteService->delete($id);
-//
-//        return response('', 204);
-//    }
+    public function store(DocumentStoreRequest $request, TransactionDocumentService $service)
+    {
+        $document = $service->create($request->getEntity());
 
+        return (new DocumentResource($document))->response()->setStatusCode(201);
+    }
 
+    public function show(DocumentService $documentService, int $id)
+    {
+        $document = $documentService->get($id);
+        return (new DocumentResource($document))->response()->setStatusCode(200);
+    }
+
+    public function update(DocumentUpdateRequest $request, TransactionDocumentService $documentService, int $id)
+    {
+        $createNewVersion = $request->get('createNewVersion', true);
+        $document = $documentService->update($id, $request->getEntity(), $request->getUpdatedFields(), $createNewVersion);
+
+        return (new DocumentResource($document))->response()->setStatusCode(200);
+    }
+
+    public function destroy(DocumentService $documentService, int $id)
+    {
+        $documentService->delete($id);
+
+        return response('', 204);
+    }
+
+    public function setActualVersion(DocumentSetActualVersionRequest $request, TransactionDocumentService $documentService, $id)
+    {
+        $document = $documentService->setActualVersion($id, $request->getVersionId());
+        return (new DocumentResource($document))->response()->setStatusCode(200);
+    }
 
 
 //    public function massArchive(Request $request, IAtomCommandInvoker $invoker)

@@ -3,6 +3,7 @@
 namespace App\Contracts\Repositories;
 
 use App\Tag;
+use Illuminate\Support\Collection;
 
 interface ITagRepository extends IRepository
 {
@@ -13,4 +14,6 @@ interface ITagRepository extends IRepository
     public function update(int $id, Tag $tagInput, array $updatedFields): Tag;
 
     public function delete(int $id): ?bool;
+
+    public function findMany(array $ids): Collection;
 }

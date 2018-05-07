@@ -145,6 +145,24 @@ class DocumentTest extends ApiTestCase
         $this->jsonRequestObjectsWithPagination(self::PATH);
     }
 
+    public function testListOfDocumentsWithPaginationWithFiltersSuccess()
+    {
+
+        factory(DocumentVersion::class)->create(['name'=> 'not_match']);
+        factory(DocumentVersion::class)->create(['name'=> 'not_match_1']);
+        factory(DocumentVersion::class)->create(['name'=> 'not_match_2']);
+
+        factory(DocumentVersion::class)->create(['name'=> 'match_1']);
+        factory(DocumentVersion::class)->create(['name'=> 'match_2']);
+
+        $response = $this->jsonRequestObjectsWithPagination(self::PATH . '?filter[name]=match');
+        $responseArr = $response->decodeResponseJson();
+
+        $this->assertCount(2, $responseArr['data']);
+        $this->assertEquals('match_1', $responseArr['data'][0]['actualVersion']['name']);
+        $this->assertEquals('match_2', $responseArr['data'][1]['actualVersion']['name']);
+    }
+
     public function testSetActualVersionSuccess()
     {
         $documentVersion = factory(DocumentVersion::class)->create();

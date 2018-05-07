@@ -5,10 +5,8 @@ namespace App\Services\Document;
 use App\Contracts\Repositories\IDocumentRepository;
 use App\Document;
 use App\DocumentVersion;
-use App\Http\Controllers\API\DocumentVersionController;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * @author Vladimir Barmotin <barmotinvladimir@gmail.com>
@@ -105,9 +103,9 @@ class DocumentService
         return $this->repository->delete($this->get($id));
     }
 
-    public function list(): LengthAwarePaginator
+    public function list(array $filters): LengthAwarePaginator
     {
-        return $this->repository->list();
+        return $this->repository->list($filters);
     }
 
     public function setActualVersion($documentId, $documentVersionId)

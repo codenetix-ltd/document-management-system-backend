@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Document\DocumentSetActualVersionRequest;
 use App\Http\Requests\Document\DocumentStoreRequest;
 use App\Http\Requests\Document\DocumentUpdateRequest;
+use App\Http\Requests\FilterRequest;
 use App\Http\Resources\DocumentResource;
 use App\Services\Document\DocumentService;
 use App\Services\Document\TransactionDocumentService;
@@ -18,9 +19,9 @@ use DB;
 
 class DocumentController extends Controller
 {
-    public function index(DocumentService $documentService)
+    public function index(DocumentService $documentService, FilterRequest $request)
     {
-        $documents = $documentService->list();
+        $documents = $documentService->list($request->getFilter());
 
         return (DocumentResource::collection($documents))->response()->setStatusCode(200);
     }

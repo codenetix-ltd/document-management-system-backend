@@ -163,6 +163,29 @@ class DocumentTest extends ApiTestCase
         $this->assertEquals('match_2', $responseArr['data'][1]['actualVersion']['name']);
     }
 
+    public function testListOfDocumentsWithPaginationWithFiltersTagSuccess()
+    {
+        $tag1 = factory(Tag::class)->create();
+        $tag2 = factory(Tag::class)->create();
+        $tag3 = factory(Tag::class)->create();
+        /** @var DocumentVersion $dv1 */
+        factory(DocumentVersion::class,2)->create();
+        $dv1 = factory(DocumentVersion::class)->create();
+        $dv2 = factory(DocumentVersion::class)->create();
+        $dv3 = factory(DocumentVersion::class)->create();
+
+        $dv1->tags()->sync([$tag2->id]);
+        $dv2->tags()->sync([$tag1->id]);
+        $dv3->tags()->sync([$tag3->id]);
+
+        $response = $this->jsonRequestObjectsWithPagination(self::PATH . '?filter[labelIds]='.$tag1->id.','.$tag2->id);
+        $responseArr = $response->decodeResponseJson();
+
+        $this->assertCount(2, $responseArr['data']);
+        $this->assertEquals($dv1->id, $responseArr['data'][0]['actualVersion']['id']);
+        $this->assertEquals($dv2->id, $responseArr['data'][1]['actualVersion']['id']);
+    }
+
     public function testSetActualVersionSuccess()
     {
         $documentVersion = factory(DocumentVersion::class)->create();

@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources;
 
-use App\Services\System\Extractor;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\Resource;
 
@@ -26,8 +25,8 @@ abstract class ApiResource extends Resource
             }
         }
 
-        $extractor = new Extractor();
-        $data = $extractor->extract($this->resource, array_keys($structure));
+        $this->resource->setVisible(array_keys($structure));
+        $data = $this->resource->toArray();
 
         return array_merge($response, $data);
     }

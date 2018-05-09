@@ -36,5 +36,8 @@ Route::prefix('v1')->group(function () {
     Route::delete('documents/{id}/versions/{versionId}', 'API\DocumentVersionController@destroy');
 
     Route::post('files', 'FileController@uploadFile');
+
+    Route::apiResource('roles', 'API\RoleController');
+    Route::get('permission-groups', 'API\PermissionController@index');
 });
 

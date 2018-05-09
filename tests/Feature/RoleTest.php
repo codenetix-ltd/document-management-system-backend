@@ -1,0 +1,79 @@
+<?php
+
+namespace Tests\Feature;
+
+use App\Role;
+use Tests\ApiTestCase;
+
+class RoleTest extends ApiTestCase
+{
+    private const PATH = 'roles';
+    protected const DB_TABLE = 'roles';
+
+    public function testCreateTagSuccess()
+    {
+        $role = factory(Role::class)->make();
+
+        $response = $this->jsonRequestPostEntityWithSuccess(self::PATH, [
+            'name' => $role->name,
+        ]);
+        $response->assertJson([
+            'name' => $role->name,
+        ]);
+        $this->assertJsonStructure($response, config('models.tag_response'));
+    }
+
+//    public function testCreateTagValidationError()
+//    {
+//        $response = $this->jsonRequestPostEntityValidationError(self::PATH);
+//        $response->assertJsonValidationErrors(['name']);
+//    }
+//
+//    public function testGetTagSuccess()
+//    {
+//        $tag = factory(Tag::class)->create();
+//
+//        $response = $this->jsonRequestGetEntitySuccess(self::PATH . '/' .  $tag->id);
+//        $response->assertJson([
+//            'name' => $tag->name,
+//        ]);
+//        $this->assertJsonStructure($response, config('models.tag_response'));
+//    }
+//
+//    public function testGetTagNotFound()
+//    {
+//        $this->jsonRequestGetEntityNotFound(self::PATH . '/' . 0);
+//    }
+//
+//    public function testUpdateTagSuccess()
+//    {
+//        $tag = factory(Tag::class)->create();
+//        $tagNameNew = 'New Name';
+//
+//        $response = $this->jsonRequestPutEntityWithSuccess(self::PATH .'/' . $tag->id, [
+//            'name' => $tagNameNew
+//        ]);
+//        $response->assertJson([
+//            'name' => $tagNameNew
+//        ]);
+//        $this->assertJsonStructure($response, config('models.tag_response'));
+//    }
+//
+//    public function testDeleteTagSuccess()
+//    {
+//        $tag = factory(Tag::class)->create();
+//        $this->jsonRequestDelete(self::PATH, $tag->id, self::DB_TABLE);
+//    }
+//
+//    public function testDeleteTagNotExistSuccess()
+//    {
+//        $this->jsonRequestDelete(self::PATH, 0, self::DB_TABLE);
+//    }
+//
+//    public function testListOfTagsWithPaginationSuccess()
+//    {
+//        factory(Tag::class, 20)->create();
+//
+//        $this->jsonRequestObjectsWithPagination(self::PATH);
+//    }
+}

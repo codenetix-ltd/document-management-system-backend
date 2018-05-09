@@ -68,12 +68,12 @@ return [
                     'label' => 'Factory',
                     'access_types' => [
                         'any' => [
-                            'machine_name' => 'any',
+                            'machine_name' => 'any_factory',
                             'label' => 'Any factory',
                             'handler' => AnyPermissionHandler::class
                         ],
                         'list' => [
-                            'machine_name' => 'list',
+                            'machine_name' => 'list_factories',
                             'label' => 'User\'s OR Role\'s factories',
                             'handler' => ByFactoryPermissionHandler::class
                         ]
@@ -84,12 +84,12 @@ return [
                     'label' => 'Template',
                     'access_types' => [
                         'any' => [
-                            'machine_name' => 'any',
+                            'machine_name' => 'any_template',
                             'label' => 'Any template',
                             'handler' => AnyPermissionHandler::class
                         ],
                         'list' => [
-                            'machine_name' => 'list',
+                            'machine_name' => 'list_templates',
                             'label' => 'User\'s OR Role\'s templates',
                             'handler' => ByTemplatePermissionHandler::class
                         ]

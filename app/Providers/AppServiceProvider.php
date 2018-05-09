@@ -3,28 +3,29 @@
 namespace App\Providers;
 
 use App\Adapters\TableAdapter;
-use App\Attribute;
 use App\Contracts\Adapters\ITableAdapter;
 use App\Contracts\Repositories\IAttributeRepository;
 use App\Contracts\Repositories\IAttributeValueRepository;
 use App\Contracts\Repositories\IDocumentRepository;
 use App\Contracts\Repositories\IDocumentVersionRepository;
 use App\Contracts\Repositories\IFileRepository;
+use App\Contracts\Repositories\IRoleRepository;
 use App\Contracts\Repositories\ITagRepository;
 use App\Contracts\Repositories\ITemplateRepository;
 use App\Contracts\Repositories\ITypeRepository;
 use App\Contracts\Repositories\IUserRepository;
 use App\Contracts\Services\File\IFileCreateService;
 use App\Contracts\Services\File\IFileManager;
+use App\Contracts\Services\IPermissionService;
 use App\Contracts\Services\ITransaction;
 use App\Contracts\System\ITransformer;
-use App\File;
 use App\Repositories\AttributeRepository;
 use App\Repositories\AttributeValueRepository;
 use App\Repositories\DBTransaction;
 use App\Repositories\DocumentRepository;
 use App\Repositories\DocumentVersionRepository;
 use App\Repositories\FileRepository;
+use App\Repositories\RoleRepository;
 use App\Repositories\TagRepository;
 use App\Repositories\TemplateRepository;
 use App\Repositories\TypeRepository;
@@ -37,6 +38,7 @@ use App\Services\DocumentGetService;
 use App\Services\DocumentViewService;
 use App\Services\File\FileCreateService;
 use App\Services\File\FileManager;
+use App\Services\PermissionService;
 use App\Services\System\Transformer;
 use Illuminate\Http\Resources\Json\Resource;
 use Illuminate\Support\ServiceProvider;
@@ -81,6 +83,9 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(IAttributeValueRepository::class, AttributeValueRepository::class);
 
         $this->app->bind(ITransformer::class, Transformer::class);
+
+        $this->app->bind(IPermissionService::class, PermissionService::class);
+        $this->app->bind(IRoleRepository::class, RoleRepository::class);
 
 //_____________________________________________________________________________________________________________________
         $this->app->bind(ADocumentCompareService::class, DocumentCompareService::class);

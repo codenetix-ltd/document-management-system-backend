@@ -10,6 +10,8 @@ class RolePermission extends Pivot
 
     protected $fillable = [];
 
+    protected $table = 'role_permission';
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\MorphTo
      */
@@ -18,7 +20,13 @@ class RolePermission extends Pivot
         return $this->morphTo();
     }
 
-    public function qualifiers(){
+    public function qualifiers()
+    {
         return $this->belongsToMany(Qualifier::class, 'qualifier_role_permission', 'role_permission_id', 'qualifier_id')->withPivot(['id', 'qualifier_id', 'role_permission_id', 'access_type']);
+    }
+
+    public function accessType()
+    {
+        return $this->hasOne(AccessType::class, 'id', 'access_type');
     }
 }

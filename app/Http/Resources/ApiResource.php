@@ -25,8 +25,13 @@ abstract class ApiResource extends Resource
             }
         }
 
-        $this->resource->setVisible(array_keys($structure));
-        $data = $this->resource->toArray();
+        if ($structure) {
+            $this->resource->setVisible(array_keys($structure));
+            $data = $this->resource->toArray();
+        } else {
+            $data = [];
+        }
+
 
         return array_merge($response, $data);
     }

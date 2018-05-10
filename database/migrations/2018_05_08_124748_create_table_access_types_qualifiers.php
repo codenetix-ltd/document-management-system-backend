@@ -14,7 +14,7 @@ class CreateTableAccessTypesQualifiers extends Migration
     public function up()
     {
         Schema::create('access_types_qualifiers', function (Blueprint $table) {
-            $table->unsignedInteger('access_type_id');
+            $table->string('access_type_id');
             $table->unsignedInteger('qualifier_id');
 
             $table->foreign('access_type_id')

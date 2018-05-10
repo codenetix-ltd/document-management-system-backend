@@ -10,18 +10,18 @@ class RoleTest extends ApiTestCase
     private const PATH = 'roles';
     protected const DB_TABLE = 'roles';
 
-    public function testCreateTagSuccess()
-    {
-        $role = factory(Role::class)->make();
-
-        $response = $this->jsonRequestPostEntityWithSuccess(self::PATH, [
-            'name' => $role->name,
-        ]);
-        $response->assertJson([
-            'name' => $role->name,
-        ]);
-        $this->assertJsonStructure($response, config('models.tag_response'));
-    }
+//    public function testCreateTagSuccess()
+//    {
+//        $role = factory(Role::class)->make();
+//
+//        $response = $this->jsonRequestPostEntityWithSuccess(self::PATH, [
+//            'name' => $role->name,
+//        ]);
+//        $response->assertJson([
+//            'name' => $role->name,
+//        ]);
+//        $this->assertJsonStructure($response, config('models.tag_response'));
+//    }
 
 //    public function testCreateTagValidationError()
 //    {
@@ -70,10 +70,10 @@ class RoleTest extends ApiTestCase
 //        $this->jsonRequestDelete(self::PATH, 0, self::DB_TABLE);
 //    }
 //
-//    public function testListOfTagsWithPaginationSuccess()
-//    {
-//        factory(Tag::class, 20)->create();
-//
-//        $this->jsonRequestObjectsWithPagination(self::PATH);
-//    }
+    public function testListOfTagsWithPaginationSuccess()
+    {
+        //factory(Tag::class, 20)->create();
+
+        $this->jsonRequestObjectsWithPagination(self::PATH);
+    }
 }

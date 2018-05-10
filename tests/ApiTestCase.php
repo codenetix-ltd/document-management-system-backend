@@ -35,6 +35,7 @@ abstract class ApiTestCase extends BaseTestCase
     protected function jsonRequestPostEntityWithSuccess($relationPath, $data)
     {
         $response = $this->jsonRequest('POST', $relationPath, $data);
+        dd($response);
         $response->assertStatus(201);
 
         return $response;
@@ -87,6 +88,7 @@ abstract class ApiTestCase extends BaseTestCase
     protected function jsonRequestObjectsWithPagination($path)
     {
         $response = $this->jsonRequest('GET', $path);
+        dd($response->getOriginalContent());
         $response->assertStatus(200);
         $this->assetJsonPaginationStructure($response);
     }

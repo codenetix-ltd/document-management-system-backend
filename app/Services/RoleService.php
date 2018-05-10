@@ -32,10 +32,10 @@ class RoleService
 //        return $this->repository->findOrFail($id);
 //    }
 //
-//    public function list(): LengthAwarePaginatorContract
-//    {
-//        return $this->repository->list();
-//    }
+    public function list(): LengthAwarePaginatorContract
+    {
+        return $this->repository->list();
+    }
 //
 //    public function update(int $id, Tag $tagInput, array $updatedFields): Tag
 //    {

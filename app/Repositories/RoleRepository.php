@@ -4,8 +4,7 @@ namespace App\Repositories;
 
 use App\Contracts\Repositories\IRoleRepository;
 use App\Role;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator as LengthAwarePaginatorContract;
-use Illuminate\Support\Collection;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class RoleRepository implements IRoleRepository
 {
@@ -40,10 +39,10 @@ class RoleRepository implements IRoleRepository
 //        return Tag::where('id', $id)->delete();
 //    }
 //
-//    public function list(): LengthAwarePaginatorContract
-//    {
-//        return Tag::paginate();
-//    }
+    public function list(): LengthAwarePaginator
+    {
+        return Role::paginate();
+    }
 //
 //    public function findMany(array $ids): Collection
 //    {

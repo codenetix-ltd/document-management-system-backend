@@ -9,7 +9,6 @@ class QualifierResource extends ApiResource
     protected function getComplexFields(Request $request): array
     {
         return [
-            'id' => $this->name,
             'accessTypes' => AccessTypeResource::collection($this->accessTypes)->toArray($request)
         ];
     }

@@ -15,6 +15,7 @@ class PermissionService
 
     public function getPermissionGroups()
     {
+        //todo - move to repo
         return PermissionGroup::all();
     }
 

@@ -24,7 +24,7 @@ class PermissionsSeeder extends Seeder
         $permissionIds = [];
         foreach ($permissionGroups as $group) {
             $groupModel = PermissionGroup::whereName($group['machine_name'])->first();
-            if(!$groupModel){
+            if (!$groupModel) {
                 $groupModel = new PermissionGroup();
                 $groupModel->name = $group['machine_name'];
                 $groupModel->label = $group['label'];
@@ -43,10 +43,10 @@ class PermissionsSeeder extends Seeder
 
                 //create accessTypes
                 foreach ($qualifier['access_types'] as $accessType) {
-                    $accessTypeModel = AccessType::where('name', $accessType['machine_name'])->first();
+                    $accessTypeModel = AccessType::where('id', $accessType['machine_name'])->first();
                     if (!$accessTypeModel) {
                         $accessTypeModel = new AccessType();
-                        $accessTypeModel->name = $accessType['machine_name'];
+                        $accessTypeModel->id = $accessType['machine_name'];
                         $accessTypeModel->label = $accessType['label'];
                         $accessTypeModel->save();
                     }
@@ -70,10 +70,10 @@ class PermissionsSeeder extends Seeder
                 }
 
                 foreach ($permission['access_types'] as $accessType) {
-                    $accessTypeModel = AccessType::where('name', $accessType['machine_name'])->first();
+                    $accessTypeModel = AccessType::where('id', $accessType['machine_name'])->first();
                     if (!$accessTypeModel) {
                         $accessTypeModel = new AccessType();
-                        $accessTypeModel->name = $accessType['machine_name'];
+                        $accessTypeModel->id = $accessType['machine_name'];
                         $accessTypeModel->label = $accessType['label'];
                         $accessTypeModel->save();
                     }
@@ -82,8 +82,8 @@ class PermissionsSeeder extends Seeder
             }
         }
 
-        foreach ($permissionIds as $key => $set){
-           $this->getRole($key)->permissions()->sync($set);
+        foreach ($permissionIds as $key => $set) {
+            $this->getRole($key)->permissions()->sync($set);
         }
 
         $user = User::first();

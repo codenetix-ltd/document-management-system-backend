@@ -9,19 +9,19 @@ use App\Services\RoleService;
 
 class RoleController extends Controller
 {
-//    public function index(TagService $templateListService)
-//    {
-//        $users = $templateListService->list();
-//
-//        return (TagResource::collection($users))->response()->setStatusCode(200);
-//    }
-
-    public function store(RoleStoreRequest $request, RoleService $roleService)
+    public function index(RoleService $roleService)
     {
-        $role = $roleService->create($request->getEntity());
+        $roles = $roleService->list();
 
-        return (new RoleResource($role))->response()->setStatusCode(201);
+        return (RoleResource::collection($roles))->response()->setStatusCode(200);
     }
+
+//    public function store(RoleStoreRequest $request, RoleService $roleService)
+//    {
+//        $role = $roleService->create($request->getEntity());
+//
+//        return (new RoleResource($role))->response()->setStatusCode(201);
+//    }
 
 //    public function show(TagService $templateGetService, int $id)
 //    {

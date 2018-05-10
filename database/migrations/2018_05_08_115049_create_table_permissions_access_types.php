@@ -15,7 +15,7 @@ class CreateTablePermissionsAccessTypes extends Migration
     {
         Schema::create('permissions_access_types', function (Blueprint $table) {
             $table->unsignedInteger('permission_id');
-            $table->unsignedInteger('access_type_id');
+            $table->string('access_type_id');
 
             $table->foreign('permission_id')
                 ->references('id')

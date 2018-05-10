@@ -71,6 +71,7 @@ class DocumentTest extends ApiTestCase
         $newOwner = factory(User::class)->create();
 
         $response = $this->jsonRequestPutEntityWithSuccess(self::PATH .'/' . $documentVersion->document_id, [
+            'createNewVersion' => true,
             'ownerId' => $newOwner->id,
             'actualVersion' => [
                 'name' => 'rename',

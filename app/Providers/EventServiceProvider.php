@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Listeners\DocumentEventSubscriber;
+use App\Listeners\TagEventSubscriber;
+use App\Listeners\TemplateEventSubscriber;
+use App\Listeners\UserEventSubscriber;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 class EventServiceProvider extends ServiceProvider
@@ -12,8 +16,11 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        'App\Events\Event' => [
-            'App\Listeners\EventListener'
+        'App\Events\UserLogin' => [
+            'App\Listeners\LogEventListener'
+        ],
+        'App\Events\UserLogout' => [
+            'App\Listeners\LogEventListener'
         ],
     ];
 
@@ -30,5 +37,9 @@ class EventServiceProvider extends ServiceProvider
     }
 
     protected $subscribe = [
+        DocumentEventSubscriber::class,
+        TagEventSubscriber::class,
+        UserEventSubscriber::class,
+        TemplateEventSubscriber::class,
     ];
 }

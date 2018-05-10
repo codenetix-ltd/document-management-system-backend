@@ -13,6 +13,9 @@ use App\Services\System\EloquentTransformer;
  */
 class DocumentBaseRequest extends ApiRequest
 {
+    protected $ignoredFields = [
+        'createNewVersion'
+    ];
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -30,17 +33,16 @@ class DocumentBaseRequest extends ApiRequest
 
     public function transform(string $interface)
     {
-        $data = $this->only(array_keys($this->rules()));
         /** @var Document $object */
-        $object = $this->container->make($interface);
-        $transformer = $this->container->make(EloquentTransformer::class);
-        $transformer->transform($data, $object);
-        $this->updatedFields = $transformer->getTransformedFields();
+        $object = parent::transform($interface);
+
+        $data = $this->only(array_keys($this->rules()));
 
         $actualVersion = $this->container->make(DocumentVersion::class);
         $actualVersion->setVersionName($data['actualVersion']['name']);
         $actualVersion->setLabelIds($data['actualVersion']['labelIds']);
         $actualVersion->setFileIds($data['actualVersion']['fileIds']);
+        $transformer = $this->getTransformer();
         $transformer->transform($data['actualVersion'], $actualVersion);
 
         $attributeValues = [];
@@ -57,6 +59,11 @@ class DocumentBaseRequest extends ApiRequest
 
         return $object;
 
+    }
+
+    protected function getTransformer()
+    {
+        return $this->container->make(EloquentTransformer::class);
     }
 
 

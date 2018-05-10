@@ -12,6 +12,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 interface IDocumentRepository extends RepositoryInterface
 {
     public function findOrFail($id): Document;
+    public function find($id): ?Document;
     public function list(): LengthAwarePaginator;
     public function getActualVersionRelation(Document $document):DocumentVersion;
 }

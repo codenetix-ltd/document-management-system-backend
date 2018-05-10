@@ -4,7 +4,6 @@ namespace App;
 
 use App\Contracts\Entity\IHasId;
 use App\Contracts\Entity\IHasOwnerId;
-use App\Contracts\Models\IDocument;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;

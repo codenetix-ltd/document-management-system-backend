@@ -7,6 +7,8 @@ use App\Document;
 use App\DocumentVersion;
 use App\Repositories\Filters\DateFilter;
 use App\Repositories\Filters\EqualsFilter;
+use App\Repositories\Filters\NotNullFilter;
+use App\Repositories\Filters\NullFilter;
 use App\Repositories\Filters\OneOfFilter;
 use App\Repositories\Filters\RelationFilter;
 use App\Repositories\Filters\StartsWithFilter;
@@ -66,6 +68,14 @@ class DocumentRepository extends EloquentRepository implements IDocumentReposito
             $inFilter = new OneOfFilter('id', $filters['labelIds']);
             $documentVersionFilter = new RelationFilter($inFilter, 'tags');
             (new RelationFilter($documentVersionFilter, 'documentActualVersion'))->apply($builder);
+        }
+
+        if(isset($filters['archived'])) {
+            if ($filters['archived'] === 1) {
+                (new NotNullFilter('substitute_document_id'))->apply($builder);
+            } else {
+                (new NullFilter('substitute_document_id'))->apply($builder);
+            }
         }
 
         $this->applyDateFilters($builder, 'createdAt', $filters, 'created_at');

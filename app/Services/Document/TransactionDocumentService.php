@@ -57,7 +57,7 @@ class TransactionDocumentService extends DocumentService
      * @param bool $createNewVersion
      * @throws Exception
      */
-    protected function doUpdate(Document $document, DocumentVersion $oldActualVersion, DocumentVersion $newActualVersion, bool $createNewVersion): void
+    protected function doUpdate(Document $document, ?DocumentVersion $oldActualVersion, ?DocumentVersion $newActualVersion, bool $createNewVersion): void
     {
         $this->transaction->beginTransaction();
 

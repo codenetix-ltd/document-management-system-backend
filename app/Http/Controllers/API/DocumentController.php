@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Document;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Document\DocumentPatchRequest;
 use App\Http\Requests\Document\DocumentSetActualVersionRequest;
 use App\Http\Requests\Document\DocumentStoreRequest;
 use App\Http\Requests\Document\DocumentUpdateRequest;
@@ -57,6 +58,13 @@ class DocumentController extends Controller
     public function setActualVersion(DocumentSetActualVersionRequest $request, TransactionDocumentService $documentService, $id)
     {
         $document = $documentService->setActualVersion($id, $request->getVersionId());
+        return (new DocumentResource($document))->response()->setStatusCode(200);
+    }
+
+    public function patchUpdate(DocumentPatchRequest $request, TransactionDocumentService $service, $id)
+    {
+        $document = $service->update($id, $request->getEntity(), $request->getUpdatedFields(), false);
+
         return (new DocumentResource($document))->response()->setStatusCode(200);
     }
 

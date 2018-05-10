@@ -92,31 +92,38 @@ class DocumentService
             $document->{dms_build_setter($fieldKey)}($documentInput->{dms_build_getter($fieldKey)}());
         }
 
-
-        $oldActualVersion = $this->repository->getActualVersionRelation($document);
         $newActualVersion = $documentInput->getActualVersion();
-        $newActualVersion->setDocumentId($id);
-        $newActualVersion->setActual(true);
 
-        $this->doUpdate($document, $oldActualVersion, $newActualVersion, $createNewVersion);
+        if($newActualVersion) {
+            $oldActualVersion = $this->repository->getActualVersionRelation($document);
+            $newActualVersion->setDocumentId($id);
+            $newActualVersion->setActual(true);
+
+            $this->doUpdate($document, $oldActualVersion, $newActualVersion, $createNewVersion);
+        } else {
+            $this->doUpdate($document, null, null, false);
+        }
 
         $this->eventDispatcher->dispatch(new DocumentUpdateEvent($document));
         return $this->get($id);
     }
 
-    protected function doUpdate(Document $document, DocumentVersion $oldActualVersion, DocumentVersion $newActualVersion, bool $createNewVersion): void
+    protected function doUpdate(Document $document, ?DocumentVersion $oldActualVersion, ?DocumentVersion $newActualVersion, bool $createNewVersion): void
     {
         $this->repository->save($document);
-        if($createNewVersion) {
-            $oldActualVersion->setActual(false);
-            $this->documentVersionService->update($oldActualVersion);
-            $newActualVersion->setVersionName((int)$oldActualVersion->getVersionName() + 1);
-        } else {
-            $this->documentVersionService->delete($oldActualVersion->getId(), true);
-            $newActualVersion->setVersionName($oldActualVersion->getVersionName());
+
+        if($newActualVersion && $oldActualVersion) {
+            if ($createNewVersion) {
+                $oldActualVersion->setActual(false);
+                $this->documentVersionService->update($oldActualVersion);
+                $newActualVersion->setVersionName((int)$oldActualVersion->getVersionName() + 1);
+            } else {
+                $this->documentVersionService->delete($oldActualVersion->getId(), true);
+                $newActualVersion->setVersionName($oldActualVersion->getVersionName());
+            }
+            $this->documentVersionService->create($newActualVersion);
         }
 
-        $this->documentVersionService->create($newActualVersion);
     }
 
     public function delete(int $id): ?bool

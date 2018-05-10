@@ -197,4 +197,22 @@ class DocumentTest extends ApiTestCase
         $responseArray = $response->decodeResponseJson();
         $this->assertEquals($newDocumentVersion->id, $responseArray['actualVersion']['id']);
     }
+
+    public function testPatchUpdateDocumentSuccess()
+    {
+        $documentVersion = factory(DocumentVersion::class)->create();
+
+        $newOwner = factory(User::class)->create();
+
+        $response = $this->jsonRequestPatchEntityWithSuccess(self::PATH .'/' . $documentVersion->document_id, [
+            'ownerId' => $newOwner->id,
+        ]);
+
+        $this->assertJsonStructure($response, array_keys(config('models.Document')));
+        $responseArray = $response->decodeResponseJson();
+
+        $this->assertEquals($newOwner->id, $responseArray['ownerId']);
+        $this->assertEquals($documentVersion->id, $responseArray['actualVersion']['id']);
+        $this->assertEquals(1, $responseArray['version']);
+    }
 }

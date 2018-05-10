@@ -23,6 +23,9 @@ Route::prefix('v1')->group(function () {
 
     Route::apiResource('types', 'API\TypeController', ['only' => ['index']]);
 
+    //Order is important (patch overrides apiResource)
+    Route::patch('documents/{id}', 'API\DocumentController@patchUpdate');
+    Route::put('documents/{id}', 'API\DocumentController@update');
     Route::apiResource('documents', 'API\DocumentController');
 
     Route::post('templates/{templateId}/attributes', 'API\AttributeController@store');

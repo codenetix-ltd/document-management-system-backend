@@ -5,6 +5,11 @@ namespace App\Services\Document;
 use App\Contracts\Repositories\IDocumentRepository;
 use App\Document;
 use App\DocumentVersion;
+use App\Events\Document\DocumentCreateEvent;
+use App\Events\Document\DocumentDeleteEvent;
+use App\Events\Document\DocumentReadEvent;
+use App\Events\Document\DocumentUpdateEvent;
+use App\Services\Components\IEventDispatcher;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -18,23 +23,35 @@ class DocumentService
      * @var DocumentVersionService
      */
     private $documentVersionService;
+    /**
+     * @var IEventDispatcher
+     */
+    private $eventDispatcher;
 
     /**
      * DocumentService constructor.
      *
      * @param IDocumentRepository $repository
      * @param DocumentVersionService $documentVersionService
+     * @param IEventDispatcher $eventDispatcher
      */
-    public function __construct(IDocumentRepository $repository, DocumentVersionService $documentVersionService)
+    public function __construct(
+        IDocumentRepository $repository,
+        DocumentVersionService $documentVersionService,
+        IEventDispatcher $eventDispatcher
+    )
     {
         $this->repository = $repository;
         $this->documentVersionService = $documentVersionService;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     public function create(Document $document): Document
     {
         $id = $this->doCreate($document);
         $document->setId($id);
+
+        $this->eventDispatcher->dispatch(new DocumentCreateEvent($document));
 
         return $document;
     }
@@ -61,7 +78,10 @@ class DocumentService
 
     public function get($id): Document
     {
-        return $this->repository->findOrFail($id);
+        $document = $this->repository->findOrFail($id);
+        $this->eventDispatcher->dispatch(new DocumentReadEvent($document));
+
+        return $document;
     }
 
     public function update(int $id, Document $documentInput, $updatedFields, bool $createNewVersion = true): Document
@@ -80,6 +100,7 @@ class DocumentService
 
         $this->doUpdate($document, $oldActualVersion, $newActualVersion, $createNewVersion);
 
+        $this->eventDispatcher->dispatch(new DocumentUpdateEvent($document));
         return $this->get($id);
     }
 
@@ -100,7 +121,14 @@ class DocumentService
 
     public function delete(int $id): ?bool
     {
-        return $this->repository->delete($this->get($id));
+        $document = $this->repository->find($id);
+
+        if(!$document) {
+            return false;
+        }
+
+        $this->eventDispatcher->dispatch(new DocumentDeleteEvent($document));
+        return $this->repository->delete($document);
     }
 
     public function list(array $filters): LengthAwarePaginator

@@ -71,6 +71,7 @@ class DocumentTest extends ApiTestCase
         $newOwner = factory(User::class)->create();
 
         $response = $this->jsonRequestPutEntityWithSuccess(self::PATH .'/' . $documentVersion->document_id, [
+            'createNewVersion' => true,
             'ownerId' => $newOwner->id,
             'actualVersion' => [
                 'name' => 'rename',
@@ -155,8 +156,7 @@ class DocumentTest extends ApiTestCase
         factory(DocumentVersion::class)->create(['name'=> 'match_1']);
         factory(DocumentVersion::class)->create(['name'=> 'match_2']);
 
-        $response = $this->jsonRequestObjectsWithPagination(self::PATH . '?filter[name]=match');
-        $responseArr = $response->decodeResponseJson();
+        $responseArr = $this->jsonRequestObjectsWithPagination(self::PATH . '?filter[name]=match');
 
         $this->assertCount(2, $responseArr['data']);
         $this->assertEquals('match_1', $responseArr['data'][0]['actualVersion']['name']);
@@ -178,8 +178,7 @@ class DocumentTest extends ApiTestCase
         $dv2->tags()->sync([$tag1->id]);
         $dv3->tags()->sync([$tag3->id]);
 
-        $response = $this->jsonRequestObjectsWithPagination(self::PATH . '?filter[labelIds]='.$tag1->id.','.$tag2->id);
-        $responseArr = $response->decodeResponseJson();
+        $responseArr = $this->jsonRequestObjectsWithPagination(self::PATH . '?filter[labelIds]='.$tag1->id.','.$tag2->id);
 
         $this->assertCount(2, $responseArr['data']);
         $this->assertEquals($dv1->id, $responseArr['data'][0]['actualVersion']['id']);

@@ -68,4 +68,9 @@ class UserRepository implements IUserRepository
     {
         return User::paginate();
     }
+
+    public function find(int $id): ?User
+    {
+        return User::find($id);
+    }
 }

@@ -101,7 +101,8 @@
     "user": "array|required",
     "action": "string|required",
     "link": "array|required",
-    "type": "string|required|in:user,document,template,label",
+    "referenceType": "string|required|in:user,document,template,label",
+    "referenceId": "integer|required",
     "id": "integer|required",
     "createdAt": "integer|required",
     "updatedAt": "integer|required"
@@ -224,9 +225,15 @@
     "actualVersion": "array|required"
   },
   "DocumentPutRequest": {
+    "createNewVersion": "boolean|required",
     "ownerId": "integer|required",
     "substituteDocumentId": "integer",
     "actualVersion": "array|required"
+  },
+  "DocumentPatchRequest": {
+    "ownerId": "integer",
+    "substituteDocumentId": "integer",
+    "actualVersionId": "integer"
   },
   "ResetEmailRequest": {
     "email": "string|required"

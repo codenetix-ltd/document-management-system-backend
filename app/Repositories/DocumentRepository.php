@@ -94,4 +94,8 @@ class DocumentRepository extends EloquentRepository implements IDocumentReposito
         }
     }
 
+    public function find($id): ?Document
+    {
+        return Document::find($id);
+    }
 }

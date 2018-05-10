@@ -13,5 +13,6 @@ interface IDocumentRepository extends RepositoryInterface
 {
     public function findOrFail($id): Document;
     public function list($filters=[]): LengthAwarePaginator;
+    public function find($id): ?Document;
     public function getActualVersionRelation(Document $document):DocumentVersion;
 }

@@ -28,6 +28,8 @@ Route::prefix('v1')->group(function () {
     Route::put('documents/{id}', 'API\DocumentController@update');
     Route::apiResource('documents', 'API\DocumentController');
 
+    Route::delete('documents', 'API\DocumentController@bulkDestroy');
+
     Route::post('templates/{templateId}/attributes', 'API\AttributeController@store');
     Route::get('attributes/{id}', 'API\AttributeController@show');
     Route::delete('attributes/{id}', 'API\AttributeController@destroy');

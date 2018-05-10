@@ -68,6 +68,17 @@ class DocumentController extends Controller
         return (new DocumentResource($document))->response()->setStatusCode(200);
     }
 
+    public function bulkDestroy(TransactionDocumentService $documentService, Request $request)
+    {
+        $ids = explode(',',$request->query->get('ids', ''));
+
+        foreach ($ids as $id) {
+            $documentService->delete($id);
+        }
+
+        return response('', 204);
+    }
+
 
 //    public function massArchive(Request $request, IAtomCommandInvoker $invoker)
 //    {

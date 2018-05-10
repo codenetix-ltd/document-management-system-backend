@@ -215,4 +215,11 @@ class DocumentTest extends ApiTestCase
         $this->assertEquals($documentVersion->id, $responseArray['actualVersion']['id']);
         $this->assertEquals(1, $responseArray['version']);
     }
+
+    public function testBulkDeleteDocumentSuccess()
+    {
+        $documentIds = factory(DocumentVersion::class,4)->create()->implode('document.id', ',');
+        $response = $this->jsonRequest('DELETE', self::PATH.'?ids='.$documentIds);
+        $response->assertStatus(204);
+    }
 }

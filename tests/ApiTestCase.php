@@ -97,7 +97,7 @@ abstract class ApiTestCase extends BaseTestCase
         $response->assertStatus(200);
         $this->assetJsonPaginationStructure($response);
 
-        return $response->decodeResponseJson();
+        return $response;
     }
 
     protected function assetJsonPaginationStructure(TestResponse $response)

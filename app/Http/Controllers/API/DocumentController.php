@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Document;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Document\DocumentBulkPatchRequest;
 use App\Http\Requests\Document\DocumentPatchRequest;
 use App\Http\Requests\Document\DocumentSetActualVersionRequest;
 use App\Http\Requests\Document\DocumentStoreRequest;
@@ -79,6 +80,32 @@ class DocumentController extends Controller
         return response('', 204);
     }
 
+    /**
+     * @param DocumentBulkPatchRequest $request
+     * @param TransactionDocumentService $service
+     * @return JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function bulkPatchUpdate(DocumentBulkPatchRequest $request, TransactionDocumentService $service)
+    {
+        $documents = $request->transformBulk(Document::class);
+        $ids = explode(',',$request->get('ids',''));
+        $updatedFields = $request->getUpdatedFields();
+        if(count($ids) != count($documents) || count($documents) != count($updatedFields)) {
+            $request->failValidation();
+        }
+
+        for($i=0;$i<count($ids);++$i) {
+            try {
+                $service->update($ids[$i], $documents[$i], $updatedFields[$i], false);
+            } catch (Exception $e) {
+
+            }
+        }
+        $documents = $service->list(['ids'=>$request->get('ids','')]);
+
+        return (DocumentResource::collection($documents))->response()->setStatusCode(200);
+    }
 
 //    public function massArchive(Request $request, IAtomCommandInvoker $invoker)
 //    {

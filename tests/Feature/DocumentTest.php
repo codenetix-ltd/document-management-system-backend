@@ -156,7 +156,7 @@ class DocumentTest extends ApiTestCase
         factory(DocumentVersion::class)->create(['name'=> 'match_1']);
         factory(DocumentVersion::class)->create(['name'=> 'match_2']);
 
-        $responseArr = $this->jsonRequestObjectsWithPagination(self::PATH . '?filter[name]=match');
+        $responseArr = $this->jsonRequestObjectsWithPagination(self::PATH . '?filter[name]=match')->decodeResponseJson();
 
         $this->assertCount(2, $responseArr['data']);
         $this->assertEquals('match_1', $responseArr['data'][0]['actualVersion']['name']);
@@ -178,7 +178,7 @@ class DocumentTest extends ApiTestCase
         $dv2->tags()->sync([$tag1->id]);
         $dv3->tags()->sync([$tag3->id]);
 
-        $responseArr = $this->jsonRequestObjectsWithPagination(self::PATH . '?filter[labelIds]='.$tag1->id.','.$tag2->id);
+        $responseArr = $this->jsonRequestObjectsWithPagination(self::PATH . '?filter[labelIds]='.$tag1->id.','.$tag2->id)->decodeResponseJson();
 
         $this->assertCount(2, $responseArr['data']);
         $this->assertEquals($dv1->id, $responseArr['data'][0]['actualVersion']['id']);
@@ -221,5 +221,24 @@ class DocumentTest extends ApiTestCase
         $documentIds = factory(DocumentVersion::class,4)->create()->implode('document.id', ',');
         $response = $this->jsonRequest('DELETE', self::PATH.'?ids='.$documentIds);
         $response->assertStatus(204);
+    }
+
+    public function testBulkPatchUpdateDocumentSuccess()
+    {
+        $documentIds = factory(DocumentVersion::class,3)->create()->implode('document.id', ',');
+
+        $newOwner = factory(User::class)->create();
+
+        $response = $this->jsonRequestPatchEntityWithSuccess(self::PATH . '?ids=' . $documentIds, [
+            ['ownerId' => $newOwner->id],
+            ['ownerId' => $newOwner->id],
+            ['ownerId' => $newOwner->id]
+        ]);
+
+        $response->decodeResponseJson();
+
+//        $this->assertEquals($newOwner->id, $responseArray['ownerId']);
+//        $this->assertEquals($documentVersion->id, $responseArray['actualVersion']['id']);
+//        $this->assertEquals(1, $responseArray['version']);
     }
 }

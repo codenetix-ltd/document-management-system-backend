@@ -27,10 +27,10 @@ test:
   services:
     - mysql:5.7.22
   variables:
-    MYSQL_DATABASE: dms
+    MYSQL_DATABASE: dms_test
     MYSQL_ROOT_PASSWORD: dms
     APP_ENV: test
-    DB_DATABASE: dms
+    DB_DATABASE: dms_test
     DB_HOST: mysql
     DB_PASSWORD: dms
     DB_USERNAME: root

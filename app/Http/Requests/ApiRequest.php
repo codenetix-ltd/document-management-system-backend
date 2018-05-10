@@ -25,6 +25,14 @@ abstract class ApiRequest extends FormRequest
         return $object;
     }
 
+    /**
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function failValidation()
+    {
+        $this->failedValidation($this->getValidatorInstance());
+    }
+
     public function getUpdatedFields(): array
     {
         return $this->updatedFields;

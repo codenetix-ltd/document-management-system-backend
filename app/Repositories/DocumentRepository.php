@@ -50,6 +50,10 @@ class DocumentRepository extends EloquentRepository implements IDocumentReposito
             (new EqualsFilter('id', $filters['id']))->apply($builder);
         }
 
+        if(isset($filters['ids'])) {
+            (new OneOfFilter('id', $filters['ids']))->apply($builder);
+        }
+
         if(isset($filters['ownerId'])) {
             (new EqualsFilter('owner_id', $filters['ownerId']))->apply($builder);
         }

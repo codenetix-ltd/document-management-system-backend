@@ -2,7 +2,10 @@
 
 namespace Tests\Feature;
 
+use App\AccessType;
 use App\Role;
+use App\Services\AccessTypeService;
+use App\Template;
 use Tests\ApiTestCase;
 
 class RoleTest extends ApiTestCase
@@ -10,69 +13,97 @@ class RoleTest extends ApiTestCase
     private const PATH = 'roles';
     protected const DB_TABLE = 'roles';
 
-//    public function testCreateTagSuccess()
-//    {
-//        $role = factory(Role::class)->make();
-//
-//        $response = $this->jsonRequestPostEntityWithSuccess(self::PATH, [
-//            'name' => $role->name,
-//        ]);
-//        $response->assertJson([
-//            'name' => $role->name,
-//        ]);
-//        $this->assertJsonStructure($response, config('models.tag_response'));
-//    }
-
-//    public function testCreateTagValidationError()
-//    {
-//        $response = $this->jsonRequestPostEntityValidationError(self::PATH);
-//        $response->assertJsonValidationErrors(['name']);
-//    }
-//
-//    public function testGetTagSuccess()
-//    {
-//        $tag = factory(Tag::class)->create();
-//
-//        $response = $this->jsonRequestGetEntitySuccess(self::PATH . '/' .  $tag->id);
-//        $response->assertJson([
-//            'name' => $tag->name,
-//        ]);
-//        $this->assertJsonStructure($response, config('models.tag_response'));
-//    }
-//
-//    public function testGetTagNotFound()
-//    {
-//        $this->jsonRequestGetEntityNotFound(self::PATH . '/' . 0);
-//    }
-//
-//    public function testUpdateTagSuccess()
-//    {
-//        $tag = factory(Tag::class)->create();
-//        $tagNameNew = 'New Name';
-//
-//        $response = $this->jsonRequestPutEntityWithSuccess(self::PATH .'/' . $tag->id, [
-//            'name' => $tagNameNew
-//        ]);
-//        $response->assertJson([
-//            'name' => $tagNameNew
-//        ]);
-//        $this->assertJsonStructure($response, config('models.tag_response'));
-//    }
-//
-//    public function testDeleteTagSuccess()
-//    {
-//        $tag = factory(Tag::class)->create();
-//        $this->jsonRequestDelete(self::PATH, $tag->id, self::DB_TABLE);
-//    }
-//
-//    public function testDeleteTagNotExistSuccess()
-//    {
-//        $this->jsonRequestDelete(self::PATH, 0, self::DB_TABLE);
-//    }
-//
-    public function testListOfTagsWithPaginationSuccess()
+    public function testCreateRoleSuccess()
     {
-        //factory(Tag::class, 20)->create();
+        $role = factory(Role::class)->make();
+        $template = factory(Template::class, 1)->create();
+
+        $accessType = AccessType::find(AccessTypeService::TYPE_BY_QUALIFIERS);
+        $permission = $accessType->permissions->first();
+        $qualifiers = $permission->permissionGroup->qualifiers;
+        $qualifier = $qualifiers->first();
+        $qualifierAccessType = $qualifier->accessTypes->first();
+
+        $accessTypeSimple = AccessType::where('id', '!=', AccessTypeService::TYPE_BY_QUALIFIERS)->first();
+        $permissionSecond = $accessType->permissions->first(function ($value, $key) use ($permission) {
+            return $value->id != $permission->id;
+        });
+
+        $permissionValues = [
+            [
+                'id' => $permission->id,
+                'accessTypeId' => $accessType->id,
+                'qualifiers' => [
+                    [
+                        'id' => $qualifier->id,
+                        'accessTypeId' => $qualifierAccessType->id
+                    ]
+                ]
+            ],
+            [
+                'id' => $permissionSecond->id,
+                'accessTypeId' => $accessTypeSimple->id
+            ]
+        ];
+
+        $response = $this->jsonRequestPostEntityWithSuccess(self::PATH, [
+            'name' => $role->name,
+            'templateIds' => $template->pluck('id'),
+            'permissionValues' => $permissionValues
+        ]);
+
+        $response->assertJson([
+            'name' => $role->name,
+            'templateIds' => $template->pluck('id')->toArray()
+        ]);
+        $this->assertJsonStructure($response, array_keys(config('models.Role')));
+    }
+
+    public function testGetRoleSuccess()
+    {
+        $role = factory(Role::class)->create();
+
+        $response = $this->jsonRequestGetEntitySuccess(self::PATH . '/' .  $role->id);
+        $response->assertJson([
+            'name' => $role->name,
+        ]);
+        $this->assertJsonStructure($response, array_keys(config('models.Role')));
+    }
+
+    public function testGetRoleNotFound()
+    {
+        $this->jsonRequestGetEntityNotFound(self::PATH . '/' . 0);
+    }
+
+    public function testUpdateRoleSuccess()
+    {
+        $role = factory(Role::class)->create();
+        $roleNameNew = 'New Name';
+
+        $response = $this->jsonRequestPutEntityWithSuccess(self::PATH .'/' . $role->id, [
+            'name' => $roleNameNew
+        ]);
+
+        $response->assertJson([
+            'name' => $roleNameNew
+        ]);
+        $this->assertJsonStructure($response, array_keys(config('models.Role')));
+    }
+
+    public function testDeleteRoleSuccess()
+    {
+        $role = factory(Role::class)->create();
+        $this->jsonRequestDelete(self::PATH, $role->id, self::DB_TABLE);
+    }
+
+    public function testDeleteRoleNotExistSuccess()
+    {
+        $this->jsonRequestDelete(self::PATH, 0, self::DB_TABLE);
+    }
+
+    public function testListOfRolesWithPaginationSuccess()
+    {
+        factory(Role::class, 20)->create();
 
         $this->jsonRequestObjectsWithPagination(self::PATH);
     }

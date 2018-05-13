@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 class PermissionGroupResource extends ApiResource
 {
-    protected function getComplexFields(Request $request): array
+    protected function getData(Request $request): array
     {
         return [
             'permissions' => PermissionResource::collection($this->permissions)->toArray($request),

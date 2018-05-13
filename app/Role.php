@@ -10,6 +10,45 @@ class Role extends Model
         'name'
     ];
 
+    private $templates_ids;
+    private $permissionValues;
+
+    /**
+     * @return mixed
+     */
+    public function getPermissionValues()
+    {
+        return $this->permissionValues;
+    }
+
+    /**
+     * @param mixed $permissionValues
+     * @return Role
+     */
+    public function setPermissionValues($permissionValues)
+    {
+        $this->permissionValues = $permissionValues;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTemplatesIds()
+    {
+        return $this->templates_ids;
+    }
+
+    /**
+     * @param mixed $templates_ids
+     * @return Role
+     */
+    public function setTemplatesIds($templates_ids)
+    {
+        $this->templates_ids = $templates_ids;
+        return $this;
+    }
+
     public function permissions()
     {
         return $this->belongsToMany(Permission::class, "role_permission")->using(RolePermission::class)->withPivot(['id', 'entity_id', 'entity_type', 'access_type']);

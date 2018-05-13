@@ -44,6 +44,7 @@ class CreateTablesRolesPermissions extends Migration
             $table->unsignedInteger('entity_id')->nullable();
             $table->string('access_type', 255)->nullable();
             $table->string('entity_type')->nullable();
+            $table->timestamps();
 
             $table->foreign('role_id')
                 ->references('id')
@@ -61,6 +62,7 @@ class CreateTablesRolesPermissions extends Migration
             $table->string('name');
             $table->string('label');
             $table->unsignedInteger('permission_group_id');
+            $table->timestamps();
 
             $table->foreign('permission_group_id')
                 ->references('id')
@@ -73,6 +75,7 @@ class CreateTablesRolesPermissions extends Migration
             $table->unsignedInteger('role_permission_id');
             $table->unsignedInteger('qualifier_id');
             $table->string('access_type');
+            $table->timestamps();
 
             $table->foreign('role_permission_id')
                 ->references('id')

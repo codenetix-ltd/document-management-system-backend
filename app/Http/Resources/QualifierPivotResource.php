@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 
-class QualifierResource extends ApiResource
+class QualifierPivotResource extends QualifierResource
 {
     protected function getStructure(): array
     {
@@ -16,7 +16,7 @@ class QualifierResource extends ApiResource
         return [
             'id' => $this->id,
             'label' => $this->label,
-            'accessType' => AccessTypeResource::collection($this->accessTypes)->toArray($request)
+            'accessType' => (new AccessTypeResource($this->resource->pivot->accessType))->toArray($request)
         ];
     }
 }

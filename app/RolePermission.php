@@ -6,10 +6,6 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class RolePermission extends Pivot
 {
-    public $timestamps = false;
-
-    protected $fillable = [];
-
     protected $table = 'role_permission';
 
     /**
@@ -22,11 +18,21 @@ class RolePermission extends Pivot
 
     public function qualifiers()
     {
-        return $this->belongsToMany(Qualifier::class, 'qualifier_role_permission', 'role_permission_id', 'qualifier_id')->withPivot(['id', 'qualifier_id', 'role_permission_id', 'access_type']);
+        return $this->belongsToMany(Qualifier::class, 'qualifier_role_permission', 'role_permission_id', 'qualifier_id')->using(QualifierRolePermission::class)->withPivot(['id', 'qualifier_id', 'role_permission_id', 'access_type']);
     }
 
     public function accessType()
     {
         return $this->hasOne(AccessType::class, 'id', 'access_type');
+    }
+
+    public function getCreatedAtColumn()
+    {
+        return 'created_at';
+    }
+
+    public function getUpdatedAtColumn()
+    {
+        return 'updated_at';
     }
 }

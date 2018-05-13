@@ -16,7 +16,7 @@ class CreateTableAccessTypes extends Migration
         Schema::create('access_types', function (Blueprint $table) {
             $table->string('id')->primary();
             $table->string('label');
-            //$table->primary('id');
+            $table->timestamps();
         });
     }
 

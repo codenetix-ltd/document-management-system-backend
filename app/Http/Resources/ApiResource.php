@@ -7,32 +7,12 @@ use Illuminate\Http\Resources\Json\Resource;
 
 abstract class ApiResource extends Resource
 {
-    protected function getComplexFields(Request $request): array
-    {
-        return [];
-    }
-
     protected abstract function getStructure(): array;
+
+    protected abstract function getData(Request $request): array;
 
     public function toArray($request)
     {
-        $response = [];
-        $structure = $this->getStructure();
-        foreach ($structure as $fieldKey => $fieldValue) {
-            if (key_exists($fieldKey, static::getComplexFields($request))) {
-                $response[$fieldKey] = static::getComplexFields($request)[$fieldKey];
-                unset($structure[$fieldKey]);
-            }
-        }
-
-        if ($structure) {
-            $this->resource->setVisible(array_keys($structure));
-            $data = $this->resource->toArray();
-        } else {
-            $data = [];
-        }
-
-
-        return array_merge($response, $data);
+        return array_intersect_key(static::getData($request), $this->getStructure());
     }
 }

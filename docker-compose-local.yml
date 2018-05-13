@@ -36,7 +36,7 @@ services:
     image: registry.codenetix.com/documentation/laravel-validation-generator:master
     volumes:
       - ./config/validation.json:/generator/out.json
-      - /Users/barmotinvladimir/Tree-Soft-Projects/dms/api-specification:/schema
+      - schema:/schema
   schema:
     image: registry.codenetix.com/dms/api-specification:master
     volumes:

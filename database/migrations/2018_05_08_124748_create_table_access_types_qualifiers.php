@@ -16,6 +16,7 @@ class CreateTableAccessTypesQualifiers extends Migration
         Schema::create('access_types_qualifiers', function (Blueprint $table) {
             $table->string('access_type_id');
             $table->unsignedInteger('qualifier_id');
+            $table->timestamps();
 
             $table->foreign('access_type_id')
                 ->references('id')

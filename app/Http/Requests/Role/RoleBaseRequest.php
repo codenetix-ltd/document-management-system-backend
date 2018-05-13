@@ -31,8 +31,10 @@ class RoleBaseRequest extends ApiRequest
         $transformer = $this->container->make(EloquentTransformer::class);
         $transformer->transform($data, $object);
 
-        return $object;
+        $object->setTemplatesIds(array_get($data, 'templateIds'));
+        $object->setPermissionValues(array_get($data, 'permissionValues'));
 
+        return $object;
     }
 
 

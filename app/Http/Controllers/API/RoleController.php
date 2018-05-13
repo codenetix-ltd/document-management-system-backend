@@ -16,31 +16,31 @@ class RoleController extends Controller
         return (RoleResource::collection($roles))->response()->setStatusCode(200);
     }
 
-//    public function store(RoleStoreRequest $request, RoleService $roleService)
-//    {
-//        $role = $roleService->create($request->getEntity());
-//
-//        return (new RoleResource($role))->response()->setStatusCode(201);
-//    }
+    public function store(RoleStoreRequest $request, RoleService $roleService)
+    {
+        $role = $roleService->create($request->getEntity());
 
-//    public function show(TagService $templateGetService, int $id)
-//    {
-//        $template = $templateGetService->get($id);
-//
-//        return (new TagResource($template))->response()->setStatusCode(200);
-//    }
-//
-//    public function update(TagUpdateRequest $request, TagService $tagUpdateService, int $id)
-//    {
-//        $tag = $tagUpdateService->update($id, $request->getEntity(), $request->getUpdatedFields());
-//
-//        return (new TagResource($tag))->response()->setStatusCode(200);
-//    }
-//
-//    public function destroy(TagService $userDeleteService, int $id)
-//    {
-//        $userDeleteService->delete($id);
-//
-//        return response('', 204);
-//    }
+        return (new RoleResource($role))->response()->setStatusCode(201);
+    }
+
+    public function show(RoleService $roleService, int $id)
+    {
+        $role = $roleService->get($id);
+
+        return (new RoleResource($role))->response()->setStatusCode(200);
+    }
+
+    public function update(RoleStoreRequest $request, RoleService $roleService, int $id)
+    {
+        $role = $roleService->update($id, $request->getEntity());
+
+        return (new RoleResource($role))->response()->setStatusCode(200);
+    }
+
+    public function destroy(RoleService $roleService, int $id)
+    {
+        $roleService->delete($id);
+
+        return response('', 204);
+    }
 }

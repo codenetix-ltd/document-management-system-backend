@@ -4,12 +4,16 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 
-class PermissionResource extends ApiResource
+class PermissionResource extends BaseResource
 {
-    protected function getComplexFields(Request $request): array
+    protected function getData(Request $request): array
     {
         return [
-            'accessTypes' => AccessTypeResource::collection($this->accessTypes)->toArray($request)
+            'id' => $this->id,
+            'name' => $this->name,
+            'accessTypes' => AccessTypeResource::collection($this->accessTypes)->toArray($request),
+            'createdAt' => $this->created_at->timestamp,
+            'updatedAt' => $this->updated_at->timestamp
         ];
     }
 

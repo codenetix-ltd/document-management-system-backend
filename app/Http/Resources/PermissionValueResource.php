@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 
-class PermissionValueResource extends ApiResource
+class PermissionValueResource extends BaseResource
 {
     protected function getStructure(): array
     {

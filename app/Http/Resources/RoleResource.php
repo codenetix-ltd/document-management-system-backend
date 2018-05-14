@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 
-class RoleResource extends ApiResource
+class RoleResource extends BaseResource
 {
     protected function getStructure(): array
     {

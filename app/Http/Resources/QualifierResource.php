@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 
-class QualifierResource extends ApiResource
+class QualifierResource extends BaseResource
 {
     protected function getStructure(): array
     {

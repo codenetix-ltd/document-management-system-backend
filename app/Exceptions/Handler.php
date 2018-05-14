@@ -52,9 +52,10 @@ class Handler extends ExceptionHandler
             return response('Resource Not Found', 404);
         }
 
-        if ($exception instanceof AccessDeniedHttpException) {
-            return response()->view('errors.403', [], 403);
-        }
+        //TODO - catch
+//        if ($exception instanceof AccessDeniedHttpException) {
+//            return response()->view('errors.403', [], 403);
+//        }
 
         if ($exception instanceof InvalidAttributeDataStructureException || $exception instanceof InvalidAttributeTypeException) {
             return response()->json([

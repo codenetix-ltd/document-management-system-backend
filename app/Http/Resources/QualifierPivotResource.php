@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 
-class QualifierPivotResource extends QualifierResource
+class QualifierPivotResource extends BaseResource
 {
     protected function getStructure(): array
     {

@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 
-class PermissionGroupResource extends ApiResource
+class PermissionGroupResource extends BaseResource
 {
     protected function getData(Request $request): array
     {

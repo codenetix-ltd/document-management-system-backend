@@ -2,9 +2,9 @@
 
 namespace App\Contracts\Helpers;
 
-use App\Contracts\Models\IUser;
+use App\User;
 
 interface ILogger
 {
-    public function write(IUser $user, string $body, int $referenceId, string $referenceType) : void;
+    public function write(User $user, string $body, int $referenceId, string $referenceType) : void;
 }

@@ -3,10 +3,12 @@
 namespace App\Listeners;
 
 use App\Events\Event;
+use App\Events\UserEvent;
+use App\Events\UserLogin;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class EventListener
+class LogEventListener
 {
     /**
      * Create the event listener.
@@ -21,11 +23,11 @@ class EventListener
     /**
      * Handle the event.
      *
-     * @param  Event  $event
+     * @param Event $event
      * @return void
      */
-    public function handle(Event $event)
+    public function handle(UserEvent $event)
     {
-        //
+        echo 'event was fired';
     }
 }

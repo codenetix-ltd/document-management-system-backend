@@ -9,6 +9,8 @@ use App\Http\Requests\ApiRequest;
  */
 class DocumentSetActualVersionRequest extends ApiRequest
 {
+    protected $modelConfigName = 'DocumentSetActualVersionRequest';
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -23,13 +25,4 @@ class DocumentSetActualVersionRequest extends ApiRequest
     {
         return $this->get('versionId');
     }
-
-    public function rules()
-    {
-        //TODO use $modelConfigName
-        return [
-            'versionId' => 'integer|required'
-        ];
-    }
-
 }

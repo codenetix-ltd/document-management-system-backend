@@ -10,19 +10,9 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class Event
+abstract class Event
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-
-    /**
-     * Create a new event instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //
-    }
 
     /**
      * Get the channels the event should broadcast on.

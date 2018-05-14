@@ -49,4 +49,9 @@ class TagRepository implements ITagRepository
     {
         return Tag::findMany($ids);
     }
+
+    public function find(int $id): ?Tag
+    {
+        return Tag::find($id);
+    }
 }

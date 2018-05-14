@@ -87,16 +87,6 @@ class DocumentVersionService
 
     public function list(int $documentId): Collection
     {
-        $versions = $this->repository->list($documentId);
-        /**
-         * TODO why is it necessary to use get method? it makes n queries to database
-         * @see \App\Services\Attribute\AttributeService::list()
-         */
-        $versions->transform(function ($version) {
-            /** @var DocumentVersion $version */
-            return $this->get($version->getId());
-        });
-
-        return $versions;
+        return $this->repository->list($documentId);
     }
 }

@@ -70,6 +70,14 @@ abstract class ApiTestCase extends BaseTestCase
         return $response;
     }
 
+    protected function jsonRequestPatchEntityWithSuccess($relationPath, $data)
+    {
+        $response =  $this->jsonRequest('PATCH', $relationPath, $data);
+        $response->assertStatus(200);
+
+        return $response;
+    }
+
     protected function jsonRequestDelete($path, $id, $table, $soft=false)
     {
         $response = $this->jsonRequest('DELETE', $path . '/' . $id);
@@ -89,6 +97,8 @@ abstract class ApiTestCase extends BaseTestCase
         $response = $this->jsonRequest('GET', $path);
         $response->assertStatus(200);
         $this->assetJsonPaginationStructure($response);
+
+        return $response;
     }
 
     protected function assetJsonPaginationStructure(TestResponse $response)

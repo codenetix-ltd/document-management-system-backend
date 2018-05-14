@@ -6,6 +6,7 @@ use App\Contracts\Repositories\IDocumentRepository;
 use App\Contracts\Services\ITransaction;
 use App\Document;
 use App\DocumentVersion;
+use App\Services\Components\IEventDispatcher;
 use App\Services\Document\DocumentVersionService;
 use App\Services\Document\TransactionDocumentService;
 use Exception;
@@ -46,6 +47,21 @@ class TransactionDocumentServiceTest extends TestCase
         return $this->createMock(ITransaction::class);
     }
 
+    private function createDocumentService(
+        $repository = null,
+        $documentVersionService = null,
+        $transaction = null,
+        $eventDispatcher = null
+    )
+    {
+        return new TransactionDocumentService(
+            $repository ?? $this->createMock(IDocumentRepository::class),
+            $documentVersionService ?? $this->createEmptyDocumentVersionServiceStub(),
+            $eventDispatcher ?? $this->createMock(IEventDispatcher::class),
+            $transaction ?? $this->createEmptyTransactionStub()
+        );
+    }
+
     public function testCreateSuccess()
     {
         $newId = 1;
@@ -55,7 +71,7 @@ class TransactionDocumentServiceTest extends TestCase
         $transactionMock->expects($this->once())->method('beginTransaction');
         $transactionMock->expects($this->once())->method('commit');
         $transactionMock->expects($this->never())->method('rollback');
-        $documentService = new TransactionDocumentService($documentRepositoryStub, $this->createEmptyDocumentVersionServiceStub(),$transactionMock);
+        $documentService = $this->createDocumentService($documentRepositoryStub, null,$transactionMock);
         $document = $this->createDocument();
 
         $resultDocument = $documentService->create($document);
@@ -74,7 +90,7 @@ class TransactionDocumentServiceTest extends TestCase
         $transactionMock->expects($this->once())->method('beginTransaction');
         $transactionMock->expects($this->never())->method('commit');
         $transactionMock->expects($this->once())->method('rollback');
-        $documentService = new TransactionDocumentService($documentRepositoryStub, $this->createEmptyDocumentVersionServiceStub(),$transactionMock);
+        $documentService = $this->createDocumentService($documentRepositoryStub, null,$transactionMock);
         $document = $this->createDocument();
 
         $documentService->create($document);
@@ -102,7 +118,7 @@ class TransactionDocumentServiceTest extends TestCase
         $transactionMock->expects($this->once())->method('beginTransaction');
         $transactionMock->expects($this->once())->method('commit');
         $transactionMock->expects($this->never())->method('rollback');
-        $documentService = new TransactionDocumentService($documentRepositoryStub, $this->createEmptyDocumentVersionServiceStub(), $transactionMock);
+        $documentService = $this->createDocumentService($documentRepositoryStub, null, $transactionMock);
 
         $result = $documentService->update(1, $newDocument, ['ownerId']);
 
@@ -137,7 +153,7 @@ class TransactionDocumentServiceTest extends TestCase
         $transactionMock->expects($this->once())->method('beginTransaction');
         $transactionMock->expects($this->never())->method('commit');
         $transactionMock->expects($this->once())->method('rollback');
-        $documentService = new TransactionDocumentService($documentRepositoryStub, $this->createEmptyDocumentVersionServiceStub(), $transactionMock);
+        $documentService = $this->createDocumentService($documentRepositoryStub, null, $transactionMock);
 
         $documentService->update(1, $newDocument, ['ownerId']);
 
@@ -161,7 +177,7 @@ class TransactionDocumentServiceTest extends TestCase
         $documentRepositoryStub->method('getActualVersionRelation')->willReturn($oldDV);
         $documentRepositoryStub->method('findOrFail')->willReturn($document);
 
-        $documentService = new TransactionDocumentService($documentRepositoryStub, $dvsStub, $transactionMock);
+        $documentService = $this->createDocumentService($documentRepositoryStub, $dvsStub, $transactionMock);
         $documentService->setActualVersion(1, 1);
     }
 
@@ -187,7 +203,7 @@ class TransactionDocumentServiceTest extends TestCase
         $documentRepositoryStub->method('findOrFail')->willReturn($document);
         $this->expectExceptionObject($exception);
 
-        $documentService = new TransactionDocumentService($documentRepositoryStub, $dvsStub, $transactionMock);
+        $documentService = $this->createDocumentService($documentRepositoryStub, $dvsStub, $transactionMock);
         $documentService->setActualVersion(1, 1);
     }
 }

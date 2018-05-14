@@ -4,9 +4,12 @@ namespace App\Http\Controllers\API;
 
 use App\Document;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Document\DocumentBulkPatchRequest;
+use App\Http\Requests\Document\DocumentPatchRequest;
 use App\Http\Requests\Document\DocumentSetActualVersionRequest;
 use App\Http\Requests\Document\DocumentStoreRequest;
 use App\Http\Requests\Document\DocumentUpdateRequest;
+use App\Http\Requests\FilterRequest;
 use App\Http\Resources\DocumentResource;
 use App\Services\Document\DocumentService;
 use App\Services\Document\TransactionDocumentService;
@@ -19,9 +22,9 @@ use DB;
 
 class DocumentController extends Controller
 {
-    public function index(DocumentService $documentService)
+    public function index(DocumentService $documentService, FilterRequest $request)
     {
-        $documents = $documentService->list();
+        $documents = $documentService->list($request->getFilter());
 
         return (DocumentResource::collection($documents))->response()->setStatusCode(200);
     }
@@ -64,6 +67,50 @@ class DocumentController extends Controller
         return (new DocumentResource($document))->response()->setStatusCode(200);
     }
 
+    public function patchUpdate(DocumentPatchRequest $request, TransactionDocumentService $service, $id)
+    {
+        $document = $service->update($id, $request->getEntity(), $request->getUpdatedFields(), false);
+
+        return (new DocumentResource($document))->response()->setStatusCode(200);
+    }
+
+    public function bulkDestroy(TransactionDocumentService $documentService, Request $request)
+    {
+        $ids = explode(',',$request->query->get('ids', ''));
+
+        foreach ($ids as $id) {
+            $documentService->delete($id);
+        }
+
+        return response('', 204);
+    }
+
+    /**
+     * @param DocumentBulkPatchRequest $request
+     * @param TransactionDocumentService $service
+     * @return JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function bulkPatchUpdate(DocumentBulkPatchRequest $request, TransactionDocumentService $service)
+    {
+        $documents = $request->transformBulk(Document::class);
+        $ids = explode(',',$request->get('ids',''));
+        $updatedFields = $request->getUpdatedFields();
+        if(count($ids) != count($documents) || count($documents) != count($updatedFields)) {
+            $request->failValidation();
+        }
+
+        for($i=0;$i<count($ids);++$i) {
+            try {
+                $service->update($ids[$i], $documents[$i], $updatedFields[$i], false);
+            } catch (Exception $e) {
+
+            }
+        }
+        $documents = $service->list(['ids'=>$request->get('ids','')]);
+
+        return (DocumentResource::collection($documents))->response()->setStatusCode(200);
+    }
 
 //    public function massArchive(Request $request, IAtomCommandInvoker $invoker)
 //    {

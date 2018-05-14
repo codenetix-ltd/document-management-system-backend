@@ -4,6 +4,10 @@ namespace App\Services\User;
 
 use App\Contracts\Repositories\IUserRepository;
 use App\Contracts\Services\File\IFileManager;
+use App\Events\User\UserCreateEvent;
+use App\Events\User\UserDeleteEvent;
+use App\Events\User\UserUpdateEvent;
+use App\Services\Components\IEventDispatcher;
 use App\User;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator as LengthAwarePaginatorContract;
@@ -13,11 +17,16 @@ class UserService
     private $repository;
 
     private $fileManager;
+    /**
+     * @var IEventDispatcher
+     */
+    private $eventDispatcher;
 
-    public function __construct(IUserRepository $repository, IFileManager $fileManager)
+    public function __construct(IUserRepository $repository, IFileManager $fileManager, IEventDispatcher $eventDispatcher)
     {
         $this->repository = $repository;
         $this->fileManager = $fileManager;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     public function updateAvatar(User $user, UploadedFile $file): User
@@ -36,13 +45,22 @@ class UserService
         if ($file) {
             $user = $this->updateAvatar($user, $file);
         }
+        $this->eventDispatcher->dispatch(new UserCreateEvent($user));
 
         return $user;
     }
 
     public function delete(int $id): ?bool
     {
-        return $this->repository->delete($id);
+        $user = $this->repository->find($id);
+
+        if(!$user) {
+            return false;
+        }
+
+        $this->eventDispatcher->dispatch(new UserDeleteEvent($user));
+
+        return $this->repository->delete($user->getId());
     }
 
     public function get(int $id): User
@@ -62,6 +80,7 @@ class UserService
         if ($file) {
             $user = $this->updateAvatar($user, $file);
         }
+        $this->eventDispatcher->dispatch(new UserUpdateEvent($user));
 
         return $user;
     }

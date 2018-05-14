@@ -77,6 +77,11 @@
   "Qualifier": {
     "id": "integer|required",
     "label": "string|required",
+    "accessType": "array|required"
+  },
+  "QualifierStructure": {
+    "id": "integer|required",
+    "label": "string|required",
     "accessTypes": "array|required"
   },
   "Permission": {
@@ -91,6 +96,16 @@
     "label": "string|required",
     "permissions": "array|required",
     "qualifiers": "array|required"
+  },
+  "Log": {
+    "user": "array|required",
+    "action": "string|required",
+    "link": "array|required",
+    "referenceType": "string|required|in:user,document,template,label",
+    "referenceId": "integer|required",
+    "id": "integer|required",
+    "createdAt": "integer|required",
+    "updatedAt": "integer|required"
   },
   "RowColumn": {
     "id": "integer|required",
@@ -132,6 +147,10 @@
   "File": {
     "id": "integer|required",
     "name": "string|required",
+    "url": "string|required"
+  },
+  "Link": {
+    "title": "string|required",
     "url": "string|required"
   },
   "SystemObject": {
@@ -206,9 +225,15 @@
     "actualVersion": "array|required"
   },
   "DocumentPutRequest": {
+    "createNewVersion": "boolean|required",
     "ownerId": "integer|required",
     "substituteDocumentId": "integer",
     "actualVersion": "array|required"
+  },
+  "DocumentPatchRequest": {
+    "ownerId": "integer",
+    "substituteDocumentId": "integer",
+    "actualVersionId": "integer"
   },
   "ResetEmailRequest": {
     "email": "string|required"
@@ -219,5 +244,8 @@
   },
   "LabelRequest": {
     "name": "string|required"
+  },
+  "DocumentSetActualVersionRequest": {
+    "versionId": "integer|required"
   }
 }

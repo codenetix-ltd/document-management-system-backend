@@ -42,4 +42,9 @@ class TemplateRepository implements ITemplateRepository
     {
         return Template::paginate();
     }
+
+    public function find(int $id): ?Template
+    {
+       return Template::find($id);
+    }
 }

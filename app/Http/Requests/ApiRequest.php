@@ -9,6 +9,8 @@ use Illuminate\Foundation\Http\FormRequest;
 
 abstract class ApiRequest extends FormRequest
 {
+    protected $ignoredFields = [];
+
     protected $updatedFields = [];
 
     protected $modelConfigName = '';
@@ -16,11 +18,19 @@ abstract class ApiRequest extends FormRequest
     public function transform(string $interface)
     {
         $object = $this->container->make($interface);
-        $transformer = $this->container->make(ITransformer::class);
-        $transformer->transform($this->only(array_keys($this->rules())), $object);
+        $transformer = $this->getTransformer();
+        $transformer->transform($this->only(array_diff(array_keys($this->rules()), $this->ignoredFields)), $object);
         $this->updatedFields = $transformer->getTransformedFields();
 
         return $object;
+    }
+
+    /**
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function failValidation()
+    {
+        $this->failedValidation($this->getValidatorInstance());
     }
 
     public function getUpdatedFields(): array
@@ -30,5 +40,10 @@ abstract class ApiRequest extends FormRequest
 
     public function rules() {
         return $this->modelConfigName ? (new ValidationRulesKeeper(config()))->getRules($this->modelConfigName):[];
+    }
+
+    protected function getTransformer()
+    {
+        return $this->container->make(ITransformer::class);
     }
 }

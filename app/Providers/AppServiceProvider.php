@@ -5,11 +5,13 @@ namespace App\Providers;
 use App\Adapters\TableAdapter;
 use App\Attribute;
 use App\Contracts\Adapters\ITableAdapter;
+use App\Contracts\Helpers\ILogger;
 use App\Contracts\Repositories\IAttributeRepository;
 use App\Contracts\Repositories\IAttributeValueRepository;
 use App\Contracts\Repositories\IDocumentRepository;
 use App\Contracts\Repositories\IDocumentVersionRepository;
 use App\Contracts\Repositories\IFileRepository;
+use App\Contracts\Repositories\ILogRepository;
 use App\Contracts\Repositories\ITagRepository;
 use App\Contracts\Repositories\ITemplateRepository;
 use App\Contracts\Repositories\ITypeRepository;
@@ -25,6 +27,7 @@ use App\Repositories\DBTransaction;
 use App\Repositories\DocumentRepository;
 use App\Repositories\DocumentVersionRepository;
 use App\Repositories\FileRepository;
+use App\Repositories\LogRepository;
 use App\Repositories\TagRepository;
 use App\Repositories\TemplateRepository;
 use App\Repositories\TypeRepository;
@@ -32,11 +35,14 @@ use App\Repositories\UserRepository;
 use App\Services\ADocumentCompareService;
 use App\Services\ADocumentGetService;
 use App\Services\ADocumentViewService;
+use App\Services\Components\IEventDispatcher;
+use App\Services\Components\LaravelEventDispatcher;
 use App\Services\DocumentCompareService;
 use App\Services\DocumentGetService;
 use App\Services\DocumentViewService;
 use App\Services\File\FileCreateService;
 use App\Services\File\FileManager;
+use App\Services\LogService;
 use App\Services\System\Transformer;
 use Illuminate\Http\Resources\Json\Resource;
 use Illuminate\Support\ServiceProvider;
@@ -80,6 +86,8 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->bind(IAttributeValueRepository::class, AttributeValueRepository::class);
 
+        $this->app->bind(ILogRepository::class, LogRepository::class);
+
         $this->app->bind(ITransformer::class, Transformer::class);
 
 //_____________________________________________________________________________________________________________________
@@ -91,5 +99,8 @@ class AppServiceProvider extends ServiceProvider
         //Repositories
 
         $this->app->bind(ITransaction::class, DBTransaction::class);
+
+        $this->app->bind(ILogger::class, LogService::class);
+        $this->app->bind(IEventDispatcher::class, LaravelEventDispatcher::class);
     }
 }

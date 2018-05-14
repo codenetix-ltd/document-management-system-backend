@@ -11,6 +11,7 @@ interface IUserRepository extends IRepository
     public function updateAvatar(User $user, int $fileId) : bool;
 
     public function findOrFail(int $id) : User;
+    public function find(int $id) : ?User;
 
     public function update(int $id, User $userInput, array $updatedFields): User;
 

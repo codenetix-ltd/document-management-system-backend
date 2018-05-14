@@ -71,6 +71,7 @@ class DocumentTest extends ApiTestCase
         $newOwner = factory(User::class)->create();
 
         $response = $this->jsonRequestPutEntityWithSuccess(self::PATH .'/' . $documentVersion->document_id, [
+            'createNewVersion' => true,
             'ownerId' => $newOwner->id,
             'actualVersion' => [
                 'name' => 'rename',
@@ -145,6 +146,45 @@ class DocumentTest extends ApiTestCase
         $this->jsonRequestObjectsWithPagination(self::PATH);
     }
 
+    public function testListOfDocumentsWithPaginationWithFiltersSuccess()
+    {
+
+        factory(DocumentVersion::class)->create(['name'=> 'not_match']);
+        factory(DocumentVersion::class)->create(['name'=> 'not_match_1']);
+        factory(DocumentVersion::class)->create(['name'=> 'not_match_2']);
+
+        factory(DocumentVersion::class)->create(['name'=> 'match_1']);
+        factory(DocumentVersion::class)->create(['name'=> 'match_2']);
+
+        $responseArr = $this->jsonRequestObjectsWithPagination(self::PATH . '?filter[name]=match')->decodeResponseJson();
+
+        $this->assertCount(2, $responseArr['data']);
+        $this->assertEquals('match_1', $responseArr['data'][0]['actualVersion']['name']);
+        $this->assertEquals('match_2', $responseArr['data'][1]['actualVersion']['name']);
+    }
+
+    public function testListOfDocumentsWithPaginationWithFiltersTagSuccess()
+    {
+        $tag1 = factory(Tag::class)->create();
+        $tag2 = factory(Tag::class)->create();
+        $tag3 = factory(Tag::class)->create();
+        /** @var DocumentVersion $dv1 */
+        factory(DocumentVersion::class,2)->create();
+        $dv1 = factory(DocumentVersion::class)->create();
+        $dv2 = factory(DocumentVersion::class)->create();
+        $dv3 = factory(DocumentVersion::class)->create();
+
+        $dv1->tags()->sync([$tag2->id]);
+        $dv2->tags()->sync([$tag1->id]);
+        $dv3->tags()->sync([$tag3->id]);
+
+        $responseArr = $this->jsonRequestObjectsWithPagination(self::PATH . '?filter[labelIds]='.$tag1->id.','.$tag2->id)->decodeResponseJson();
+
+        $this->assertCount(2, $responseArr['data']);
+        $this->assertEquals($dv1->id, $responseArr['data'][0]['actualVersion']['id']);
+        $this->assertEquals($dv2->id, $responseArr['data'][1]['actualVersion']['id']);
+    }
+
     public function testSetActualVersionSuccess()
     {
         $documentVersion = factory(DocumentVersion::class)->create();
@@ -156,5 +196,49 @@ class DocumentTest extends ApiTestCase
         $this->assertJsonStructure($response, array_keys(config('models.Document')));
         $responseArray = $response->decodeResponseJson();
         $this->assertEquals($newDocumentVersion->id, $responseArray['actualVersion']['id']);
+    }
+
+    public function testPatchUpdateDocumentSuccess()
+    {
+        $documentVersion = factory(DocumentVersion::class)->create();
+
+        $newOwner = factory(User::class)->create();
+
+        $response = $this->jsonRequestPatchEntityWithSuccess(self::PATH .'/' . $documentVersion->document_id, [
+            'ownerId' => $newOwner->id,
+        ]);
+
+        $this->assertJsonStructure($response, array_keys(config('models.Document')));
+        $responseArray = $response->decodeResponseJson();
+
+        $this->assertEquals($newOwner->id, $responseArray['ownerId']);
+        $this->assertEquals($documentVersion->id, $responseArray['actualVersion']['id']);
+        $this->assertEquals(1, $responseArray['version']);
+    }
+
+    public function testBulkDeleteDocumentSuccess()
+    {
+        $documentIds = factory(DocumentVersion::class,4)->create()->implode('document.id', ',');
+        $response = $this->jsonRequest('DELETE', self::PATH.'?ids='.$documentIds);
+        $response->assertStatus(204);
+    }
+
+    public function testBulkPatchUpdateDocumentSuccess()
+    {
+        $documentIds = factory(DocumentVersion::class,3)->create()->implode('document.id', ',');
+
+        $newOwner = factory(User::class)->create();
+
+        $response = $this->jsonRequestPatchEntityWithSuccess(self::PATH . '?ids=' . $documentIds, [
+            ['ownerId' => $newOwner->id],
+            ['ownerId' => $newOwner->id],
+            ['ownerId' => $newOwner->id]
+        ]);
+
+        $response->decodeResponseJson();
+
+//        $this->assertEquals($newOwner->id, $responseArray['ownerId']);
+//        $this->assertEquals($documentVersion->id, $responseArray['actualVersion']['id']);
+//        $this->assertEquals(1, $responseArray['version']);
     }
 }

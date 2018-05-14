@@ -23,7 +23,13 @@ Route::prefix('v1')->group(function () {
 
     Route::apiResource('types', 'API\TypeController', ['only' => ['index']]);
 
+    //Order is important (patch overrides apiResource)
+    Route::patch('documents/{id}', 'API\DocumentController@patchUpdate');
+    Route::put('documents/{id}', 'API\DocumentController@update');
     Route::apiResource('documents', 'API\DocumentController');
+
+    Route::delete('documents', 'API\DocumentController@bulkDestroy');
+    Route::patch('documents', 'API\DocumentController@bulkPatchUpdate');
 
     Route::post('templates/{templateId}/attributes', 'API\AttributeController@store');
     Route::get('attributes/{id}', 'API\AttributeController@show');
@@ -34,6 +40,7 @@ Route::prefix('v1')->group(function () {
     Route::put('documents/{id}/actualVersion', 'API\DocumentController@setActualVersion');
     Route::get('documents/{id}/versions/{versionId}', 'API\DocumentVersionController@show');
     Route::delete('documents/{id}/versions/{versionId}', 'API\DocumentVersionController@destroy');
+    Route::get('logs', 'Api\LogController@index');
 
     Route::post('files', 'FileController@uploadFile');
 });

@@ -6,6 +6,7 @@ use App\Contracts\Repositories\IDocumentRepository;
 use App\Contracts\Services\ITransaction;
 use App\Document;
 use App\DocumentVersion;
+use App\Services\Components\IEventDispatcher;
 use Exception;
 
 /**
@@ -21,10 +22,11 @@ class TransactionDocumentService extends DocumentService
     public function __construct(
         IDocumentRepository $repository,
         DocumentVersionService $documentVersionService,
+        IEventDispatcher $eventDispatcher,
         ITransaction $transaction
     )
     {
-        parent::__construct($repository, $documentVersionService);
+        parent::__construct($repository, $documentVersionService, $eventDispatcher);
         $this->transaction = $transaction;
     }
 
@@ -55,7 +57,7 @@ class TransactionDocumentService extends DocumentService
      * @param bool $createNewVersion
      * @throws Exception
      */
-    protected function doUpdate(Document $document, DocumentVersion $oldActualVersion, DocumentVersion $newActualVersion, bool $createNewVersion): void
+    protected function doUpdate(Document $document, ?DocumentVersion $oldActualVersion, ?DocumentVersion $newActualVersion, bool $createNewVersion): void
     {
         $this->transaction->beginTransaction();
 

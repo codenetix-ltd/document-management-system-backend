@@ -9,6 +9,7 @@ interface ITemplateRepository extends IRepository
     public function create(Template $template) : Template;
 
     public function findOrFail(int $id) : Template;
+    public function find(int $id) : ?Template;
 
     public function update(int $id, Template $templateInput, array $updatedFields): Template;
 

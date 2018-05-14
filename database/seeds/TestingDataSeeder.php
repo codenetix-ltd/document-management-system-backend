@@ -20,6 +20,12 @@ class TestingDataSeeder extends Seeder
             'password' => bcrypt('admin'),
         ]);
 
+        factory(User::class)->create([
+            'full_name' => 'test',
+            'email' => 'test@example.com',
+            'password' => bcrypt('test'),
+        ]);
+
         //TODO - данные необходимые для функционирования системы вынести в отдельный сидер
         //Create types
         factory(Type::class)->create(['name' => 'String', 'machine_name' => 'string']);

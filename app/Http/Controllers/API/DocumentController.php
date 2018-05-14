@@ -13,6 +13,7 @@ use App\Http\Requests\FilterRequest;
 use App\Http\Resources\DocumentResource;
 use App\Services\Document\DocumentService;
 use App\Services\Document\TransactionDocumentService;
+use App\System\AuthBuilders\AuthorizerFactory;
 use Exception;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Http\JsonResponse;
@@ -30,6 +31,10 @@ class DocumentController extends Controller
 
     public function store(DocumentStoreRequest $request, TransactionDocumentService $service)
     {
+        //TODO - remove/uncomment example for auth action
+        $authorizer = AuthorizerFactory::make('document');
+        $authorizer->authorize('document_create');
+
         $document = $service->create($request->getEntity());
 
         return (new DocumentResource($document))->response()->setStatusCode(201);

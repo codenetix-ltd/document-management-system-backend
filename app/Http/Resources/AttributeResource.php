@@ -4,13 +4,15 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 
-class AttributeResource extends ApiResource
+class AttributeResource extends BaseResource
 {
-    protected function getComplexFields(Request $request): array
+    protected function getData(Request $request): array
     {
         return [
+            'id' => $this->id,
             'type' => (new TypeResource($this->type))->toArray($request),
-            'data' => $this->getData()
+            'name' => $this->name,
+            'data' => $this->resource->getData()
         ];
     }
 

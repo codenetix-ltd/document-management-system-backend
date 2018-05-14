@@ -35,6 +35,37 @@ class User extends Authenticatable
         }
     }
 
+    public function hasAnyRole($roles)
+    {
+        if (is_array($roles)) {
+            return $this->roles()->whereIn('name', $roles)->exists();
+        } else {
+            return $this->roles()->where('name', $roles)->exists();
+        }
+    }
+
+    public function hasAnyPermission($permissions)
+    {
+        if (is_array($permissions)) {
+            foreach ($permissions as $permission) {
+                foreach ($this->roles as $role) {
+                    if ($role->hasPermission($permission)) return true;
+                }
+            }
+        } else {
+            foreach ($this->roles as $role) {
+                if ($role->hasPermission($permissions)) return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, 'user_role');
+    }
+
     public function setPasswordAttribute($password)
     {
         $this->attributes['password'] = bcrypt($password);

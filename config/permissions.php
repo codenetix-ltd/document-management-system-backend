@@ -1,7 +1,6 @@
 <?php
 
 use App\Handlers\Permissions\AnyPermissionHandler;
-use App\Handlers\Permissions\ByFactoryPermissionHandler;
 use App\Handlers\Permissions\ByOwnerPermissionHandler;
 use App\Handlers\Permissions\ByQualifiersPermissionHandler;
 use App\Handlers\Permissions\ByTemplatePermissionHandler;
@@ -63,33 +62,17 @@ return [
             'machine_name' => 'document',
             'label' => 'Documents',
             'qualifiers' => [
-                'factory' => [
-                    'machine_name' => 'factory',
-                    'label' => 'Factory',
-                    'access_types' => [
-                        'any' => [
-                            'machine_name' => 'any',
-                            'label' => 'Any factory',
-                            'handler' => AnyPermissionHandler::class
-                        ],
-                        'list' => [
-                            'machine_name' => 'list',
-                            'label' => 'User\'s OR Role\'s factories',
-                            'handler' => ByFactoryPermissionHandler::class
-                        ]
-                    ]
-                ],
                 'template' => [
                     'machine_name' => 'template',
                     'label' => 'Template',
                     'access_types' => [
                         'any' => [
-                            'machine_name' => 'any',
+                            'machine_name' => 'any_template',
                             'label' => 'Any template',
                             'handler' => AnyPermissionHandler::class
                         ],
                         'list' => [
-                            'machine_name' => 'list',
+                            'machine_name' => 'list_templates',
                             'label' => 'User\'s OR Role\'s templates',
                             'handler' => ByTemplatePermissionHandler::class
                         ]

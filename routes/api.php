@@ -43,5 +43,8 @@ Route::prefix('v1')->group(function () {
     Route::get('logs', 'Api\LogController@index');
 
     Route::post('files', 'FileController@uploadFile');
+
+    Route::apiResource('roles', 'API\RoleController');
+    Route::get('permission-groups', 'API\PermissionController@index');
 });
 

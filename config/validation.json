@@ -208,8 +208,19 @@
   "TemplateRequest": {
     "name": "string|required|max:255"
   },
+  "QualifierRequest": {
+    "id": "integer|required",
+    "accessTypeId": "string|required"
+  },
+  "PermissionValueRequest": {
+    "id": "integer|required",
+    "accessTypeId": "string|required",
+    "qualifiers": "array"
+  },
   "RoleRequest": {
-    "name": "string|required"
+    "name": "string|required",
+    "templateIds": "array",
+    "permissionValues": "array"
   },
   "DocumentVersionRequest": {
     "name": "string|required",

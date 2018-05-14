@@ -30,6 +30,7 @@ class AttributeTest extends ApiTestCase
             'name' => $attribute->name,
             'typeId' => $attribute->type_id
         ]);
+
         //TODO documentation doesn't have commented fields
         $response->assertJson([
             'name' => $attribute->name,

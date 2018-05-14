@@ -219,8 +219,8 @@
   },
   "RoleRequest": {
     "name": "string|required",
-    "templateIds": "array|required",
-    "permissionValues": "array|required"
+    "templateIds": "array",
+    "permissionValues": "array"
   },
   "DocumentVersionRequest": {
     "name": "string|required",

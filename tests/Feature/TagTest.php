@@ -20,7 +20,7 @@ class TagTest extends ApiTestCase
         $response->assertJson([
             'name' => $tag->name,
         ]);
-        $this->assertJsonStructure($response, config('models.tag_response'));
+        $this->assertJsonStructure($response, array_keys(config('models.Label')));
     }
 
     public function testCreateTagValidationError()
@@ -37,7 +37,7 @@ class TagTest extends ApiTestCase
         $response->assertJson([
             'name' => $tag->name,
         ]);
-        $this->assertJsonStructure($response, config('models.tag_response'));
+        $this->assertJsonStructure($response, array_keys(config('models.Label')));
     }
 
     public function testGetTagNotFound()
@@ -56,7 +56,7 @@ class TagTest extends ApiTestCase
         $response->assertJson([
             'name' => $tagNameNew
         ]);
-        $this->assertJsonStructure($response, config('models.tag_response'));
+        $this->assertJsonStructure($response, array_keys(config('models.Label')));
     }
 
     public function testDeleteTagSuccess()

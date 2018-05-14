@@ -18,7 +18,7 @@ class TemplateTest extends ApiTestCase
         $response = $this->jsonRequestPostEntityWithSuccess(self::PATH, [
             'name' => $template->name,
         ]);
-        $this->assertJsonStructure($response, config('models.template_response'));
+        $this->assertJsonStructure($response, array_keys(config('models.Template')));
     }
 
     public function testGetTemplateSuccess()
@@ -31,7 +31,7 @@ class TemplateTest extends ApiTestCase
         $response->assertJson([
             'name' => $template->name,
         ]);
-        $this->assertJsonStructure($response, config('models.template_response'));
+        $this->assertJsonStructure($response, array_keys(config('models.Template')));
     }
 
     public function testGetTemplateNotFound()
@@ -50,7 +50,7 @@ class TemplateTest extends ApiTestCase
         $response->assertJson([
             'name' => $templateNameNew
         ]);
-        $this->assertJsonStructure($response, config('models.template_response'));
+        $this->assertJsonStructure($response, array_keys(config('models.Template')));
     }
 
     public function testDeleteTagSuccess()

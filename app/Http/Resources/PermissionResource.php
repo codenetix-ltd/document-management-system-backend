@@ -11,9 +11,8 @@ class PermissionResource extends BaseResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'accessTypes' => AccessTypeResource::collection($this->accessTypes)->toArray($request),
-            'createdAt' => $this->created_at->timestamp,
-            'updatedAt' => $this->updated_at->timestamp
+            'label' => $this->label,
+            'accessTypes' => AccessTypeResource::collection($this->accessTypes)->toArray($request)
         ];
     }
 

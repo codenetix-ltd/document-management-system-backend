@@ -102,7 +102,7 @@ class UserTest extends ApiTestCase
 
     private function assertJsonStructureForUser(TestResponse $response, $withAvatar = false)
     {
-        $structure = config('models.user_response');
+        $structure = array_keys(config('models.User'));
 
         if (!$withAvatar) {
             unset($structure['avatar']);

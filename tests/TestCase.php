@@ -13,15 +13,16 @@ abstract class TestCase extends BaseTestCase
 
     use CreatesApplication;
 
-    const API_ROOT = '/api/v1/';
+    const API_ROOT = '/api/';
 
     protected $authUser;
 
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
 
         $this->artisan("db:seed", ['--class' => 'TestingDataSeeder']);
+        $this->artisan("db:seed", ['--class' => 'PermissionsSeeder']);
 
         $this->authUser = User::whereFullName('admin')->first();
     }

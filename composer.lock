@@ -761,16 +761,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v5.6.21",
+            "version": "v5.6.22",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "458a89b1c5ff73072c27308566f444c790f76f28"
+                "reference": "637fd797a6dde8d24a9f07da77e375ec251c5d24"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/458a89b1c5ff73072c27308566f444c790f76f28",
-                "reference": "458a89b1c5ff73072c27308566f444c790f76f28",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/637fd797a6dde8d24a9f07da77e375ec251c5d24",
+                "reference": "637fd797a6dde8d24a9f07da77e375ec251c5d24",
                 "shasum": ""
             },
             "require": {
@@ -896,7 +896,7 @@
                 "framework",
                 "laravel"
             ],
-            "time": "2018-05-08T13:30:15+00:00"
+            "time": "2018-05-15T13:34:20+00:00"
         },
         {
             "name": "laravel/passport",
@@ -3034,16 +3034,16 @@
     "packages-dev": [
         {
             "name": "codenetix/stub-generator",
-            "version": "1.0.4",
+            "version": "1.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codenetix-ltd/laravel-crud-code-generator.git",
-                "reference": "ec0afe595b16f52e9fc2bafa958048f417f83f32"
+                "reference": "0bfae90bc7fc955f6e43ee516978756aa39ad0c2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codenetix-ltd/laravel-crud-code-generator/zipball/ec0afe595b16f52e9fc2bafa958048f417f83f32",
-                "reference": "ec0afe595b16f52e9fc2bafa958048f417f83f32",
+                "url": "https://api.github.com/repos/codenetix-ltd/laravel-crud-code-generator/zipball/0bfae90bc7fc955f6e43ee516978756aa39ad0c2",
+                "reference": "0bfae90bc7fc955f6e43ee516978756aa39ad0c2",
                 "shasum": ""
             },
             "require": {
@@ -3086,10 +3086,10 @@
             ],
             "support": {
                 "email": "avorobyev@codenetix.com",
-                "source": "https://github.com/codenetix-ltd/laravel-crud-code-generator/tree/master",
+                "source": "https://github.com/codenetix-ltd/laravel-crud-code-generator/tree/1.0.5",
                 "issues": "https://github.com/codenetix-ltd/laravel-crud-code-generator/issues"
             },
-            "time": "2018-05-15T06:10:26+00:00"
+            "time": "2018-05-16T10:07:07+00:00"
         },
         {
             "name": "doctrine/instantiator",

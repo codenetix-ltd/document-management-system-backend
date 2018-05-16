@@ -47,4 +47,5 @@ Route::prefix('v1')->group(function () {
 });
 
 Route::resource('templates', 'TemplatesController');
+Route::resource('labels', 'LabelsController');
 

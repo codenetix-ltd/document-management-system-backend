@@ -162,7 +162,8 @@ return [
         Intervention\Image\ImageServiceProvider::class,
 
         App\Providers\MorphMapServiceProvider::class,
-        App\Providers\HelperServiceProvider::class
+        App\Providers\HelperServiceProvider::class,
+        \App\Providers\RepositoryServiceProvider::class
     ],
 
     /*

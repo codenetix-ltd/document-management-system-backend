@@ -24,7 +24,8 @@ class TemplateUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            "name" => "string|required|max:255"
+            'name' => 'bail|required|unique:templates,name,'.$this->route('id').'|max:255',
+            'orders' => 'required|json'
         ];
     }
 }

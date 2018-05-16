@@ -2,72 +2,109 @@
 
 namespace Tests\Feature;
 
-use App\Attribute;
-use App\Template;
-use Tests\ApiTestCase;
+use App\Entities\Template;
+use App\Http\Resources\TemplateCollectionResource;
+use App\Http\Resources\TemplateResource;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\Resources\Json\Resource;
+use Tests\TestCase;
 
-class TemplateTest extends ApiTestCase
+/**
+ * Created by Codenetix team <support@codenetix.com>
+ */
+class TemplateTest extends TestCase
 {
-    private const PATH = 'templates';
-    private const DB_TABLE = 'templates';
+    use RefreshDatabase;
 
-    public function testCreateTemplateSuccess()
+    /**
+     * Setup the test environment.
+     *
+     * @return void
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+        Resource::withoutWrapping();
+    }
+
+    /**
+     * Tests template list endpoint
+     *
+     * @return void
+     */
+    public function testTemplateList()
+    {
+        factory(Template::class, 10)->create();
+
+        $response = $this->json('GET', '/api/templates');
+
+        $this->assetJsonPaginationStructure($response);
+
+        $response->assertStatus(200);
+    }
+
+    /**
+     * Tests $template get endpoint
+     *
+     * @return void
+     */
+    public function testTemplateGet()
+    {
+        $templates = factory(Template::class, 10)->create();
+
+        $response = $this->json('GET', '/api/templates/' . $templates[0]->id);
+
+        $response
+            ->assertStatus(200)
+            ->assertJson((new TemplateResource($templates[0]))->resolve());
+    }
+
+    /**
+     * Tests template store endpoint
+     *
+     * @return void
+     */
+    public function testTemplateStore()
     {
         $template = factory(Template::class)->make();
 
-        $response = $this->jsonRequestPostEntityWithSuccess(self::PATH, [
-            'name' => $template->name,
-        ]);
-        $this->assertJsonStructure($response, array_keys(config('models.Template')));
+        $response = $this->json('POST', '/api/templates', $template->toArray());
+        $template = Template::first();
+
+        $response
+            ->assertStatus(201)
+            ->assertJson((new TemplateResource($template))->resolve());
     }
 
-    public function testGetTemplateSuccess()
+    /**
+     * Tests template update endpoint
+     *
+     * @return void
+     */
+    public function testTemplateUpdate()
     {
         $template = factory(Template::class)->create();
-        $attribute = factory(Attribute::class)->create();
-        $template->attributes()->save($attribute);
 
-        $response = $this->jsonRequestGetEntitySuccess(self::PATH . '/' .  $template->id);
-        $response->assertJson([
-            'name' => $template->name,
-        ]);
-        $this->assertJsonStructure($response, array_keys(config('models.Template')));
+        $response = $this->json('PUT', '/api/templates/' . $template->id, array_only($template->toArray(), $template->getFillable()));
+
+        $response
+            ->assertStatus(200)
+            ->assertJson((new TemplateResource($template))->resolve());
     }
 
-    public function testGetTemplateNotFound()
-    {
-        $this->jsonRequestGetEntityNotFound(self::PATH . '/' . 0);
-    }
-
-    public function testUpdateTemplateSuccess()
+    /**
+     * Tests template delete endpoint
+     *
+     * @return void
+     */
+    public function testTemplateDelete()
     {
         $template = factory(Template::class)->create();
-        $templateNameNew = 'New Name';
 
-        $response = $this->jsonRequestPutEntityWithSuccess(self::PATH .'/' . $template->id, [
-            'name' => $templateNameNew
-        ]);
-        $response->assertJson([
-            'name' => $templateNameNew
-        ]);
-        $this->assertJsonStructure($response, array_keys(config('models.Template')));
+        $response = $this->json('DELETE', '/api/templates/' . $template->id);
+
+        $response
+            ->assertStatus(204);
     }
 
-    public function testDeleteTagSuccess()
-    {
-        $template = factory(Template::class)->create();
-        $this->jsonRequestDelete(self::PATH, $template->id, self::DB_TABLE);
-    }
-
-    public function testDeleteTagNotExistSuccess()
-    {
-        $this->jsonRequestDelete(self::PATH, 0, self::DB_TABLE);
-    }
-
-    public function testListOfTemplatesWithPaginationSuccess()
-    {
-        factory(Template::class, 20)->create();
-
-        $this->jsonRequestObjectsWithPagination(self::PATH);
-    }
 }

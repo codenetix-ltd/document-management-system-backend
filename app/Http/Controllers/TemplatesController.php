@@ -2,93 +2,81 @@
 
 namespace App\Http\Controllers;
 
-use App\Attribute;
+use App\Http\Requests\TemplateCreateRequest;
 use App\Http\Requests\TemplateUpdateRequest;
-use App\Template;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
+use App\Http\Resources\TemplateResource;
+use App\Services\TemplateService;
+use Illuminate\Http\Response;
 
+/**
+ * Created by Codenetix team <support@codenetix.com>
+ */
 class TemplatesController extends Controller
 {
-    public function delete($id, IAtomCommandInvoker $invoker)
+    /**
+     * @var TemplateService
+     */
+    protected $service;
+
+    /**
+     * TemplatesController constructor.
+     * @param TemplateService $service
+     */
+    public function __construct(TemplateService $service)
     {
-        $templateGetCommand = app()->makeWith(ITemplateGetCommand::class, [
-            'id' => $id
-        ]);
-        $invoker->invoke($templateGetCommand);
-        $template = $templateGetCommand->getResult();
-
-        if($template->documents->count()){
-            return back()->with('error', 'Unable to remove template "' . $template->name . '" as long as it has at least one document which use it as base template!');
-        }
-
-        $templateDeleteCommand = app()->makeWith(ITemplateDeleteCommand::class, [
-            'id' => $template->id
-        ]);
-        $invoker->invoke($templateDeleteCommand);
-
-        return back()->with('success', 'Template "' . $template->name . '" has been removed with success!');
+        $this->service = $service;
     }
 
-    public function edit($id, IAtomCommandInvoker $invoker)
+    /**
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     */
+    public function index()
     {
-        $authorizer = AuthorizerFactory::make('template');
-        $authorizer->authorize('template_update');
-
-        $templateGetCommand = app()->makeWith(ITemplateGetCommand::class, [
-            'id' => $id
-        ]);
-        $invoker->invoke($templateGetCommand);
-        $template = $templateGetCommand->getResult();
-
-        $attributes = $template->attributes;
-
-        return view('pages.templates.add_edit', compact('template', 'attributes'));
+        $templates = $this->service->list();
+        return TemplateResource::collection($templates);
     }
 
-    public function store(TemplateCreateRequest $request, IAtomCommandInvoker $invoker)
+    /**
+     * @param TemplateCreateRequest $request
+     * @return TemplateResource
+     */
+    public function store(TemplateCreateRequest $request)
     {
-        $data = $this->filterOnNull($request->all());
-
-        $templateCreateCommand = app()->makeWith(ITemplateCreateCommand::class, [
-            'templateData' => $data
-        ]);
-        $invoker->invoke($templateCreateCommand);
-        $template = $templateCreateCommand->getResult();
-
-        return redirect()->route('templates.edit', ['id' => $template->id]);
+        $template = $this->service->create($request->all());
+        return new TemplateResource($template);
     }
 
-    public function update($id, TemplateUpdateRequest $request)
+    /**
+     * @param $id
+     * @return TemplateResource
+     */
+    public function show($id)
     {
-        $template = DB::transaction(function () use ($id, $request) {
-            $template = Template::find($id);
-            $template->fill($request->all());
-            $template->save();
+        $template = $this->service->find($id);
+        return new TemplateResource($template);
+    }
 
-            $orders = json_decode($request->input('orders'), true);
+    /**
+     * @param TemplateUpdateRequest $request
+     * @param $id
+     * @return TemplateResource
+     */
+    public function update(TemplateUpdateRequest $request, $id)
+    {
+        $template = $this->service->update($request->all(), $id);
+        return new TemplateResource($template);
+    }
 
-            if(is_null($orders) || !is_array($orders)){
-                //TODO
-                throw new \RuntimeException();
-            }
-
-            foreach ($orders as $order) {
-                //TODO
-                if(!isset($order['id']) || !isset($order['order'])){
-                    throw new \RuntimeException();
-                }
-
-                $attribute = Attribute::findOrFail($order['id']);
-                $attribute->order = $order['order'];
-                $attribute->update();
-            }
-
-            event(new TemplateUpdateEvent(Auth::user(), $template));
-
-            return $template;
-        });
-
-        return redirect()->route('templates.edit', ['id' => $template->id]);
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int $id
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        $this->service->delete($id);
+        return response()->json([], Response::HTTP_NO_CONTENT);
     }
 }

@@ -17,8 +17,6 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('v1')->group(function () {
     Route::apiResource('users', 'API\UserController');
 
-    Route::apiResource('templates', 'API\TemplateController');
-
     Route::apiResource('tags', 'API\TagController');
 
     Route::apiResource('types', 'API\TypeController', ['only' => ['index']]);
@@ -47,4 +45,6 @@ Route::prefix('v1')->group(function () {
     Route::apiResource('roles', 'API\RoleController');
     Route::get('permission-groups', 'API\PermissionController@index');
 });
+
+Route::resource('templates', 'TemplatesController');
 

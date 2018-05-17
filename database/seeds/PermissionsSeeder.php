@@ -1,12 +1,12 @@
 <?php
 
-use App\AccessType;
-use App\Permission;
-use App\PermissionGroup;
-use App\Qualifier;
-use App\Role;
+use App\Entities\AccessType;
+use App\Entities\Permission;
+use App\Entities\PermissionGroup;
+use App\Entities\Qualifier;
+use App\Entities\Role;
+use App\Entities\User;
 use App\Services\PermissionService;
-use App\User;
 use Illuminate\Database\Seeder;
 
 class PermissionsSeeder extends Seeder

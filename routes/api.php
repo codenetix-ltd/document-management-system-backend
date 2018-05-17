@@ -49,4 +49,5 @@ Route::prefix('v1')->group(function () {
 Route::resource('templates', 'TemplatesController');
 Route::resource('labels', 'LabelsController');
 Route::apiResource('types', 'TypesController', ['only' => ['index']]);
+Route::get('permission-groups', 'PermissionGroupsController@index');
 

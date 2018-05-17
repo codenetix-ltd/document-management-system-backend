@@ -13,12 +13,6 @@ class PermissionService
         return config('permissions.groups');
     }
 
-    public function getPermissionGroups()
-    {
-        //todo - move to repo
-        return PermissionGroup::all();
-    }
-
     public function getAccessTypesByPermissionId()
     {
         $permissions = Permission::get();

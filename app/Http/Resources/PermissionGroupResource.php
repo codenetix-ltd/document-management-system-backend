@@ -2,20 +2,21 @@
 
 namespace App\Http\Resources;
 
-use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
 
-class PermissionGroupResource extends BaseResource
+class PermissionGroupResource extends JsonResource
 {
-    protected function getData(Request $request): array
+    /**
+     * Transform the resource into an array.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return array
+     */
+    public function toArray($request)
     {
         return [
             'permissions' => PermissionResource::collection($this->permissions)->toArray($request),
             'qualifiers' => QualifierResource::collection($this->qualifiers)->toArray($request)
         ];
-    }
-
-    protected function getStructure(): array
-    {
-        return config('models.PermissionGroup');
     }
 }

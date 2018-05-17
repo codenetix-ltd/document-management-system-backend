@@ -2,11 +2,11 @@
 
 namespace App\Http\Resources;
 
-use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
 
-class PermissionResource extends BaseResource
+class PermissionResource extends JsonResource
 {
-    protected function getData(Request $request): array
+    public function toArray($request)
     {
         return [
             'id' => $this->id,
@@ -15,11 +15,4 @@ class PermissionResource extends BaseResource
             'accessTypes' => AccessTypeResource::collection($this->accessTypes)->toArray($request)
         ];
     }
-
-    protected function getStructure(): array
-    {
-        return config('models.Permission');
-    }
-
-
 }

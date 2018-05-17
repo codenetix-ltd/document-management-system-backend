@@ -2,16 +2,11 @@
 
 namespace App\Http\Resources;
 
-use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
 
-class QualifierResource extends BaseResource
+class QualifierResource extends JsonResource
 {
-    protected function getStructure(): array
-    {
-        return config('models.Qualifier');
-    }
-
-    protected function getData(Request $request): array
+    public function toArray($request)
     {
         return [
             'id' => $this->id,

@@ -2,15 +2,38 @@
 
 namespace Tests\Feature;
 
-use Tests\ApiTestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\Resources\Json\Resource;
+use Tests\TestCase;
 
-class PermissionGroupTest extends ApiTestCase
+/**
+ * Created by Codenetix team <support@codenetix.com>
+ */
+class PermissionGroupTest extends TestCase
 {
-    private const PATH = 'permission-groups';
+    use RefreshDatabase;
 
-    public function testListOfPermissionsSuccess()
+    /**
+     * Setup the test environment.
+     *
+     * @return void
+     */
+    protected function setUp()
     {
-        $response = $this->jsonRequest('GET', self::PATH);
+        parent::setUp();
+        Resource::withoutWrapping();
+    }
+
+    /**
+     * Tests permissionGroup list endpoint
+     *
+     * @return void
+     */
+    public function testPermissionGroupList()
+    {
+        $response = $this->json('GET', '/api/permission-groups');
+
         $response->assertStatus(200);
+        //TODO - add assert
     }
 }

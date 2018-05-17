@@ -1,53 +1,12 @@
 <?php
 
-namespace App;
+namespace App\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 
 class Role extends Model
 {
-    protected $fillable = [
-        'name'
-    ];
-
-    private $templates_ids;
-    private $permissionValues;
-
-    /**
-     * @return mixed
-     */
-    public function getPermissionValues()
-    {
-        return $this->permissionValues;
-    }
-
-    /**
-     * @param mixed $permissionValues
-     * @return Role
-     */
-    public function setPermissionValues($permissionValues)
-    {
-        $this->permissionValues = $permissionValues;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getTemplatesIds()
-    {
-        return $this->templates_ids;
-    }
-
-    /**
-     * @param mixed $templates_ids
-     * @return Role
-     */
-    public function setTemplatesIds($templates_ids)
-    {
-        $this->templates_ids = $templates_ids;
-        return $this;
-    }
+    protected $fillable = ['name'];
 
     public function permissions()
     {
@@ -76,15 +35,5 @@ class Role extends Model
     public function users()
     {
         return $this->belongsToMany(User::class, 'user_role');
-    }
-
-    public function getId() : int
-    {
-        return $this->id;
-    }
-
-    public function setId(int $id)
-    {
-        // TODO: Implement setId() method.
     }
 }

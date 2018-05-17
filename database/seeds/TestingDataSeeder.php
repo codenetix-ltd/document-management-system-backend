@@ -1,7 +1,7 @@
 <?php
 
 use App\Entities\Type;
-use App\User;
+use App\Entities\User;
 use Illuminate\Database\Seeder;
 
 class TestingDataSeeder extends Seeder

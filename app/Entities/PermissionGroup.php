@@ -1,16 +1,21 @@
 <?php
 
-namespace App;
+namespace App\Entities;
 
 use Illuminate\Database\Eloquent\Model;
+use Prettus\Repository\Contracts\Transformable;
+use Prettus\Repository\Traits\TransformableTrait;
 
-class PermissionGroup extends Model
+/**
+ * Class PermissionGroup.
+ */
+class PermissionGroup extends Model implements Transformable
 {
+    use TransformableTrait;
+
     public $timestamps = false;
 
-    protected $fillable = [
-        'label', 'machine_name'
-    ];
+    protected $fillable = [];
 
     public function permissions()
     {

@@ -2,11 +2,17 @@
 
 namespace App\Http\Resources;
 
-use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
 
-class AttributeResource extends BaseResource
+class AttributeResource extends JsonResource
 {
-    protected function getData(Request $request): array
+    /**
+     * Transform the resource into an array.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return array
+     */
+    public function toArray($request)
     {
         return [
             'id' => $this->id,
@@ -14,10 +20,5 @@ class AttributeResource extends BaseResource
             'name' => $this->name,
             'data' => $this->resource->getData()
         ];
-    }
-
-    protected function getStructure(): array
-    {
-        return config('models.Attribute');
     }
 }

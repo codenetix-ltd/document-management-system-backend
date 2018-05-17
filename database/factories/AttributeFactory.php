@@ -1,13 +1,13 @@
 <?php
 
-use App\Attribute;
-use App\Contracts\Repositories\ITypeRepository;
-use App\Template;
+use App\Entities\Attribute;
+use App\Entities\Template;
+use App\Repositories\TypeRepository;
 use Faker\Generator as Faker;
 
 $factory->define(Attribute::class, function (Faker $faker) {
-    /** @var ITypeRepository $typeRepository */
-    $typeRepository = app()->make(ITypeRepository::class);
+    /** @var TypeRepository $typeRepository */
+    $typeRepository = app()->make(TypeRepository::class);
     $typeString = $typeRepository->getTypeByMachineName('string');
 
     return [
@@ -15,15 +15,14 @@ $factory->define(Attribute::class, function (Faker $faker) {
         'template_id' => function () {
             return factory(Template::class)->create()->id;
         },
-        'type_id' => $typeString->getId(),
+        'type_id' => $typeString->id,
         'is_locked' => false,
         'order' => 0
     ];
 });
 
 $factory->state(Attribute::class, 'table', function (Faker $faker) {
-    /** @var ITypeRepository $typeRepository */
-    $typeRepository = app()->make(ITypeRepository::class);
+    $typeRepository = app()->make(TypeRepository::class);
     $typeString = $typeRepository->getTypeByMachineName('string');
 
     return [
@@ -34,11 +33,11 @@ $factory->state(Attribute::class, 'table', function (Faker $faker) {
                     'name' => 'row1',
                     'columns' => [
                         [
-                            'typeId' => $typeString->getId(),
+                            'typeId' => $typeString->id,
                             'isLocked' => false
                         ],
                         [
-                            'typeId' => $typeString->getId(),
+                            'typeId' => $typeString->id,
                             'isLocked' => false
                         ]
                     ]
@@ -47,11 +46,11 @@ $factory->state(Attribute::class, 'table', function (Faker $faker) {
                     'name' => 'row2',
                     'columns' => [
                         [
-                            'typeId' => $typeString->getId(),
+                            'typeId' => $typeString->id,
                             'isLocked' => false
                         ],
                         [
-                            'typeId' => $typeString->getId(),
+                            'typeId' => $typeString->id,
                             'isLocked' => false
                         ]
                     ]
@@ -70,8 +69,7 @@ $factory->state(Attribute::class, 'table', function (Faker $faker) {
 });
 
 $factory->state(Attribute::class, 'table-broken', function (Faker $faker) {
-    /** @var ITypeRepository $typeRepository */
-    $typeRepository = app()->make(ITypeRepository::class);
+    $typeRepository = app()->make(TypeRepository::class);
     $typeString = $typeRepository->getTypeByMachineName('string');
 
     return [
@@ -82,11 +80,11 @@ $factory->state(Attribute::class, 'table-broken', function (Faker $faker) {
                     'name' => 'row1',
                     'columns' => [
                         [
-                            'typeId' => $typeString->getId(),
+                            'typeId' => $typeString->id,
                             'isLocked' => false
                         ],
                         [
-                            'typeId' => $typeString->getId(),
+                            'typeId' => $typeString->id,
                             'isLocked' => false
                         ]
                     ]
@@ -95,11 +93,11 @@ $factory->state(Attribute::class, 'table-broken', function (Faker $faker) {
                     'name' => 'row2',
                     'columns' => [
                         [
-                            'typeId' => $typeString->getId(),
+                            'typeId' => $typeString->id,
                             'isLocked' => false
                         ],
                         [
-                            'typeId' => $typeString->getId(),
+                            'typeId' => $typeString->id,
                             'isLocked' => false
                         ]
                     ]

@@ -62,4 +62,8 @@ class TemplateService
     public function delete(int $id){
         $this->repository->delete($id);
     }
+    public function paginate(){
+        return $this->repository->paginate();
+    }
+
 }

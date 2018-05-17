@@ -31,7 +31,13 @@ class TypeService
     /**
      * @return mixed
      */
-    public function list(){
+    public function list()
+    {
+        return $this->repository->all();
+    }
+
+    public function paginate()
+    {
         return $this->repository->paginate();
     }
 }

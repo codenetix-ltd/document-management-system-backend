@@ -32,7 +32,7 @@ class RolesController extends Controller
      */
     public function index()
     {
-        $roles = $this->service->list();
+        $roles = $this->service->paginate();
         return RoleResource::collection($roles);
     }
 

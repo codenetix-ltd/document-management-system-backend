@@ -27,23 +27,31 @@ class RoleService
     /**
      * @return mixed
      */
-    public function list(){
-        return $this->repository->paginate();
+    public function list()
+    {
+        return $this->repository->all();
     }
 
     /**
      * @param int $id
      * @return Role
      */
-    public function find(int $id){
+    public function find(int $id)
+    {
         return $this->repository->find($id);
+    }
+
+    public function paginate()
+    {
+        return $this->repository->paginate();
     }
 
     /**
      * @param array $data
      * @return Role
      */
-    public function create(array $data){
+    public function create(array $data)
+    {
         $role = $this->repository->create($data);
 
         if (!empty($data['template_ids'])) {
@@ -62,7 +70,8 @@ class RoleService
      * @param int $id
      * @return mixed
      */
-    public function update(array $data, int $id){
+    public function update(array $data, int $id)
+    {
         $role = $this->repository->update($data, $id);
 
         if (!empty($data['template_ids'])) {
@@ -79,7 +88,8 @@ class RoleService
     /**
      * @param int $id
      */
-    public function delete(int $id){
+    public function delete(int $id)
+    {
         $this->repository->delete($id);
     }
 

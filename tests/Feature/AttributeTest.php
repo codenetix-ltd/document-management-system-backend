@@ -2,145 +2,114 @@
 
 namespace Tests\Feature;
 
-use App\Attribute;
-use App\Contracts\Repositories\ITypeRepository;
-use App\Services\Type\TypeService;
-use App\Template;
-use Tests\ApiTestCase;
+use App\Entities\Attribute;
+use App\Entities\Template;
+use App\Http\Resources\AttributeCollectionResource;
+use App\Http\Resources\AttributeResource;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\Resources\Json\Resource;
+use Tests\TestCase;
 
-class AttributeTest extends ApiTestCase
+/**
+ * Created by Codenetix team <support@codenetix.com>
+ */
+class AttributeTest extends TestCase
 {
-    protected const DB_TABLE = 'attributes';
+    use RefreshDatabase;
 
-    /** @var ITypeRepository $typeRepository */
-    private $typeRepository;
-
-    public function setUp()
+    /**
+     * Setup the test environment.
+     *
+     * @return void
+     */
+    protected function setUp()
     {
         parent::setUp();
-        $this->typeRepository = $this->app->make(ITypeRepository::class);
+        Resource::withoutWrapping();
     }
 
-    public function testCreateAttributeTypeStringSuccess()
+    /**
+     * Tests attribute list endpoint
+     *
+     * @return void
+     */
+    public function testAttributeList()
+    {
+        $template = factory(Template::class)->create();
+
+        factory(Attribute::class, 10)->create([
+            'template_id' => $template->id
+        ]);
+
+        $response = $this->json('GET', '/api/templates/' . $template->id . '/attributes');
+
+        $response->assertStatus(200);
+        $this->assetJsonPaginationStructure($response);
+    }
+
+    /**
+     * Tests $attribute get endpoint
+     *
+     * @return void
+     */
+    public function testAttributeGet()
+    {
+        $attributes = factory(Attribute::class, 10)->create();
+
+        $response = $this->json('GET', '/api/attributes/' . $attributes[0]->id);
+
+        $response
+            ->assertStatus(200)
+            ->assertJson((new AttributeResource($attributes[0]))->resolve());
+    }
+
+    /**
+     * Tests attribute store endpoint
+     *
+     * @return void
+     */
+    public function testAttributeStore()
     {
         $attribute = factory(Attribute::class)->make();
-        $template = factory(Template::class)->create();
 
-        $response = $this->jsonRequestPostEntityWithSuccess('templates/' . $template->id . '/attributes', [
-            'name' => $attribute->name,
-            'typeId' => $attribute->type_id
-        ]);
+        $response = $this->json('POST', '/api/attributes', $attribute->toArray());
 
-        //TODO documentation doesn't have commented fields
-        $response->assertJson([
-            'name' => $attribute->name,
-//            'templateId' => $template->id,
-//            'isLocked' => false,
-//            'order' => 0,
-            'type' => [
-                'machineName' => TypeService::TYPE_STRING
-            ]
-        ]);
-        //TODO validate by laravel validation tools
-        $this->assertJsonStructure($response, array_keys(config('models.Attribute')));
+        $attribute = Attribute::first();
+
+        $response
+            ->assertStatus(201)
+            ->assertJson((new AttributeResource($attribute))->resolve());
     }
 
-    public function testCreateAttributeTypeTableSuccess()
+    /**
+     * Tests attribute update endpoint
+     *
+     * @return void
+     */
+    public function testAttributeUpdate()
     {
-        $attribute = factory(Attribute::class)->states('table')->make();
-        $template = factory(Template::class)->create();
-
-        $typeTable = $this->typeRepository->getTypeByMachineName(TypeService::TYPE_TABLE);
-
-        $response = $this->jsonRequestPostEntityWithSuccess('templates/' . $template->id . '/attributes', [
-            'name' => $attribute->name,
-            'typeId' => $typeTable->id,
-            'data' => $attribute->data
-        ]);
-
-        //TODO documentation doesn't have commented fields
-        $response->assertJson([
-            'name' => $attribute->name,
-//            'templateId' => $template->id,
-//            'isLocked' => false,
-//            'order' => 0,
-            'type' => [
-                'machineName' => TypeService::TYPE_TABLE
-            ]
-        ]);
-        //TODO validate by laravel validation tools
-        $this->assertJsonStructure($response, array_keys(config('models.Attribute')));
-        //todo - assert data properties
-    }
-
-    public function testCreateAttributeTypeTableValidationFail()
-    {
-        $attribute = factory(Attribute::class)->states('table-broken')->make();
-        $template = factory(Template::class)->create();
-
-        $typeTable = $this->typeRepository->getTypeByMachineName(TypeService::TYPE_TABLE);
-
-        $response = $this->jsonRequestPostEntityValidationError('templates/' . $template->id . '/attributes', [
-            'name' => $attribute->name,
-            'typeId' => $typeTable->id,
-            'data' => $attribute->data
-        ]);
-    }
-
-    //todo - implement endpoint - attribute update
-
-    public function testGetAttributeSuccess()
-    {
-        /** @var Attribute $attribute */
         $attribute = factory(Attribute::class)->create();
 
-        $response = $this->jsonRequestGetEntitySuccess('attributes/' . $attribute->getId());
-        //TODO documentation doesn't have commented fields
-        $response->assertJson([
-            'name' => $attribute->getName(),
-//            'templateId' => $attribute->getTemplateId(),
-//            'isLocked' => $attribute->isLocked(),
-//            'parentAttributeId' => $attribute->getParentAttributeId(),
-            'type' => [
-                'id' => $attribute->getTypeId()
-            ]
-        ]);
+        $response = $this->json('PUT', '/api/attributes/' . $attribute->id, array_only($attribute->toArray(), $attribute->getFillable()));
 
-        //TODO validate by laravel validation tools
-        $this->assertJsonStructure($response, array_keys(config('models.Attribute')));
+        $response
+            ->assertStatus(200)
+            ->assertJson((new AttributeResource($attribute))->resolve());
     }
 
-    public function testGetAttributeNotFound()
+    /**
+     * Tests attribute delete endpoint
+     *
+     * @return void
+     */
+    public function testAttributeDelete()
     {
-        $this->jsonRequestGetEntityNotFound('attributes/' . 0);
-    }
-
-    public function testDeleteAttributeSuccess()
-    {
-        /** @var Attribute $attribute */
         $attribute = factory(Attribute::class)->create();
-        $this->jsonRequestDelete('attributes', $attribute->getId(), self::DB_TABLE);
+
+        $response = $this->json('DELETE', '/api/attributes/' . $attribute->id);
+
+        $response
+            ->assertStatus(204);
     }
 
-    public function testDeleteAttributeNotExistSuccess()
-    {
-        $this->jsonRequestDelete('attributes', 0, self::DB_TABLE);
-    }
-
-    public function testListOfAttributesWithPaginationSuccess()
-    {
-        /** @var Template $template */
-        $template = factory(Template::class)->create();
-        factory(Attribute::class, 20)->create([
-            'template_id' => $template->getId()
-        ]);
-
-        $template = factory(Template::class)->create();
-        factory(Attribute::class, 14)->create([
-            'template_id' => $template->getId()
-        ]);
-
-        $response = $this->jsonRequest('GET', 'templates/' . $template->getId() . '/attributes');
-        $response->assertStatus(200);
-    }
 }

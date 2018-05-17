@@ -4,12 +4,12 @@ namespace App\Repositories;
 
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
-use App\Entities\Type;
+use App\Entities\Attribute;
 
 /**
  * Class DocumentRepositoryEloquent.
  */
-class TypeRepositoryEloquent extends BaseRepository implements TypeRepository
+class AttributeRepositoryEloquent extends BaseRepository implements AttributeRepository
 {
     /**
      * Specify Model class name
@@ -18,7 +18,7 @@ class TypeRepositoryEloquent extends BaseRepository implements TypeRepository
      */
     public function model()
     {
-        return Type::class;
+        return Attribute::class;
     }
 
     /**
@@ -27,12 +27,5 @@ class TypeRepositoryEloquent extends BaseRepository implements TypeRepository
     public function boot()
     {
         $this->pushCriteria(app(RequestCriteria::class));
-    }
-
-    public function getTypeByMachineName($machineName): Type
-    {
-        return $this->findWhere([
-            ['machine_name', '=', $machineName]
-        ])->first();
     }
 }

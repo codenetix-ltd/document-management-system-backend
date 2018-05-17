@@ -2,24 +2,24 @@
 
 namespace App\Services;
 
-use App\Entities\Label;
-use App\Repositories\LabelRepository;
+use App\Entities\Attribute;
+use App\Repositories\AttributeRepository;
 
 /**
  * Created by Codenetix team <support@codenetix.com>
  */
-class LabelService
+class AttributeService
 {
     /**
-     * @var LabelRepository
+     * @var AttributeRepository
      */
     protected $repository;
 
     /**
-     * LabelService constructor.
-     * @param LabelRepository $repository
+     * AttributeService constructor.
+     * @param AttributeRepository $repository
      */
-    public function __construct(LabelRepository $repository)
+    public function __construct(AttributeRepository $repository)
     {
         $this->repository = $repository;
     }
@@ -27,26 +27,23 @@ class LabelService
     /**
      * @return mixed
      */
-    public function list()
-    {
+    public function list(){
         return $this->repository->all();
     }
 
     /**
      * @param int $id
-     * @return Label
+     * @return Attribute
      */
-    public function find(int $id)
-    {
+    public function find(int $id){
         return $this->repository->find($id);
     }
 
     /**
      * @param array $data
-     * @return Label
+     * @return Attribute
      */
-    public function create(array $data)
-    {
+    public function create(array $data){
         return $this->repository->create($data);
     }
 
@@ -55,21 +52,18 @@ class LabelService
      * @param int $id
      * @return mixed
      */
-    public function update(array $data, int $id)
-    {
+    public function update(array $data, int $id){
         return $this->repository->update($data, $id);
     }
 
     /**
      * @param int $id
      */
-    public function delete(int $id)
-    {
+    public function delete(int $id){
         $this->repository->delete($id);
     }
 
-    public function paginate()
-    {
+    public function paginate(){
         return $this->repository->paginate();
     }
 }

@@ -32,7 +32,7 @@ class LabelsController extends Controller
      */
     public function index()
     {
-        $labels = $this->service->list();
+        $labels = $this->service->paginate();
         return LabelResource::collection($labels);
     }
 

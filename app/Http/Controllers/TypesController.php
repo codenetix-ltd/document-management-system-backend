@@ -29,7 +29,7 @@ class TypesController extends Controller
      */
     public function index()
     {
-        $types = $this->service->list();
+        $types = $this->service->paginate();
         return TypeResource::collection($types);
     }
 }

@@ -2,10 +2,18 @@
 
 namespace App\Providers;
 
+use App\Repositories\AttributeRepository;
+use App\Repositories\AttributeRepositoryEloquent;
+use App\Repositories\LabelRepository;
+use App\Repositories\LabelRepositoryEloquent;
 use App\Repositories\PermissionGroupRepository;
 use App\Repositories\PermissionGroupRepositoryEloquent;
 use App\Repositories\RoleRepository;
 use App\Repositories\RoleRepositoryEloquent;
+use App\Repositories\TemplateRepository;
+use App\Repositories\TemplateRepositoryEloquent;
+use App\Repositories\TypeRepository;
+use App\Repositories\TypeRepositoryEloquent;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -27,11 +35,12 @@ class RepositoryServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(\App\Repositories\TemplateRepository::class, \App\Repositories\TemplateRepositoryEloquent::class);
-        $this->app->bind(\App\Repositories\LabelRepository::class, \App\Repositories\LabelRepositoryEloquent::class);
-        $this->app->bind(\App\Repositories\TypeRepository::class, \App\Repositories\TypeRepositoryEloquent::class);
+        $this->app->bind(TemplateRepository::class, TemplateRepositoryEloquent::class);
+        $this->app->bind(LabelRepository::class, LabelRepositoryEloquent::class);
+        $this->app->bind(TypeRepository::class, TypeRepositoryEloquent::class);
         $this->app->bind(PermissionGroupRepository::class, PermissionGroupRepositoryEloquent::class);
         $this->app->bind(RoleRepository::class, RoleRepositoryEloquent::class);
+        $this->app->bind(AttributeRepository::class, AttributeRepositoryEloquent::class);
 
     }
 }

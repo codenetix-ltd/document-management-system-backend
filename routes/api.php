@@ -25,10 +25,7 @@ Route::prefix('v1')->group(function () {
     Route::delete('documents', 'API\DocumentController@bulkDestroy');
     Route::patch('documents', 'API\DocumentController@bulkPatchUpdate');
 
-    Route::post('templates/{templateId}/attributes', 'API\AttributeController@store');
-    Route::get('attributes/{id}', 'API\AttributeController@show');
-    Route::delete('attributes/{id}', 'API\AttributeController@destroy');
-    Route::get('templates/{id}/attributes', 'API\AttributeController@index');
+
 
     Route::get('documents/{id}/versions', 'API\DocumentVersionController@index');
     Route::put('documents/{id}/actualVersion', 'API\DocumentController@setActualVersion');
@@ -44,4 +41,9 @@ Route::resource('labels', 'LabelsController');
 Route::apiResource('types', 'TypesController', ['only' => ['index']]);
 Route::get('permission-groups', 'PermissionGroupsController@index');
 Route::apiResource('roles', 'RolesController');
+
+Route::post('templates/{templateId}/attributes', 'AttributesController@store');
+Route::get('attributes/{id}', 'AttributesController@show');
+Route::delete('attributes/{id}', 'AttributesController@destroy');
+Route::get('templates/{id}/attributes', 'AttributesController@index');
 

@@ -2,31 +2,85 @@
 
 namespace App\Services;
 
-use App\Contracts\Repositories\IRoleRepository;
-use App\Role;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator as LengthAwarePaginatorContract;
+use App\Entities\Role;
+use App\Repositories\RoleRepository;
 
+/**
+ * Created by Codenetix team <support@codenetix.com>
+ */
 class RoleService
 {
-    private $repository;
+    /**
+     * @var RoleRepository
+     */
+    protected $repository;
 
-    public function __construct(IRoleRepository $repository)
+    /**
+     * RoleService constructor.
+     * @param RoleRepository $repository
+     */
+    public function __construct(RoleRepository $repository)
     {
         $this->repository = $repository;
     }
 
-    public function create(Role $requestRole) : Role
-    {
-        $role = $this->repository->create($requestRole);
-        if ($requestRole->getTemplatesIds()) {
-            $this->repository->syncTemplates($role, $requestRole->getTemplatesIds());
+    /**
+     * @return mixed
+     */
+    public function list(){
+        return $this->repository->paginate();
+    }
+
+    /**
+     * @param int $id
+     * @return Role
+     */
+    public function find(int $id){
+        return $this->repository->find($id);
+    }
+
+    /**
+     * @param array $data
+     * @return Role
+     */
+    public function create(array $data){
+        $role = $this->repository->create($data);
+
+        if (!empty($data['template_ids'])) {
+            $this->repository->sync($role->id, 'templates', $data['template_ids']);
         }
 
-        if ($requestRole->getPermissionValues()) {
-            $this->savePermissionValues($role, $requestRole->getPermissionValues());
+        if (!empty($data['permissionValues'])) {
+            $this->savePermissionValues($role, $data['permissionValues']);
         }
 
         return $role;
+    }
+
+    /**
+     * @param array $data
+     * @param int $id
+     * @return mixed
+     */
+    public function update(array $data, int $id){
+        $role = $this->repository->update($data, $id);
+
+        if (!empty($data['template_ids'])) {
+            $this->repository->sync($role->id, 'templates', $data['template_ids']);
+        }
+
+        if (!empty($data['permissionValues'])) {
+            $this->savePermissionValues($role, $data['permissionValues']);
+        }
+
+        return $role;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function delete(int $id){
+        $this->repository->delete($id);
     }
 
     private function savePermissionValues(Role $role, array $permissionValues)
@@ -53,35 +107,5 @@ class RoleService
                 ]);
             }
         }
-    }
-
-    public function delete(int $id): ?bool
-    {
-        return $this->repository->delete($id);
-    }
-
-    public function get(int $id): Role
-    {
-        return $this->repository->findOrFail($id);
-    }
-
-    public function list(): LengthAwarePaginatorContract
-    {
-        return $this->repository->list();
-    }
-
-    public function update(int $id, Role $requestRole): Role
-    {
-        $role = $this->repository->update($id, $requestRole);
-
-        if ($requestRole->getTemplatesIds()) {
-            $this->repository->syncTemplates($role, $requestRole->getTemplatesIds());
-        }
-
-        if ($requestRole->getPermissionValues()) {
-            $this->savePermissionValues($role, $requestRole->getPermissionValues());
-        }
-
-        return $role;
     }
 }

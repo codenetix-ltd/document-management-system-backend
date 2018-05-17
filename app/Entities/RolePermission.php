@@ -3,9 +3,13 @@
 namespace App\Entities;
 
 use Illuminate\Database\Eloquent\Relations\Pivot;
+use Prettus\Repository\Contracts\Transformable;
+use Prettus\Repository\Traits\TransformableTrait;
 
-class RolePermission extends Pivot
+class RolePermission extends Pivot implements Transformable
 {
+    use TransformableTrait;
+
     protected $table = 'role_permission';
 
     /**

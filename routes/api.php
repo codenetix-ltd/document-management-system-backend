@@ -17,10 +17,6 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('v1')->group(function () {
     Route::apiResource('users', 'API\UserController');
 
-    Route::apiResource('tags', 'API\TagController');
-
-    Route::apiResource('types', 'API\TypeController', ['only' => ['index']]);
-
     //Order is important (patch overrides apiResource)
     Route::patch('documents/{id}', 'API\DocumentController@patchUpdate');
     Route::put('documents/{id}', 'API\DocumentController@update');
@@ -41,13 +37,11 @@ Route::prefix('v1')->group(function () {
     Route::get('logs', 'Api\LogController@index');
 
     Route::post('files', 'FileController@uploadFile');
-
-    Route::apiResource('roles', 'API\RoleController');
-    Route::get('permission-groups', 'API\PermissionController@index');
 });
 
 Route::resource('templates', 'TemplatesController');
 Route::resource('labels', 'LabelsController');
 Route::apiResource('types', 'TypesController', ['only' => ['index']]);
 Route::get('permission-groups', 'PermissionGroupsController@index');
+Route::apiResource('roles', 'RolesController');
 

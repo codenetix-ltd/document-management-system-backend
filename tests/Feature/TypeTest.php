@@ -2,14 +2,43 @@
 
 namespace Tests\Feature;
 
-use Tests\ApiTestCase;
+use App\Entities\Type;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\Resources\Json\Resource;
+use Tests\TestCase;
 
-class TypeTest extends ApiTestCase
+/**
+ * Created by Codenetix team <support@codenetix.com>
+ */
+class TypeTest extends TestCase
 {
-    private const PATH = 'types';
+    use RefreshDatabase;
 
-    public function testListOfTemplatesWithPaginationSuccess()
+    /**
+     * Setup the test environment.
+     *
+     * @return void
+     */
+    protected function setUp()
     {
-        $this->jsonRequestObjectsWithPagination(self::PATH);
+        parent::setUp();
+        Resource::withoutWrapping();
+    }
+
+    /**
+     * Tests type list endpoint
+     *
+     * @return void
+     */
+    public function testTypeList()
+    {
+        factory(Type::class, 10)->create();
+
+        $response = $this->json('GET', '/api/types');
+        $response->dump();
+
+        $this->assetJsonPaginationStructure($response);
+
+        $response->assertStatus(200);
     }
 }

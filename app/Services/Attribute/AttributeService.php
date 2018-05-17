@@ -110,6 +110,7 @@ class AttributeService {
             throw new InvalidAttributeDataStructureException('Rows properties is empty');
         }
 
+        //TODO REMOVE getTypeIds => USE ANOTHER METHOD FOR GETTING TYPE IDS
         $availableTypeIds = $this->typeRepository->getTypeIds();
         $totalColumns = count($data['headers']);
         array_walk($data['rows'], function ($item) use ($totalColumns, $availableTypeIds) {
@@ -129,7 +130,7 @@ class AttributeService {
 
     private function buildData(Attribute $attribute): ?array
     {
-        $type = $this->typeRepository->getTypeById($attribute->getTypeId());
+        $type = $this->typeRepository->find($attribute->getTypeId());
         if ($type->getMachineName() == TypeService::TYPE_TABLE) {
             return $this->buildDataForTable($attribute->getId());
         }
@@ -180,7 +181,7 @@ class AttributeService {
      */
     private function createComplexAttribute(Attribute $attribute): Attribute
     {
-        $type = $this->typeRepository->getTypeById($attribute->getTypeId());
+        $type = $this->typeRepository->find($attribute->getTypeId());
 
         //TODO - create factory for different types
         if ($type->getMachineName() == TypeService::TYPE_TABLE) {

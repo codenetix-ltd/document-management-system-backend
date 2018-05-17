@@ -2,21 +2,24 @@
 
 namespace App\Http\Resources;
 
-use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
 
-class TypeResource extends BaseResource
+class TypeResource extends JsonResource
 {
-    protected function getStructure(): array
-    {
-        return config('models.Type');
-    }
-
-    protected function getData(Request $request): array
+    /**
+     * Transform the resource into an array.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return array
+     */
+    public function toArray($request)
     {
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'machineName' => $this->machine_name
+            'machineName' => $this->machine_name,
+            'createdAt' => $this->created_at->timestamp,
+            'updatedAt' => $this->updated_at->timestamp
         ];
     }
 }

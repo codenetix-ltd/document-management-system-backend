@@ -66,42 +66,36 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(IUserRepository::class, UserRepository::class);
-
-        $this->app->bind(IFileRepository::class, FileRepository::class);
-        $this->app->bind(IFileManager::class, FileManager::class);
-        $this->app->bind(IFileCreateService::class, FileCreateService::class);
-
-        $this->app->bind(ITemplateRepository::class, TemplateRepository::class);
-
-        $this->app->bind(ITagRepository::class, TagRepository::class);
-
-        $this->app->bind(ITypeRepository::class, TypeRepository::class);
-
-        $this->app->bind(IAttributeRepository::class, AttributeRepository::class);
-
-        $this->app->bind(IDocumentRepository::class, DocumentRepository::class);
-
-        $this->app->bind(IDocumentVersionRepository::class, DocumentVersionRepository::class);
-
-        $this->app->bind(IAttributeValueRepository::class, AttributeValueRepository::class);
-
+//        $this->app->bind(IUserRepository::class, UserRepository::class);
+//
+//        $this->app->bind(IFileRepository::class, FileRepository::class);
+//        $this->app->bind(IFileManager::class, FileManager::class);
+//        $this->app->bind(IFileCreateService::class, FileCreateService::class);
+//
+//        $this->app->bind(ITemplateRepository::class, TemplateRepository::class);
+//
+//        $this->app->bind(IAttributeRepository::class, AttributeRepository::class);
+//
+//        $this->app->bind(IDocumentRepository::class, DocumentRepository::class);
+//
+//        $this->app->bind(IDocumentVersionRepository::class, DocumentVersionRepository::class);
+//
+//        $this->app->bind(IAttributeValueRepository::class, AttributeValueRepository::class);
+//
         $this->app->bind(ILogRepository::class, LogRepository::class);
-
-        $this->app->bind(ITransformer::class, Transformer::class);
-
-        $this->app->bind(IRoleRepository::class, RoleRepository::class);
+//
+//        $this->app->bind(ITransformer::class, Transformer::class);
+//
+//        $this->app->bind(IRoleRepository::class, RoleRepository::class);
 
 //_____________________________________________________________________________________________________________________
-        $this->app->bind(ADocumentCompareService::class, DocumentCompareService::class);
-        $this->app->bind(ADocumentViewService::class, DocumentViewService::class);
-        //Adapters
-        $this->app->bind(ITableAdapter::class, TableAdapter::class);
-        //Repositories
-
-        $this->app->bind(ITransaction::class, DBTransaction::class);
-
+//        $this->app->bind(ADocumentCompareService::class, DocumentCompareService::class);
+//        $this->app->bind(ADocumentViewService::class, DocumentViewService::class);
+//        $this->app->bind(ITableAdapter::class, TableAdapter::class);
+//
+//        $this->app->bind(ITransaction::class, DBTransaction::class);
+//
         $this->app->bind(ILogger::class, LogService::class);
-        $this->app->bind(IEventDispatcher::class, LaravelEventDispatcher::class);
+//        $this->app->bind(IEventDispatcher::class, LaravelEventDispatcher::class);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-use App\Type;
+use App\Entities\Type;
 use App\User;
 use Illuminate\Database\Seeder;
 

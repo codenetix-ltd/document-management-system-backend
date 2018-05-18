@@ -2,11 +2,10 @@
 
 namespace App\Entities;
 
-use Illuminate\Database\Eloquent\Relations\Pivot;
 use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
 
-class QualifierRolePermission extends Pivot implements Transformable
+class QualifierRolePermission extends BasePivotEntity implements Transformable
 {
     use TransformableTrait;
 

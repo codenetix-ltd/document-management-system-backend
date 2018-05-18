@@ -12,11 +12,11 @@ $factory->define(Attribute::class, function (Faker $faker) {
 
     return [
         'name' => $faker->unique()->word,
-        'template_id' => function () {
+        'templateId' => function () {
             return factory(Template::class)->create()->id;
         },
-        'type_id' => $typeString->id,
-        'is_locked' => false,
+        'typeId' => $typeString->id,
+        'isLocked' => false,
         'order' => 0
     ];
 });

@@ -2,14 +2,13 @@
 
 namespace App\Entities;
 
-use Illuminate\Database\Eloquent\Model;
 use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
 
 /**
  * Class Label.
  */
-class Label extends Model implements Transformable
+class Label extends BaseEntity implements Transformable
 {
     use TransformableTrait;
 

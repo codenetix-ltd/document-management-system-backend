@@ -2,9 +2,7 @@
 
 namespace App\Entities;
 
-use Illuminate\Database\Eloquent\Model;
-
-class AttributeValue extends Model
+class AttributeValue extends BaseEntity
 {
     protected $fillable = [
         'attribute_id', 'document_version_id', 'version_name', 'version_name', 'value',

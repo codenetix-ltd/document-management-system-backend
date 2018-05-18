@@ -38,25 +38,15 @@ class AttributesController extends Controller
         return AttributeResource::collection($attributes);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  AttributeCreateRequest $request
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function store(AttributeCreateRequest $request)
+    public function store($templateId, AttributeCreateRequest $request)
     {
-        $attribute = $this->service->create($request->all());
+        $attribute = $this->service->create($templateId, $request->all());
         return new AttributeResource($attribute);
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int $id
-     *
-     * @return \Illuminate\Http\Response
+     * @param $id
+     * @return AttributeResource
      */
     public function show($id)
     {

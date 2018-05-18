@@ -2,14 +2,13 @@
 
 namespace App\Entities;
 
-use Illuminate\Database\Eloquent\Model;
 use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
 
 /**
  * Class Attribute.
  */
-class Attribute extends Model implements Transformable
+class Attribute extends BaseEntity implements Transformable
 {
     use TransformableTrait;
 
@@ -18,7 +17,7 @@ class Attribute extends Model implements Transformable
      *
      * @var array
      */
-    protected $fillable = ['name', 'type_id'];
+    protected $fillable = ['name', 'typeId', 'templateId', 'order'];
 
     private $data;
 

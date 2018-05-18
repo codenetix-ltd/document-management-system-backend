@@ -27,28 +27,6 @@ class AttributeService {
     }
 
     /**
-     * @param Attribute $attribute
-     * @param int $templateId
-     * @return Attribute
-     * @throws FailedAttributeCreateException
-     * @throws InvalidAttributeTypeException
-     * @throws InvalidAttributeDataStructureException
-     */
-    public function create(Attribute $attribute, int $templateId) : Attribute
-    {
-        $attribute->setTemplateId($templateId);
-        $attribute->setOrder($this->repository->getDefaultAttributeOrderByTemplateId($attribute->getTemplateId()));
-
-        if (!$attribute->getData()) {
-            $attribute = $this->repository->create($attribute);
-        } else {
-            $attribute = $this->createComplexAttribute($attribute);
-        }
-
-        return $this->get($attribute->getId());
-    }
-
-    /**
      * @param int $id
      * @return bool|null
      * @throws FailedAttributeDeleteException
@@ -128,15 +106,7 @@ class AttributeService {
         return true;
     }
 
-    private function buildData(Attribute $attribute): ?array
-    {
-        $type = $this->typeRepository->find($attribute->getTypeId());
-        if ($type->getMachineName() == TypeService::TYPE_TABLE) {
-            return $this->buildDataForTable($attribute->getId());
-        }
 
-        return null;
-    }
 
     private function buildDataForTable(int $id): array
     {

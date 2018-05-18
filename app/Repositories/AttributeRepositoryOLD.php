@@ -10,7 +10,7 @@ use App\TableTypeRow;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
-class AttributeRepository implements IAttributeRepository
+class AttributeRepositorqweqey implements IAttributeRepository
 {
     public function getAttributeValuesByDocumentVersionId($documentVersionId)
     {
@@ -44,17 +44,6 @@ class AttributeRepository implements IAttributeRepository
         $tableTypeRow->save();
 
         return $tableTypeRow;
-    }
-
-    public function getDefaultAttributeOrderByTemplateId(int $templateId): int
-    {
-        $maxOrder = Attribute::where('template_id', $templateId)->where('parent_attribute_id', null)->max('order');
-
-        if (is_null($maxOrder)) {
-            return 0;
-        } else {
-            return $maxOrder + 1;
-        }
     }
 
     public function findOrFail(int $id): Attribute

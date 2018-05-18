@@ -8,6 +8,7 @@ use App\Http\Resources\AttributeCollectionResource;
 use App\Http\Resources\AttributeResource;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Resources\Json\Resource;
+use Tests\Stubs\Requests\AttributeStoreRequestStub;
 use Tests\TestCase;
 
 /**
@@ -68,18 +69,31 @@ class AttributeTest extends TestCase
      *
      * @return void
      */
-    public function testAttributeStore()
+    public function testAttributeStoreTypeString()
     {
-        $attribute = factory(Attribute::class)->make();
+        $stub = (new AttributeStoreRequestStub())->buildAttributeWithTypeString();
 
-        $response = $this->json('POST', '/api/attributes', $attribute->toArray());
-
-        $attribute = Attribute::first();
+        $response = $this->json('POST', '/api/templates/' . $stub['templateId'] . '/attributes', $stub['attribute']);
+        $response->dump();
 
         $response
             ->assertStatus(201)
-            ->assertJson((new AttributeResource($attribute))->resolve());
+            ->assertJson([
+                'name' => $stub['attribute']['name'],
+                'templateId' => $stub['templateId'],
+                'typeId' => $stub['attribute']['typeId'],
+                'isLocked' => false,
+                'order' => 0
+            ]);
     }
+
+
+
+
+
+
+
+
 
     /**
      * Tests attribute update endpoint

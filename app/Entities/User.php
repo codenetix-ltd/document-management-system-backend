@@ -14,6 +14,20 @@ class User extends Authenticatable implements Transformable
 
     use Notifiable, HasApiTokens;
 
+    public function getAttribute($key)
+    {
+        if (array_key_exists($key, $this->relations)) {
+            return parent::getAttribute($key);
+        } else {
+            return parent::getAttribute(snake_case($key));
+        }
+    }
+
+    public function setAttribute($key, $value)
+    {
+        return parent::setAttribute(snake_case($key), $value);
+    }
+
     public function templates()
     {
         return $this->belongsToMany(Template::class, "user_template");

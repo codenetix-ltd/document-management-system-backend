@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests;
 use App\Http\Requests\AttributeCreateRequest;
-use App\Http\Requests\AttributeUpdateRequest;
 use App\Http\Resources\AttributeCollectionResource;
 use App\Http\Resources\AttributeResource;
 use App\Services\AttributeService;
+use App\Services\TemplateService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
 /**
@@ -20,61 +20,73 @@ class AttributesController extends Controller
      */
     protected $service;
 
+    protected $templateService;
+
     /**
      * AttributesController constructor.
      * @param AttributeService $service
+     * @param TemplateService $templateService
      */
-    public function __construct(AttributeService $service)
+    public function __construct(AttributeService $service, TemplateService $templateService)
     {
         $this->service = $service;
+        $this->templateService = $templateService;
     }
 
     /**
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @return AttributeCollectionResource
      */
     public function index()
     {
         $attributes = $this->service->paginate();
-        return AttributeResource::collection($attributes);
+
+        return (new AttributeCollectionResource($attributes, $this->service));
     }
 
+    /**
+     * @param $templateId
+     * @param AttributeCreateRequest $request
+     * @return JsonResponse
+     * @throws \App\Exceptions\FailedAttributeCreateException
+     * @throws \App\Exceptions\InvalidAttributeDataStructureException
+     * @throws \App\Exceptions\InvalidAttributeTypeException
+     */
     public function store($templateId, AttributeCreateRequest $request)
     {
         $attribute = $this->service->create($templateId, $request->all());
-        return new AttributeResource($attribute);
+
+        return (new AttributeResource($attribute, $this->service))->response()->setStatusCode(201);
     }
 
     /**
+     * @param $templateId
      * @param $id
      * @return AttributeResource
      */
-    public function show($id)
+    public function show($templateId, $id)
     {
+        $this->templateService->find($templateId);
         $attribute = $this->service->find($id);
-        return new AttributeResource($attribute);
+        return new AttributeResource($attribute, $this->service);
     }
 
+//    public function update(AttributeUpdateRequest $request, $id)
+//    {
+//        $attribute = $this->service->update($request->all(), $id);
+//        return new AttributeResource($attribute);
+//    }
+
     /**
-     * @param AttributeUpdateRequest $request
+     * @param $templateId
      * @param $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     * @throws \App\Exceptions\FailedAttributeDeleteException
      */
-    public function update(AttributeUpdateRequest $request, $id)
+    public function destroy($templateId, $id)
     {
-        $attribute = $this->service->update($request->all(), $id);
-        return new AttributeResource($attribute);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
+        $this->templateService->find($templateId);
         $this->service->delete($id);
+
         return response()->json([], Response::HTTP_NO_CONTENT);
     }
 }

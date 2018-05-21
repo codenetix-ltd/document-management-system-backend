@@ -4,11 +4,13 @@ namespace Tests\Feature;
 
 use App\Entities\Attribute;
 use App\Entities\Template;
-use App\Http\Resources\AttributeCollectionResource;
 use App\Http\Resources\AttributeResource;
+use App\Services\AttributeService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Resources\Json\Resource;
-use Tests\Stubs\Requests\AttributeStoreRequestStub;
+use Illuminate\Http\Response;
+use Tests\Stubs\AttributeWithTypeStringStub;
+use Tests\Stubs\AttributeWithTypeTableStub;
 use Tests\TestCase;
 
 /**
@@ -18,6 +20,8 @@ class AttributeTest extends TestCase
 {
     use RefreshDatabase;
 
+    private $attributeService;
+
     /**
      * Setup the test environment.
      *
@@ -26,6 +30,7 @@ class AttributeTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
+        $this->attributeService = $this->app->make(AttributeService::class);
         Resource::withoutWrapping();
     }
 
@@ -37,9 +42,8 @@ class AttributeTest extends TestCase
     public function testAttributeList()
     {
         $template = factory(Template::class)->create();
-
         factory(Attribute::class, 10)->create([
-            'template_id' => $template->id
+            'templateId' => $template->id
         ]);
 
         $response = $this->json('GET', '/api/templates/' . $template->id . '/attributes');
@@ -55,60 +59,67 @@ class AttributeTest extends TestCase
      */
     public function testAttributeGet()
     {
-        $attributes = factory(Attribute::class, 10)->create();
+        $template = factory(Template::class)->create();
+        $attribute = factory(Attribute::class)->create([
+            'templateId' => $template->id
+        ]);
 
-        $response = $this->json('GET', '/api/attributes/' . $attributes[0]->id);
-
+        $response = $this->json('GET', '/api/templates/'.$template->id.'/attributes/' . $attribute->id);
         $response
             ->assertStatus(200)
-            ->assertJson((new AttributeResource($attributes[0]))->resolve());
+            ->assertJson((new AttributeResource($attribute, $this->attributeService))->resolve());
     }
 
     /**
-     * Tests attribute store endpoint
-     *
-     * @return void
+     * @throws \Exception
      */
     public function testAttributeStoreTypeString()
     {
-        $stub = (new AttributeStoreRequestStub())->buildAttributeWithTypeString();
+        $stub = new AttributeWithTypeStringStub();
 
-        $response = $this->json('POST', '/api/templates/' . $stub['templateId'] . '/attributes', $stub['attribute']);
-        $response->dump();
+        $response = $this->json('POST', '/api/templates/' . $stub->getTemplateId() . '/attributes', $stub->buildRequest());
+        $attributeModel = Attribute::find($response->decodeResponseJson('id'));
 
         $response
             ->assertStatus(201)
-            ->assertJson([
-                'name' => $stub['attribute']['name'],
-                'templateId' => $stub['templateId'],
-                'typeId' => $stub['attribute']['typeId'],
-                'isLocked' => false,
-                'order' => 0
-            ]);
+            ->assertExactJson($stub->buildResponse($attributeModel));
     }
 
-
-
-
-
-
-
-
-
     /**
-     * Tests attribute update endpoint
-     *
-     * @return void
+     * @throws \Exception
      */
-    public function testAttributeUpdate()
+    public function testAttributeStoreTypeTable()
     {
-        $attribute = factory(Attribute::class)->create();
+        $stub = new AttributeWithTypeTableStub();
 
-        $response = $this->json('PUT', '/api/attributes/' . $attribute->id, array_only($attribute->toArray(), $attribute->getFillable()));
+        $response = $this->json('POST', '/api/templates/' . $stub->getTemplateId() . '/attributes', $stub->buildRequest());
+        $attributeModel = Attribute::find($response->decodeResponseJson('id'));
 
         $response
-            ->assertStatus(200)
-            ->assertJson((new AttributeResource($attribute))->resolve());
+            ->assertStatus(201)
+            ->assertExactJson($stub->buildResponse($attributeModel));
+    }
+
+    public function testAttributeStoreValidationError()
+    {
+        $stub = new AttributeWithTypeStringStub();
+        $data = $stub->buildRequest();
+        $fieldKey = 'name';
+        unset($data[$fieldKey]);
+
+        $response = $this->json('POST', '/api/templates/' . $stub->getTemplateId() . '/attributes', $data);
+
+        $response
+            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
+            ->assertJsonValidationErrors([$fieldKey]);
+    }
+
+    public function testGetAttributeNotFound()
+    {
+        $template = factory(Template::class)->create();
+        $response = $this->json('GET', '/api/templates/' . $template->id . '/attributes/' . 0);
+
+        $response->assertStatus(Response::HTTP_NOT_FOUND);
     }
 
     /**
@@ -118,12 +129,39 @@ class AttributeTest extends TestCase
      */
     public function testAttributeDelete()
     {
-        $attribute = factory(Attribute::class)->create();
+        $template = factory(Template::class)->create();
+        $attribute = factory(Attribute::class)->create([
+            'templateId' => $template->id
+        ]);
 
-        $response = $this->json('DELETE', '/api/attributes/' . $attribute->id);
-
-        $response
-            ->assertStatus(204);
+        $response = $this->json('DELETE', '/api/templates/' . $template->id . '/attributes/' . $attribute->id);
+        $response->assertStatus(204);
     }
+
+    public function testAttributeDeleteWhichDoesNotExist()
+    {
+        $template = factory(Template::class)->create();
+
+        $response = $this->json('DELETE', '/api/templates/' . $template->id . '/attributes/' . 0);
+        $response->assertStatus(204);
+    }
+
+
+    /**
+     * Tests attribute update endpoint
+     *
+     * @return void
+     */
+//    public function testAttributeUpdate()
+//    {
+//        $attribute = factory(Attribute::class)->create();
+//
+//        $response = $this->json('PUT', '/api/attributes/' . $attribute->id, array_only($attribute->toArray(), $attribute->getFillable()));
+//
+//        $response
+//            ->assertStatus(200)
+//            ->assertJson((new AttributeResource($attribute))->resolve());
+//    }
+
 
 }

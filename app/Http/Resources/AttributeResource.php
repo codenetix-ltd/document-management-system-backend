@@ -9,7 +9,7 @@ class AttributeResource extends JsonResource
 {
     private $attributeService;
 
-    public function __construct(mixed $resource, AttributeService $attributeService)
+    public function __construct($resource, AttributeService $attributeService)
     {
         $this->attributeService = $attributeService;
         parent::__construct($resource);
@@ -27,7 +27,10 @@ class AttributeResource extends JsonResource
             'id' => $this->id,
             'type' => (new TypeResource($this->type))->toArray($request),
             'name' => $this->name,
-            'data' => $this->resource->getData(),
+            'data' => $this->attributeService->buildData($this->resource),
+            'isLocked' => $this->isLocked,
+            'order' => $this->order,
+            'templateId' => $this->templateId,
             'createdAt' => $this->createdAt->timestamp,
             'updatedAt' => $this->updatedAt->timestamp
         ];

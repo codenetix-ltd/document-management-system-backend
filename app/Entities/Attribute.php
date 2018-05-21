@@ -17,9 +17,11 @@ class Attribute extends BaseEntity implements Transformable
      *
      * @var array
      */
-    protected $fillable = ['name', 'typeId', 'templateId', 'order'];
+    protected $fillable = ['name', 'typeId', 'templateId', 'order', 'tableTypeRowId', 'tableTypeColumnId', 'parentAttributeId', 'isLocked'];
 
-    private $data;
+    protected $casts = [
+        'is_locked' => 'boolean'
+    ];
 
     public function attributeValues()
     {
@@ -34,17 +36,5 @@ class Attribute extends BaseEntity implements Transformable
     public function type()
     {
         return $this->belongsTo(Type::class);
-    }
-
-    public function setData(array $data = null): self
-    {
-        $this->data = $data;
-
-        return $this;
-    }
-
-    public function getData(): ?array
-    {
-        return $this->data;
     }
 }

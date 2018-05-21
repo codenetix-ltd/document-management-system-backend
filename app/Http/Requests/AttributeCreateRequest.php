@@ -26,7 +26,7 @@ class AttributeCreateRequest extends FormRequest
         return [
             "name" => "required|string|max:255",
             "typeId" => "required|integer",
-            "data" => "array"//TODO - Add validator
+            "data" => "sometimes|required|array"//TODO - Add validator
         ];
     }
 }

@@ -43,7 +43,8 @@ Route::get('permission-groups', 'PermissionGroupsController@index');
 Route::apiResource('roles', 'RolesController');
 
 Route::post('templates/{templateId}/attributes', 'AttributesController@store');
-Route::get('attributes/{id}', 'AttributesController@show');
-Route::delete('attributes/{id}', 'AttributesController@destroy');
-Route::get('templates/{id}/attributes', 'AttributesController@index');
+Route::get('templates/{templateId}/attributes', 'AttributesController@index');
+Route::get('templates/{templateId}/attributes/{id}', 'AttributesController@show');
+Route::delete('templates/{templateId}/attributes/{id}', 'AttributesController@destroy');
+
 

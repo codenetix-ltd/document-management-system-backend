@@ -23,48 +23,10 @@ $factory->define(Attribute::class, function (Faker $faker) {
 
 $factory->state(Attribute::class, 'table', function (Faker $faker) {
     $typeRepository = app()->make(TypeRepository::class);
-    $typeString = $typeRepository->getTypeByMachineName('string');
+    $typeTable = $typeRepository->getTypeByMachineName('table');
 
     return [
-        'name' => $faker->unique()->word,
-        'data' => [
-            'rows' => [
-                [
-                    'name' => 'row1',
-                    'columns' => [
-                        [
-                            'typeId' => $typeString->id,
-                            'isLocked' => false
-                        ],
-                        [
-                            'typeId' => $typeString->id,
-                            'isLocked' => false
-                        ]
-                    ]
-                ],
-                [
-                    'name' => 'row2',
-                    'columns' => [
-                        [
-                            'typeId' => $typeString->id,
-                            'isLocked' => false
-                        ],
-                        [
-                            'typeId' => $typeString->id,
-                            'isLocked' => false
-                        ]
-                    ]
-                ]
-            ],
-            'headers' => [
-                [
-                    'name' => 'header1',
-                ],
-                [
-                    'name' => 'header2',
-                ],
-            ]
-        ]
+        'typeId' => $typeTable->id,
     ];
 });
 

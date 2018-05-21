@@ -19,4 +19,15 @@ class BaseEntity extends Model
     {
         return parent::setAttribute(snake_case($key), $value);
     }
+
+    public function toArray()
+    {
+        $data = parent::toArray();
+        $result = [];
+        foreach ($data as $key => $item) {
+            $result[camel_case($key)] = $item;
+        }
+
+        return $result;
+    }
 }

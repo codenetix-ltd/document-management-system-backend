@@ -47,7 +47,7 @@ class AttributeTest extends TestCase
         ]);
 
         $response = $this->json('GET', '/api/templates/' . $template->id . '/attributes');
-        $response->assertStatus(200);
+        $response->assertStatus(Response::HTTP_OK);
         $this->assetJsonPaginationStructure($response);
     }
 
@@ -65,7 +65,7 @@ class AttributeTest extends TestCase
 
         $response = $this->json('GET', '/api/templates/'.$template->id.'/attributes/' . $attribute->id);
         $response
-            ->assertStatus(200)
+            ->assertStatus(Response::HTTP_OK)
             ->assertJson((new AttributeResource($attribute, $this->attributeService))->resolve());
     }
 
@@ -80,7 +80,7 @@ class AttributeTest extends TestCase
         $attributeModel = Attribute::find($response->decodeResponseJson('id'));
 
         $response
-            ->assertStatus(201)
+            ->assertStatus(Response::HTTP_CREATED)
             ->assertExactJson($stub->buildResponse($attributeModel));
     }
 
@@ -95,7 +95,7 @@ class AttributeTest extends TestCase
         $attributeModel = Attribute::find($response->decodeResponseJson('id'));
 
         $response
-            ->assertStatus(201)
+            ->assertStatus(Response::HTTP_CREATED)
             ->assertExactJson($stub->buildResponse($attributeModel));
     }
 
@@ -134,7 +134,7 @@ class AttributeTest extends TestCase
         ]);
 
         $response = $this->json('DELETE', '/api/templates/' . $template->id . '/attributes/' . $attribute->id);
-        $response->assertStatus(204);
+        $response->assertStatus(Response::HTTP_NO_CONTENT);
     }
 
     public function testAttributeDeleteWhichDoesNotExist()
@@ -142,7 +142,7 @@ class AttributeTest extends TestCase
         $template = factory(Template::class)->create();
 
         $response = $this->json('DELETE', '/api/templates/' . $template->id . '/attributes/' . 0);
-        $response->assertStatus(204);
+        $response->assertStatus(Response::HTTP_NO_CONTENT);
     }
 
 

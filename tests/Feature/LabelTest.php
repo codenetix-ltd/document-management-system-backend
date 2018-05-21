@@ -6,6 +6,8 @@ use App\Entities\Label;
 use App\Http\Resources\LabelResource;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Resources\Json\Resource;
+use Illuminate\Http\Response;
+use Tests\Stubs\LabelStub;
 use Tests\TestCase;
 
 /**
@@ -39,7 +41,7 @@ class LabelTest extends TestCase
 
         $this->assetJsonPaginationStructure($response);
 
-        $response->assertStatus(200);
+        $response->assertStatus(Response::HTTP_OK);
     }
 
     /**
@@ -49,31 +51,52 @@ class LabelTest extends TestCase
      */
     public function testLabelGet()
     {
-        $labels = factory(Label::class, 10)->create();
+        $label = factory(Label::class)->create();
 
-        $response = $this->json('GET', '/api/labels/' . $labels[0]->id);
+        $response = $this->json('GET', '/api/labels/' . $label->id);
 
         $response
-            ->assertStatus(200)
-            ->assertJson((new LabelResource($labels[0]))->resolve());
+            ->assertStatus(Response::HTTP_OK)
+            ->assertJson((new LabelResource($label))->resolve());
     }
 
     /**
-     * Tests label store endpoint
-     *
-     * @return void
+     * @throws \Exception
      */
     public function testLabelStore()
     {
-        $label = factory(Label::class)->make();
+        $labelStub = new LabelStub();
 
-        $response = $this->json('POST', '/api/labels', $label->toArray());
+        $response = $this->json('POST', '/api/labels', $labelStub->buildRequest());
 
-        $label = Label::first();
+        $label = Label::find($response->decodeResponseJson('id'));
 
         $response
-            ->assertStatus(201)
-            ->assertJson((new LabelResource($label))->resolve());
+            ->assertStatus(Response::HTTP_CREATED)
+            ->assertJson($labelStub->buildResponse($label));
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testLabelStoreValidationError()
+    {
+        $labelStub = new LabelStub();
+        $data = $labelStub->buildRequest();
+        $fieldKey = 'name';
+        unset($data[$fieldKey]);
+
+        $response = $this->json('POST', '/api/labels', $data);
+
+        $response
+            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
+            ->assertJsonValidationErrors([$fieldKey]);
+    }
+
+    public function testGetLabelNotFound()
+    {
+        $response = $this->json('GET', '/api/labels/' . 0);
+        $response->assertStatus(Response::HTTP_NOT_FOUND);
     }
 
     /**
@@ -83,12 +106,12 @@ class LabelTest extends TestCase
      */
     public function testLabelUpdate()
     {
-        $label = factory(Label::class)->create();
+        //$labelStub = new LabelStub();
 
         $response = $this->json('PUT', '/api/labels/' . $label->id, array_only($label->toArray(), $label->getFillable()));
 
         $response
-            ->assertStatus(200)
+            ->assertStatus(Response::HTTP_OK)
             ->assertJson((new LabelResource($label))->resolve());
     }
 
@@ -103,8 +126,14 @@ class LabelTest extends TestCase
 
         $response = $this->json('DELETE', '/api/labels/' . $label->id);
 
-        $response
-            ->assertStatus(204);
+        $response->assertStatus(Response::HTTP_NO_CONTENT);
+    }
+
+    public function testLabelDeleteWhichDoesNotExist()
+    {
+        $response = $this->json('DELETE', '/api/labels/' . 0);
+
+        $response->assertStatus(Response::HTTP_NO_CONTENT);
     }
 
 }

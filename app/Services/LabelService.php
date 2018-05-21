@@ -60,11 +60,13 @@ class LabelService
         return $this->repository->update($data, $id);
     }
 
-    /**
-     * @param int $id
-     */
     public function delete(int $id)
     {
+        $label = $this->repository->findWhere([['id', '=', $id]])->first();
+        if (is_null($label)) {
+            return null;
+        }
+
         $this->repository->delete($id);
     }
 

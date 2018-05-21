@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use App\Entities\Label;
-use App\Http\Resources\LabelResource;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Resources\Json\Resource;
 use Illuminate\Http\Response;
@@ -38,7 +37,6 @@ class LabelTest extends TestCase
         factory(Label::class, 10)->create();
 
         $response = $this->json('GET', '/api/labels');
-
         $this->assetJsonPaginationStructure($response);
 
         $response->assertStatus(Response::HTTP_OK);
@@ -51,13 +49,18 @@ class LabelTest extends TestCase
      */
     public function testLabelGet()
     {
-        $label = factory(Label::class)->create();
+        $labelStub = new LabelStub([], true);
+        $label = $labelStub->getModel();
 
         $response = $this->json('GET', '/api/labels/' . $label->id);
 
         $response
             ->assertStatus(Response::HTTP_OK)
-            ->assertJson((new LabelResource($label))->resolve());
+            ->assertExactJson($labelStub->buildResponse([
+                'id' => $label->id,
+                'createdAt' => $label->createdAt->timestamp,
+                'updatedAt' => $label->updatedAt->timestamp
+            ]));
     }
 
     /**
@@ -73,7 +76,11 @@ class LabelTest extends TestCase
 
         $response
             ->assertStatus(Response::HTTP_CREATED)
-            ->assertJson($labelStub->buildResponse($label));
+            ->assertExactJson($labelStub->buildResponse([
+                'id' => $label->id,
+                'createdAt' => $label->createdAt->timestamp,
+                'updatedAt' => $label->updatedAt->timestamp
+            ]));
     }
 
     /**
@@ -100,19 +107,28 @@ class LabelTest extends TestCase
     }
 
     /**
-     * Tests label update endpoint
-     *
-     * @return void
+     * @throws \Exception
      */
     public function testLabelUpdate()
     {
-        //$labelStub = new LabelStub();
+        $labelStub = new LabelStub([], true);
+        $label = $labelStub->getModel();
+        $newLabelName = 'new label name';
 
-        $response = $this->json('PUT', '/api/labels/' . $label->id, array_only($label->toArray(), $label->getFillable()));
+        $response = $this->json('PUT', '/api/labels/' . $label->id, $labelStub->buildRequest([
+            'name' => $newLabelName
+        ]));
+
+        $labelUpdated = Label::find($response->decodeResponseJson('id'));
 
         $response
             ->assertStatus(Response::HTTP_OK)
-            ->assertJson((new LabelResource($label))->resolve());
+            ->assertExactJson($labelStub->buildResponse([
+                'id' => $labelUpdated->id,
+                'name' => $newLabelName,
+                'createdAt' => $labelUpdated->createdAt->timestamp,
+                'updatedAt' => $labelUpdated->updatedAt->timestamp
+            ]));
     }
 
     /**

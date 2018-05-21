@@ -8,25 +8,27 @@ class LabelStub
 {
     private $label;
 
-    public function __construct()
+    public function __construct($valuesToOverride = [], $persisted = false)
     {
-        $this->label = factory(Label::class)->make();
+        $this->label = factory(Label::class)->{$persisted ? 'create' : 'make'}($valuesToOverride);
     }
 
-    public function buildRequest(): array
+    public function buildRequest($valuesToOverride = []): array
     {
-        return [
+        return array_replace_recursive([
             'name' => $this->label->name,
-        ];
+        ], $valuesToOverride);
     }
 
-    public function buildResponse(Label $labelModel): array
+    public function buildResponse($valuesToOverride = []): array
     {
-        return [
-            'id' => $labelModel->id,
+        return array_replace_recursive([
             'name' => $this->label->name,
-            'createdAt' => $labelModel->createdAt->timestamp,
-            'updatedAt' => $labelModel->updatedAt->timestamp
-        ];
+        ], $valuesToOverride);
+    }
+
+    public function getModel()
+    {
+        return $this->label;
     }
 }

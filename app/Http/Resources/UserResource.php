@@ -2,23 +2,33 @@
 
 namespace App\Http\Resources;
 
+use App\Entities\User;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
 
-class UserResource extends BaseResource
+/**
+ * Class UserResource
+ * @package App\Http\Resources
+ *
+ * @property User $resource
+ */
+class UserResource extends JsonResource
 {
-    protected function getData(Request $request): array
+    /**
+     * Transform the resource into an array.
+     *
+     * @param  Request $request
+     * @return array
+     */
+    public function toArray($request)
     {
         return [
-            'id' => $this->id,
-            'fullName' => $this->full_name,
-            'email' => $this->email,
-            'templatesIds' => $this->templates->pluck('id'),
-            'avatar' => $this->when($this->avatar, new AvatarResource($this->avatar))
+            'id' => $this->resource->id,
+            'fullName' => $this->resource->fullName,
+            'email' => $this->resource->email,
+            'templateIds' => $this->resource->templates->pluck('id')->toArray(),
+            'avatar' => new FileResource($this->resource->avatar),
+            'avatarId' => $this->resource->avatar->getId(),
         ];
-    }
-
-    protected function getStructure(): array
-    {
-        return config('models.User');
     }
 }

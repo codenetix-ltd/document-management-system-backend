@@ -2,111 +2,155 @@
 
 namespace Tests\Feature;
 
-use App\Contracts\Services\File\IFileManager;
-use App\Template;
-use App\User;
-use Illuminate\Foundation\Testing\TestResponse;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
-use Tests\ApiTestCase;
+use App\Entities\User;
+use App\Http\Resources\UserCollectionResource;
+use App\Http\Resources\UserResource;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\Resources\Json\Resource;
+use Illuminate\Http\Response;
+use Tests\Stubs\UserStub;
+use Tests\TestCase;
 
-class UserTest extends ApiTestCase
+/**
+ * Created by Codenetix team <support@codenetix.com>
+ */
+class UserTest extends TestCase
 {
-    private const PATH = 'users';
-    private const DB_TABLE = 'users';
+    use RefreshDatabase;
 
-    public function testCreateUserSuccess()
+    /**
+     * Setup the test environment.
+     *
+     * @return void
+     */
+    protected function setUp()
     {
-        $password = 'password';
-        $templatesIds = Template::all()->take(2)->pluck('id')->toArray();
-
-        $user = factory(User::class)->make([
-            'password' => bcrypt($password),
-        ]);
-
-        Storage::fake('avatars');
-        $fileManager = $this->app->get(IFileManager::class);
-        $file = $fileManager->createImageFile(
-            UploadedFile::fake()->image('avatar.jpg'),
-            config('filesystems.paths.avatars')
-        );
-        $response = $this->jsonRequestPostEntityWithSuccess(self::PATH, [
-            'fullName' => $user->full_name,
-            'email' => $user->email,
-            'templatesIds' => $templatesIds,
-            'password' => $password,
-            'passwordConfirmation' => $password,
-            'avatarId' => $file->id
-        ]);
-        //Storage::disk('avatars')->assertExists('avatar.jpg'); TODO - check files, clear directory after test
-
-        $response->assertJson([
-            'fullName' => $user->full_name,
-            'email' => $user->email,
-            'templatesIds' => $templatesIds
-        ]);
-        $this->assertJsonStructureForUser($response, true);
+        parent::setUp();
+        Resource::withoutWrapping();
     }
 
-    public function testGetUserSuccess()
+    /**
+     * Tests user list endpoint
+     *
+     * @return void
+     */
+    public function testUserList()
     {
-        $user = factory(User::class)->create();
+        factory(User::class, 10)->create();
 
-        $response = $this->jsonRequestGetEntitySuccess(self::PATH . '/' .  $user->id);
-        $response->assertJson([
-            'fullName' => $user->full_name,
-            'email' => $user->email,
-        ]);
-        $this->assertJsonStructureForUser($response);
+        $response = $this->json('GET', '/api/users');
+
+        $this->assetJsonPaginationStructure($response);
+
+        $response->assertStatus(Response::HTTP_OK);
+    }
+
+    /**
+     * Tests $user get endpoint
+     *
+     * @return void
+     */
+    public function testUserGet()
+    {
+        $userStub = new UserStub([], true);
+        /** @var User $user */
+        $user = $userStub->getModel();
+
+        $response = $this->json('GET', '/api/users/' . $user->id);
+
+        $response
+            ->assertStatus(200)
+            ->assertExactJson($userStub->buildResponse(['id' => $user->id]));
+    }
+
+    /**
+     * Tests user store endpoint
+     *
+     * @return void
+     */
+    public function testUserStore()
+    {
+        /** @var User $user */
+        $userStub = new UserStub();
+        $response = $this->json('POST', '/api/users', $userStub->buildRequest([
+            'password' => 'uSERpAsSWOrd',
+            'passwordConfirmation' => 'uSERpAsSWOrd',
+        ]));
+
+        $response->assertStatus(Response::HTTP_CREATED);
+
+        $user = User::find($response->decodeResponseJson()['id']);
+
+        $response
+            ->assertExactJson($userStub->buildResponse([
+                'id' => $user->id
+            ]));
+    }
+
+    /**
+     * Tests user update endpoint
+     *
+     * @return void
+     */
+    public function testUserUpdate()
+    {
+        $userStub = new UserStub([], true);
+        $newFullName = 'John Smith';
+
+        /** @var User $user */
+        $user = $userStub->getModel();
+
+        $response = $this->json('PUT', '/api/users/' . $user->id, $userStub->buildRequest(['fullName' => $newFullName]));
+
+        $response
+            ->assertStatus(200)
+            ->assertJson($userStub->buildResponse(['fullName' => $newFullName]));
+    }
+
+    /**
+     * Tests user delete endpoint
+     *
+     * @return void
+     */
+    public function testUserDelete()
+    {
+        /** @var User $user */
+        $user = (new UserStub([], true))->getModel();
+
+        $response = $this->json('DELETE', '/api/users/' . $user->id);
+
+        $response
+            ->assertStatus(204);
+    }
+
+    public function testLabelDeleteWhichDoesNotExist()
+    {
+        $response = $this->json('DELETE', '/api/users/' . 0);
+
+        $response->assertStatus(Response::HTTP_NO_CONTENT);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUserStoreValidationError()
+    {
+        $labelStub = new UserStub();
+        $data = $labelStub->buildRequest();
+        $fieldKey = 'fullName';
+        unset($data[$fieldKey]);
+
+        $response = $this->json('POST', '/api/users', $data);
+
+        $response
+            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
+            ->assertJsonValidationErrors([$fieldKey]);
     }
 
     public function testGetUserNotFound()
     {
-        $this->jsonRequestGetEntityNotFound(self::PATH . '/' . 0);
+        $response = $this->json('GET', '/api/users/' . 0);
+        $response->assertStatus(Response::HTTP_NOT_FOUND);
     }
 
-    public function testUpdateUserSuccess()
-    {
-        $user = factory(User::class)->create();
-        $userNameNew = 'New Full Name';
-        $templatesIds = Template::all()->take(1)->pluck('id')->toArray(); //TODO - можно ли тут так делать?
-
-        $response = $this->jsonRequestPutEntityWithSuccess(self::PATH .'/' . $user->id, [
-            'fullName' => $userNameNew,
-            'templatesIds' => $templatesIds
-        ]);
-        $response->assertJson([
-            'fullName' => $userNameNew,
-            'templatesIds' => $templatesIds
-        ]);
-        $this->assertJsonStructureForUser($response);
-    }
-
-    public function testDeleteTagSuccess()
-    {
-        $user = factory(User::class)->create();
-        $this->jsonRequestDelete(self::PATH, $user->id, self::DB_TABLE);
-    }
-
-    public function testDeleteTagNotExistSuccess()
-    {
-        $this->jsonRequestDelete(self::PATH, 0, self::DB_TABLE);
-    }
-
-    public function testListOfUsersWithPaginationSuccess()
-    {
-        factory(User::class, 20)->create();
-
-        $this->jsonRequestObjectsWithPagination(self::PATH);
-    }
-
-    private function assertJsonStructureForUser(TestResponse $response, $withAvatar = false)
-    {
-        $structure = array_keys(config('models.User'));
-
-        if (!$withAvatar) {
-            unset($structure['avatar']);
-        }
-        $this->assertJsonStructure($response, $structure);
-    }
 }

@@ -2,23 +2,21 @@
 
 namespace App\Http\Resources;
 
-use Illuminate\Http\Request;
+use App\File;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * @author Vladimir Barmotin <barmotinvladimir@gmail.com>
+ *
+ * @property File $resource
  */
-class FileResource extends ApiResource
+class FileResource extends JsonResource
 {
-    protected function getComplexFields(Request $request): array
+    public function toArray($request): array
     {
         return [
-            'name'=>$this->getOriginalName(),
-            'url' => $this->getPath()
+            'name'=>$this->resource->getOriginalName(),
+            'url' => $this->resource->getPath()
         ];
-    }
-
-    protected function getStructure(): array
-    {
-        return config('models.File');
     }
 }

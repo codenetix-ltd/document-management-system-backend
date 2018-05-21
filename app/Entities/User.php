@@ -2,30 +2,42 @@
 
 namespace App\Entities;
 
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Laravel\Passport\HasApiTokens;
+use App\File;
+use Illuminate\Database\Eloquent\Collection;
 use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
 
-class User extends Authenticatable implements Transformable
+/**
+ * Class User.
+ *
+ * @property int $id
+ * @property string $email
+ * @property string $fullName
+ * @property File $avatar
+ * @property Collection|Document[] $documents
+ * @property Collection|Template[] $templates
+ * @property Collection|Role[] $roles
+ */
+class User extends BaseEntity implements Transformable
 {
     use TransformableTrait;
 
-    use Notifiable, HasApiTokens;
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'fullName', 'email', 'avatarFileId'
+    ];
 
-    public function getAttribute($key)
-    {
-        if (array_key_exists($key, $this->relations)) {
-            return parent::getAttribute($key);
-        } else {
-            return parent::getAttribute(snake_case($key));
-        }
-    }
+    protected $hidden = [
+        'password'
+    ];
 
-    public function setAttribute($key, $value)
+    public function roles()
     {
-        return parent::setAttribute(snake_case($key), $value);
+        return $this->belongsToMany(Role::class, 'user_role');
     }
 
     public function templates()
@@ -43,52 +55,8 @@ class User extends Authenticatable implements Transformable
         return $this->hasOne(File::class, 'id', 'avatar_file_id');
     }
 
-    public function getAvatarURL(){
-        if($this->avatar){
-            return asset('storage/'.$this->avatar->path);
-        } else {
-            return asset('storage/profile-default.png');
-        }
-    }
-
-    public function hasAnyRole($roles)
-    {
-        if (is_array($roles)) {
-            return $this->roles()->whereIn('name', $roles)->exists();
-        } else {
-            return $this->roles()->where('name', $roles)->exists();
-        }
-    }
-
-    public function hasAnyPermission($permissions)
-    {
-        if (is_array($permissions)) {
-            foreach ($permissions as $permission) {
-                foreach ($this->roles as $role) {
-                    if ($role->hasPermission($permission)) return true;
-                }
-            }
-        } else {
-            foreach ($this->roles as $role) {
-                if ($role->hasPermission($permissions)) return true;
-            }
-        }
-
-        return false;
-    }
-
-    public function roles()
-    {
-        return $this->belongsToMany(Role::class, 'user_role');
-    }
-
     public function setPasswordAttribute($password)
     {
         $this->attributes['password'] = bcrypt($password);
-    }
-
-    public function logs()
-    {
-        return $this->morphMany(Log::class, 'reference');
     }
 }

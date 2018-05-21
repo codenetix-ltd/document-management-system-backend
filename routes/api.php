@@ -47,4 +47,7 @@ Route::get('templates/{templateId}/attributes', 'AttributesController@index');
 Route::get('templates/{templateId}/attributes/{id}', 'AttributesController@show');
 Route::delete('templates/{templateId}/attributes/{id}', 'AttributesController@destroy');
 
+Route::apiResource('users', 'UsersController');
+
+
 

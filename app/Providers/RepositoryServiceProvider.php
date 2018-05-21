@@ -16,6 +16,8 @@ use App\Repositories\TemplateRepository;
 use App\Repositories\TemplateRepositoryEloquent;
 use App\Repositories\TypeRepository;
 use App\Repositories\TypeRepositoryEloquent;
+use App\Repositories\UserRepository;
+use App\Repositories\UserRepositoryEloquent;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -44,5 +46,6 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(RoleRepository::class, RoleRepositoryEloquent::class);
         $this->app->bind(AttributeRepository::class, AttributeRepositoryEloquent::class);
         $this->app->bind(DocumentRepository::class, DocumentRepositoryEloquent::class);
+        $this->app->bind(UserRepository::class, UserRepositoryEloquent::class);
     }
 }

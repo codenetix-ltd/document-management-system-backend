@@ -47,7 +47,6 @@ class AttributeTest extends TestCase
         ]);
 
         $response = $this->json('GET', '/api/templates/' . $template->id . '/attributes');
-
         $response->assertStatus(200);
         $this->assetJsonPaginationStructure($response);
     }

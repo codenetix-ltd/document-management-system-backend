@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Entities\TableTypeColumn;
 use App\Entities\TableTypeRow;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
@@ -66,11 +67,11 @@ class AttributeRepositoryEloquent extends BaseRepository implements AttributeRep
 
         return $tableTypeRow;
     }
-//
-//    public function list(int $templateId): Collection
-//    {
-//        return Attribute::where('parent_attribute_id', null)->where('template_id', $templateId)->get();
-//    }
+
+    public function paginateAttributes(int $templateId): LengthAwarePaginator
+    {
+        return Attribute::where('parent_attribute_id', null)->where('template_id', $templateId)->paginate();
+    }
 
 //    public function getAttributeValuesByDocumentVersionId($documentVersionId)
 //    {

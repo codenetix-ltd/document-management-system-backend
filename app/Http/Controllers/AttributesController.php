@@ -33,12 +33,10 @@ class AttributesController extends Controller
         $this->templateService = $templateService;
     }
 
-    /**
-     * @return AttributeCollectionResource
-     */
-    public function index()
+    public function index($templateId)
     {
-        $attributes = $this->service->paginate();
+        $this->templateService->find($templateId); //TODO - add method 'exist' in EloquentRepository
+        $attributes = $this->service->paginateAttributes($templateId);
 
         return (new AttributeCollectionResource($attributes, $this->service));
     }

@@ -84,9 +84,9 @@ class AttributeService
         return $this->repository->update($data, $id);
     }
 
-    public function paginate()
+    public function paginateAttributes($templateId)
     {
-        return $this->repository->paginate();
+        return $this->repository->paginateAttributes($templateId);
     }
 
     private function getDefaultAttributeOrderByTemplateId($templateId): int

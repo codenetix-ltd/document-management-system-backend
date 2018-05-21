@@ -2,10 +2,9 @@
 
 namespace App\Http\Requests;
 
-/**
- * @author Vladimir Barmotin <barmotinvladimir@gmail.com>
- */
-class FilterRequest extends ApiRequest
+use Illuminate\Foundation\Http\FormRequest;
+
+class DocumentUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -18,10 +17,14 @@ class FilterRequest extends ApiRequest
     }
 
     /**
+     * Get the validation rules that apply to the request.
+     *
      * @return array
      */
-    public function getFilter(): array
+    public function rules()
     {
-        return $this->query->all()['filter'] ?? [];
+        return [
+            //
+        ];
     }
 }

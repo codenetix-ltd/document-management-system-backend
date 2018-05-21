@@ -2,44 +2,110 @@
 
 namespace Tests\Feature;
 
-use App\Document;
-use App\DocumentVersion;
-use Tests\ApiTestCase;
+use App\Entities\DocumentVersion;
+use App\Http\Resources\DocumentVersionCollectionResource;
+use App\Http\Resources\DocumentVersionResource;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\Resources\Json\Resource;
+use Tests\TestCase;
 
 /**
- * @author Vladimir Barmotin <barmotinvladimir@gmail.com>
+ * Created by Codenetix team <support@codenetix.com>
  */
-class DocumentVersionTest extends ApiTestCase
+class DocumentVersionTest extends TestCase
 {
-    protected const DB_TABLE = 'document_versions';
+    use RefreshDatabase;
 
-    public function testListOfDocumentVersionsWithPaginationSuccess()
+    /**
+     * Setup the test environment.
+     *
+     * @return void
+     */
+    protected function setUp()
     {
-        $document = factory(Document::class)->create();
-        factory(DocumentVersion::class, 20)->create(['document_id' => $document->id]);
-
-        $response = $this->jsonRequest('GET', 'documents/' . $document->getId() . '/versions');
-        $response->assertStatus(200);
+        parent::setUp();
+        Resource::withoutWrapping();
     }
 
-    public function testDeleteDocumentVersionSuccess()
+    /**
+     * Tests documentVersion list endpoint
+     *
+     * @return void
+     */
+    public function testDocumentVersionList()
     {
-        $documentVersion = factory(DocumentVersion::class)->create(['is_actual' => false]);
-        $this->jsonRequestDelete('documents/' . $documentVersion->document_id . '/versions', $documentVersion->id, self::DB_TABLE);
+        $documentVersions = factory(DocumentVersion::class, 10)->create();
+
+        $response = $this->json('GET', '/api/documentVersions');
+
+        $response
+            ->assertStatus(200)
+            ->assertJson((new DocumentVersionCollectionResource($documentVersions))->resolve());
     }
 
-    public function testGetDocumentVersionSuccess()
+    /**
+     * Tests $documentVersion get endpoint
+     *
+     * @return void
+     */
+    public function testDocumentVersionGet()
     {
-        /** @var DocumentVersion $attribute */
-        $dv = factory(DocumentVersion::class)->create();
+        $documentVersions = factory(DocumentVersion::class, 10)->create();
 
-        $response = $this->jsonRequestGetEntitySuccess('documents/' . $dv->document_id . '/versions/'. $dv->id);
+        $response = $this->json('GET', '/api/documentVersions/' . $documentVersions[0]->id);
 
-        $this->assertJsonStructure($response, array_keys(config('models.DocumentVersion')));
+        $response
+            ->assertStatus(200)
+            ->assertJson((new DocumentVersionResource($documentVersions[0]))->resolve());
     }
 
-    public function testGetDocumentVersionNotFound()
+    /**
+     * Tests documentVersion store endpoint
+     *
+     * @return void
+     */
+    public function testDocumentVersionStore()
     {
-        $this->jsonRequestGetEntityNotFound('documents/0/versions/0');
+        $documentVersion = factory(DocumentVersion::class)->make();
+
+        $response = $this->json('POST', '/api/documentVersions', $documentVersion->toArray());
+
+        $documentVersion = DocumentVersion::first();
+
+        $response
+            ->assertStatus(201)
+            ->assertJson((new DocumentVersionResource($documentVersion))->resolve());
     }
+
+    /**
+     * Tests documentVersion update endpoint
+     *
+     * @return void
+     */
+    public function testDocumentVersionUpdate()
+    {
+        $documentVersion = factory(DocumentVersion::class)->create();
+
+        $response = $this->json('PUT', '/api/documentVersions/' . $documentVersion->id, array_only($documentVersion->toArray(), $documentVersion->getFillable()));
+
+        $response
+            ->assertStatus(200)
+            ->assertJson((new DocumentVersionResource($documentVersion))->resolve());
+    }
+
+    /**
+     * Tests documentVersion delete endpoint
+     *
+     * @return void
+     */
+    public function testDocumentVersionDelete()
+    {
+        $documentVersion = factory(DocumentVersion::class)->create();
+
+        $response = $this->json('DELETE', '/api/documentVersions/' . $documentVersion->id);
+
+        $response
+            ->assertStatus(204);
+    }
+
 }

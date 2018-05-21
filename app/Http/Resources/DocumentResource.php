@@ -2,24 +2,18 @@
 
 namespace App\Http\Resources;
 
-use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
 
-/**
- * @author Vladimir Barmotin <barmotinvladimir@gmail.com>
- */
-class DocumentResource extends ApiResource
+class DocumentResource extends JsonResource
 {
-    protected function getComplexFields(Request $request): array
+    /**
+     * Transform the resource into an array.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return array
+     */
+    public function toArray($request)
     {
-        return [
-            'actualVersion' => (new DocumentVersionResource($this->documentActualVersion))->toArray($request),
-            'owner' => (new UserResource($this->owner))->toArray($request),
-            'version' => (int)($this->documentActualVersion->getVersionName())
-        ];
-    }
-
-    protected function getStructure(): array
-    {
-        return config('models.Document');
+        return parent::toArray($request);
     }
 }

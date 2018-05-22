@@ -54,8 +54,8 @@ class RoleService
     {
         $role = $this->repository->create($data);
 
-        if (!empty($data['template_ids'])) {
-            $this->repository->sync($role->id, 'templates', $data['template_ids']);
+        if (!empty($data['templateIds'])) {
+            $this->repository->sync($role->id, 'templates', $data['templateIds']);
         }
 
         if (!empty($data['permissionValues'])) {
@@ -74,8 +74,8 @@ class RoleService
     {
         $role = $this->repository->update($data, $id);
 
-        if (!empty($data['template_ids'])) {
-            $this->repository->sync($role->id, 'templates', $data['template_ids']);
+        if (!empty($data['templateIds'])) {
+            $this->repository->sync($role->id, 'templates', $data['templateIds']);
         }
 
         if (!empty($data['permissionValues'])) {
@@ -87,9 +87,15 @@ class RoleService
 
     /**
      * @param int $id
+     * @return null
      */
     public function delete(int $id)
     {
+        $label = $this->repository->findWhere([['id', '=', $id]])->first();
+        if (is_null($label)) {
+            return null;
+        }
+
         $this->repository->delete($id);
     }
 
@@ -105,15 +111,15 @@ class RoleService
     private function attachPermission(Role $role, array $permissionValue)
     {
         $rolePermission = $this->repository->createRolePermission([
-            'role_id' => $role->id,
-            'permission_id' => $permissionValue['id'],
-            'access_type' => $permissionValue['accessTypeId']
+            'roleId' => $role->id,
+            'permissionId' => $permissionValue['id'],
+            'accessType' => $permissionValue['accessTypeId']
         ]);
 
         if ($permissionValue['accessTypeId'] == AccessTypeService::TYPE_BY_QUALIFIERS && !empty($permissionValue['qualifiers'])) {
             foreach ($permissionValue['qualifiers'] as $qualifier) {
                 $this->repository->attachQualifierToRolePermission($rolePermission, [
-                    $qualifier['id'] => ['access_type' => $qualifier['accessTypeId']]
+                    $qualifier['id'] => ['accessType' => $qualifier['accessTypeId']]
                 ]);
             }
         }

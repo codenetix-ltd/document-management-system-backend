@@ -9,14 +9,14 @@ class TemplateResource extends Resource
 {
     public function toArray($request)
     {
-        $attributeTransactionService = app()->make(AttributeTransactionService::class);
+        //$attributeTransactionService = app()->make(AttributeTransactionService::class);
 
         return [
             'id' => $this->id,
             'name' => $this->name,
             //'attributes' => AttributeResource::collection($attributeTransactionService->list($this->resource->getId()))->toArray($request),
-            'createdAt' => $this->created_at->timestamp,
-            'updatedAt' => $this->updated_at->timestamp
+            'createdAt' => $this->createdAt->timestamp,
+            'updatedAt' => $this->updatedAt->timestamp
         ];
     }
 }

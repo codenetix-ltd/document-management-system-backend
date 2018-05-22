@@ -17,8 +17,8 @@ class LabelResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'createdAt' => $this->created_at->timestamp,
-            'updatedAt' => $this->updated_at->timestamp
+            'createdAt' => $this->createdAt->timestamp,
+            'updatedAt' => $this->updatedAt->timestamp
         ];
     }
 }

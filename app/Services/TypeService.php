@@ -35,9 +35,4 @@ class TypeService
     {
         return $this->repository->all();
     }
-
-    public function paginate()
-    {
-        return $this->repository->paginate();
-    }
 }

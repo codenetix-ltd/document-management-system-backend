@@ -11,8 +11,8 @@ class AccessTypeResource extends JsonResource
         return [
             'id' => $this->id,
             'label' => $this->label,
-            'createdAt' => $this->created_at->timestamp,
-            'updatedAt' => $this->updated_at->timestamp
+            'createdAt' => $this->createdAt->timestamp,
+            'updatedAt' => $this->updatedAt->timestamp
         ];
     }
 }

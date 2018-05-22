@@ -27,7 +27,8 @@ class TemplateService
     /**
      * @return mixed
      */
-    public function list(){
+    public function list()
+    {
         return $this->repository->all();
     }
 
@@ -35,7 +36,8 @@ class TemplateService
      * @param int $id
      * @return Template
      */
-    public function find(int $id){
+    public function find(int $id)
+    {
         return $this->repository->find($id);
     }
 
@@ -43,7 +45,8 @@ class TemplateService
      * @param array $data
      * @return Template
      */
-    public function create(array $data){
+    public function create(array $data)
+    {
         return $this->repository->create($data);
     }
 
@@ -52,17 +55,23 @@ class TemplateService
      * @param int $id
      * @return mixed
      */
-    public function update(array $data, int $id){
+    public function update(array $data, int $id)
+    {
         return $this->repository->update($data, $id);
     }
 
-    /**
-     * @param int $id
-     */
-    public function delete(int $id){
+    public function delete(int $id)
+    {
+        $template = $this->repository->findWhere([['id', '=', $id]])->first();
+        if (is_null($template)) {
+            return null;
+        }
+
         $this->repository->delete($id);
     }
-    public function paginate(){
+
+    public function paginate()
+    {
         return $this->repository->paginate();
     }
 

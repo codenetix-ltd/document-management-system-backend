@@ -32,8 +32,6 @@ class PermissionGroupTest extends TestCase
     public function testPermissionGroupList()
     {
         $response = $this->json('GET', '/api/permission-groups');
-
         $response->assertStatus(200);
-        //TODO - add assert
     }
 }

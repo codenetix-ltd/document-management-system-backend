@@ -2,21 +2,21 @@
 
 namespace Tests\Stubs;
 
-use App\Entities\Label;
+use App\Entities\Template;
 
 /**
  * Class LabelStub
  * @package Tests\Stubs
- * @property Label $model
+ * @property Template $model
  */
-class LabelStub extends AbstractStub
+class TemplateStub extends AbstractStub
 {
     /**
      * @return string
      */
     protected function getModelName()
     {
-        return Label::class;
+        return Template::class;
     }
 
     /**

@@ -19,8 +19,8 @@ class RoleResource extends JsonResource
             'name' => $this->name,
             'templateIds' => $this->templates->pluck('id')->toArray(),
             'permissionValues' => PermissionValueResource::collection($this->permissions)->toArray($request),
-            'createdAt' => $this->created_at->timestamp,
-            'updatedAt' => $this->updated_at->timestamp
+            'createdAt' => $this->createdAt->timestamp,
+            'updatedAt' => $this->updatedAt->timestamp
         ];
     }
 }

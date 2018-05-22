@@ -14,17 +14,17 @@ class TemplateEventSubscriber extends AbstractLogEventSubscriber
 {
     public function create(TemplateCreateEvent $event)
     {
-        $this->addLog('Template was created', $event->getTemplate()->getId());
+        $this->addLog('Template was created', $event->getTemplate()->id);
     }
 
     public function update(TemplateUpdateEvent $event)
     {
-        $this->addLog('Template was updated', $event->getTemplate()->getId());
+        $this->addLog('Template was updated', $event->getTemplate()->id);
     }
 
     public function delete(TemplateDeleteEvent $event)
     {
-        $this->addLog('Template was deleted', $event->getTemplate()->getId());
+        $this->addLog('Template was deleted', $event->getTemplate()->id);
     }
 
     public function subscribe(Dispatcher $events)

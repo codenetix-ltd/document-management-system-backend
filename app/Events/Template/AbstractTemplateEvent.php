@@ -3,7 +3,7 @@
 namespace App\Events\Template;
 
 use App\Events\Event;
-use App\Template;
+use App\Entities\Template;
 
 /**
  * @author Vladimir Barmotin <barmotinvladimir@gmail.com>

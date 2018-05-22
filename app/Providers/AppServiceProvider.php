@@ -82,7 +82,7 @@ class AppServiceProvider extends ServiceProvider
 //
 //        $this->app->bind(IAttributeValueRepository::class, AttributeValueRepository::class);
 //
-        $this->app->bind(ILogRepository::class, LogRepository::class);
+//        $this->app->bind(ILogRepository::class, LogRepository::class);
 //
 //        $this->app->bind(ITransformer::class, Transformer::class);
 //

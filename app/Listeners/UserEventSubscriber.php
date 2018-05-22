@@ -14,17 +14,17 @@ class UserEventSubscriber extends AbstractLogEventSubscriber
 {
     public function create(UserCreateEvent $event)
     {
-        $this->addLog('User was created', $event->getUser()->getId());
+        $this->addLog('User was created', $event->getUser()->id);
     }
 
     public function update(UserUpdateEvent $event)
     {
-        $this->addLog('User was updated', $event->getUser()->getId());
+        $this->addLog('User was updated', $event->getUser()->id);
     }
 
     public function delete(UserDeleteEvent $event)
     {
-        $this->addLog('User was deleted', $event->getUser()->getId());
+        $this->addLog('User was deleted', $event->getUser()->id);
     }
 
     public function subscribe(Dispatcher $events)

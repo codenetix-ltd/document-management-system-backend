@@ -2,23 +2,33 @@
 
 namespace App\Http\Resources;
 
-use Illuminate\Http\Request;
+use App\Entities\Log;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * @author Vladimir Barmotin <barmotinvladimir@gmail.com>
+ * Class LogResource
+ * @package App\Http\Resources
+ *
+ * @property Log $resource
  */
-class LogResource extends ApiResource
+class LogResource extends JsonResource
 {
-    protected function getComplexFields(Request $request): array
+    /**
+     * Transform the resource into an array.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return array
+     */
+    public function toArray($request)
     {
         return [
-            'user' => (new UserResource($this->user))->toArray($request),
-            'action' => $this->body,
+            "id" => $this->resource->id,
+            'user' => (new UserResource($this->resource->user)),
+            'action' => $this->resource->body,
+            "referenceType" => $this->resource->referenceType,
+            "referenceId" => $this->resource->referenceId,
+            "createdAt" => $this->resource->createdAt->timestamp,
+            "updatedAt" => $this->resource->updatedAt->timestamp,
         ];
-    }
-
-    protected function getStructure(): array
-    {
-        return config('models.Log');
     }
 }

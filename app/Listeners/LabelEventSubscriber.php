@@ -10,21 +10,21 @@ use Illuminate\Events\Dispatcher;
 /**
  * @author Vladimir Barmotin <barmotinvladimir@gmail.com>
  */
-class TagEventSubscriber extends AbstractLogEventSubscriber
+class LabelEventSubscriber extends AbstractLogEventSubscriber
 {
     public function create(LabelCreateEvent $event)
     {
-        $this->addLog('Label was created', $event->getTag()->getId());
+        $this->addLog('Label was created', $event->getLabel()->id);
     }
 
     public function update(LabelUpdateEvent $event)
     {
-        $this->addLog('Label was updated', $event->getTag()->getId());
+        $this->addLog('Label was updated', $event->getLabel()->id);
     }
 
     public function delete(LabelDeleteEvent $event)
     {
-        $this->addLog('Label was deleted', $event->getTag()->getId());
+        $this->addLog('Label was deleted', $event->getLabel()->id);
     }
 
     public function subscribe(Dispatcher $events)

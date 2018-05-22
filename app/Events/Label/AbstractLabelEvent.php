@@ -3,7 +3,7 @@
 namespace App\Events\Label;
 
 use App\Events\Event;
-use App\Tag;
+use App\Entities\Label;
 
 /**
  * @author Vladimir Barmotin <barmotinvladimir@gmail.com>
@@ -11,17 +11,17 @@ use App\Tag;
 abstract class AbstractLabelEvent extends Event
 {
     /**
-     * @var Tag
+     * @var Label
      */
-    private $tag;
+    private $label;
 
-    public function __construct(Tag $tag)
+    public function __construct(Label $label)
     {
-        $this->tag = $tag;
+        $this->label = $label;
     }
 
-    public function getTag(): Tag
+    public function getLabel(): Label
     {
-        return $this->tag;
+        return $this->label;
     }
 }

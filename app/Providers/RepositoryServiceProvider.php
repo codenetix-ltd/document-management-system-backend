@@ -8,6 +8,8 @@ use App\Repositories\DocumentRepository;
 use App\Repositories\DocumentRepositoryEloquent;
 use App\Repositories\LabelRepository;
 use App\Repositories\LabelRepositoryEloquent;
+use App\Repositories\LogRepository;
+use App\Repositories\LogRepositoryEloquent;
 use App\Repositories\PermissionGroupRepository;
 use App\Repositories\PermissionGroupRepositoryEloquent;
 use App\Repositories\RoleRepository;
@@ -47,5 +49,6 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(AttributeRepository::class, AttributeRepositoryEloquent::class);
         $this->app->bind(DocumentRepository::class, DocumentRepositoryEloquent::class);
         $this->app->bind(UserRepository::class, UserRepositoryEloquent::class);
+        $this->app->bind(LogRepository::class, LogRepositoryEloquent::class);
     }
 }

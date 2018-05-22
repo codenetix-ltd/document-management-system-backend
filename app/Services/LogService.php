@@ -3,39 +3,44 @@
 namespace App\Services;
 
 use App\Contracts\Helpers\ILogger;
-use App\Contracts\Repositories\ILogRepository;
-use App\Log;
-use App\User;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use App\Repositories\LogRepository;
+use App\Entities\User;
 
 /**
- * @author Vladimir Barmotin <barmotinvladimir@gmail.com>
+ * Created by Codenetix team <support@codenetix.com>
  */
 class LogService implements ILogger
 {
     /**
-     * @var ILogRepository
+     * @var LogRepository
      */
-    private $repository;
+    protected $repository;
 
-    public function __construct(ILogRepository $repository)
+    /**
+     * LogService constructor.
+     * @param LogRepository $repository
+     */
+    public function __construct(LogRepository $repository)
     {
         $this->repository = $repository;
     }
 
-    public function write(User $user, string $body, int $referenceId, string $referenceType): void
-    {
-        $log = new Log();
-        $log->setBody($body)
-            ->setUserId($user->getId())
-            ->setReferenceId($referenceId)
-            ->setReferenceType($referenceType);
+    /**
+     * @param $userId
+     * @return mixed
+     */
+    public function list($userId){
+        return $this->repository->paginateByUser($userId);
 
-        $this->repository->save($log);
     }
 
-    public function list($userId = null): LengthAwarePaginator
+    public function write(User $user, string $body, int $referenceId, string $referenceType): void
     {
-        return $this->repository->list($userId);
+        $this->repository->create([
+            'user_id' => $user->id,
+            'body' => $body,
+            'reference_id' => $referenceId,
+            'reference_type' => $referenceType
+        ]);
     }
 }

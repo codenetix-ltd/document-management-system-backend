@@ -2,24 +2,12 @@
 
 namespace App\Repositories;
 
-use App\Contracts\Repositories\ILogRepository;
-use App\Log;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Prettus\Repository\Contracts\RepositoryInterface;
 
 /**
- * @author Vladimir Barmotin <barmotinvladimir@gmail.com>
+ * Interface LogRepository.
  */
-class LogRepository extends EloquentRepository implements ILogRepository
+interface LogRepository extends RepositoryInterface
 {
-
-    public function list($userId = null): LengthAwarePaginator
-    {
-        $query = Log::query();
-
-        if (!is_null($userId)) {
-            $query->where('user_id', $userId);
-        }
-
-        return $query->paginate();
-    }
+    public function paginateByUser($userId);
 }

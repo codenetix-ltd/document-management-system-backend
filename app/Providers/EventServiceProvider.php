@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use App\Listeners\DocumentEventSubscriber;
-use App\Listeners\TagEventSubscriber;
+use App\Listeners\LabelEventSubscriber;
 use App\Listeners\TemplateEventSubscriber;
 use App\Listeners\UserEventSubscriber;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -38,7 +38,7 @@ class EventServiceProvider extends ServiceProvider
 
     protected $subscribe = [
         DocumentEventSubscriber::class,
-        TagEventSubscriber::class,
+        LabelEventSubscriber::class,
         UserEventSubscriber::class,
         TemplateEventSubscriber::class,
     ];

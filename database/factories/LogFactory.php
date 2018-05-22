@@ -1,10 +1,9 @@
 <?php
 
-use App\Log;
-use App\User;
+use App\Entities\User;
 use Faker\Generator as Faker;
 
-$factory->define(Log::class, function (Faker $faker) {
+$factory->define(App\Entities\Log::class, function (Faker $faker) {
     return [
         'body' => $faker->unique()->word,
         'user_id' => function(){

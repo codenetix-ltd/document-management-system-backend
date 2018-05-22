@@ -7,6 +7,8 @@ use Prettus\Repository\Traits\TransformableTrait;
 
 /**
  * Class Template.
+ *
+ * @property int id
  */
 class Template extends BaseEntity implements Transformable
 {

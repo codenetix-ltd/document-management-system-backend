@@ -3,7 +3,11 @@
 namespace App\Services;
 
 use App\Entities\User;
+use App\Events\User\UserCreateEvent;
+use App\Events\User\UserDeleteEvent;
+use App\Events\User\UserUpdateEvent;
 use App\Repositories\UserRepository;
+use Illuminate\Support\Facades\Event;
 
 /**
  * Created by Codenetix team <support@codenetix.com>
@@ -48,6 +52,8 @@ class UserService
         $user = $this->repository->create($data);
         $user->templates()->sync($data['templateIds']);
 
+        Event::dispatch(new UserCreateEvent($user));
+
         return $user;
     }
 
@@ -60,6 +66,9 @@ class UserService
         /** @var User $user */
         $user = $this->repository->update($data, $id);
         $user->templates()->sync($data['templateIds']);
+
+        Event::dispatch(new UserUpdateEvent($user));
+
         return $user;
     }
 
@@ -68,11 +77,13 @@ class UserService
      */
     public function delete(int $id){
 
-        $model = $this->repository->findWhere([['id', '=', $id]])->first();
+        $user = $this->repository->findWhere([['id', '=', $id]])->first();
 
-        if (is_null($model)) {
+        if (is_null($user)) {
             return;
         }
+
+        Event::dispatch(new UserDeleteEvent($user));
 
         $this->repository->delete($id);
     }

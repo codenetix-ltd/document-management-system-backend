@@ -2,7 +2,7 @@
 
 namespace App\Events\Document;
 
-use App\Document;
+use App\Entities\Document;
 use App\Events\Event;
 
 /**

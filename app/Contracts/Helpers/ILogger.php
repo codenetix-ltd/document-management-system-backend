@@ -2,7 +2,7 @@
 
 namespace App\Contracts\Helpers;
 
-use App\User;
+use App\Entities\User;
 
 interface ILogger
 {

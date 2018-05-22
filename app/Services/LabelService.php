@@ -3,7 +3,11 @@
 namespace App\Services;
 
 use App\Entities\Label;
+use App\Events\Label\LabelCreateEvent;
+use App\Events\Label\LabelDeleteEvent;
+use App\Events\Label\LabelUpdateEvent;
 use App\Repositories\LabelRepository;
+use Illuminate\Support\Facades\Event;
 
 /**
  * Created by Codenetix team <support@codenetix.com>
@@ -47,7 +51,10 @@ class LabelService
      */
     public function create(array $data)
     {
-        return $this->repository->create($data);
+        $label = $this->repository->create($data);
+        Event::dispatch(new LabelCreateEvent($label));
+
+        return $label;
     }
 
     /**
@@ -57,7 +64,10 @@ class LabelService
      */
     public function update(array $data, int $id)
     {
-        return $this->repository->update($data, $id);
+        $label = $this->repository->update($data, $id);
+        Event::dispatch(new LabelUpdateEvent($label));
+
+        return $label;
     }
 
     public function delete(int $id)
@@ -68,6 +78,8 @@ class LabelService
         }
 
         $this->repository->delete($id);
+        Event::dispatch(new LabelDeleteEvent($label));
+
     }
 
     public function paginate()

@@ -3,7 +3,7 @@
 namespace App\Events\User;
 
 use App\Events\Event;
-use App\User;
+use App\Entities\User;
 
 /**
  * @author Vladimir Barmotin <barmotinvladimir@gmail.com>

@@ -7,6 +7,9 @@ use Prettus\Repository\Traits\TransformableTrait;
 
 /**
  * Class Label.
+ *
+ * @property int $id
+ * @property string $name
  */
 class Label extends BaseEntity implements Transformable
 {

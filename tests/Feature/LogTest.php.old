@@ -3,9 +3,6 @@
 namespace Tests\Feature;
 
 use App\DocumentVersion;
-use App\Entities\Log;
-use App\Entities\Template;
-use App\Entities\User;
 use App\Events\Document\DocumentCreateEvent;
 use App\Events\Document\DocumentDeleteEvent;
 use App\Events\Document\DocumentReadEvent;
@@ -19,58 +16,20 @@ use App\Events\Template\TemplateUpdateEvent;
 use App\Events\User\UserCreateEvent;
 use App\Events\User\UserDeleteEvent;
 use App\Events\User\UserUpdateEvent;
-use App\Http\Resources\LogCollectionResource;
-use App\Http\Resources\LogResource;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Http\Resources\Json\Resource;
-use Illuminate\Http\Response;
-use Tests\Stubs\DocumentStub;
-use Tests\Stubs\LabelStub;
-use Tests\Stubs\UserStub;
-use Tests\TestCase;
+use App\Log;
+use App\Services\Document\DocumentService;
+use App\Tag;
+use App\Template;
+use App\User;
+use Illuminate\Support\Facades\App;
+use Tests\ApiTestCase;
 
 /**
- * Created by Codenetix team <support@codenetix.com>
+ * @author Vladimir Barmotin <barmotinvladimir@gmail.com>
  */
-class LogTest extends TestCase
+class LogTest extends ApiTestCase
 {
     private const PATH = 'logs';
-
-    use RefreshDatabase;
-
-    /**
-     * Setup the test environment.
-     *
-     * @return void
-     */
-    protected function setUp()
-    {
-        parent::setUp();
-        Resource::withoutWrapping();
-    }
-
-    /**
-     * Tests log list endpoint
-     *
-     * @return void
-     */
-    public function testLogList()
-    {
-        factory(Log::class, 5)->create(['user_id' => $this->authUser->id]);
-        factory(Log::class, 5)->create(['user_id' => factory(User::class)->create()->id]);
-
-        $response = $this
-            ->actingAs($this->authUser)
-            ->json('GET', '/api/logs');
-
-        $this->assetJsonPaginationStructure($response);
-
-        $response->assertStatus(Response::HTTP_OK);
-        $responseArr = $response->decodeResponseJson();
-
-        $this->assertCount(5, $responseArr['data']);
-    }
-
 
     public function testDocumentReadEventLogSuccess()
     {
@@ -104,32 +63,29 @@ class LogTest extends TestCase
         $user = factory(User::class)->create();
         $this->actingAs($user);
 
-//        //TODO documentEvents
-//        $document = (new DocumentStub())->buildModel()->getModel();
-//        event(new DocumentCreateEvent($document));
-//        event(new DocumentUpdateEvent($document));
-//        event(new DocumentReadEvent($document));
-//        event(new DocumentDeleteEvent($document));
+        $document = factory(DocumentVersion::class)->create()->document;
+        event(new DocumentCreateEvent($document));
+        event(new DocumentUpdateEvent($document));
+        event(new DocumentReadEvent($document));
+        event(new DocumentDeleteEvent($document));
 
-        //TODO use stub
         $template = factory(Template::class)->create();
         event(new TemplateCreateEvent($template));
         event(new TemplateUpdateEvent($template));
         event(new TemplateDeleteEvent($template));
 
-        $label = (new LabelStub([], true))->getModel();
+        $label = factory(Tag::class)->create();
         event(new LabelCreateEvent($label));
         event(new LabelUpdateEvent($label));
         event(new LabelDeleteEvent($label));
 
-        $newUser = (new UserStub([], true))->getModel();
+        $newUser = factory(User::class)->create();
         event(new UserCreateEvent($newUser));
         event(new UserUpdateEvent($newUser));
         event(new UserDeleteEvent($newUser));
 
         $logs = Log::all();
 
-        //TODO 13
-        $this->assertCount(9, $logs); //event() calls count
+        $this->assertCount(13, $logs); //event() calls count
     }
 }

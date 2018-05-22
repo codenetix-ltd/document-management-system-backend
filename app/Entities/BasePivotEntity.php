@@ -10,6 +10,8 @@ class BasePivotEntity extends Pivot
     {
         if (array_key_exists($key, $this->relations)) {
             return parent::getAttribute($key);
+        } elseif (method_exists($this, $key)) {
+            return parent::getAttribute($key);
         } else {
             return parent::getAttribute(snake_case($key));
         }

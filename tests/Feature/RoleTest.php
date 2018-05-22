@@ -6,7 +6,9 @@ use App\Entities\Role;
 use App\Http\Resources\RoleResource;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Resources\Json\Resource;
+use Illuminate\Http\Response;
 use Tests\Stubs\Requests\RoleStoreRequestStub;
+use Tests\Stubs\RoleStub;
 use Tests\TestCase;
 
 /**
@@ -39,7 +41,6 @@ class RoleTest extends TestCase
         $response = $this->json('GET', '/api/roles');
 
         $this->assetJsonPaginationStructure($response);
-
         $response->assertStatus(200);
     }
 
@@ -50,31 +51,41 @@ class RoleTest extends TestCase
      */
     public function testRoleGet()
     {
-        $roles = factory(Role::class, 10)->create();
+        $roleStub = new RoleStub([], true);
+        $role = $roleStub->getModel();
 
-        $response = $this->json('GET', '/api/roles/' . $roles[0]->id);
+        $response = $this->json('GET', '/api/roles/' . $role->id);
+
+        $response->dump();
 
         $response
-            ->assertStatus(200)
-            ->assertJson((new RoleResource($roles[0]))->resolve());
+            ->assertStatus(Response::HTTP_OK)
+            ->assertExactJson($roleStub->buildResponse([
+                'id' => $role->id,
+                'createdAt' => $role->createdAt->timestamp,
+                'updatedAt' => $role->updatedAt->timestamp
+            ]));
     }
 
     /**
-     * Tests role store endpoint
-     *
-     * @return void
+     * @throws \Exception
      */
     public function testRoleStore()
     {
-        $role = (new RoleStoreRequestStub())->build();
+        $roleStub = new RoleStub();
 
-        $response = $this->json('POST', '/api/roles', $role);
+        $response = $this->json('POST', '/api/roles', $roleStub->buildRequest());
+        $response->dump();
 
-        $role = Role::where('name', $role['name'])->first();
+        $role = Role::find($response->decodeResponseJson('id'));
 
         $response
-            ->assertStatus(201)
-            ->assertJson((new RoleResource($role))->resolve());
+            ->assertStatus(Response::HTTP_CREATED)
+            ->assertExactJson($roleStub->buildResponse([
+                'id' => $role->id,
+                'createdAt' => $role->createdAt->timestamp,
+                'updatedAt' => $role->updatedAt->timestamp
+            ]));
     }
 
     /**

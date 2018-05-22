@@ -26,7 +26,7 @@ class RoleCreateRequest extends FormRequest
         return [
             "name" => "required|string",
             "templateIds" => "array",
-            "permissionValues" => "array"
+            "permissionValues" => "array"//TODO - add custom validation rule
         ];
     }
 }

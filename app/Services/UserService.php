@@ -44,17 +44,23 @@ class UserService
      * @return User
      */
     public function create(array $data){
-        return $this->repository->create($data);
+        /** @var User $user */
+        $user = $this->repository->create($data);
+        $user->templates()->sync($data['templateIds']);
+
+        return $user;
     }
 
     /**
      * @param array $data
      * @param int $id
-     * @return mixed
+     * @return User
      */
     public function update(array $data, int $id){
-        $data['avatarFileId'] = $data['avatarId'];
-        return $this->repository->update($data, $id);
+        /** @var User $user */
+        $user = $this->repository->update($data, $id);
+        $user->templates()->sync($data['templateIds']);
+        return $user;
     }
 
     /**

@@ -2,9 +2,8 @@
 
 namespace Tests\Feature;
 
+use App\Entities\Template;
 use App\Entities\User;
-use App\Http\Resources\UserCollectionResource;
-use App\Http\Resources\UserResource;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Resources\Json\Resource;
 use Illuminate\Http\Response;
@@ -104,7 +103,31 @@ class UserTest extends TestCase
 
         $response
             ->assertStatus(200)
-            ->assertJson($userStub->buildResponse(['fullName' => $newFullName]));
+            ->assertExactJson($userStub->buildResponse(['fullName' => $newFullName, 'id' => $user->id]));
+    }
+
+    /**
+     * Tests user update endpoint
+     *
+     * @return void
+     */
+    public function testUserUpdateTemplateIds()
+    {
+        $userStub = new UserStub([], true);
+
+        /** @var User $user */
+        $user = $userStub->getModel();
+        $templateIds = $user->templates->pluck('id')->toArray();
+        $newTemplateId = factory(Template::class)->create()->id;
+
+        $templateIds[0] = $newTemplateId;
+
+
+        $response = $this->json('PUT', '/api/users/' . $user->id, $userStub->buildRequest(['templateIds' => $templateIds]));
+
+        $response
+            ->assertStatus(200)
+            ->assertExactJson($userStub->buildResponse(['templateIds' => $templateIds, 'id' => $user->id]));
     }
 
     /**

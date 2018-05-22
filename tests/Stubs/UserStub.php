@@ -2,10 +2,31 @@
 
 namespace Tests\Stubs;
 
+use App\Entities\Template;
 use App\Entities\User;
+use Illuminate\Support\Collection;
 
+/**
+ * Class UserStub
+ * @package Tests\Stubs
+ *
+ * @property User $model
+ */
 class UserStub extends AbstractStub
 {
+    private $templateIds = [];
+
+    public function __construct(array $valuesToOverride = [], bool $persisted = false)
+    {
+        parent::__construct($valuesToOverride, $persisted);
+        /** @var Collection $templates */
+        $this->templateIds = factory(Template::class, 5)->create()->pluck('id')->toArray();
+
+        if($persisted) {
+            $this->model->templates()->sync($this->templateIds);
+        }
+    }
+
     /**
      * @return string
      */
@@ -19,13 +40,11 @@ class UserStub extends AbstractStub
      */
     protected function doBuildRequest()
     {
-        /** @var User $user */
-        $user = $this->getModel();
         return [
-            'email' => $user->email,
-            'fullName' => $user->fullName,
-            'templateIds' => $user->templates->pluck('id')->toArray(),
-            'avatarId' => $user->avatar->getId(),
+            'email' => $this->model->email,
+            'fullName' => $this->model->fullName,
+            'templateIds' => $this->templateIds,
+            'avatarId' => $this->model->avatar->getId(),
         ];
     }
 
@@ -34,16 +53,14 @@ class UserStub extends AbstractStub
      */
     protected function doBuildResponse()
     {
-        /** @var User $user */
-        $user = $this->getModel();
         return [
-            'fullName' => $user->fullName,
-            'email' => $user->email,
-            'templateIds' => $user->templates->pluck('id')->toArray(),
-            'avatarId' => $user->avatar->getId(),
+            'fullName' => $this->model->fullName,
+            'email' => $this->model->email,
+            'templateIds' => $this->templateIds,
+            'avatarId' => $this->model->avatar->getId(),
             'avatar' => [
-                'name'=>$user->avatar->getOriginalName(),
-                'url' => $user->avatar->getPath()
+                'name'=>$this->model->avatar->getOriginalName(),
+                'url' => $this->model->avatar->getPath()
             ]
         ];
     }

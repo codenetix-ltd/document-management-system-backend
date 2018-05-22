@@ -85,20 +85,6 @@ class LogTest extends TestCase
         $this->assertCount(1, Log::all());
     }
 
-    public function testGetLogsSuccess()
-    {
-        $user = factory(User::class)->create();
-        $this->actingAs($user);
-
-        factory(Log::class, 3)->create([
-            'user_id' => $user->id,
-            'reference_type' => 'user',
-            'reference_id' => $user->id,
-        ]);
-
-        $this->jsonRequestObjectsWithPagination(self::PATH);
-    }
-
     public function testEventsLogs()
     {
         $user = factory(User::class)->create();

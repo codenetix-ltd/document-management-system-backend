@@ -33,12 +33,11 @@ class TypeTest extends TestCase
     public function testTypeList()
     {
         factory(Type::class, 10)->create();
+        $total = Type::all()->count();
 
         $response = $this->json('GET', '/api/types');
-        $response->dump();
 
-        $this->assetJsonPaginationStructure($response);
-
+        $response->assertJsonCount($total);
         $response->assertStatus(200);
     }
 }

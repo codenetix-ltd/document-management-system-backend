@@ -9,7 +9,7 @@ class TemplateResource extends Resource
 {
     public function toArray($request)
     {
-        $attributeTransactionService = app()->make(AttributeTransactionService::class);
+        //$attributeTransactionService = app()->make(AttributeTransactionService::class);
 
         return [
             'id' => $this->id,

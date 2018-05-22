@@ -3,10 +3,10 @@
 namespace Tests\Feature;
 
 use App\Entities\Template;
-use App\Http\Resources\TemplateCollectionResource;
-use App\Http\Resources\TemplateResource;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Resources\Json\Resource;
+use Illuminate\Http\Response;
+use Tests\Stubs\TemplateStub;
 use Tests\TestCase;
 
 /**
@@ -37,10 +37,9 @@ class TemplateTest extends TestCase
         factory(Template::class, 10)->create();
 
         $response = $this->json('GET', '/api/templates');
-
         $this->assetJsonPaginationStructure($response);
 
-        $response->assertStatus(200);
+        $response->assertStatus(Response::HTTP_OK);
     }
 
     /**
@@ -50,46 +49,86 @@ class TemplateTest extends TestCase
      */
     public function testTemplateGet()
     {
-        $templates = factory(Template::class, 10)->create();
+        $templateStub = new TemplateStub([], true);
+        $template = $templateStub->getModel();
 
-        $response = $this->json('GET', '/api/templates/' . $templates[0]->id);
+        $response = $this->json('GET', '/api/templates/' . $template->id);
 
         $response
-            ->assertStatus(200)
-            ->assertJson((new TemplateResource($templates[0]))->resolve());
+            ->assertStatus(Response::HTTP_OK)
+            ->assertExactJson($templateStub->buildResponse([
+                'id' => $template->id,
+                'createdAt' => $template->createdAt->timestamp,
+                'updatedAt' => $template->updatedAt->timestamp
+            ]));
     }
 
     /**
-     * Tests template store endpoint
-     *
-     * @return void
+     * @throws \Exception
      */
     public function testTemplateStore()
     {
-        $template = factory(Template::class)->make();
+        $templateStub = new TemplateStub();
 
-        $response = $this->json('POST', '/api/templates', $template->toArray());
-        $template = Template::first();
+        $response = $this->json('POST', '/api/templates', $templateStub->buildRequest());
+
+        $template = Template::find($response->decodeResponseJson('id'));
 
         $response
-            ->assertStatus(201)
-            ->assertJson((new TemplateResource($template))->resolve());
+            ->assertStatus(Response::HTTP_CREATED)
+            ->assertExactJson($templateStub->buildResponse([
+                'id' => $template->id,
+                'createdAt' => $template->createdAt->timestamp,
+                'updatedAt' => $template->updatedAt->timestamp
+            ]));
     }
 
     /**
-     * Tests template update endpoint
-     *
-     * @return void
+     * @throws \Exception
+     */
+    public function testTemplateStoreValidationError()
+    {
+        $templateStub = new TemplateStub();
+        $data = $templateStub->buildRequest();
+        $fieldKey = 'name';
+        unset($data[$fieldKey]);
+
+        $response = $this->json('POST', '/api/templates', $data);
+
+        $response
+            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
+            ->assertJsonValidationErrors([$fieldKey]);
+    }
+
+    public function testGetTemplateNotFound()
+    {
+        $response = $this->json('GET', '/api/templates/' . 0);
+        $response->assertStatus(Response::HTTP_NOT_FOUND);
+    }
+
+    /**
+     * @throws \Exception
      */
     public function testTemplateUpdate()
     {
-        $template = factory(Template::class)->create();
+        $templateStub = new TemplateStub([], true);
+        $template = $templateStub->getModel();
+        $newTemplateName = 'new template name';
 
-        $response = $this->json('PUT', '/api/templates/' . $template->id, array_only($template->toArray(), $template->getFillable()));
+        $response = $this->json('PUT', '/api/templates/' . $template->id, $templateStub->buildRequest([
+            'name' => $newTemplateName
+        ]));
+
+        $templateUpdated = Template::find($response->decodeResponseJson('id'));
 
         $response
-            ->assertStatus(200)
-            ->assertJson((new TemplateResource($template))->resolve());
+            ->assertStatus(Response::HTTP_OK)
+            ->assertExactJson($templateStub->buildResponse([
+                'id' => $templateUpdated->id,
+                'name' => $newTemplateName,
+                'createdAt' => $templateUpdated->createdAt->timestamp,
+                'updatedAt' => $templateUpdated->updatedAt->timestamp
+            ]));
     }
 
     /**
@@ -103,8 +142,13 @@ class TemplateTest extends TestCase
 
         $response = $this->json('DELETE', '/api/templates/' . $template->id);
 
-        $response
-            ->assertStatus(204);
+        $response->assertStatus(Response::HTTP_NO_CONTENT);
     }
 
+    public function testTemplateDeleteWhichDoesNotExist()
+    {
+        $response = $this->json('DELETE', '/api/templates/' . 0);
+
+        $response->assertStatus(Response::HTTP_NO_CONTENT);
+    }
 }

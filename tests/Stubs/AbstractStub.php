@@ -7,7 +7,7 @@ namespace Tests\Stubs;
  */
 abstract class AbstractStub
 {
-    private $model;
+    protected $model;
 
     /**
      * @return string

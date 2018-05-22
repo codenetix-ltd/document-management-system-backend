@@ -138,7 +138,8 @@ class LabelTest extends TestCase
      */
     public function testLabelDelete()
     {
-        $label = factory(Label::class)->create();
+        $labelStub = new LabelStub([], true);
+        $label = $labelStub->getModel();
 
         $response = $this->json('DELETE', '/api/labels/' . $label->id);
 

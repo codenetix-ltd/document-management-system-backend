@@ -138,7 +138,8 @@ class TemplateTest extends TestCase
      */
     public function testTemplateDelete()
     {
-        $template = factory(Template::class)->create();
+        $templateStub = new TemplateStub([], true);
+        $template = $templateStub->getModel();
 
         $response = $this->json('DELETE', '/api/templates/' . $template->id);
 

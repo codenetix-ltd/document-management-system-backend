@@ -16,10 +16,11 @@ use App\Services\AccessTypeService;
 class RoleStub extends AbstractStub
 {
     private $templates;
-    private $permissionValueWithQualifiersAccessType;
-    private $permissionValueWithQualifiersAccessTypeVariableContainer;
 
+    private $permissionValueWithQualifiersAccessType;
     private $permissionValueWithoutQualifiersAccessType;
+    
+    private $variablesContainer;
 
     public function __construct(array $valuesToOverride = [], bool $persisted = false)
     {
@@ -66,23 +67,33 @@ class RoleStub extends AbstractStub
                 [
                     'id' => $this->permissionValueWithQualifiersAccessType['id'],
                     'accessType' => [
-                        'id' => $this->permissionValueWithQualifiersAccessTypeVariableContainer['accessType']->id,
-                        'label' => $this->permissionValueWithQualifiersAccessTypeVariableContainer['accessType']->label,
-                        'createdAt' => $this->permissionValueWithQualifiersAccessTypeVariableContainer['accessType']->createdAt->timestamp,
-                        'updatedAt' => $this->permissionValueWithQualifiersAccessTypeVariableContainer['accessType']->updatedAt->timestamp,
+                        'id' => $this->variablesContainer['permissionValueWithQualifiersAccessType']['accessType']->id,
+                        'label' => $this->variablesContainer['permissionValueWithQualifiersAccessType']['accessType']->label,
+                        'createdAt' => $this->variablesContainer['permissionValueWithQualifiersAccessType']['accessType']->createdAt->timestamp,
+                        'updatedAt' => $this->variablesContainer['permissionValueWithQualifiersAccessType']['accessType']->updatedAt->timestamp,
                     ],
                     'qualifiers' => [
                         [
-                            'id' => $this->permissionValueWithQualifiersAccessTypeVariableContainer['qualifier']->id,
-                            'label' => $this->permissionValueWithQualifiersAccessTypeVariableContainer['qualifier']->label,
+                            'id' => $this->variablesContainer['permissionValueWithQualifiersAccessType']['qualifier']->id,
+                            'label' => $this->variablesContainer['permissionValueWithQualifiersAccessType']['qualifier']->label,
                             'accessType' => [
-//                                'id' => $this->permissionValueWithQualifiersAccessTypeVariableContainer['qualifierAccessType']->id,
-//                                'label' =>
-//                                'createdAt' =>
-//                                'updatedAt' =>
+                                'id' => $this->variablesContainer['permissionValueWithQualifiersAccessType']['qualifierAccessType']->id,
+                                'label' => $this->variablesContainer['permissionValueWithQualifiersAccessType']['qualifierAccessType']->label,
+                                'createdAt' => $this->variablesContainer['permissionValueWithQualifiersAccessType']['qualifierAccessType']->createdAt->timestamp,
+                                'updatedAt' => $this->variablesContainer['permissionValueWithQualifiersAccessType']['qualifierAccessType']->updatedAt->timestamp,
                             ]
                         ]
                     ]
+                ],
+                [
+                    'id' => $this->permissionValueWithoutQualifiersAccessType['id'],
+                    'accessType' => [
+                        'id' => $this->variablesContainer['permissionValueWithoutQualifiersAccessType']['accessType']->id,
+                        'label' => $this->variablesContainer['permissionValueWithoutQualifiersAccessType']['accessType']->label,
+                        'createdAt' => $this->variablesContainer['permissionValueWithoutQualifiersAccessType']['accessType']->createdAt->timestamp,
+                        'updatedAt' => $this->variablesContainer['permissionValueWithoutQualifiersAccessType']['accessType']->updatedAt->timestamp,
+                    ],
+                    'qualifiers' => []
                 ]
             ]
         ];
@@ -101,9 +112,9 @@ class RoleStub extends AbstractStub
         $qualifier = $qualifiers->first();
         $qualifierAccessType = $qualifier->accessTypes->first();
 
-        $this->permissionValueWithQualifiersAccessTypeVariableContainer['accessType'] = $accessType;
-        $this->permissionValueWithQualifiersAccessTypeVariableContainer['qualifier'] = $qualifier;
-        $this->permissionValueWithQualifiersAccessTypeVariableContainer['qualifierAccessType'] = $qualifierAccessType;
+        $this->variablesContainer['permissionValueWithQualifiersAccessType']['accessType'] = $accessType;
+        $this->variablesContainer['permissionValueWithQualifiersAccessType']['qualifier'] = $qualifier;
+        $this->variablesContainer['permissionValueWithQualifiersAccessType']['qualifierAccessType'] = $qualifierAccessType;
 
         return  [
             'id' => $permission->id,
@@ -127,6 +138,8 @@ class RoleStub extends AbstractStub
     {
         $permission = Permission::where('id', '!=', $excerptIds)->first();
         $accessType = $permission->accessTypes->whereNotIn('id', AccessTypeService::TYPE_BY_QUALIFIERS)->first();
+
+        $this->variablesContainer['permissionValueWithoutQualifiersAccessType']['accessType'] = $accessType;
 
         return [
             'id' => $permission->id,

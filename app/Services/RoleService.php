@@ -87,9 +87,15 @@ class RoleService
 
     /**
      * @param int $id
+     * @return null
      */
     public function delete(int $id)
     {
+        $label = $this->repository->findWhere([['id', '=', $id]])->first();
+        if (is_null($label)) {
+            return null;
+        }
+
         $this->repository->delete($id);
     }
 

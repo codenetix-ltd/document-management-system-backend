@@ -2,13 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests;
-use App\Http\Requests\PermissionGroupCreateRequest;
-use App\Http\Requests\PermissionGroupUpdateRequest;
-use App\Http\Resources\PermissionGroupCollectionResource;
 use App\Http\Resources\PermissionGroupResource;
 use App\Services\PermissionGroupService;
-use Illuminate\Http\Response;
 
 /**
  * Created by Codenetix team <support@codenetix.com>

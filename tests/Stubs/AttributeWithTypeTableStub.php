@@ -3,53 +3,49 @@
 namespace Tests\Stubs;
 
 use App\Entities\Attribute;
-use App\Entities\Template;
 use App\Repositories\TypeRepository;
 
-class AttributeWithTypeTableStub
+class AttributeWithTypeTableStub extends AbstractStub
 {
-    private $attribute;
-    private $template;
-
-    public function __construct()
+    /**
+     * @return string
+     */
+    protected function getModelName()
     {
-        $this->attribute = factory(Attribute::class)->states('table')->make();
-        $this->template = factory(Template::class)->create();
+        return Attribute::class;
     }
 
-    public function buildRequest(): array
+    /**
+     * @return array
+     */
+    protected function doBuildRequest()
     {
         return [
-            'name' => $this->attribute->name,
-            'typeId' => $this->attribute->typeId,
+            'name' => $this->model->name,
+            'typeId' => $this->model->typeId,
             'data' => $this->buildAttributeData()
         ];
     }
 
-    public function buildResponse(Attribute $attributeModel): array
+    /**
+     * @return array
+     */
+    protected function doBuildResponse()
     {
         return [
-            'id' => $attributeModel->id,
             'type' => [
-                'id' => $this->attribute->typeId,
-                'name' => $attributeModel->type->name,
-                'machineName' => $attributeModel->type->machineName,
-                'createdAt' => $attributeModel->type->createdAt->timestamp,
-                'updatedAt' => $attributeModel->type->updatedAt->timestamp
+                'id' => $this->model->typeId,
+                'name' => $this->model->type->name,
+                'machineName' => $this->model->type->machineName,
+                'createdAt' => $this->model->type->createdAt->timestamp,
+                'updatedAt' => $this->model->type->updatedAt->timestamp
             ],
-            'name' => $this->attribute->name,
+            'name' => $this->model->name,
             'data' => $this->buildAttributeData(),
             'isLocked' => false,
             'order' => 0,
-            'templateId' => $this->template->id,
-            'createdAt' => $attributeModel->createdAt->timestamp,
-            'updatedAt' => $attributeModel->updatedAt->timestamp
+            'templateId' => $this->model->templateId,
         ];
-    }
-
-    public function getTemplateId(): int
-    {
-        return $this->template->id;
     }
 
     private function buildAttributeData(): array

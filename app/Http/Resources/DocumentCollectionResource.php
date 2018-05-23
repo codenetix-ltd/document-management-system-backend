@@ -2,18 +2,10 @@
 
 namespace App\Http\Resources;
 
-use Illuminate\Http\Resources\Json\ResourceCollection;
-
-class DocumentCollectionResource extends ResourceCollection
+class DocumentCollectionResource extends AbstractCollectionResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
-     */
-    public function toArray($request)
+    protected function transformSingle($item)
     {
-        return parent::toArray($request);
+        return new DocumentResource($item);
     }
 }

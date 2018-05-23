@@ -2,27 +2,22 @@
 
 namespace App\Http\Resources;
 
-use App\Attribute;
-use Illuminate\Http\Request;
+use App\Entities\AttributeValue;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * @author Vladimir Barmotin <barmotinvladimir@gmail.com>
+ *
+ * @property AttributeValue $resource
  */
-class AttributeValueResource extends ApiResource
+class AttributeValueResource extends JsonResource
 {
-    protected function getComplexFields(Request $request): array
+    public function toArray($request)
     {
-        /** @var Attribute $attribute */
-        $attribute = $this->attribute;
         return [
-            'id' => $attribute->getId(),
-            'type' => $attribute->type->machine_name
+            'id' => $this->resource->id,
+            'type' => $this->resource->attribute->type->machineName,
+            'value' => $this->resource->value
         ];
-    }
-
-    protected function getStructure(): array
-    {
-        //TODO id, name, value properties are required
-        return config('models.ValueInteger');
     }
 }

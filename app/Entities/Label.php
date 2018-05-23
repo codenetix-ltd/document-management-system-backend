@@ -2,6 +2,7 @@
 
 namespace App\Entities;
 
+use Carbon\Carbon;
 use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
 
@@ -10,6 +11,8 @@ use Prettus\Repository\Traits\TransformableTrait;
  *
  * @property int $id
  * @property string $name
+ * @property Carbon $createdAt
+ * @property Carbon $updatedAt
  */
 class Label extends BaseEntity implements Transformable
 {

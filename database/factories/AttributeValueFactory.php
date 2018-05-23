@@ -1,9 +1,8 @@
 <?php
 
-use App\Attribute;
-use App\AttributeValue;
-use App\DocumentVersion;
-use App\User;
+use App\Entities\Attribute;
+use App\Entities\AttributeValue;
+use App\Entities\DocumentVersion;
 use Faker\Generator as Faker;
 
 $factory->define(AttributeValue::class, function (Faker $faker) {

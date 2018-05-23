@@ -26,6 +26,7 @@ class UserTest extends TestCase
     {
         parent::setUp();
         Resource::withoutWrapping();
+        $this->actingAs($this->authUser);
     }
 
     /**

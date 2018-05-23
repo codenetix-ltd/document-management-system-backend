@@ -2,11 +2,22 @@
 
 namespace App\Entities;
 
+use Carbon\Carbon;
 use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
 
 /**
  * Class Attribute.
+ *
+ * @property Type $type
+ *
+ * @property string $name
+ * @property bool $isLocked
+ * @property int $order
+ * @property int $templateId
+ *
+ * @property Carbon $createdAt
+ * @property Carbon $updatedAt
  */
 class Attribute extends BaseEntity implements Transformable
 {

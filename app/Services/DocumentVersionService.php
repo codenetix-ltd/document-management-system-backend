@@ -14,14 +14,20 @@ class DocumentVersionService
      * @var DocumentVersionRepository
      */
     protected $repository;
+    /**
+     * @var AttributeValueService
+     */
+    private $attributeValueService;
 
     /**
      * DocumentVersionService constructor.
      * @param DocumentVersionRepository $repository
+     * @param AttributeValueService $attributeValueService
      */
-    public function __construct(DocumentVersionRepository $repository)
+    public function __construct(DocumentVersionRepository $repository, AttributeValueService $attributeValueService)
     {
         $this->repository = $repository;
+        $this->attributeValueService = $attributeValueService;
     }
 
     /**
@@ -44,7 +50,19 @@ class DocumentVersionService
      * @return DocumentVersion
      */
     public function create(array $data){
-        return $this->repository->create($data);
+        /** @var DocumentVersion $documentVersion */
+        $documentVersion = $this->repository->create($data);
+        $documentVersion->files()->sync($data['fileIds']);
+        $documentVersion->labels()->sync($data['labelIds']);
+        foreach($data['attributeValues'] as $attributeValue) {
+            $this->attributeValueService->create([
+                'attributeId' => $attributeValue['id'],
+                'documentVersionId' => $documentVersion->id,
+                'value' => $attributeValue['value']
+            ]);
+        }
+
+        return $documentVersion;
     }
 
     /**

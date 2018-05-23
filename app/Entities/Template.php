@@ -2,15 +2,22 @@
 
 namespace App\Entities;
 
+use Carbon\Carbon;
+use Illuminate\Support\Collection;
 use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
 
 /**
  * Class Template.
  *
- * @property int id
+ * @property string $name
+ * @property Collection $attributes
+ *
+ * @property Carbon $createdAt
+ * @property Carbon $updatedAt
  */
-class Template extends BaseEntity implements Transformable
+class
+Template extends BaseEntity implements Transformable
 {
     use TransformableTrait;
 
@@ -26,10 +33,10 @@ class Template extends BaseEntity implements Transformable
 //        return $this->hasMany(Document::class);
 //    }
 //
-//    public function attributes()
-//    {
-//        return $this->hasMany(Attribute::class)->orderBy('order', 'ASC')->whereNull('parent_attribute_id');
-//    }
+    public function attributes()
+    {
+        return $this->hasMany(Attribute::class)->orderBy('order', 'ASC')->whereNull('parent_attribute_id');
+    }
 //
 //    public function logs()
 //    {

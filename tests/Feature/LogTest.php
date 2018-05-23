@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\DocumentVersion;
+use App\Entities\Document;
 use App\Entities\Log;
 use App\Entities\Template;
 use App\Entities\User;
@@ -21,11 +22,14 @@ use App\Events\User\UserDeleteEvent;
 use App\Events\User\UserUpdateEvent;
 use App\Http\Resources\LogCollectionResource;
 use App\Http\Resources\LogResource;
+use App\Services\DocumentService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Resources\Json\Resource;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\App;
 use Tests\Stubs\DocumentStub;
 use Tests\Stubs\LabelStub;
+use Tests\Stubs\TemplateStub;
 use Tests\Stubs\UserStub;
 use Tests\TestCase;
 
@@ -76,11 +80,12 @@ class LogTest extends TestCase
     {
         $user = factory(User::class)->create();
         $this->actingAs($user);
-        $dv = factory(DocumentVersion::class)->create();
+        /** @var Document $document */
+        $document = (new DocumentStub([], true))->getModel();
 
         /** @var DocumentService $documentService */
         $documentService = App::make(DocumentService::class);
-        $documentService->get($dv->document_id);
+        $documentService->find($document->id);
 
         $this->assertCount(1, Log::all());
     }
@@ -90,15 +95,13 @@ class LogTest extends TestCase
         $user = factory(User::class)->create();
         $this->actingAs($user);
 
-//        //TODO documentEvents
-//        $document = (new DocumentStub())->buildModel()->getModel();
-//        event(new DocumentCreateEvent($document));
-//        event(new DocumentUpdateEvent($document));
-//        event(new DocumentReadEvent($document));
-//        event(new DocumentDeleteEvent($document));
+        $document = (new DocumentStub([], true))->getModel();
+        event(new DocumentCreateEvent($document));
+        event(new DocumentUpdateEvent($document));
+        event(new DocumentReadEvent($document));
+        event(new DocumentDeleteEvent($document));
 
-        //TODO use stub
-        $template = factory(Template::class)->create();
+        $template = (new TemplateStub([], true))->getModel();
         event(new TemplateCreateEvent($template));
         event(new TemplateUpdateEvent($template));
         event(new TemplateDeleteEvent($template));
@@ -115,7 +118,6 @@ class LogTest extends TestCase
 
         $logs = Log::all();
 
-        //TODO 13
-        $this->assertCount(9, $logs); //event() calls count
+        $this->assertCount(13, $logs); //event() calls count
     }
 }

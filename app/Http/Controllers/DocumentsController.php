@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests;
 use App\Http\Requests\DocumentCreateRequest;
+use App\Http\Requests\DocumentPatchUpdateRequest;
 use App\Http\Requests\DocumentUpdateRequest;
 use App\Http\Resources\DocumentCollectionResource;
 use App\Http\Resources\DocumentResource;
@@ -64,6 +65,17 @@ class DocumentsController extends Controller
      * @return DocumentResource
      */
     public function update(DocumentUpdateRequest $request, $id)
+    {
+        $document = $this->service->updateVersion($request->all(), $id);
+        return new DocumentResource($document);
+    }
+
+    /**
+     * @param DocumentPatchUpdateRequest $request
+     * @param $id
+     * @return DocumentResource
+     */
+    public function patchUpdate(DocumentPatchUpdateRequest $request, $id)
     {
         $document = $this->service->update($request->all(), $id);
         return new DocumentResource($document);

@@ -2,10 +2,22 @@
 
 namespace App\Entities;
 
+use Carbon\Carbon;
+
+/**
+ * Class AttributeValue
+ * @package App\Entities
+ *
+ * @property string $value
+ * @property Attribute $attribute
+ *
+ * @property Carbon $createdAt
+ * @property Carbon $updatedAt
+ */
 class AttributeValue extends BaseEntity
 {
     protected $fillable = [
-        'attribute_id', 'document_version_id', 'version_name', 'version_name', 'value',
+        'attributeId', 'documentVersionId', 'value',
     ];
 
     public function attribute()

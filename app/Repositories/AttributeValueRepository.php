@@ -2,12 +2,12 @@
 
 namespace App\Repositories;
 
-use App\Contracts\Repositories\IAttributeValueRepository;
+use Prettus\Repository\Contracts\RepositoryInterface;
 
 /**
  * @author Vladimir Barmotin <barmotinvladimir@gmail.com>
  */
-class AttributeValueRepository extends EloquentRepository implements IAttributeValueRepository
+interface AttributeValueRepository extends RepositoryInterface
 {
 
 }

@@ -2,21 +2,28 @@
 
 namespace App\Http\Resources;
 
-use App\Services\Attribute\AttributeTransactionService;
+use App\Entities\Template;
+use App\Services\AttributeService;
 use Illuminate\Http\Resources\Json\Resource;
 
+/**
+ * Class TemplateResource
+ * @package App\Http\Resources
+ *
+ * @property Template $resource
+ */
 class TemplateResource extends Resource
 {
     public function toArray($request)
     {
-        //$attributeTransactionService = app()->make(AttributeTransactionService::class);
+        $attributeService = app()->make(AttributeService::class);
 
         return [
-            'id' => $this->id,
-            'name' => $this->name,
-            //'attributes' => AttributeResource::collection($attributeTransactionService->list($this->resource->getId()))->toArray($request),
-            'createdAt' => $this->createdAt->timestamp,
-            'updatedAt' => $this->updatedAt->timestamp
+            'id' => $this->resource->id,
+            'name' => $this->resource->name,
+            'attributes' => new AttributeCollectionResource($this->resource->attributes, $attributeService),
+            'createdAt' => $this->resource->createdAt->timestamp,
+            'updatedAt' => $this->resource->updatedAt->timestamp
         ];
     }
 }

@@ -12,6 +12,7 @@ use Prettus\Repository\Traits\TransformableTrait;
  * Class Document.
  *
  * @property int $ownerId
+ * @property int $substituteDocumentId
  *
  * @property User $owner
  * @property Document $substituteDocument

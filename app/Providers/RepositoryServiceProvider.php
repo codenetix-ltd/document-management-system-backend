@@ -4,8 +4,12 @@ namespace App\Providers;
 
 use App\Repositories\AttributeRepository;
 use App\Repositories\AttributeRepositoryEloquent;
+use App\Repositories\AttributeValueRepository;
+use App\Repositories\AttributeValueRepositoryEloquent;
 use App\Repositories\DocumentRepository;
 use App\Repositories\DocumentRepositoryEloquent;
+use App\Repositories\DocumentVersionRepository;
+use App\Repositories\DocumentVersionRepositoryEloquent;
 use App\Repositories\LabelRepository;
 use App\Repositories\LabelRepositoryEloquent;
 use App\Repositories\LogRepository;
@@ -47,7 +51,9 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(PermissionGroupRepository::class, PermissionGroupRepositoryEloquent::class);
         $this->app->bind(RoleRepository::class, RoleRepositoryEloquent::class);
         $this->app->bind(AttributeRepository::class, AttributeRepositoryEloquent::class);
+        $this->app->bind(AttributeValueRepository::class, AttributeValueRepositoryEloquent::class);
         $this->app->bind(DocumentRepository::class, DocumentRepositoryEloquent::class);
+        $this->app->bind(DocumentVersionRepository::class, DocumentVersionRepositoryEloquent::class);
         $this->app->bind(UserRepository::class, UserRepositoryEloquent::class);
         $this->app->bind(LogRepository::class, LogRepositoryEloquent::class);
     }

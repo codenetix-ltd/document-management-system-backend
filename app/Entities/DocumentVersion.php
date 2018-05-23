@@ -15,7 +15,7 @@ use Prettus\Repository\Traits\TransformableTrait;
  * @property string $versionName
  * @property string $comment
  * @property int $templateId
- * @property int $ownerId
+ * @property int $documentId
  *
  * @property Document $document
  * @property Template $template
@@ -36,7 +36,7 @@ class DocumentVersion extends BaseEntity implements Transformable
      * @var array
      */
     protected $fillable = [
-        'is_actual', 'template_id', 'document_id', 'version_name', 'name', 'comment'
+        'isActual', 'templateId', 'documentId', 'versionName', 'name', 'comment', 'fileId'
     ];
 
     public function document()
@@ -61,7 +61,7 @@ class DocumentVersion extends BaseEntity implements Transformable
 
     public function labels()
     {
-        return $this->belongsToMany(Label::class, 'document_version_tag');
+        return $this->belongsToMany(Label::class, 'document_version_label');
     }
 
 }

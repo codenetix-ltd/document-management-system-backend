@@ -50,5 +50,9 @@ Route::delete('templates/{templateId}/attributes/{id}', 'AttributesController@de
 Route::apiResource('users', 'UsersController');
 Route::get('logs', 'LogsController@index');
 
+//Order is important (patch overrides apiResource)
+Route::patch('documents/{id}', 'DocumentsController@patchUpdate');
+Route::put('documents/{id}', 'DocumentsController@update');
+Route::apiResource('documents', 'DocumentsController');
 
 

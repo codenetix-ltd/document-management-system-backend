@@ -2,15 +2,14 @@
 
 namespace App\Repositories;
 
-use App\Criteria\DocumentFilterCriteria;
+use App\Entities\AttributeValue;
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
-use App\Entities\Document;
 
 /**
  * Class DocumentRepositoryEloquent.
  */
-class DocumentRepositoryEloquent extends BaseRepository implements DocumentRepository
+class AttributeValueRepositoryEloquent extends BaseRepository implements AttributeValueRepository
 {
     /**
      * Specify Model class name
@@ -19,13 +18,8 @@ class DocumentRepositoryEloquent extends BaseRepository implements DocumentRepos
      */
     public function model()
     {
-        return Document::class;
+        return AttributeValue::class;
     }
-
-    protected $fieldSearchable = [
-        'ownerId',
-        'documentActualVersion.name' => 'like',
-    ];
 
     /**
      * Boot up the repository, pushing criteria
@@ -33,6 +27,5 @@ class DocumentRepositoryEloquent extends BaseRepository implements DocumentRepos
     public function boot()
     {
         $this->pushCriteria(app(RequestCriteria::class));
-        $this->pushCriteria(app(DocumentFilterCriteria::class));
     }
 }

@@ -10,6 +10,11 @@ abstract class AbstractStub
     protected $model;
 
     /**
+     * @var bool
+     */
+    protected $persisted;
+
+    /**
      * @return string
      */
     abstract protected function getModelName();
@@ -33,6 +38,7 @@ abstract class AbstractStub
     public function __construct($valuesToOverride = [], $persisted = false, $states = [])
     {
         $this->model = factory($this->getModelName())->states($states)->{$persisted ? 'create' : 'make'}($valuesToOverride);
+        $this->persisted = $persisted;
     }
 
     public function buildRequest($valuesToOverride = [])
@@ -42,7 +48,19 @@ abstract class AbstractStub
 
     public function buildResponse($valuesToOverride = [])
     {
-        return array_replace_recursive($this->doBuildResponse(), $valuesToOverride);
+        $response = $this->doBuildResponse();
+
+        if ($this->persisted) {
+            $response['id'] = $this->model->id;
+            if($this->model->createdAt){
+                $response['createdAt'] = $this->model->createdAt->timestamp;
+            }
+            if($this->model->updatedAt){
+                $response['updatedAt'] = $this->model->updatedAt->timestamp;
+            }
+        }
+
+        return array_replace_recursive($response, $valuesToOverride);
     }
 
     public function getModel()

@@ -15,22 +15,22 @@ class DocumentEventSubscriber extends AbstractLogEventSubscriber
 {
     public function create(DocumentCreateEvent $event)
     {
-        $this->addLog('Document was created', $event->getDocument()->getId());
+        $this->addLog('Document was created', $event->getDocument()->id);
     }
 
     public function read(DocumentReadEvent $event)
     {
-        $this->addLog('Document was read', $event->getDocument()->getId());
+        $this->addLog('Document was read', $event->getDocument()->id);
     }
 
     public function update(DocumentUpdateEvent $event)
     {
-        $this->addLog('Document was updated', $event->getDocument()->getId());
+        $this->addLog('Document was updated', $event->getDocument()->id);
     }
 
     public function delete(DocumentDeleteEvent $event)
     {
-        $this->addLog('Document was deleted', $event->getDocument()->getId());
+        $this->addLog('Document was deleted', $event->getDocument()->id);
     }
 
     public function subscribe(Dispatcher $events)

@@ -5,54 +5,87 @@ namespace Tests\Stubs;
 use App\Entities\DocumentVersion;
 use App\Entities\Label;
 use App\File;
+use Illuminate\Support\Collection;
 use Tests\Stubs\Requests\DocumentAttributeValueStub;
 
-class DocumentVersionStub implements StubInterface
+/**
+ * Class DocumentVersionStub
+ * @package Tests\Stubs
+ *
+ * @property DocumentVersion $model
+ */
+class DocumentVersionStub extends AbstractStub
 {
-    protected $documentVersion;
+    /**
+     * @var Collection
+     */
     protected $labels;
+
+    /**
+     * @var Collection
+     */
     protected $files;
+
+    /**
+     * @var DocumentAttributeValueStub
+     */
     protected $documentAttributeValueStub;
 
+    public function __construct(array $valuesToOverride = [], bool $persisted = false)
+    {
+        parent::__construct($valuesToOverride, $persisted);
 
-    public function buildRequest($valuesToOverride = []): array
+        $this->labels = factory(Label::class, 3)->create();
+        $this->files = factory(File::class, 3)->create();
+
+        $this->documentAttributeValueStub = new DocumentAttributeValueStub();
+
+        if($persisted) {
+            $this->model->labels()->sync($this->labels->pluck('id')->toArray());
+            $this->model->files()->sync($this->files->pluck('id')->toArray());
+        }
+
+    }
+
+    /**
+     * @return string
+     */
+    protected function getModelName()
+    {
+        return DocumentVersion::class;
+    }
+
+    /**
+     * @return array
+     */
+    protected function doBuildRequest()
     {
         return [
-            'name' => $this->documentVersion->name,
-            'templateId' => $this->documentVersion->template_id,
-            'comment' => $this->documentVersion->comment,
-            'labelIds' => $this->labels->pluck('id'),
-            'fileIds' => $this->files->pluck('id'),
+            'name' => $this->model->name,
+            'templateId' => $this->model->templateId,
+            'comment' => $this->model->comment,
+            'labelIds' => $this->labels->pluck('id')->toArray(),
+            'fileIds' => $this->files->pluck('id')->toArray(),
             'attributeValues' => [
                 $this->documentAttributeValueStub->buildRequest()
             ]
         ];
     }
 
-    public function buildResponse($valuesToOverride = []): array
+    /**
+     * @return array
+     */
+    protected function doBuildResponse()
     {
         return [
-            'name' => $this->documentVersion->name,
-            'templateId' => $this->documentVersion->template_id,
-            'comment' => $this->documentVersion->comment,
-            'labelIds' => $this->labels->pluck('id'),
-            'fileIds' => $this->files->pluck('id'),
+            'name' => $this->model->name,
+            'templateId' => $this->model->templateId,
+            'comment' => $this->model->comment,
+            'labelIds' => $this->labels->pluck('id')->toArray(),
+            'fileIds' => $this->files->pluck('id')->toArray(),
             'attributeValues' => [
                 $this->documentAttributeValueStub->buildResponse()
             ]
         ];
-    }
-
-    public function buildModel($valuesToOverride = [], $persisted = false)
-    {
-        $this->documentVersion = factory(DocumentVersion::class)->{$persisted ? 'create' : 'make'}($valuesToOverride);
-        $this->labels = factory(Label::class, 3)->create();
-        $this->files = factory(File::class, 3)->create();
-        $this->documentAttributeValueStub = new DocumentAttributeValueStub();
-    }
-
-    public function getModel()
-    {
-        return $this->documentVersion;
     }
 }

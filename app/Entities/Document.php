@@ -2,16 +2,28 @@
 
 namespace App\Entities;
 
-use App\Log;
-use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Collection;
 use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
 
 /**
  * Class Document.
+ *
+ * @property int $ownerId
+ *
+ * @property User $owner
+ * @property Document $substituteDocument
+ * @property DocumentVersion $documentActualVersion
+ * @property Collection|DocumentVersion[] $documentVersions
+ * @property Collection|Log[] $logs
+ *
+ * @property Carbon $createdAt
+ * @property Carbon $updatedAt
+ * @property Carbon $deletedAt
  */
-class Document extends Model implements Transformable
+class Document extends BaseEntity implements Transformable
 {
     use TransformableTrait;
     use SoftDeletes;
@@ -45,6 +57,9 @@ class Document extends Model implements Transformable
         return $this->hasOne(DocumentVersion::class)->whereIsActual(1);
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function documentVersions()
     {
         return $this->hasMany(DocumentVersion::class)->orderBy('created_at', 'DESC');

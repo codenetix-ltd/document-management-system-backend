@@ -4,50 +4,64 @@ namespace Tests\Stubs;
 
 
 use App\Entities\Document;
+use App\Entities\DocumentVersion;
 
-class DocumentStub implements StubInterface
+/**
+ * Class DocumentStub
+ * @package Tests\Stubs
+ *
+ * @property Document $model
+ */
+class DocumentStub extends AbstractStub
 {
-
-    protected $document;
+    /**
+     * @var DocumentVersionStub
+     */
     protected $actualDocumentVersionStub;
 
-    public function buildModel($valuesToOverride = [], $persisted = false)
-    {
-        $this->document = factory(Document::class)->{$persisted ? 'create' : 'make'}($valuesToOverride);
+    /**
+     * @var DocumentVersion
+     */
+    protected $actualVersion;
 
-        $versionStub = new DocumentVersionStub();
-        $versionStub->buildModel([
-            'document_id' => $this->document->id,
-            'is_actual' => 1
+    public function __construct(array $valuesToOverride = [], bool $persisted = false)
+    {
+        parent::__construct($valuesToOverride, $persisted);
+
+        $this->actualDocumentVersionStub = new DocumentVersionStub([
+            'document_id' => $this->model->id,
+            'is_actual' => 1,
         ], $persisted);
-
-        $this->document->atttach($versionStub->getModel());
-
-        $this->actualDocumentVersionStub = $versionStub;
-
-        return $this;
     }
 
-    public function buildRequest($valuesToOverride = []): array
+    /**
+     * @return string
+     */
+    protected function getModelName()
     {
-        return array_merge_recursive([
-            'ownerId' => $this->document->ownerId,
+        return Document::class;
+    }
+
+    /**
+     * @return array
+     */
+    protected function doBuildRequest()
+    {
+        return [
+            'ownerId' => $this->model->ownerId,
             'actualVersion' => $this->actualDocumentVersionStub->buildRequest()
-        ], $valuesToOverride);
+        ];
     }
 
-    public function buildResponse($valuesToOverride = []): array
+    /**
+     * @return array
+     */
+    protected function doBuildResponse()
     {
-        return array_merge_recursive([
-
-            'ownerId' => $this->document->ownerId,
+        return [
+            'ownerId' => $this->model->ownerId,
             'substituteDocumentId' => null,
-            'actualVersion' => $this->actualDocumentVersionStub->buildReponse()
-        ], $valuesToOverride);
-    }
-
-    public function getModel()
-    {
-        return $this->document;
+            'actualVersion' => $this->actualDocumentVersionStub->buildResponse(),
+        ];
     }
 }

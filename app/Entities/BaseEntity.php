@@ -4,6 +4,12 @@ namespace App\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**[
+ * Class BaseEntity
+ * @package App\Entities
+ *
+ * @property int $id
+ */
 class BaseEntity extends Model
 {
     public function getAttribute($key)

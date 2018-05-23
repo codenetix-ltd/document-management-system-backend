@@ -3,26 +3,40 @@
 namespace Tests\Stubs\Requests;
 
 use App\Entities\Attribute;
+use Tests\Stubs\AbstractStub;
 use Tests\Stubs\StubInterface;
 
-class DocumentAttributeValueStub implements StubInterface
+/**
+ * Class DocumentAttributeValueStub
+ * @package Tests\Stubs\Requests
+ *
+ * @property Attribute $model
+ */
+class DocumentAttributeValueStub extends AbstractStub
 {
+    /**
+     * @return string
+     */
+    protected function getModelName()
+    {
+        return Attribute::class;
+    }
 
-    public function buildModel($valuesToOverride = [], $persisted = false){
-        $attribute = factory(Attribute::class)->create();
-
+    /**
+     * @return array
+     */
+    protected function doBuildRequest()
+    {
         return [
-            'id' => $attribute->id,
+            'id' => $this->model->id,
             'value' => 'testValue',
         ];
     }
 
-    public function buildRequest()
-    {
-        return [];
-    }
-
-    public function getModel()
+    /**
+     * @return array
+     */
+    protected function doBuildResponse()
     {
         return [];
     }

@@ -58,15 +58,18 @@ class AttributeTest extends TestCase
      */
     public function testAttributeGet()
     {
-        $template = factory(Template::class)->create();
-        $attribute = factory(Attribute::class)->create([
-            'templateId' => $template->id
-        ]);
+        $attributeStub = new AttributeWithTypeStringStub([], true);
+        $attribute = $attributeStub->getModel();
 
-        $response = $this->json('GET', '/api/templates/'.$template->id.'/attributes/' . $attribute->id);
+        $response = $this->json('GET', '/api/templates/' . $attribute->templateId . '/attributes/' . $attribute->id);
+
         $response
             ->assertStatus(Response::HTTP_OK)
-            ->assertJson((new AttributeResource($attribute, $this->attributeService))->resolve());
+            ->assertExactJson($attributeStub->buildResponse([
+                'id' => $attribute->id,
+                'createdAt' => $attribute->createdAt->timestamp,
+                'updatedAt' => $attribute->updatedAt->timestamp,
+            ]));
     }
 
     /**
@@ -74,14 +77,19 @@ class AttributeTest extends TestCase
      */
     public function testAttributeStoreTypeString()
     {
-        $stub = new AttributeWithTypeStringStub();
+        $attributeStub = new AttributeWithTypeStringStub();
+        $attribute = $attributeStub->getModel();
 
-        $response = $this->json('POST', '/api/templates/' . $stub->getTemplateId() . '/attributes', $stub->buildRequest());
+        $response = $this->json('POST', '/api/templates/' . $attribute->templateId . '/attributes', $attributeStub->buildRequest());
         $attributeModel = Attribute::find($response->decodeResponseJson('id'));
 
         $response
             ->assertStatus(Response::HTTP_CREATED)
-            ->assertExactJson($stub->buildResponse($attributeModel));
+            ->assertExactJson($attributeStub->buildResponse([
+                'id' => $attributeModel->id,
+                'createdAt' => $attributeModel->createdAt->timestamp,
+                'updatedAt' => $attributeModel->updatedAt->timestamp,
+            ]));
     }
 
     /**
@@ -89,24 +97,30 @@ class AttributeTest extends TestCase
      */
     public function testAttributeStoreTypeTable()
     {
-        $stub = new AttributeWithTypeTableStub();
+        $attributeStub = new AttributeWithTypeTableStub([], false, 'table');
+        $attribute = $attributeStub->getModel();
 
-        $response = $this->json('POST', '/api/templates/' . $stub->getTemplateId() . '/attributes', $stub->buildRequest());
+        $response = $this->json('POST', '/api/templates/' . $attribute->templateId . '/attributes', $attributeStub->buildRequest());
         $attributeModel = Attribute::find($response->decodeResponseJson('id'));
 
         $response
             ->assertStatus(Response::HTTP_CREATED)
-            ->assertExactJson($stub->buildResponse($attributeModel));
+            ->assertExactJson($attributeStub->buildResponse([
+                'id' => $attributeModel->id,
+                'createdAt' => $attributeModel->createdAt->timestamp,
+                'updatedAt' => $attributeModel->updatedAt->timestamp,
+            ]));
     }
 
     public function testAttributeStoreValidationError()
     {
-        $stub = new AttributeWithTypeStringStub();
-        $data = $stub->buildRequest();
+        $attributeStub = new AttributeWithTypeStringStub();
+        $data = $attributeStub->buildRequest();
         $fieldKey = 'name';
         unset($data[$fieldKey]);
+        $model = $attributeStub->getModel();
 
-        $response = $this->json('POST', '/api/templates/' . $stub->getTemplateId() . '/attributes', $data);
+        $response = $this->json('POST', '/api/templates/' . $model->templateId . '/attributes', $data);
 
         $response
             ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
@@ -128,12 +142,10 @@ class AttributeTest extends TestCase
      */
     public function testAttributeDelete()
     {
-        $template = factory(Template::class)->create();
-        $attribute = factory(Attribute::class)->create([
-            'templateId' => $template->id
-        ]);
+        $attributeStub = new AttributeWithTypeStringStub([], true);
+        $attribute = $attributeStub->getModel();
 
-        $response = $this->json('DELETE', '/api/templates/' . $template->id . '/attributes/' . $attribute->id);
+        $response = $this->json('DELETE', '/api/templates/' . $attribute->templateId . '/attributes/' . $attribute->id);
         $response->assertStatus(Response::HTTP_NO_CONTENT);
     }
 

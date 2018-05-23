@@ -24,9 +24,15 @@ abstract class AbstractStub
      */
     abstract protected function doBuildResponse();
 
-    public function __construct($valuesToOverride = [], $persisted = false)
+    /**
+     * AbstractStub constructor.
+     * @param array $valuesToOverride
+     * @param bool $persisted
+     * @param array $states
+     */
+    public function __construct($valuesToOverride = [], $persisted = false, $states = [])
     {
-        $this->model = factory($this->getModelName())->{$persisted ? 'create' : 'make'}($valuesToOverride);
+        $this->model = factory($this->getModelName())->states($states)->{$persisted ? 'create' : 'make'}($valuesToOverride);
     }
 
     public function buildRequest($valuesToOverride = [])

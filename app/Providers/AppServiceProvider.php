@@ -68,7 +68,7 @@ class AppServiceProvider extends ServiceProvider
     {
 //        $this->app->bind(IUserRepository::class, UserRepository::class);
 //
-//        $this->app->bind(IFileRepository::class, FileRepository::class);
+        $this->app->bind(IFileRepository::class, FileRepository::class);
 //        $this->app->bind(IFileManager::class, FileManager::class);
 //        $this->app->bind(IFileCreateService::class, FileCreateService::class);
 //

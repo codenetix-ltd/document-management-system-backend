@@ -37,7 +37,7 @@ test:
     APP_KEY: '"base64:N5A11hYX5GxzTqEPRtoRHjtdtqg65hGpw2Qis1V4b8M="'
     GIT_STRATEGY: none
   script:
-    - /var/www/vendor/bin/phpunit -c /var/www/phpunit.xml --coverage-text --colors=never
+    - /var/www/vendor/bin/phpunit /var/www/tests/Feature -c /var/www/phpunit.xml --coverage-text --colors=never
   tags:
     - docker-build
 

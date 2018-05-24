@@ -27,6 +27,14 @@ class UserStub extends AbstractStub
         }
     }
 
+    protected function initiateByModel($model)
+    {
+        parent::initiateByModel($model);
+
+        $this->templateIds = $this->model->templates->pluck('id')->toArray();
+    }
+
+
     /**
      * @return string
      */
@@ -58,10 +66,7 @@ class UserStub extends AbstractStub
             'email' => $this->model->email,
             'templateIds' => $this->templateIds,
             'avatarId' => $this->model->avatar->getId(),
-            'avatar' => [
-                'name'=>$this->model->avatar->getOriginalName(),
-                'url' => $this->model->avatar->getPath()
-            ]
+            'avatar' => (new FileStub([], true, [], $this->model->avatar))->buildResponse()
         ];
     }
 }

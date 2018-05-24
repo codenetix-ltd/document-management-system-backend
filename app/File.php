@@ -4,6 +4,12 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Class File
+ * @package App
+ *
+ * @property int $id
+ */
 class File extends Model
 {
     //TODO - remove from here

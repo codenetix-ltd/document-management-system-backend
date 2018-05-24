@@ -11,6 +11,7 @@ use Illuminate\Support\Collection;
 use Tests\ApiTestCase;
 use Tests\Stubs\DocumentStub;
 use Tests\Stubs\DocumentVersionStub;
+use Tests\Stubs\UserStub;
 
 /**
  * Class DocumentTest
@@ -66,17 +67,7 @@ class DocumentTest extends ApiTestCase
 
         $response->assertExactJson($stub->buildResponse([
             'ownerId' => $newOwner->id,
-            'owner' => [
-                'id' => $newOwner->id,
-                'fullName' => $newOwner->fullName,
-                'email' => $newOwner->email,
-                'templateIds' => $newOwner->templates->pluck('id')->toArray(),
-                'avatar' => [
-                    'name'=>$newOwner->avatar->getOriginalName(),
-                    'url' => $newOwner->avatar->getPath()
-                ],
-                'avatarId' => $newOwner->avatar->getId(),
-            ],
+            'owner' => (new UserStub([], true, [], $newOwner))->buildResponse(),
             'updatedAt' => $updatedDocument->updatedAt->timestamp,
         ]));
     }

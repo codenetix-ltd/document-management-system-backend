@@ -76,17 +76,7 @@ class DocumentStub extends AbstractStub
             'substituteDocumentId' => null,
             'actualVersion' => $this->actualDocumentVersionStub->buildResponse(),
             'version' => (string)$this->actualDocumentVersionStub->getModel()->versionName,
-            'owner' => [
-                'id' => $this->model->owner->id,
-                'fullName' => $this->model->owner->fullName,
-                'email' => $this->model->owner->email,
-                'templateIds' => $this->model->owner->templates->pluck('id')->toArray(),
-                'avatar' => [
-                    'name'=>$this->model->owner->avatar->getOriginalName(),
-                    'url' => $this->model->owner->avatar->getPath()
-                ],
-                'avatarId' => $this->model->owner->avatar->getId(),
-            ]
+            'owner' => (new UserStub([], true, [], $this->model->owner))->buildResponse(),
         ];
     }
 }

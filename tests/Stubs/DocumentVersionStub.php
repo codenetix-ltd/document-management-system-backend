@@ -113,7 +113,7 @@ class DocumentVersionStub extends AbstractStub
             })->toArray(),
             'fileIds' => $this->files->pluck('id')->toArray(),
             'files' => $this->files->map(function ($item) {
-                return (new FileStub([], false, [], $item))->buildResponse();
+                return (new FileStub([], true, [], $item))->buildResponse();
             })->toArray(),
             'attributeValues' => $this->attributeValuesStubs->map(function($item){
                 /** @var AttributeValueStub $item */

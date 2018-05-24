@@ -38,9 +38,9 @@ class DocumentVersionStub extends AbstractStub
      */
     protected $documentAttributeValueStub;
 
-    public function __construct(array $valuesToOverride = [], bool $persisted = false)
+    protected function buildModel($valuesToOverride = [], $persisted = false, $states = [])
     {
-        parent::__construct($valuesToOverride, $persisted);
+        parent::buildModel($valuesToOverride, $persisted, $states);
 
         $this->labels = factory(Label::class, 3)->create();
         $this->files = factory(File::class, 3)->create();
@@ -54,8 +54,23 @@ class DocumentVersionStub extends AbstractStub
             $this->model->labels()->sync($this->labels->pluck('id')->toArray());
             $this->model->files()->sync($this->files->pluck('id')->toArray());
         }
-
     }
+
+    /**
+     * @param DocumentVersion $model
+     */
+    protected function initiateByModel($model)
+    {
+        parent::initiateByModel($model);
+
+        $this->labels = $model->labels;
+        $this->files = $model->files;
+
+        $this->attributeValuesStubs = $model->attributeValues->map(function($item){
+            return new AttributeValueStub([], true, [], $item);
+        });
+    }
+
 
     /**
      * @return string
@@ -94,52 +109,17 @@ class DocumentVersionStub extends AbstractStub
             'comment' => $this->model->comment,
             'labelIds' => $this->labels->pluck('id')->toArray(),
             'labels' => $this->labels->map(function ($item) {
-                /** @var Label $item */
-                return [
-                    'id' => $item->id,
-                    'name' => $item->name,
-                    'createdAt' => $item->createdAt->timestamp,
-                    'updatedAt' => $item->updatedAt->timestamp,
-                ];
+                return (new LabelStub([], true, [], $item))->buildResponse();
             })->toArray(),
             'fileIds' => $this->files->pluck('id')->toArray(),
             'files' => $this->files->map(function ($item) {
-                /** @var File $item */
-                return [
-                    'name' => $item->getOriginalName(),
-                    'url' => $item->getPath()
-                ];
+                return (new FileStub([], false, [], $item))->buildResponse();
             })->toArray(),
             'attributeValues' => $this->attributeValuesStubs->map(function($item){
                 /** @var AttributeValueStub $item */
                 return $item->doBuildResponse();
             })->toArray(),
-            'template' => [
-                'name' => $this->model->template->name,
-                'id' => $this->model->template->id,
-                'createdAt' => $this->model->template->createdAt->timestamp,
-                'updatedAt' => $this->model->template->updatedAt->timestamp,
-                'attributes' => $this->model->template->attributes->map(function($item){
-                    /** @var Attribute $item */
-                    return [
-                        'id' => $item->id,
-                        'type' => [
-                            'id' => $item->type->id,
-                            'name' => $item->type->name,
-                            'machineName' => $item->type->machineName,
-                            'createdAt' => $item->type->createdAt->timestamp,
-                            'updatedAt' => $item->type->updatedAt->timestamp
-                        ],
-                        'name' => $item->name,
-                        'data' => null,
-                        'isLocked' => $item->isLocked,
-                        'order' => $item->order,
-                        'templateId' => $item->templateId,
-                        'createdAt' => $item->createdAt->timestamp,
-                        'updatedAt' => $item->updatedAt->timestamp
-                    ];
-                })->toArray()
-            ],
+            'template' => (new TemplateStub([], true, [], $this->model->template))->buildResponse(),
         ];
     }
 }

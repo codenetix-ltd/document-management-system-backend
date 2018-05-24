@@ -4,8 +4,15 @@ namespace Tests\Stubs;
 
 use App\Entities\Attribute;
 
+/**
+ * Class AttributeWithTypeStringStub
+ * @package Tests\Stubs
+ *
+ * @property Attribute $model
+ */
 class AttributeWithTypeStringStub extends AbstractStub
 {
+    protected $replaceTimeStamps = true;
     /**
      * @return string
      */
@@ -40,8 +47,8 @@ class AttributeWithTypeStringStub extends AbstractStub
             ],
             'name' => $this->model->name,
             'data' => null,
-            'isLocked' => false,
-            'order' => 0,
+            'isLocked' => $this->model->isLocked,
+            'order' => $this->model->order,
             'templateId' => $this->model->templateId,
         ];
     }

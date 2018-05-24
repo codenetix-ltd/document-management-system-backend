@@ -6,6 +6,8 @@ use App\File;
 
 /**
  * @author Vladimir Barmotin <barmotinvladimir@gmail.com>
+ *
+ * @property File $model
  */
 class FileStub extends AbstractStub
 {
@@ -31,6 +33,9 @@ class FileStub extends AbstractStub
      */
     protected function doBuildResponse()
     {
-        return [];
+        return [
+            'name' => $this->model->getOriginalName(),
+            'url' => $this->model->getPath()
+        ];
     }
 }

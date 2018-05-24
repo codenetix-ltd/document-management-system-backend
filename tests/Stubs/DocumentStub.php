@@ -5,6 +5,7 @@ namespace Tests\Stubs;
 
 use App\Entities\Document;
 use App\Entities\DocumentVersion;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class DocumentStub
@@ -26,14 +27,24 @@ class DocumentStub extends AbstractStub
      */
     protected $actualVersion;
 
-    public function __construct(array $valuesToOverride = [], bool $persisted = false)
+    protected function buildModel($valuesToOverride = [], $persisted = false, $states = [])
     {
-        parent::__construct($valuesToOverride, $persisted);
+        parent::buildModel($valuesToOverride, $persisted, $states);
 
         $this->actualDocumentVersionStub = new DocumentVersionStub([
             'document_id' => $this->model->id,
             'is_actual' => 1,
         ], $persisted);
+    }
+
+    /**
+     * @param Document $model
+     */
+    protected function initiateByModel($model)
+    {
+        parent::initiateByModel($model);
+
+        $this->actualDocumentVersionStub = new DocumentVersionStub([], true, [], $model->documentActualVersion);
     }
 
     /**

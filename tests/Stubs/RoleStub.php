@@ -22,14 +22,13 @@ class RoleStub extends AbstractStub
     
     private $variablesContainer;
 
-    public function __construct(array $valuesToOverride = [], bool $persisted = false)
+    protected function buildModel($valuesToOverride = [], $persisted = false, $states = [])
     {
+        parent::buildModel($valuesToOverride, $persisted, $states);
+
         $this->templates = factory(Template::class, 1)->create();
         $this->permissionValueWithQualifiersAccessType = $this->buildPermissionValueWithQualifiersAccessType();
         $this->permissionValueWithoutQualifiersAccessType = $this->buildPermissionValueWithoutQualifiersAccessType($this->permissionValueWithQualifiersAccessType['id']);
-
-
-        parent::__construct($valuesToOverride, $persisted);
     }
 
     /**

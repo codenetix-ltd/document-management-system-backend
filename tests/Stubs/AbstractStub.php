@@ -2,6 +2,8 @@
 
 namespace Tests\Stubs;
 
+use Illuminate\Database\Eloquent\Model;
+
 /**
  * @author Vladimir Barmotin <barmotinvladimir@gmail.com>
  */
@@ -39,11 +41,16 @@ abstract class AbstractStub
      * @param array $valuesToOverride
      * @param bool $persisted
      * @param array $states
+     * @param Model|null $model
      */
-    public function __construct($valuesToOverride = [], $persisted = false, $states = [])
+    public function __construct($valuesToOverride = [], $persisted = false, $states = [], Model $model = null)
     {
-        $this->model = factory($this->getModelName())->states($states)->{$persisted ? 'create' : 'make'}($valuesToOverride);
         $this->persisted = $persisted;
+        if ($model) {
+            $this->initiateByModel($model);
+        } else {
+            $this->buildModel($valuesToOverride, $persisted, $states);
+        }
     }
 
     public function buildRequest($valuesToOverride = [])
@@ -74,5 +81,15 @@ abstract class AbstractStub
     public function getModel()
     {
         return $this->model;
+    }
+
+    protected function buildModel($valuesToOverride = [], $persisted = false, $states = [])
+    {
+        $this->model = factory($this->getModelName())->states($states)->{$persisted ? 'create' : 'make'}($valuesToOverride);
+    }
+
+    protected function initiateByModel($model)
+    {
+        $this->model = $model;
     }
 }

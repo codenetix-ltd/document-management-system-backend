@@ -15,6 +15,7 @@ use Prettus\Repository\Traits\TransformableTrait;
  * @property bool $isLocked
  * @property int $order
  * @property int $templateId
+ * @property int $typeId
  *
  * @property Carbon $createdAt
  * @property Carbon $updatedAt

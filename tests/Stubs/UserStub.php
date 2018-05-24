@@ -16,10 +16,10 @@ class UserStub extends AbstractStub
 {
     private $templateIds = [];
 
-    public function __construct(array $valuesToOverride = [], bool $persisted = false)
+    protected function buildModel($valuesToOverride = [], $persisted = false, $states = [])
     {
-        parent::__construct($valuesToOverride, $persisted);
-        /** @var Collection $templates */
+        parent::buildModel($valuesToOverride, $persisted, $states);
+
         $this->templateIds = factory(Template::class, 5)->create()->pluck('id')->toArray();
 
         if($persisted) {

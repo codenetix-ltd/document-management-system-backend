@@ -57,11 +57,7 @@ class LabelTest extends TestCase
 
         $response
             ->assertStatus(Response::HTTP_OK)
-            ->assertExactJson($labelStub->buildResponse([
-                'id' => $label->id,
-                'createdAt' => $label->createdAt->timestamp,
-                'updatedAt' => $label->updatedAt->timestamp
-            ]));
+            ->assertExactJson($labelStub->buildResponse());
     }
 
     /**
@@ -73,6 +69,7 @@ class LabelTest extends TestCase
 
         $response = $this->json('POST', '/api/labels', $labelStub->buildRequest());
 
+        /** @var Label $label */
         $label = Label::find($response->decodeResponseJson('id'));
 
         $response
@@ -120,14 +117,13 @@ class LabelTest extends TestCase
             'name' => $newLabelName
         ]));
 
+        /** @var Label $labelUpdated */
         $labelUpdated = Label::find($response->decodeResponseJson('id'));
 
         $response
             ->assertStatus(Response::HTTP_OK)
             ->assertExactJson($labelStub->buildResponse([
-                'id' => $labelUpdated->id,
                 'name' => $newLabelName,
-                'createdAt' => $labelUpdated->createdAt->timestamp,
                 'updatedAt' => $labelUpdated->updatedAt->timestamp
             ]));
     }

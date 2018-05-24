@@ -2,23 +2,22 @@
 
 namespace Tests\Stubs;
 
-use App\Entities\Label;
+use App\Entities\Type;
 
 /**
- * Class LabelStub
- * @package Tests\Stubs
- * @property Label $model
+ * @author Vladimir Barmotin <barmotinvladimir@gmail.com>
+ *
+ * @property Type $model
  */
-class LabelStub extends AbstractStub
+class TypeStub extends AbstractStub
 {
     protected $replaceTimeStamps = true;
-
     /**
      * @return string
      */
     protected function getModelName()
     {
-        return Label::class;
+        return Type::class;
     }
 
     /**
@@ -26,9 +25,7 @@ class LabelStub extends AbstractStub
      */
     protected function doBuildRequest()
     {
-        return [
-            'name' => $this->model->name,
-        ];
+        return [];
     }
 
     /**
@@ -38,6 +35,7 @@ class LabelStub extends AbstractStub
     {
         return [
             'name' => $this->model->name,
+            'machineName' => $this->model->machineName,
         ];
     }
 }

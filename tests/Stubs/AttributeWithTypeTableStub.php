@@ -5,6 +5,12 @@ namespace Tests\Stubs;
 use App\Entities\Attribute;
 use App\Repositories\TypeRepository;
 
+/**
+ * Class AttributeWithTypeTableStub
+ * @package Tests\Stubs
+ *
+ * @property Attribute $model
+ */
 class AttributeWithTypeTableStub extends AbstractStub
 {
     /**
@@ -50,6 +56,7 @@ class AttributeWithTypeTableStub extends AbstractStub
 
     private function buildAttributeData(): array
     {
+        /** @var TypeRepository $typeRepository */
         $typeRepository = app()->make(TypeRepository::class);
         $typeString = $typeRepository->getTypeByMachineName('string');
 

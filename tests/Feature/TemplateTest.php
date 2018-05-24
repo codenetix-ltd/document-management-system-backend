@@ -57,11 +57,7 @@ class TemplateTest extends TestCase
 
         $response
             ->assertStatus(Response::HTTP_OK)
-            ->assertExactJson($templateStub->buildResponse([
-                'id' => $template->id,
-                'createdAt' => $template->createdAt->timestamp,
-                'updatedAt' => $template->updatedAt->timestamp
-            ]));
+            ->assertExactJson($templateStub->buildResponse());
     }
 
     /**
@@ -80,7 +76,7 @@ class TemplateTest extends TestCase
             ->assertExactJson($templateStub->buildResponse([
                 'id' => $template->id,
                 'createdAt' => $template->createdAt->timestamp,
-                'updatedAt' => $template->updatedAt->timestamp
+                'updatedAt' => $template->updatedAt->timestamp,
             ]));
     }
 

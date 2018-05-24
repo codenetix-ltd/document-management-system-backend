@@ -63,12 +63,7 @@ class DocumentService
         /** @var Document $document */
         $document = $this->repository->create($data);
 
-        $actualVersionData = $data['actualVersion'];
-        $actualVersionData['isActual'] = 1;
-        $actualVersionData['versionName'] = 1;
-        $actualVersionData['documentId'] = $document->id;
-
-        $this->documentVersionService->create($actualVersionData);
+        $this->documentVersionService->create($data['actualVersion'], $document->id, 1, true);
         Event::dispatch(new DocumentCreateEvent($document));
 
         return $document;
@@ -103,16 +98,16 @@ class DocumentService
         $document = $this->find($id);
 
         $oldActualVersion = $document->documentActualVersion;
-        $actualVersionData = $data['actualVersion'];
-        $actualVersionData['isActual'] = 1;
-        $actualVersionData['documentId'] = $document->id;
-        $actualVersionData['versionName'] = (int)$oldActualVersion->versionName + ($createNewVersion ? 1 : 0);
 
-
-        $this->documentVersionService->create($actualVersionData);
+        $this->documentVersionService->create(
+            $data['actualVersion'],
+            $document->id,
+            (int)$oldActualVersion->versionName + ($createNewVersion ? 1 : 0),
+            true
+        );
 
         if($createNewVersion) {
-            $this->documentVersionService->update(['isActual' => false], $oldActualVersion->id);
+            $this->documentVersionService->updateActual(false, $oldActualVersion->id);
         } else {
             $this->documentVersionService->delete($oldActualVersion->id);
         }
@@ -145,8 +140,8 @@ class DocumentService
 
         $oldVersion = $document->documentActualVersion;
 
-        $this->documentVersionService->update(['isActual' => false], $oldVersion->id);
-        $this->documentVersionService->update(['isActual' => true], $newVersion->id);
+        $this->documentVersionService->updateActual(false, $oldVersion->id);
+        $this->documentVersionService->updateActual(true, $newVersion->id);
     }
 
 }

@@ -2,11 +2,13 @@
 
 namespace Tests\Feature;
 
+use App\Entities\Document;
 use App\Entities\DocumentVersion;
-use App\Http\Resources\DocumentVersionCollectionResource;
-use App\Http\Resources\DocumentVersionResource;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Resources\Json\Resource;
+use Illuminate\Http\Response;
+use Tests\Stubs\DocumentStub;
+use Tests\Stubs\DocumentVersionStub;
 use Tests\TestCase;
 
 /**
@@ -25,38 +27,7 @@ class DocumentVersionTest extends TestCase
     {
         parent::setUp();
         Resource::withoutWrapping();
-    }
-
-    /**
-     * Tests documentVersion list endpoint
-     *
-     * @return void
-     */
-    public function testDocumentVersionList()
-    {
-        $documentVersions = factory(DocumentVersion::class, 10)->create();
-
-        $response = $this->json('GET', '/api/documentVersions');
-
-        $response
-            ->assertStatus(200)
-            ->assertJson((new DocumentVersionCollectionResource($documentVersions))->resolve());
-    }
-
-    /**
-     * Tests $documentVersion get endpoint
-     *
-     * @return void
-     */
-    public function testDocumentVersionGet()
-    {
-        $documentVersions = factory(DocumentVersion::class, 10)->create();
-
-        $response = $this->json('GET', '/api/documentVersions/' . $documentVersions[0]->id);
-
-        $response
-            ->assertStatus(200)
-            ->assertJson((new DocumentVersionResource($documentVersions[0]))->resolve());
+        $this->actingAs($this->authUser);
     }
 
     /**
@@ -66,15 +37,70 @@ class DocumentVersionTest extends TestCase
      */
     public function testDocumentVersionStore()
     {
-        $documentVersion = factory(DocumentVersion::class)->make();
+        /** @var Document $document */
+        $document = (new DocumentStub([], true))->getModel();
+        $documentVersionStub = new DocumentVersionStub(['documentId' => $document->id]);
 
-        $response = $this->json('POST', '/api/documentVersions', $documentVersion->toArray());
+        $response = $this->json('POST', '/api/documents/'.$document->id.'/documentVersions', $documentVersionStub->buildRequest([]));
 
-        $documentVersion = DocumentVersion::first();
+        $id = $response->decodeResponseJson()['id'];
+        /** @var DocumentVersion $documentVersion */
+        $documentVersion = DocumentVersion::find($id);
 
         $response
             ->assertStatus(201)
-            ->assertJson((new DocumentVersionResource($documentVersion))->resolve());
+            ->assertExactJson($documentVersionStub->buildResponse([
+                'id' => $documentVersion->id,
+                'createdAt' => $documentVersion->createdAt->timestamp,
+                'updatedAt' => $documentVersion->updatedAt->timestamp
+            ]));
+    }
+
+    /**
+     * Tests documentVersion list endpoint
+     *
+     * @return void
+     */
+    public function testDocumentVersionList()
+    {
+        /** @var Document $document */
+        $document = (new DocumentStub([], true))->getModel();
+
+        for($i=0;$i<3;++$i) {
+            new DocumentVersionStub(['document_id' => $document->id], true);
+        }
+        new DocumentVersionStub([], true);
+        new DocumentVersionStub([], true);
+
+
+        $response = $this->json('GET', '/api/documents/'.$document->id.'/documentVersions');
+
+        $this->assetJsonPaginationStructure($response);
+        $response->assertStatus(Response::HTTP_OK);
+
+        // 1 from DocumentStub + 3 from loop
+        $this->assertCount(4, $response->decodeResponseJson()['data']);
+    }
+
+    /**
+     * Tests $documentVersion get endpoint
+     *
+     * @return void
+     */
+    public function testDocumentVersionGet()
+    {
+        /** @var Document $document */
+        $document = (new DocumentStub([], true))->getModel();
+        $documentVersionStub = new DocumentVersionStub(['document_id' => $document->id], true);
+
+        /** @var DocumentVersion $documentVersion */
+        $documentVersion = $documentVersionStub->getModel();
+        $response = $this->json('GET', '/api/documents/'.$document->id.'/documentVersions/' . $documentVersion->id);
+
+        $response
+            ->assertStatus(Response::HTTP_OK)
+            ->assertExactJson($documentVersionStub->buildResponse());
+
     }
 
     /**
@@ -84,13 +110,38 @@ class DocumentVersionTest extends TestCase
      */
     public function testDocumentVersionUpdate()
     {
-        $documentVersion = factory(DocumentVersion::class)->create();
+        $documentStub = new DocumentStub([], true);
+        /** @var Document $document */
+        $document = $documentStub->getModel();
+        $documentVersionStub = new DocumentVersionStub(['document_id' => $document->id], true);
+        /** @var DocumentVersion $documentVersion */
+        $documentVersion= $documentVersionStub->getModel();
 
-        $response = $this->json('PUT', '/api/documentVersions/' . $documentVersion->id, array_only($documentVersion->toArray(), $documentVersion->getFillable()));
+        $response = $this->json('PUT', '/api/documents/'.$document->id.'/documentVersions/' . $documentVersion->id, $documentVersionStub->buildRequest(['comment' => 'newComment']));
+        /** @var DocumentVersion $updatedVersion */
+        $updatedVersion = DocumentVersion::find($documentVersion->id);
+
 
         $response
-            ->assertStatus(200)
-            ->assertJson((new DocumentVersionResource($documentVersion))->resolve());
+            ->assertStatus(Response::HTTP_OK)
+            ->assertExactJson($documentVersionStub->buildResponse([
+                'updatedAt' => $updatedVersion->updatedAt->timestamp,
+                'comment' => 'newComment',
+            ]));
+    }
+
+    public function testDocumentVersionUpdateValidationError()
+    {
+        $documentStub = new DocumentStub([], true);
+        /** @var Document $document */
+        $document = $documentStub->getModel();
+        $documentVersionStub = new DocumentVersionStub(['document_id' => $document->id], true);
+        /** @var DocumentVersion $documentVersion */
+        $documentVersion= $documentVersionStub->getModel();
+
+        $response = $this->json('PUT', '/api/documents/'.$document->id.'/documentVersions/' . $documentVersion->id, $documentVersionStub->buildRequest(['comment' => 'newComment', 'name' => null]));
+
+        $response->assertJsonValidationErrors(['name']);
     }
 
     /**
@@ -100,12 +151,29 @@ class DocumentVersionTest extends TestCase
      */
     public function testDocumentVersionDelete()
     {
-        $documentVersion = factory(DocumentVersion::class)->create();
+        /** @var Document $document */
+        $document = (new DocumentStub([], true))->getModel();
+        /** @var DocumentVersion $documentVersion */
+        $documentVersion = (new DocumentVersionStub(['document_id' => $document->id], true))->getModel();
 
-        $response = $this->json('DELETE', '/api/documentVersions/' . $documentVersion->id);
+        $response = $this->json('DELETE', '/api/documents/'.$document->id.'/documentVersions/' . $documentVersion->id);
 
-        $response
-            ->assertStatus(204);
+        $response->assertStatus(Response::HTTP_NO_CONTENT);
+
+        $this->assertDatabaseMissing('document_versions', ['id' => $documentVersion->id]);
+    }
+
+    /**
+     * Tests documentVersion delete endpoint
+     *
+     * @return void
+     */
+    public function testDocumentVersionDeleteNotFound()
+    {
+        $response = $this->json('DELETE', '/api/documents/0/documentVersions/0');
+
+        $response->assertStatus(Response::HTTP_NO_CONTENT);
+
     }
 
 }

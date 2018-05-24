@@ -19,6 +19,8 @@ class DocumentStub extends AbstractStub
      */
     protected $actualDocumentVersionStub;
 
+    protected $replaceTimeStamps = true;
+
     /**
      * @var DocumentVersion
      */

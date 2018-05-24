@@ -62,8 +62,8 @@ class AttributeValueService
 
     public function delete(int $id)
     {
-        $label = $this->repository->findWhere([['id', '=', $id]])->first();
-        if (is_null($label)) {
+        $value = $this->repository->findWhere([['id', '=', $id]])->first();
+        if (is_null($value)) {
             return null;
         }
 

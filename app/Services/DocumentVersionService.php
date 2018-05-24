@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Entities\Document;
 use App\Entities\DocumentVersion;
 use App\Repositories\DocumentVersionRepository;
 
@@ -31,10 +32,11 @@ class DocumentVersionService
     }
 
     /**
+     * @param $documentId
      * @return mixed
      */
-    public function list(){
-        return $this->repository->all();
+    public function list($documentId){
+        return $this->repository->paginateByDocument($documentId);
     }
 
     /**
@@ -47,9 +49,17 @@ class DocumentVersionService
 
     /**
      * @param array $data
+     * @param int $documentId
+     * @param string $versionName
+     * @param bool $isActual
+     *
      * @return DocumentVersion
      */
-    public function create(array $data){
+    public function create(array $data, $documentId, $versionName, $isActual){
+        $data['documentId'] = $documentId;
+        $data['versionName'] = $versionName;
+        $data['isActual'] = $isActual;
+
         /** @var DocumentVersion $documentVersion */
         $documentVersion = $this->repository->create($data);
         $documentVersion->files()->sync($data['fileIds']);
@@ -71,13 +81,38 @@ class DocumentVersionService
      * @return mixed
      */
     public function update(array $data, int $id){
-        return $this->repository->update($data, $id);
+        /** @var DocumentVersion $documentVersion */
+        $documentVersion = $this->repository->update($data, $id);
+
+        $documentVersion->files()->sync($data['fileIds']);
+        $documentVersion->labels()->sync($data['labelIds']);
+
+        $documentVersion->attributeValues()->delete();
+
+        foreach($data['attributeValues'] as $attributeValue) {
+            $this->attributeValueService->create([
+                'attributeId' => $attributeValue['id'],
+                'documentVersionId' => $documentVersion->id,
+                'value' => $attributeValue['value']
+            ]);
+        }
+
+        return $documentVersion;
+    }
+
+    public function updateActual($actual, $id) {
+        return $this->repository->update(['isActual' => $actual], $id);
     }
 
     /**
      * @param int $id
      */
     public function delete(int $id){
+        $dv = $this->repository->findWhere([['id', '=', $id]])->first();
+        if (is_null($dv)) {
+            return;
+        }
+
         $this->repository->delete($id);
     }
 }

@@ -7,6 +7,7 @@ use App\Http\Requests\DocumentVersionCreateRequest;
 use App\Http\Requests\DocumentVersionUpdateRequest;
 use App\Http\Resources\DocumentVersionCollectionResource;
 use App\Http\Resources\DocumentVersionResource;
+use App\Services\DocumentService;
 use App\Services\DocumentVersionService;
 use Illuminate\Http\Response;
 
@@ -32,61 +33,69 @@ class DocumentVersionsController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param $documentId
+     * @return DocumentVersionCollectionResource
      */
-    public function index()
+    public function index($documentId)
     {
-        $documentVersions = $this->service->list();
+        $documentVersions = $this->service->list($documentId);
         return new DocumentVersionCollectionResource($documentVersions);
     }
 
     /**
      * Store a newly created resource in storage.
      *
+     * @param $documentId
      * @param  DocumentVersionCreateRequest $request
      *
-     * @return \Illuminate\Http\Response
+     * @param DocumentService $documentService
+     * @return DocumentVersionResource
      */
-    public function store(DocumentVersionCreateRequest $request)
+    public function store($documentId, DocumentVersionCreateRequest $request, DocumentService $documentService)
     {
-        $documentVersion = $this->service->create($request->all());
+        $document = $documentService->find($documentId);
+        $version = (int)$document->documentActualVersion->versionName + 1;
+
+        $documentVersion = $this->service->create($request->all(), $document->id, $version, false);
+
         return new DocumentVersionResource($documentVersion);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int $id
-     *
-     * @return \Illuminate\Http\Response
+     * @param $documentId
+     * @param $documentVersionId
+     * @return DocumentVersionResource
      */
-    public function show($id)
+    public function show($documentId, $documentVersionId)
     {
-        $documentVersion = $this->service->find($id);
+        $documentVersion = $this->service->find($documentVersionId);
         return new DocumentVersionResource($documentVersion);
     }
 
     /**
+     * @param $documentId
+     * @param $documentVersionId
      * @param DocumentVersionUpdateRequest $request
-     * @param $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return DocumentVersionResource
      */
-    public function update(DocumentVersionUpdateRequest $request, $id)
+    public function update($documentId, $documentVersionId, DocumentVersionUpdateRequest $request)
     {
-        $documentVersion = $this->service->update($request->all(), $id);
+        $documentVersion = $this->service->update($request->all(), $documentVersionId);
         return new DocumentVersionResource($documentVersion);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
-     *
+     * @param $documentId
+     * @param $documentVersionId
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($documentId, $documentVersionId)
     {
-        $this->service->delete($id);
+        $this->service->delete($documentVersionId);
         return response()->json([], Response::HTTP_NO_CONTENT);
     }
 }

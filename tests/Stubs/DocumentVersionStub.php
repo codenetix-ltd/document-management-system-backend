@@ -17,6 +17,7 @@ use Tests\Stubs\Requests\DocumentAttributeValueStub;
  */
 class DocumentVersionStub extends AbstractStub
 {
+    protected $replaceTimeStamps = true;
     /**
      * @var Collection
      */

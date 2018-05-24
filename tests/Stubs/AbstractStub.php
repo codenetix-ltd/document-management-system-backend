@@ -15,6 +15,11 @@ abstract class AbstractStub
     protected $persisted;
 
     /**
+     * @var bool
+     */
+    protected $replaceTimeStamps = false;
+
+    /**
      * @return string
      */
     abstract protected function getModelName();
@@ -52,11 +57,14 @@ abstract class AbstractStub
 
         if ($this->persisted) {
             $response['id'] = $this->model->id;
-            if($this->model->createdAt){
-                $response['createdAt'] = $this->model->createdAt->timestamp;
-            }
-            if($this->model->updatedAt){
-                $response['updatedAt'] = $this->model->updatedAt->timestamp;
+
+            if($this->replaceTimeStamps) {
+                if ($this->model->createdAt) {
+                    $response['createdAt'] = $this->model->createdAt->timestamp;
+                }
+                if ($this->model->updatedAt) {
+                    $response['updatedAt'] = $this->model->updatedAt->timestamp;
+                }
             }
         }
 

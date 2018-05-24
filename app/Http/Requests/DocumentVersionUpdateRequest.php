@@ -24,7 +24,23 @@ class DocumentVersionUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'name' => 'string|required',
+
+            'templateId' => 'integer|required',
+            'templateIds.*' => 'integer',
+
+            'labelIds' => 'array|required',
+            'labelIds.*' => 'integer',
+
+            'fileIds' => 'array|required',
+            'fileIds.*' => 'integer',
+
+            'comment' => 'string|required',
+
+            'attributeValues' => 'array|required',
+            'attributeValues.*.id' => 'required|integer',
+            'attributeValues.*.type' => 'required|string',
+            'attributeValues.*.value' => 'required',
         ];
     }
 }

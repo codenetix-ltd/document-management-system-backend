@@ -3,13 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests;
+use App\Http\Requests\DocumentBulkPatchUpdateRequest;
 use App\Http\Requests\DocumentCreateRequest;
 use App\Http\Requests\DocumentPatchUpdateRequest;
 use App\Http\Requests\DocumentUpdateRequest;
 use App\Http\Resources\DocumentCollectionResource;
 use App\Http\Resources\DocumentResource;
 use App\Services\DocumentService;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Collection;
+use Exception;
+use Illuminate\Validation\ValidationException;
 
 /**
  * Created by Codenetix team <support@codenetix.com>
@@ -91,6 +96,46 @@ class DocumentsController extends Controller
     public function destroy($id)
     {
         $this->service->delete($id);
+        return response()->json([], Response::HTTP_NO_CONTENT);
+    }
+
+    /**
+     * @param DocumentBulkPatchUpdateRequest $request
+     * @param DocumentService $service
+     *
+     * @return DocumentCollectionResource
+     * @throws ValidationException
+     */
+    public function bulkPatchUpdate(DocumentBulkPatchUpdateRequest $request, DocumentService $service)
+    {
+        $ids = explode(',',$request->get('ids',''));
+
+        $data = $request->json()->all();
+
+        if(count($ids) != count($data)) {
+            $request->failValidation();
+        }
+
+        $collection = new Collection();
+        for($i=0;$i<count($ids);++$i) {
+            try {
+                $collection->push($service->update($data[$i], $ids[$i]));
+            } catch (Exception $e) {
+
+            }
+        }
+
+        return new DocumentCollectionResource($collection);
+    }
+
+    public function bulkDestroy(Request $request, DocumentService $documentService)
+    {
+        $ids = explode(',',$request->get('ids',''));
+
+        foreach($ids as $id) {
+            $documentService->delete($id);
+        }
+
         return response()->json([], Response::HTTP_NO_CONTENT);
     }
 }

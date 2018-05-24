@@ -15,7 +15,7 @@ class AttributeValueResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->resource->id,
+            'id' => $this->resource->attribute->id,
             'type' => $this->resource->attribute->type->machineName,
             'value' => $this->resource->value
         ];

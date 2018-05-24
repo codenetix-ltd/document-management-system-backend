@@ -7,6 +7,7 @@ use App\Entities\DocumentVersion;
 use App\Entities\Label;
 use App\Entities\User;
 use Illuminate\Http\Response;
+use Illuminate\Support\Collection;
 use Tests\ApiTestCase;
 use Tests\Stubs\DocumentStub;
 use Tests\Stubs\DocumentVersionStub;
@@ -14,10 +15,6 @@ use Tests\Stubs\DocumentVersionStub;
 /**
  * Class DocumentTest
  * @package Tests\Feature
- *
- * @TODO check 422
- * @TODO bulk
- * @TODO updatedAt compare bug
  */
 class DocumentTest extends ApiTestCase
 {
@@ -165,8 +162,7 @@ class DocumentTest extends ApiTestCase
         $response = $this->json('DELETE', self::PATH . '/' . $document->id);
         $response->assertStatus(Response::HTTP_NO_CONTENT);
 
-        //soft delete
-        $this->assertDatabaseHas('documents', ['id' => $document->id]);
+        $this->assertSoftDeleted('documents', ['id' => $document->id]);
     }
 
     public function testDeleteNotExistDocumentSuccess()
@@ -247,34 +243,81 @@ class DocumentTest extends ApiTestCase
 
         $response->assertExactJson($documentStub->buildResponse([
             'version' => '42',
-            'actualVersion' => $documentVersionStub->buildResponse(),
+            'actualVersion' => $documentVersionStub->buildResponse([
+                'updatedAt' => $updatedDocument->documentActualVersion->updatedAt->timestamp
+            ]),
             'updatedAt' => $updatedDocument->updatedAt->timestamp
         ]));
     }
-//
-//    public function testBulkDeleteDocumentSuccess()
-//    {
-//        $documentIds = factory(DocumentVersion::class,4)->create()->implode('document.id', ',');
-//        $response = $this->jsonRequest('DELETE', self::PATH.'?ids='.$documentIds);
-//        $response->assertStatus(204);
-//    }
-//
-//    public function testBulkPatchUpdateDocumentSuccess()
-//    {
-//        $documentIds = factory(DocumentVersion::class,3)->create()->implode('document.id', ',');
-//
-//        $newOwner = factory(User::class)->create();
-//
-//        $response = $this->jsonRequestPatchEntityWithSuccess(self::PATH . '?ids=' . $documentIds, [
-//            ['ownerId' => $newOwner->id],
-//            ['ownerId' => $newOwner->id],
-//            ['ownerId' => $newOwner->id]
-//        ]);
-//
-//        $response->decodeResponseJson();
-//
-////        $this->assertEquals($newOwner->id, $responseArray['ownerId']);
-////        $this->assertEquals($documentVersion->id, $responseArray['actualVersion']['id']);
-////        $this->assertEquals(1, $responseArray['version']);
-//    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testDocumentStoreValidationError()
+    {
+        $stub = new DocumentStub();
+
+        $request = $stub->buildRequest(['substituteDocumentId' => 'string']);
+        unset($request['actualVersion']['templateId']);
+
+        $response = $this->json('POST', self::PATH, $request);
+
+        $response
+            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
+            ->assertJsonValidationErrors(['substituteDocumentId', 'actualVersion.templateId']);
+    }
+
+    public function testBulkDeleteDocumentSuccess()
+    {
+        $docCollection = new Collection();
+
+        for($i=0;$i<3;++$i) {
+            $docCollection->push((new DocumentStub([], true))->getModel());
+        }
+
+        $response = $this->json('DELETE', self::PATH.'?ids='.$docCollection->implode('id', ','));
+        $response->assertStatus(204);
+
+        $docCollection->each(function(Document $item){
+            $this->assertSoftDeleted('documents', ['id' => $item->id]);
+        });
+    }
+
+    public function testBulkPatchUpdateDocumentSuccess()
+    {
+        $documentsStubCollection = new Collection();
+
+        for($i=0;$i<3;++$i) {
+            $documentsStubCollection->push(new DocumentStub([], true));
+        }
+
+        $documentsCollection = $documentsStubCollection->map(function(DocumentStub $item){
+            return $item->getModel();
+        });
+
+        /** @var Document $documentSubstitute */
+        $documentSubstitute = (new DocumentStub([], true))->getModel();
+
+        $response = $this->json(
+            'PATCH',
+            self::PATH . '?ids=' . $documentsCollection->implode('id', ','),
+            $documentsCollection->map(function()use($documentSubstitute){
+                return ['substituteDocumentId' => $documentSubstitute->id];
+            })->toArray()
+        );
+
+        $response->decodeResponseJson();
+
+        $expected = $documentsStubCollection->map(function(DocumentStub $item)use ($documentSubstitute){
+            /** @var Document $d */
+            $d = $item->getModel();
+            $d = Document::find($d->id);
+            return $item->buildResponse([
+                'substituteDocumentId' => $documentSubstitute->id,
+                'updatedAt' => $d->updatedAt->timestamp,
+            ]);
+        })->toArray();
+
+        $response->assertExactJson($expected);
+    }
 }

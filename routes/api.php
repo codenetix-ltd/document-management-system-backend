@@ -54,5 +54,8 @@ Route::get('logs', 'LogsController@index');
 Route::patch('documents/{id}', 'DocumentsController@patchUpdate');
 Route::put('documents/{id}', 'DocumentsController@update');
 Route::apiResource('documents', 'DocumentsController');
+Route::delete('documents', 'DocumentsController@bulkDestroy');
+Route::patch('documents', 'DocumentsController@bulkPatchUpdate');
 
+Route::apiResource('documents/{documentId}/documentVersions', 'DocumentVersionsController');
 

@@ -7,17 +7,17 @@ use Prettus\Repository\Contracts\CriteriaInterface;
 use Prettus\Repository\Contracts\RepositoryInterface;
 
 /**
- * Class UserIdCriteria.
+ * Class DocumentIdCriteria.
  *
  * @package namespace App\Criteria;
  */
-class UserIdCriteria implements CriteriaInterface
+class DocumentIdCriteria implements CriteriaInterface
 {
-    private $userId;
+    private $documentId;
 
-    public function __construct($userId)
+    public function __construct($documentId)
     {
-        $this->userId = $userId;
+        $this->documentId = $documentId;
     }
 
     /**
@@ -30,7 +30,7 @@ class UserIdCriteria implements CriteriaInterface
      */
     public function apply($model, RepositoryInterface $repository)
     {
-        $model = $model->where('user_id', '=', $this->userId);
+        $model = $model->where('document_id', '=', $this->documentId);
         return $model;
     }
 }

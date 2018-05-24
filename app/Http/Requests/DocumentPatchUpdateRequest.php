@@ -24,7 +24,9 @@ class DocumentPatchUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            "ownerId" => "integer",
+            "substituteDocumentId" => "integer",
+            "actualVersionId" => "integer"
         ];
     }
 }

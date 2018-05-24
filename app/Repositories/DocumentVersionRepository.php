@@ -9,5 +9,5 @@ use Prettus\Repository\Contracts\RepositoryInterface;
  */
 interface DocumentVersionRepository extends RepositoryInterface
 {
-    //
+    public function paginateByDocument($documentId);
 }

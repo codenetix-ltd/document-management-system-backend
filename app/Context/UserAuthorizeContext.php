@@ -3,7 +3,7 @@
 namespace App\Context;
 
 use App\Contracts\Entity\IHasSubjectUser;
-use App\User;
+use App\Entities\User;
 
 class UserAuthorizeContext extends AAuthorizeContext implements IHasSubjectUser
 {

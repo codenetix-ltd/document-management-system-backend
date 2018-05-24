@@ -1,17 +1,16 @@
-<?php namespace App\FactoryMethods;
+<?php
+
+namespace App\FactoryMethods;
+
 use App\Context\DocumentAuthorizeContext;
-use App\Document;
+use App\Entities\Permission;
+use App\Entities\Role;
 use App\Handlers\Permissions\AnyPermissionHandler;
-use App\Handlers\Permissions\ByFactoryPermissionHandler;
-use App\Handlers\Permissions\ByIdPermissionHandler;
 use App\Handlers\Permissions\ByOwnerPermissionHandler;
 use App\Handlers\Permissions\ByQualifiersPermissionHandler;
 use App\Handlers\Permissions\ByTemplatePermissionHandler;
 use App\Handlers\Permissions\NonePermissionHandler;
-use App\Permission;
-use App\Role;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Auth;
 use RuntimeException;
 
 /**
@@ -28,8 +27,6 @@ class DocumentPermissionFactoryMethod
 
     public function make(Role $role, Permission $permission, $handlerClass){
         switch($handlerClass){
-            case ByFactoryPermissionHandler::class:
-                return new ByFactoryPermissionHandler($this->context->getUser(), $role, $this->context->getDocument()->factories->toBase());
             case ByTemplatePermissionHandler::class:
                 return new ByTemplatePermissionHandler($this->context->getUser(), $role, new Collection([$this->context->getDocument()->template]));
             case ByOwnerPermissionHandler::class:

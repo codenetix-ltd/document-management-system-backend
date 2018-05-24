@@ -2,14 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests;
-use App\Http\Requests\LogCreateRequest;
-use App\Http\Requests\LogUpdateRequest;
 use App\Http\Resources\LogCollectionResource;
-use App\Http\Resources\LogResource;
 use App\Services\LogService;
 use Illuminate\Contracts\Auth\Guard;
-use Illuminate\Http\Response;
 
 /**
  * Created by Codenetix team <support@codenetix.com>

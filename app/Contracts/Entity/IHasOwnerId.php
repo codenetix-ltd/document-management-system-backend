@@ -2,9 +2,8 @@
 
 namespace App\Contracts\Entity;
 
-
 interface IHasOwnerId
 {
-    public function getOwnerId() : int;
-    public function setOwnerId(int $user) : void;
+    public function getOwnerId();
+    public function setOwnerId($id);
 }

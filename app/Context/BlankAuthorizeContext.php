@@ -2,7 +2,7 @@
 
 namespace App\Context;
 
-use App\User;
+use App\Entities\User;
 
 class BlankAuthorizeContext extends AAuthorizeContext
 {

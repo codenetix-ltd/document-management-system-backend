@@ -3,8 +3,8 @@
 namespace App\Context;
 
 use App\Contracts\Entity\IHasDocumentModel;
-use App\Document;
-use App\User;
+use App\Entities\Document;
+use App\Entities\User;
 
 class DocumentAuthorizeContext extends AAuthorizeContext implements IHasDocumentModel
 {

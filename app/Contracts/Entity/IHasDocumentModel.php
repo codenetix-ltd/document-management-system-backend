@@ -2,7 +2,7 @@
 
 namespace App\Contracts\Entity;
 
-use App\Document;
+use App\Entities\Document;
 
 interface IHasDocumentModel
 {

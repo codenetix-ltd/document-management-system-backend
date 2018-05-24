@@ -3,7 +3,6 @@
 namespace App\Handlers\Permissions;
 
 use App\Context\BlankAuthorizeContext;
-use App\Contracts\Models\IRole;
 
 abstract class ABlankPermissionHandler
 {
@@ -13,7 +12,6 @@ abstract class ABlankPermissionHandler
     {
         $roles = $context->getUser()->roles;
         foreach ($roles as $role) {
-            /** @var IRole $role */
             if ($role->hasPermission($this->getPermissionName())) return true;
         }
 

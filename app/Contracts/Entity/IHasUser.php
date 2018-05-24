@@ -2,7 +2,7 @@
 
 namespace App\Contracts\Entity;
 
-use App\User;
+use App\Entities\User;
 
 interface IHasUser
 {

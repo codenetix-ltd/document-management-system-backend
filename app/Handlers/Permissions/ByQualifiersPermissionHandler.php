@@ -1,16 +1,11 @@
 <?php
 
 namespace App\Handlers\Permissions;
-use App\Permission;
-use App\Role;
-use App\User;
 
-/**
- * @author Andrey Vorobiov<andrew.sprw@gmail.com>
- */
+use App\Entities\Permission;
+
 class ByQualifiersPermissionHandler
 {
-
     private $factoryMethod;
     private $permission;
     private $context;

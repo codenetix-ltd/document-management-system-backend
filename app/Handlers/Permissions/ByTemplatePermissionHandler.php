@@ -2,13 +2,10 @@
 
 namespace App\Handlers\Permissions;
 
-use App\Role;
-use App\User;
+use App\Entities\Role;
+use App\Entities\User;
 use Illuminate\Support\Collection;
 
-/**
- * @author Andrey Vorobiov<andrew.sprw@gmail.com>
- */
 class ByTemplatePermissionHandler
 {
 

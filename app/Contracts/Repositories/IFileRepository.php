@@ -6,5 +6,5 @@ use App\File;
 
 interface IFileRepository
 {
-    public function create(array $data) : File;
+    public function create(array $data): File;
 }

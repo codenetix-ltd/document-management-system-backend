@@ -1,3 +1,0 @@
-<td>
-    {!! $currentColumn->getName() !!}
-</td>

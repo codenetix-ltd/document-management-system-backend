@@ -3,11 +3,8 @@
 namespace App\Handlers\Permissions;
 
 use App\Contracts\Entity\IHasId;
-use App\User;
+use App\Entities\User;
 
-/**
- * @author Andrey Vorobiov<andrew.sprw@gmail.com>
- */
 class ByIdPermissionHandler
 {
     private $user;

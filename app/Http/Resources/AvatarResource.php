@@ -2,10 +2,8 @@
 
 namespace App\Http\Resources;
 
-class AvatarResource extends ApiResource
+use Illuminate\Http\Resources\Json\JsonResource;
+
+class AvatarResource extends JsonResource
 {
-    protected function getStructure(): array
-    {
-        return [];
-    }
 }

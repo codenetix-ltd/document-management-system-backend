@@ -54,7 +54,7 @@ class AttributeWithTypeTableStub extends AbstractStub
         ];
     }
 
-    private function buildAttributeData(): array
+    public function buildAttributeData(): array
     {
         /** @var TypeRepository $typeRepository */
         $typeRepository = app()->make(TypeRepository::class);

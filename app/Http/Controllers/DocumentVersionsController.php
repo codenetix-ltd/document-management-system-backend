@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests;
 use App\Http\Requests\DocumentVersionCreateRequest;
 use App\Http\Requests\DocumentVersionUpdateRequest;
 use App\Http\Resources\DocumentVersionCollectionResource;

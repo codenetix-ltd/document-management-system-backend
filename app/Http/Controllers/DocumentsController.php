@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests;
 use App\Http\Requests\DocumentBulkPatchUpdateRequest;
 use App\Http\Requests\DocumentCreateRequest;
 use App\Http\Requests\DocumentPatchUpdateRequest;

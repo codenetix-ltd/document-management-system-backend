@@ -20,7 +20,6 @@ class FileTest extends ApiTestCase
         $response = $this->jsonRequestPostEntityWithSuccess('files', [
             'file' => UploadedFile::fake()->image('avatar.jpg')
         ]);
-        ;
         $createdFile = File::find($response->decodeResponseJson()['id']);
 
         $fileStub = new FileStub([], true, [], $createdFile);

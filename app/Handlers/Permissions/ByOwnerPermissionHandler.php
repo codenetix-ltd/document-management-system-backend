@@ -4,9 +4,6 @@ namespace App\Handlers\Permissions;
 use App\Contracts\Entity\IHasId;
 use App\Contracts\Entity\IHasOwnerId;
 
-/**
- * @author Andrey Vorobiov<andrew.sprw@gmail.com>
- */
 class ByOwnerPermissionHandler
 {
     private $user;

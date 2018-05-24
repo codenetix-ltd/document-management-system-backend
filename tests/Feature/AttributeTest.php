@@ -4,7 +4,6 @@ namespace Tests\Feature;
 
 use App\Entities\Attribute;
 use App\Entities\Template;
-use App\Http\Resources\AttributeResource;
 use App\Services\AttributeService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Resources\Json\Resource;
@@ -158,20 +157,27 @@ class AttributeTest extends TestCase
     }
 
 
-    /**
-     * Tests attribute update endpoint
-     *
-     * @return void
-     */
 //    public function testAttributeUpdate()
 //    {
-//        $attribute = factory(Attribute::class)->create();
+//        $attributeStub = new AttributeWithTypeTableStub([], false, 'table');
+//        $attribute = $attributeStub->getModel();
+//        $attributeData = $attributeStub->buildAttributeData();
+//        dd($attributeData);
 //
-//        $response = $this->json('PUT', '/api/attributes/' . $attribute->id, array_only($attribute->toArray(), $attribute->getFillable()));
+//        $response = $this->json('PUT', '/api/labels/' . $label->id, $labelStub->buildRequest([
+//            'name' => $newLabelName
+//        ]));
+//
+//        $labelUpdated = Label::find($response->decodeResponseJson('id'));
 //
 //        $response
-//            ->assertStatus(200)
-//            ->assertJson((new AttributeResource($attribute))->resolve());
+//            ->assertStatus(Response::HTTP_OK)
+//            ->assertExactJson($labelStub->buildResponse([
+//                'id' => $labelUpdated->id,
+//                'name' => $newLabelName,
+//                'createdAt' => $labelUpdated->createdAt->timestamp,
+//                'updatedAt' => $labelUpdated->updatedAt->timestamp
+//            ]));
 //    }
 
 

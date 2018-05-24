@@ -3,7 +3,6 @@
 namespace App\Handlers\Permissions;
 
 use App\Context\BlankAuthorizeContext;
-use App\Role;
 
 class GenericPermissionHandler extends ABlankPermissionHandler
 {
@@ -22,7 +21,6 @@ class GenericPermissionHandler extends ABlankPermissionHandler
     public function handle(BlankAuthorizeContext $context): bool
     {
         $roles = $context->getUser()->roles;
-        /** @var Role $role */
         foreach ($roles as $role) {
             if ($role->hasPermission($this->getPermissionName())) return true;
         }

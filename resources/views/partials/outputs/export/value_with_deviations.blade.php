@@ -1,1 +1,0 @@
-Deviation (-): {!! $attribute->getValue()->getLeftDeviation() !!} / Value: {!! $attribute->getValue()->getValue() !!} / Deviation (+): {!! $attribute->getValue()->getRightDeviation() !!}

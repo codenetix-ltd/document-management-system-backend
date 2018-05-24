@@ -3,7 +3,7 @@
 namespace App\Context;
 
 use App\Contracts\Entity\IHasUser;
-use App\User;
+use App\Entities\User;
 
 abstract class AAuthorizeContext implements IHasUser
 {

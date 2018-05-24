@@ -28,6 +28,7 @@ class AttributeService
     /**
      * AttributeService constructor.
      * @param AttributeRepository $repository
+     * @param TypeRepository $typeRepository
      */
     public function __construct(AttributeRepository $repository, TypeRepository $typeRepository)
     {

@@ -1,1 +1,0 @@
-<input type="text" class="form-control" name="attribute[{!!$attribute->getId()!!}]" value="{!! old('attribute.'.$attribute->getId(), $attribute->getValue()) !!}" data-type="{!! $attribute->getTypeName() !!}"/>

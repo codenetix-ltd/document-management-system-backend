@@ -26,7 +26,7 @@ class UserResource extends JsonResource
             'id' => $this->resource->id,
             'fullName' => $this->resource->fullName,
             'email' => $this->resource->email,
-            'templateIds' => $this->resource->templates->pluck('id')->toArray(),
+            'templatesIds' => $this->resource->templates->pluck('id')->toArray(),
             'avatar' => new FileResource($this->resource->avatar),
             'avatarId' => $this->resource->avatar->getId(),
         ];

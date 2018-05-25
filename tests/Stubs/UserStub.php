@@ -51,7 +51,7 @@ class UserStub extends AbstractStub
         return [
             'email' => $this->model->email,
             'fullName' => $this->model->fullName,
-            'templateIds' => $this->templateIds,
+            'templatesIds' => $this->templateIds,
             'avatarId' => $this->model->avatar->getId(),
         ];
     }
@@ -64,7 +64,7 @@ class UserStub extends AbstractStub
         return [
             'fullName' => $this->model->fullName,
             'email' => $this->model->email,
-            'templateIds' => $this->templateIds,
+            'templatesIds' => $this->templateIds,
             'avatarId' => $this->model->avatar->getId(),
             'avatar' => (new FileStub([], true, [], $this->model->avatar))->buildResponse()
         ];

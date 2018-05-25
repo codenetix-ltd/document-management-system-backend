@@ -38,11 +38,11 @@ abstract class TestCase extends BaseTestCase
                 'next'
             ],
             'meta' => [
-                'current_page',
+                'currentPage',
                 'from',
-                'last_page',
+                'lastPage',
                 'path',
-                'per_page',
+                'perPage',
                 'to',
                 'total'
             ]

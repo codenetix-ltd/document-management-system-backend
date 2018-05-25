@@ -1,9 +1,13 @@
 <?php
 
-use App\DocumentVersion;
-use App\Type;
-use App\User;
+use App\Entities\Document;
+use App\Entities\User;
 use Illuminate\Database\Seeder;
+use Tests\Stubs\AttributeWithTypeStringStub;
+use Tests\Stubs\AttributeWithTypeTableStub;
+use Tests\Stubs\DocumentStub;
+use Tests\Stubs\DocumentVersionStub;
+use Tests\Stubs\UserStub;
 
 class DreddDataSeeder extends Seeder
 {
@@ -14,19 +18,20 @@ class DreddDataSeeder extends Seeder
      */
     public function run()
     {
-        //Create admin user
-        factory(User::class)->create([
-            'full_name' => 'admin',
-            'email' => 'admin@example.com',
-            'password' => bcrypt('admin'),
-        ]);
+        /** @var User $user */
+        $user = (new UserStub([], true))->getModel();
 
-        factory(Type::class)->create(['name' => 'String', 'machine_name' => 'string']);
-        factory(Type::class)->create(['name' => 'Numeric', 'machine_name' => 'numeric']);
-        factory(Type::class)->create(['name' => 'Boolean', 'machine_name' => 'boolean']);
-        factory(Type::class)->create(['name' => 'Table', 'machine_name' => 'table']);
-        factory(Type::class)->create(['name' => 'Value with deviations', 'machine_name' => 'value_with_deviations']);
+        new AttributeWithTypeStringStub([], true);
+        new AttributeWithTypeTableStub([], true);
 
-        factory(DocumentVersion::class, 10)->create();
+        for($i=0;$i<3;++$i) {
+            /** @var Document $document */
+            $document = (new DocumentStub(['owner_id' => $user->id], true))->getModel();
+
+            for($j=0;$j<3;++$j) {
+                (new DocumentVersionStub(['document_id' => $document->id, 'is_actual' => false], true));
+            }
+
+        }
     }
 }

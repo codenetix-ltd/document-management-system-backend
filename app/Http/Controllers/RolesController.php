@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\RoleCreateRequest;
 use App\Http\Requests\RoleUpdateRequest;
+use App\Http\Resources\RoleCollectionResource;
 use App\Http\Resources\RoleResource;
 use App\Services\RoleService;
 use Illuminate\Http\Response;
@@ -28,12 +29,12 @@ class RolesController extends Controller
     }
 
     /**
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @return RoleCollectionResource
      */
     public function index()
     {
         $roles = $this->service->paginate();
-        return RoleResource::collection($roles);
+        return new RoleCollectionResource($roles);
     }
 
     /**

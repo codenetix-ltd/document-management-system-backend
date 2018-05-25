@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\LabelCreateRequest;
 use App\Http\Requests\LabelUpdateRequest;
+use App\Http\Resources\LabelCollectionResource;
 use App\Http\Resources\LabelResource;
 use App\Services\LabelService;
 use Illuminate\Http\Response;
@@ -28,12 +29,12 @@ class LabelsController extends Controller
     }
 
     /**
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @return LabelCollectionResource
      */
     public function index()
     {
         $labels = $this->service->paginate();
-        return LabelResource::collection($labels);
+        return new LabelCollectionResource($labels);
     }
 
     /**

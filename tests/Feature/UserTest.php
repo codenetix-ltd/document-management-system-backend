@@ -124,11 +124,11 @@ class UserTest extends TestCase
         $templateIds[0] = $newTemplateId;
 
 
-        $response = $this->json('PUT', '/api/users/' . $user->id, $userStub->buildRequest(['templateIds' => $templateIds]));
+        $response = $this->json('PUT', '/api/users/' . $user->id, $userStub->buildRequest(['templatesIds' => $templateIds]));
 
         $response
             ->assertStatus(200)
-            ->assertExactJson($userStub->buildResponse(['templateIds' => $templateIds, 'id' => $user->id]));
+            ->assertExactJson($userStub->buildResponse(['templatesIds' => $templateIds, 'id' => $user->id]));
     }
 
     /**

@@ -312,4 +312,14 @@ class DocumentTest extends TestCase
 
         $response->assertExactJson($expected);
     }
+
+    public function testBulkPatchUpdateDocumentFail()
+    {
+        $response = $this->json(
+            'PATCH',
+            self::PATH . '?ids=1,2',
+            [[],[],[]]
+        );
+        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+    }
 }

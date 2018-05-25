@@ -3,8 +3,6 @@
 namespace App\Providers;
 
 use App\Contracts\Helpers\ILogger;
-use App\Contracts\Repositories\IFileRepository;
-use App\Repositories\FileRepository;
 use App\Services\LogService;
 use Illuminate\Http\Resources\Json\Resource;
 use Illuminate\Support\ServiceProvider;

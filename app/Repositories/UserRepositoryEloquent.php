@@ -10,6 +10,7 @@ use Prettus\Validator\Exceptions\ValidatorException;
 
 /**
  * Class DocumentRepositoryEloquent.
+ *
  */
 class UserRepositoryEloquent extends BaseRepository implements UserRepository
 {
@@ -52,6 +53,7 @@ class UserRepositoryEloquent extends BaseRepository implements UserRepository
             $this->validator->with($attributes)->passesOrFail(ValidatorInterface::RULE_CREATE);
         }
 
+        /** @var User $model */
         $model = $this->model->newInstance($attributes);
         $model->password = $attributes['password'];
         $model->save();

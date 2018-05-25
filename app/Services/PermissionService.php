@@ -2,8 +2,7 @@
 
 namespace App\Services;
 
-use App\Permission;
-use App\PermissionGroup;
+use App\Entities\Permission;
 use Illuminate\Support\Collection;
 
 class PermissionService

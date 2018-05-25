@@ -17,6 +17,9 @@ use Prettus\Repository\Traits\TransformableTrait;
  * @property int $templateId
  * @property int $typeId
  *
+ * @property int $tableTypeRowId
+ * @property int $tableTypeColumnId
+ *
  * @property Carbon $createdAt
  * @property Carbon $updatedAt
  */

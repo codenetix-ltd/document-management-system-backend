@@ -5,7 +5,6 @@ namespace App\Listeners;
 use App\Contracts\Helpers\ILogger;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Events\Dispatcher;
-use Illuminate\Support\Facades\Auth;
 
 /**
  * @author Vladimir Barmotin <barmotinvladimir@gmail.com>
@@ -26,7 +25,7 @@ abstract class AbstractLogEventSubscriber
 
     protected function addLog($body, $referenceId)
     {
-        $this->logger->write($this->user, $body, $referenceId, $this->getReferenceType());
+        $this->logger->write($this->user->getAuthIdentifier(), $body, $referenceId, $this->getReferenceType());
     }
 
     abstract public function subscribe(Dispatcher $events);

@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Entities\Document;
 use App\Entities\DocumentVersion;
 use App\Repositories\DocumentVersionRepository;
 

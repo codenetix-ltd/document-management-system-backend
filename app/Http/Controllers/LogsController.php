@@ -34,7 +34,7 @@ class LogsController extends Controller
     public function index(Guard $guard)
     {
         $user = $guard->user();
-        $logs = $this->service->list($user ? $user->id : null);
+        $logs = $this->service->list($user ? $user->getAuthIdentifier() : null);
 
         return new LogCollectionResource($logs);
     }

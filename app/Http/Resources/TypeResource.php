@@ -2,8 +2,15 @@
 
 namespace App\Http\Resources;
 
+use App\Entities\Type;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * Class TypeResource
+ * @package App\Http\Resources
+ *
+ * @property Type $resource
+ */
 class TypeResource extends JsonResource
 {
     /**
@@ -15,11 +22,11 @@ class TypeResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->id,
-            'name' => $this->name,
-            'machineName' => $this->machine_name,
-            'createdAt' => $this->created_at->timestamp,
-            'updatedAt' => $this->updated_at->timestamp
+            'id' => $this->resource->id,
+            'name' => $this->resource->name,
+            'machineName' => $this->resource->machineName,
+            'createdAt' => $this->resource->createdAt->timestamp,
+            'updatedAt' => $this->resource->updatedAt->timestamp
         ];
     }
 }

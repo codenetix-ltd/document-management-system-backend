@@ -2,11 +2,22 @@
 
 namespace App\Entities;
 
+use Carbon\Carbon;
+use Illuminate\Support\Collection;
 use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
 
 /**
  * Class Role.
+ *
+ * @property string $name
+ *
+ * @property Collection | Template[] $templates
+ * @property Collection | Permission[] $permissions
+ * @property Collection | User[] $users
+ *
+ * @property Carbon $createdAt
+ * @property Carbon $updatedAt
  */
 class Role extends BaseEntity implements Transformable
 {

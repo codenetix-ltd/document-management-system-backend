@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Criteria\DocumentFilterCriteria;
 use App\Entities\Document;
+use Prettus\Repository\Exceptions\RepositoryException;
 
 /**
  * Class DocumentRepositoryEloquent.
@@ -22,6 +23,7 @@ class DocumentRepositoryEloquent extends BaseRepository implements DocumentRepos
 
     /**
      * Boot up the repository, pushing criteria
+     * @throws RepositoryException
      */
     public function boot()
     {

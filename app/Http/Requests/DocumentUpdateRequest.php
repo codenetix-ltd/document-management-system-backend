@@ -33,7 +33,6 @@ class DocumentUpdateRequest extends FormRequest
             'actualVersion.name' => 'string|required',
 
             'actualVersion.templateId' => 'integer|required',
-            'actualVersion.templateIds.*' => 'integer',
 
             'actualVersion.labelIds' => 'array|required',
             'actualVersion.labelIds.*' => 'integer',

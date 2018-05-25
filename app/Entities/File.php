@@ -2,15 +2,18 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Entities\BaseEntity;
+use Carbon\Carbon;
 
 /**
  * Class File
  * @package App
  *
  * @property int $id
+ * @property Carbon $createdAt
+ * @property Carbon $createdAt
  */
-class File extends Model
+class File extends BaseEntity
 {
     protected $fillable = ['path', 'original_name'];
 

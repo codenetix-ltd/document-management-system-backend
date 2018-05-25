@@ -1,25 +1,24 @@
 <?php
 
-namespace App\Services\File;
+namespace App\Services;
 
-use App\Contracts\Repositories\IFileRepository;
-use App\Contracts\Services\File\IFileCreateService;
+use App\Repositories\FileRepository;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
-use App\File as FileModel;
+use App\Entities\File as FileModel;
 
-class FileCreateService implements IFileCreateService
+class FileCreateService
 {
     private $repository;
 
-    public function __construct(IFileRepository $repository)
+    public function __construct(FileRepository $repository)
     {
         $this->repository = $repository;
     }
 
-    public function createImage(UploadedFile $file, $path = ''): FileModel
+    public function createImage(UploadedFile $file, $path = '')
     {
         $storagePath = Storage::disk('public')->getDriver()->getAdapter()->getPathPrefix();
         $fileName = str_random(16) . '.' . $file->extension();
@@ -35,7 +34,7 @@ class FileCreateService implements IFileCreateService
         return $file;
     }
 
-    public function createFile(UploadedFile $file, $path = ''): FileModel
+    public function createFile(UploadedFile $file, $path = '')
     {
         $storagePath = Storage::disk('public')->getDriver()->getAdapter()->getPathPrefix();
         $fileName = str_random(16) . '.' . $file->extension();

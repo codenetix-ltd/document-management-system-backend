@@ -8,7 +8,7 @@ use App\Entities\Label;
 use App\Entities\User;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
-use Tests\ApiTestCase;
+use Tests\TestCase;
 use Tests\Stubs\DocumentStub;
 use Tests\Stubs\DocumentVersionStub;
 use Tests\Stubs\UserStub;
@@ -17,7 +17,7 @@ use Tests\Stubs\UserStub;
  * Class DocumentTest
  * @package Tests\Feature
  */
-class DocumentTest extends ApiTestCase
+class DocumentTest extends TestCase
 {
     private const PATH = 'api/documents';
     protected const DB_TABLE = 'documents';
@@ -83,7 +83,8 @@ class DocumentTest extends ApiTestCase
 
     public function testDocumentGetNotFound()
     {
-        $this->jsonRequestGetEntityNotFound(self::PATH . '/' . 0);
+        $response = $this->json('GET', self::PATH .'/0');
+        $response->assertStatus(404);
     }
 
 

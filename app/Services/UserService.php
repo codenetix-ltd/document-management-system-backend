@@ -50,7 +50,7 @@ class UserService
     public function create(array $data){
         /** @var User $user */
         $user = $this->repository->create($data);
-        $user->templates()->sync($data['templateIds']);
+        $user->templates()->sync($data['templatesIds']);
 
         Event::dispatch(new UserCreateEvent($user));
 
@@ -65,7 +65,7 @@ class UserService
     public function update(array $data, int $id){
         /** @var User $user */
         $user = $this->repository->update($data, $id);
-        $user->templates()->sync($data['templateIds']);
+        $user->templates()->sync($data['templatesIds']);
 
         Event::dispatch(new UserUpdateEvent($user));
 

@@ -28,7 +28,7 @@ class UserCreateRequest extends FormRequest
             'passwordConfirmation' => 'required|same:password',
             'fullName' => 'required|string|max:255',
             'email' => 'required|string|max:255|email',
-            'templateIds' => 'array',
+            'templatesIds' => 'required|array',
             'avatarId' => 'required|integer'
         ];
     }

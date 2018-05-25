@@ -2,23 +2,10 @@
 
 namespace App\Http\Resources;
 
-use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\ResourceCollection;
-
-class UserCollectionResource extends ResourceCollection
+class UserCollectionResource extends AbstractCollectionResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @param  Request $request
-     * @return array
-     */
-    public function toArray($request)
+    protected function transformSingle($item)
     {
-        $this->collection->transform(function ($item){
-            return new UserResource($item);
-        });
-
-        return parent::toArray($request);
+        return new UserResource($item);
     }
 }

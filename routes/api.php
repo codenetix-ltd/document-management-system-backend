@@ -32,7 +32,6 @@ Route::prefix('v1')->group(function () {
     Route::delete('documents/{id}/versions/{versionId}', 'API\DocumentVersionController@destroy');
     Route::get('logs', 'Api\LogController@index');
 
-    Route::post('files', 'FileController@uploadFile');
 });
 
 Route::resource('templates', 'TemplatesController');
@@ -57,4 +56,6 @@ Route::delete('documents', 'DocumentsController@bulkDestroy');
 Route::patch('documents', 'DocumentsController@bulkPatchUpdate');
 
 Route::apiResource('documents/{documentId}/documentVersions', 'DocumentVersionsController');
+
+Route::post('files', 'FileController@uploadFile');
 

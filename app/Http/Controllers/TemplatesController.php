@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\TemplateCreateRequest;
 use App\Http\Requests\TemplateUpdateRequest;
+use App\Http\Resources\TemplateCollectionResource;
 use App\Http\Resources\TemplateResource;
 use App\Services\TemplateService;
 use Illuminate\Http\Response;
@@ -28,12 +29,12 @@ class TemplatesController extends Controller
     }
 
     /**
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @return TemplateCollectionResource
      */
     public function index()
     {
         $templates = $this->service->paginate();
-        return TemplateResource::collection($templates);
+        return  new TemplateCollectionResource($templates);
     }
 
     /**

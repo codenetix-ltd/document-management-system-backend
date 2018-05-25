@@ -12,7 +12,6 @@ use Illuminate\Database\Eloquent\Model;
  */
 class File extends Model
 {
-    //TODO - remove from here
     protected $fillable = ['path', 'original_name'];
 
     public function getCreatedAt(): string

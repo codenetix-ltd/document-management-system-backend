@@ -2,11 +2,9 @@
 
 namespace App\Http\Resources;
 
-use App\Entities\Attribute;
 use App\Services\AttributeService;
-use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class AttributeCollectionResource extends ResourceCollection
+class AttributeCollectionResource extends AbstractCollectionResource
 {
     private $attributeService;
 
@@ -16,18 +14,8 @@ class AttributeCollectionResource extends ResourceCollection
         parent::__construct($resource);
     }
 
-    /**
-     * Transform the resource into an array.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
-     */
-    public function toArray($request)
+    protected function transformSingle($item)
     {
-        $this->collection->transform(function (Attribute $user) {
-            return new AttributeResource($user, $this->attributeService);
-        });
-
-        return parent::toArray($request);
+        return new AttributeResource($item, $this->attributeService);
     }
 }

@@ -26,7 +26,7 @@ class UserUpdateRequest extends FormRequest
         return [
             'fullName' => 'required|string|max:255',
             'email' => 'required|string|max:255|email',
-            'templateIds' => 'array',
+            'templatesIds' => 'required|array',
             'avatarId' => 'required|integer'
         ];
     }

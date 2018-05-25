@@ -2,10 +2,8 @@
 
 namespace Tests\Feature;
 
-use App\DocumentVersion;
 use App\Entities\Document;
 use App\Entities\Log;
-use App\Entities\Template;
 use App\Entities\User;
 use App\Events\Document\DocumentCreateEvent;
 use App\Events\Document\DocumentDeleteEvent;
@@ -20,8 +18,6 @@ use App\Events\Template\TemplateUpdateEvent;
 use App\Events\User\UserCreateEvent;
 use App\Events\User\UserDeleteEvent;
 use App\Events\User\UserUpdateEvent;
-use App\Http\Resources\LogCollectionResource;
-use App\Http\Resources\LogResource;
 use App\Services\DocumentService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Resources\Json\Resource;

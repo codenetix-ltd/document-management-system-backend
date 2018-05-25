@@ -2,8 +2,6 @@
 
 namespace App\Repositories;
 
-use Prettus\Repository\Eloquent\BaseRepository;
-use Prettus\Repository\Criteria\RequestCriteria;
 use App\Entities\Label;
 
 /**
@@ -19,13 +17,5 @@ class LabelRepositoryEloquent extends BaseRepository implements LabelRepository
     public function model()
     {
         return Label::class;
-    }
-
-    /**
-     * Boot up the repository, pushing criteria
-     */
-    public function boot()
-    {
-        $this->pushCriteria(app(RequestCriteria::class));
     }
 }

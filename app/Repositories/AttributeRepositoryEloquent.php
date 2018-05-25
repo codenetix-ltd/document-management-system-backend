@@ -6,8 +6,6 @@ use App\Entities\TableTypeColumn;
 use App\Entities\TableTypeRow;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
-use Prettus\Repository\Eloquent\BaseRepository;
-use Prettus\Repository\Criteria\RequestCriteria;
 use App\Entities\Attribute;
 
 /**
@@ -23,14 +21,6 @@ class AttributeRepositoryEloquent extends BaseRepository implements AttributeRep
     public function model()
     {
         return Attribute::class;
-    }
-
-    /**
-     * Boot up the repository, pushing criteria
-     */
-    public function boot()
-    {
-        $this->pushCriteria(app(RequestCriteria::class));
     }
 
     public function getTableRowsByAttributeId(int $id): Collection

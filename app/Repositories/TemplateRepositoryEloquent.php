@@ -2,8 +2,6 @@
 
 namespace App\Repositories;
 
-use Prettus\Repository\Eloquent\BaseRepository;
-use Prettus\Repository\Criteria\RequestCriteria;
 use App\Entities\Template;
 
 /**
@@ -19,13 +17,5 @@ class TemplateRepositoryEloquent extends BaseRepository implements TemplateRepos
     public function model()
     {
         return Template::class;
-    }
-
-    /**
-     * Boot up the repository, pushing criteria
-     */
-    public function boot()
-    {
-        $this->pushCriteria(app(RequestCriteria::class));
     }
 }

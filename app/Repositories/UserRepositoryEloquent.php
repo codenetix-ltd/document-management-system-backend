@@ -2,11 +2,11 @@
 
 namespace App\Repositories;
 
-use Prettus\Repository\Eloquent\BaseRepository;
-use Prettus\Repository\Criteria\RequestCriteria;
 use App\Entities\User;
 use Prettus\Repository\Events\RepositoryEntityCreated;
+use Prettus\Repository\Exceptions\RepositoryException;
 use Prettus\Validator\Contracts\ValidatorInterface;
+use Prettus\Validator\Exceptions\ValidatorException;
 
 /**
  * Class DocumentRepositoryEloquent.
@@ -24,13 +24,17 @@ class UserRepositoryEloquent extends BaseRepository implements UserRepository
     }
 
     /**
-     * Boot up the repository, pushing criteria
+     * Override method
+     * @see BaseRepository::create()
+     * For setting user password
+     *
+     * @param array $attributes
+     *
+     * @return mixed
+     *
+     * @throws RepositoryException
+     * @throws ValidatorException
      */
-    public function boot()
-    {
-        $this->pushCriteria(app(RequestCriteria::class));
-    }
-
     public function create(array $attributes)
     {
         if (!is_null($this->validator)) {

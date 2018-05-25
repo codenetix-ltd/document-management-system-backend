@@ -25,9 +25,10 @@ class UserUpdateRequest extends FormRequest
     {
         return [
             'fullName' => 'required|string|max:255',
-            'email' => 'required|string|max:255|email',
+            'email' => 'required|email|unique:users,email,'.$this->route('user'),
             'templatesIds' => 'required|array',
-            'avatarId' => 'required|integer'
+            'templatesIds.*' => 'integer|exists:templates,id',
+            'avatarId' => 'required|integer|exists:files,id'
         ];
     }
 }

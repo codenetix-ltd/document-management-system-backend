@@ -24,9 +24,9 @@ class AttributeCreateRequest extends FormRequest
     public function rules()
     {
         return [
-            "name" => "required|string|max:255",
-            "typeId" => "required|integer",
-            "data" => "sometimes|required|array"//TODO - Add validator
+            'name' => 'required|string|max:255',
+            'typeId' => "required|integer|exists:types,id",
+            'data' => 'sometimes|required|array'//TODO - Add validator
         ];
     }
 }

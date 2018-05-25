@@ -24,9 +24,12 @@ class RoleUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            "name" => "sometimes|required|string",
-            "templateIds" => "array",
-            "permissionValues" => "array"
+            'name' => 'sometimes|required|string|unique:roles,name,'.$this->route('role'),
+            'templateIds' => 'array',
+            'templatesIds.*' => 'integer|exists:templates,id',
+
+            //TODO rules for permissionValues.*
+            'permissionValues' => 'array'
         ];
     }
 }

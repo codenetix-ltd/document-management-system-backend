@@ -24,9 +24,11 @@ class RoleCreateRequest extends FormRequest
     public function rules()
     {
         return [
-            "name" => "required|string",
-            "templateIds" => "array",
-            "permissionValues" => "array"//TODO - add custom validation rule
+            'name' => 'required|string',
+            'templateIds' => 'array',
+            'templatesIds.*' => 'integer|exists:templates,id',
+
+            'permissionValues' => 'array'//TODO - add custom validation rule
         ];
     }
 }

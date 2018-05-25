@@ -26,19 +26,19 @@ class DocumentVersionUpdateRequest extends FormRequest
         return [
             'name' => 'string|required',
 
-            'templateId' => 'integer|required',
+            'templateId' => 'integer|required|exists:templates,id',
 
             'labelIds' => 'array|required',
-            'labelIds.*' => 'integer',
+            'labelIds.*' => 'integer|exists:labels,id',
 
             'fileIds' => 'array|required',
-            'fileIds.*' => 'integer',
+            'fileIds.*' => 'integer|exists:files,id',
 
             'comment' => 'string|required',
 
             'attributeValues' => 'array|required',
-            'attributeValues.*.id' => 'required|integer',
-            'attributeValues.*.type' => 'required|string',
+            'attributeValues.*.id' => 'required|integer|exists:attributes,id',
+            'attributeValues.*.type' => 'required|string|exists:types,machine_name',
             'attributeValues.*.value' => 'required',
         ];
     }

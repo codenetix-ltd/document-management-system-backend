@@ -24,9 +24,9 @@ class AttributeUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            "name" => "sometimes|required|string|max:255",
-            "typeId" => "sometimes|required|integer",
-            "data" => "array"
+            'name' => 'sometimes|required|string|max:255',
+            'typeId' => 'sometimes|required|integer|exists:types,id',
+            'data' => 'array'
         ];
     }
 }

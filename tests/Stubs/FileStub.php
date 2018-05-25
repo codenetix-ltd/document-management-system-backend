@@ -2,7 +2,7 @@
 
 namespace Tests\Stubs;
 
-use App\File;
+use App\Entities\File;
 
 /**
  * @author Vladimir Barmotin <barmotinvladimir@gmail.com>
@@ -34,8 +34,8 @@ class FileStub extends AbstractStub
     protected function doBuildResponse()
     {
         return [
-            'name' => $this->model->getOriginalName(),
-            'url' => $this->model->getPath()
+            'name' => $this->model->originalName,
+            'url' => $this->model->path
         ];
     }
 }

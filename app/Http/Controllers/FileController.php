@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\FileResource;
-use App\Services\File\FileCreateService;
+use App\Services\FileService;
 use Illuminate\Http\Request;
 
 /**
@@ -11,10 +11,16 @@ use Illuminate\Http\Request;
  */
 class FileController extends Controller
 {
-    public function uploadFile(Request $request, FileCreateService $createService){
+    /**
+     * @param Request $request
+     * @param FileService $createService
+     *
+     * @return FileResource
+     */
+    public function uploadFile(Request $request, FileService $createService){
         $file = $request->file('file');
         $fileEntity = $createService->createFile($file, config('filesystems.paths.files'));
 
-        return (new FileResource($fileEntity))->response()->setStatusCode(201);
+        return (new FileResource($fileEntity));
     }
 }

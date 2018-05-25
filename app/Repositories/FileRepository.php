@@ -2,18 +2,9 @@
 
 namespace App\Repositories;
 
-use App\Contracts\Repositories\IFileRepository;
-use App\File;
+use Prettus\Repository\Contracts\RepositoryInterface;
 
-class FileRepository implements IFileRepository
+interface FileRepository extends RepositoryInterface
 {
-    public function create(array $data): File
-    {
-        $file = new File();
-        //TODO - remove fill from here
-        $file->fill($data);
-        $file->save();
 
-        return $file;
-    }
 }

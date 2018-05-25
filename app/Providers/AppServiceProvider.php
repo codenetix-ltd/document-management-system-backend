@@ -28,7 +28,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(IFileRepository::class, FileRepository::class);
         $this->app->bind(ILogger::class, LogService::class);
     }
 }

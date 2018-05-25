@@ -2,7 +2,6 @@
 
 namespace App\Entities;
 
-use App\File;
 use Illuminate\Database\Eloquent\Collection;
 use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;

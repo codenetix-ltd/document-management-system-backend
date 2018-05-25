@@ -10,6 +10,8 @@ use App\Repositories\DocumentRepository;
 use App\Repositories\DocumentRepositoryEloquent;
 use App\Repositories\DocumentVersionRepository;
 use App\Repositories\DocumentVersionRepositoryEloquent;
+use App\Repositories\FileRepository;
+use App\Repositories\FileRepositoryEloquent;
 use App\Repositories\LabelRepository;
 use App\Repositories\LabelRepositoryEloquent;
 use App\Repositories\LogRepository;
@@ -56,5 +58,6 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(DocumentVersionRepository::class, DocumentVersionRepositoryEloquent::class);
         $this->app->bind(UserRepository::class, UserRepositoryEloquent::class);
         $this->app->bind(LogRepository::class, LogRepositoryEloquent::class);
+        $this->app->bind(FileRepository::class, FileRepositoryEloquent::class);
     }
 }

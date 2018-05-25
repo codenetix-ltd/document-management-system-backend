@@ -2,7 +2,6 @@
 
 namespace App\Entities;
 
-use App\File;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Prettus\Repository\Contracts\Transformable;

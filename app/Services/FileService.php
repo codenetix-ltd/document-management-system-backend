@@ -7,9 +7,8 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
-use App\Entities\File as FileModel;
 
-class FileCreateService
+class FileService
 {
     private $repository;
 
@@ -48,7 +47,7 @@ class FileCreateService
         return $file;
     }
 
-    public function createDirectory($path): bool
+    protected function createDirectory($path): bool
     {
         return File::isDirectory($path) ? true : Storage::disk('public')->makeDirectory($path);
     }

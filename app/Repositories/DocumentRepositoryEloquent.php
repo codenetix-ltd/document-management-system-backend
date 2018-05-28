@@ -3,9 +3,8 @@
 namespace App\Repositories;
 
 use App\Criteria\DocumentFilterCriteria;
-use Prettus\Repository\Eloquent\BaseRepository;
-use Prettus\Repository\Criteria\RequestCriteria;
 use App\Entities\Document;
+use Prettus\Repository\Exceptions\RepositoryException;
 
 /**
  * Class DocumentRepositoryEloquent.
@@ -22,17 +21,13 @@ class DocumentRepositoryEloquent extends BaseRepository implements DocumentRepos
         return Document::class;
     }
 
-    protected $fieldSearchable = [
-        'ownerId',
-        'documentActualVersion.name' => 'like',
-    ];
-
     /**
      * Boot up the repository, pushing criteria
+     * @throws RepositoryException
      */
     public function boot()
     {
-        $this->pushCriteria(app(RequestCriteria::class));
+        parent::boot();
         $this->pushCriteria(app(DocumentFilterCriteria::class));
     }
 }

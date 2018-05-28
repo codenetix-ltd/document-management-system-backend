@@ -2,9 +2,20 @@
 
 namespace App\Entities;
 
+use Illuminate\Support\Collection;
 use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
 
+/**
+ * Class Permission
+ * @package App\Entities
+ *
+ * @property string $name
+ * @property string $label
+ *
+ * @property Collection|AccessType[] $accessTypes
+ * @property Collection|Role[] $roles
+ */
 class Permission extends BaseEntity implements Transformable
 {
     use TransformableTrait;

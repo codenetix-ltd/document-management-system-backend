@@ -1,6 +1,6 @@
 <?php
 
-use App\File;
+use App\Entities\File;
 use Faker\Generator as Faker;
 
 $factory->define(File::class, function (Faker $faker) {

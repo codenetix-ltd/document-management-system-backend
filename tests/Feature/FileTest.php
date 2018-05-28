@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\File;
+use App\Entities\File;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Tests\Stubs\FileStub;

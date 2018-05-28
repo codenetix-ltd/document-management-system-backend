@@ -28,7 +28,7 @@ class UserResource extends JsonResource
             'email' => $this->resource->email,
             'templatesIds' => $this->resource->templates->pluck('id')->toArray(),
             'avatar' => new FileResource($this->resource->avatar),
-            'avatarId' => $this->resource->avatar->getId(),
+            'avatarId' => $this->resource->avatar->id,
         ];
     }
 }

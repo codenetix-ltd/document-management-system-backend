@@ -4,6 +4,10 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * Class QualifierPivotResource
+ * @package App\Http\Resources
+ */
 class QualifierPivotResource extends JsonResource
 {
     public function toArray($request)

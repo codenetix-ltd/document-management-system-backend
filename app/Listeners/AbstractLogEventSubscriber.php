@@ -25,7 +25,7 @@ abstract class AbstractLogEventSubscriber
 
     protected function addLog($body, $referenceId)
     {
-        $this->logger->write($this->user, $body, $referenceId, $this->getReferenceType());
+        $this->logger->write($this->user->getAuthIdentifier(), $body, $referenceId, $this->getReferenceType());
     }
 
     abstract public function subscribe(Dispatcher $events);

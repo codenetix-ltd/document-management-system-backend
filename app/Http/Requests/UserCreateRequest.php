@@ -27,9 +27,10 @@ class UserCreateRequest extends FormRequest
             'password' => 'required|string|max:255|min:6',
             'passwordConfirmation' => 'required|same:password',
             'fullName' => 'required|string|max:255',
-            'email' => 'required|string|max:255|email',
+            'email' => 'required|email|unique:users',
             'templatesIds' => 'required|array',
-            'avatarId' => 'required|integer'
+            'templatesIds.*' => 'integer|exists:templates,id',
+            'avatarId' => 'required|integer|exists:files,id'
         ];
     }
 }

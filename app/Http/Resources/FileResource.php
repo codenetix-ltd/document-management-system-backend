@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources;
 
-use App\File;
+use App\Entities\File;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
@@ -16,8 +16,8 @@ class FileResource extends JsonResource
     {
         return [
             'id' => $this->resource->id,
-            'name'=>$this->resource->getOriginalName(),
-            'url' => $this->resource->getPath()
+            'name'=>$this->resource->originalName,
+            'url' => $this->resource->path
         ];
     }
 }

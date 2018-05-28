@@ -2,8 +2,6 @@
 
 namespace App\Repositories;
 
-use Prettus\Repository\Eloquent\BaseRepository;
-use Prettus\Repository\Criteria\RequestCriteria;
 use App\Entities\PermissionGroup;
 
 /**
@@ -19,13 +17,5 @@ class PermissionGroupRepositoryEloquent extends BaseRepository implements Permis
     public function model()
     {
         return PermissionGroup::class;
-    }
-
-    /**
-     * Boot up the repository, pushing criteria
-     */
-    public function boot()
-    {
-        $this->pushCriteria(app(RequestCriteria::class));
     }
 }

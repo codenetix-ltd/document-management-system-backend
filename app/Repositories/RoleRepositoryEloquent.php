@@ -3,8 +3,6 @@
 namespace App\Repositories;
 
 use App\Entities\RolePermission;
-use Prettus\Repository\Eloquent\BaseRepository;
-use Prettus\Repository\Criteria\RequestCriteria;
 use App\Entities\Role;
 
 /**
@@ -20,14 +18,6 @@ class RoleRepositoryEloquent extends BaseRepository implements RoleRepository
     public function model()
     {
         return Role::class;
-    }
-
-    /**
-     * Boot up the repository, pushing criteria
-     */
-    public function boot()
-    {
-        $this->pushCriteria(app(RequestCriteria::class));
     }
 
     public function detachPermissions(Role $model): int

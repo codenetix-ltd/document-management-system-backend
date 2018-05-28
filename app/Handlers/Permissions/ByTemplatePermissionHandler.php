@@ -10,6 +10,8 @@ class ByTemplatePermissionHandler
 {
 
     protected $templates;
+    private $user;
+    private $role;
 
     public function __construct(User $user, Role $role, Collection $templates)
     {

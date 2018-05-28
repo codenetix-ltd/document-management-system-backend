@@ -2,10 +2,9 @@
 
 namespace Tests\Stubs;
 
-use App\Entities\Attribute;
 use App\Entities\DocumentVersion;
 use App\Entities\Label;
-use App\File;
+use App\Entities\File;
 use Illuminate\Support\Collection;
 use Tests\Stubs\Requests\DocumentAttributeValueStub;
 

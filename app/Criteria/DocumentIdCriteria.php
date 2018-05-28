@@ -2,6 +2,7 @@
 
 namespace App\Criteria;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Prettus\Repository\Contracts\CriteriaInterface;
 use Prettus\Repository\Contracts\RepositoryInterface;
@@ -23,7 +24,7 @@ class DocumentIdCriteria implements CriteriaInterface
     /**
      * Apply criteria in query repository
      *
-     * @param Model              $model
+     * @param Model|Builder              $model
      * @param RepositoryInterface $repository
      *
      * @return mixed

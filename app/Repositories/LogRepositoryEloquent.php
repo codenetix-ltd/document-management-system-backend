@@ -3,8 +3,6 @@
 namespace App\Repositories;
 
 use App\Criteria\UserIdCriteria;
-use Prettus\Repository\Eloquent\BaseRepository;
-use Prettus\Repository\Criteria\RequestCriteria;
 use App\Entities\Log;
 
 /**
@@ -20,14 +18,6 @@ class LogRepositoryEloquent extends BaseRepository implements LogRepository
     public function model()
     {
         return Log::class;
-    }
-
-    /**
-     * Boot up the repository, pushing criteria
-     */
-    public function boot()
-    {
-        $this->pushCriteria(app(RequestCriteria::class));
     }
 
     /**

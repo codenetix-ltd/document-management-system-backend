@@ -2,12 +2,12 @@
 
 namespace App\Repositories;
 
-use App\Entities\AttributeValue;
+use App\Entities\File;
 
 /**
  * Class DocumentRepositoryEloquent.
  */
-class AttributeValueRepositoryEloquent extends BaseRepository implements AttributeValueRepository
+class FileRepositoryEloquent extends BaseRepository implements FileRepository
 {
     /**
      * Specify Model class name
@@ -16,6 +16,6 @@ class AttributeValueRepositoryEloquent extends BaseRepository implements Attribu
      */
     public function model()
     {
-        return AttributeValue::class;
+        return File::class;
     }
 }

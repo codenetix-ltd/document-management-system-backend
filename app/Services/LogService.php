@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Contracts\Helpers\ILogger;
 use App\Repositories\LogRepository;
-use App\Entities\User;
 
 /**
  * Created by Codenetix team <support@codenetix.com>
@@ -34,10 +33,10 @@ class LogService implements ILogger
 
     }
 
-    public function write(User $user, string $body, int $referenceId, string $referenceType): void
+    public function write($userId, $body, $referenceId, $referenceType)
     {
         $this->repository->create([
-            'user_id' => $user->id,
+            'user_id' => $userId,
             'body' => $body,
             'reference_id' => $referenceId,
             'reference_type' => $referenceType

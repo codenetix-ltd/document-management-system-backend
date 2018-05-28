@@ -5,6 +5,12 @@ namespace App\Entities;
 use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
 
+/**
+ * Class RolePermission
+ * @package App\Entities
+ *
+ * @property int $id
+ */
 class RolePermission extends BasePivotEntity implements Transformable
 {
     use TransformableTrait;

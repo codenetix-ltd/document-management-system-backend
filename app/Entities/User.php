@@ -2,7 +2,6 @@
 
 namespace App\Entities;
 
-use App\File;
 use Illuminate\Database\Eloquent\Collection;
 use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
@@ -14,6 +13,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property int $id
  * @property string $email
  * @property string $fullName
+ * @property string $password
  * @property File $avatar
  * @property Collection|Document[] $documents
  * @property Collection|Template[] $templates

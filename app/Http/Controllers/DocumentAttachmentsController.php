@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
-use App\File as FileModel;
+use App\Entities\File as FileModel;
 
 /**
  * @author Andrey Vorobiov<andrew.sprw@gmail.com>

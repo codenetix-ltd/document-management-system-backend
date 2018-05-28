@@ -48,6 +48,16 @@ class AttributeRepositoryEloquent extends BaseRepository implements AttributeRep
         return $tableTypeColumn;
     }
 
+    public function deleteTableTypeColumnsByAttributeId(int $id): int
+    {
+        return TableTypeColumn::where('parent_attribute_id', $id)->delete();
+    }
+
+    public function deleteTableTypeRowsByAttributeId(int $id): int
+    {
+        return TableTypeRow::where('parent_attribute_id', $id)->delete();
+    }
+
     public function createTableTypeRow(int $parentAttributeId, string $name): TableTypeRow
     {
         $tableTypeRow = new TableTypeRow();
@@ -63,8 +73,13 @@ class AttributeRepositoryEloquent extends BaseRepository implements AttributeRep
         return Attribute::where('parent_attribute_id', null)->where('template_id', $templateId)->paginate();
     }
 
-//    public function getAttributeValuesByDocumentVersionId($documentVersionId)
-//    {
-//        return AttributeValue::whereDocumentVersionId($documentVersionId)->get();
-//    }
+    public function isExistChildAttribute(int $childAttributeId, int $parentAttributeId): bool
+    {
+        return Attribute::where('id', $childAttributeId)->where('parent_attribute_id', $parentAttributeId)->exists();
+    }
+
+    public function deleteAttributesByIds(array $ids): int
+    {
+        return Attribute::whereIn('id', $ids)->delete();
+    }
 }

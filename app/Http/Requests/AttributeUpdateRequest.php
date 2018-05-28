@@ -2,9 +2,7 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
-
-class AttributeUpdateRequest extends FormRequest
+class AttributeUpdateRequest extends ABaseFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,12 +19,11 @@ class AttributeUpdateRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'name' => 'sometimes|required|string|max:255',
-            'typeId' => 'sometimes|required|integer|exists:types,id',
-            'data' => 'array'
+            'data' => 'sometimes|required|array'
         ];
     }
 }

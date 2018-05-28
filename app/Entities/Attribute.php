@@ -32,7 +32,7 @@ class Attribute extends BaseEntity implements Transformable
      *
      * @var array
      */
-    protected $fillable = ['name', 'typeId', 'templateId', 'order', 'tableTypeRowId', 'tableTypeColumnId', 'parentAttributeId', 'isLocked'];//TODO - remove tableTypeRowId, tableTypeColumnId, parentAttributeId
+    protected $fillable = ['name', 'typeId', 'templateId', 'order', 'tableTypeRowId', 'tableTypeColumnId', 'parentAttributeId', 'isLocked'];
 
     protected $casts = [
         'is_locked' => 'boolean'
@@ -51,5 +51,10 @@ class Attribute extends BaseEntity implements Transformable
     public function type()
     {
         return $this->belongsTo(Type::class);
+    }
+
+    public function childAttributes()
+    {
+        return $this->hasMany(Attribute::class, 'parent_attribute_id', 'id');
     }
 }

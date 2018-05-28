@@ -25,8 +25,8 @@ class CreateForeignKeys extends Migration
 
         Schema::table('attributes', function (Blueprint $table) {
             $table->foreign('template_id')->references('id')->on('templates')->onDelete('cascade')->onUpdate('no action');
-            $table->foreign('table_type_row_id')->references('id')->on('table_type_rows')->onDelete('cascade')->onUpdate('no action');
-            $table->foreign('table_type_column_id')->references('id')->on('table_type_columns')->onDelete('cascade')->onUpdate('no action');
+            $table->foreign('table_type_row_id')->references('id')->on('table_type_rows')->onDelete('set null')->onUpdate('no action');
+            $table->foreign('table_type_column_id')->references('id')->on('table_type_columns')->onDelete('set null')->onUpdate('no action');
         });
 
         Schema::table('attribute_values', function (Blueprint $table) {

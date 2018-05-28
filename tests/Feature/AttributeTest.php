@@ -104,7 +104,7 @@ class AttributeTest extends TestCase
 
         $response
             ->assertStatus(Response::HTTP_CREATED)
-            ->assertExactJson($attributeStub->buildResponse([
+            ->assertJson($attributeStub->buildResponse([
                 'id' => $attributeModel->id,
                 'createdAt' => $attributeModel->createdAt->timestamp,
                 'updatedAt' => $attributeModel->updatedAt->timestamp,
@@ -166,6 +166,7 @@ class AttributeTest extends TestCase
 
         $response = $this->json('POST', '/api/templates/' . $attribute->templateId . '/attributes', $attributeStub->buildRequest());
         $createdAttribute = $response->decodeResponseJson();
+
         unset($createdAttribute['data']['rows'][1]);
 
         $dataForUpdate = $createdAttribute['data'];
@@ -173,24 +174,24 @@ class AttributeTest extends TestCase
 
         $requestData = $attributeStub->buildRequest([
             'name' => $nameForUpdate,
-            'data' => $dataForUpdate,
             'typeId' => null
         ]);
-
+        $requestData['data'] = $dataForUpdate;
         $attributeModel = Attribute::find($response->decodeResponseJson('id'));
 
         $response = $this->json('PUT', '/api/templates/' . $attributeModel->templateId . '/attributes/' . $attributeModel->id, $requestData);
 
-        $response->dump();
-
+        $stubResponse = $attributeStub->buildResponse([
+            'id' => $attributeModel->id,
+            'name' => $nameForUpdate,
+            'createdAt' => $attributeModel->createdAt->timestamp,
+            'updatedAt' => $attributeModel->updatedAt->timestamp
+        ]);
+        $stubResponse['data'] = $dataForUpdate;
 
         $response
-            ->assertStatus(Response::HTTP_CREATED)
-            ->assertExactJson($attributeStub->buildResponse([
-                'id' => $attributeModel->id,
-                'createdAt' => $attributeModel->createdAt->timestamp,
-                'updatedAt' => $attributeModel->updatedAt->timestamp,
-            ]));
+            ->assertStatus(Response::HTTP_OK)
+            ->assertJson($stubResponse);
     }
 
 

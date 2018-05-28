@@ -2,9 +2,7 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
-
-class AttributeCreateRequest extends FormRequest
+class AttributeCreateRequest extends ABaseFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,7 +19,7 @@ class AttributeCreateRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'name' => 'required|string|max:255',

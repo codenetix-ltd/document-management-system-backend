@@ -19,5 +19,5 @@ class Type extends BaseEntity implements Transformable
 {
     use TransformableTrait;
 
-    protected $fillable = ['name', ];
+    protected $fillable = ['name'];
 }

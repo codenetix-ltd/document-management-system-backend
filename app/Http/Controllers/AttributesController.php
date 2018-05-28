@@ -71,7 +71,7 @@ class AttributesController extends Controller
 
     public function update($templateId, $id, AttributeUpdateRequest $request)
     {
-        $attribute = $this->service->update($templateId, $id, $request->all());
+        $attribute = $this->service->update($templateId, $id, $request->getInputData());
         return new AttributeResource($attribute, $this->service);
     }
 

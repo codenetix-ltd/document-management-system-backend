@@ -75,14 +75,24 @@ class AttributeService
         return $this->repository->find($attribute->id);
     }
 
+    /**
+     * @param $templateId
+     * @param $id
+     * @param array $data
+     * @return mixed
+     * @throws FailedAttributeCreateException
+     * @throws InvalidAttributeDataStructureException
+     * @throws InvalidAttributeTypeException
+     */
     public function update($templateId, $id, array $data)
     {
-        if (empty($data['data']) || TRUE) {
+        if (empty($data['data'])) {
             $attribute = $this->repository->update($data, $id);
+        } else {
+            $attribute = $this->updateComplexAttribute($data, $id);
         }
-        dd($attribute);
 
-        return $this->repository->update($data, $id);
+        return $this->repository->find($attribute->id);
     }
 
     public function paginateAttributes($templateId)
@@ -130,8 +140,8 @@ class AttributeService
                 /** @var Attribute $childAttribute */
                 foreach ($childAttributes as $childAttribute) {
                     if ($childAttribute->tableTypeRowId == $row->id && $childAttribute->tableTypeColumnId == $column->id) {
-                        //dd($childAttribute->type->toArray());
                         $dataRow['columns'][] = [
+                            'id' => $childAttribute->id,
                             'typeId' => $childAttribute->typeId,
                             'isLocked' => $childAttribute->isLocked
                         ];
@@ -159,7 +169,6 @@ class AttributeService
     {
         $type = $this->typeRepository->find($data['typeId']);
 
-        //TODO - create factory for different types
         if ($type->machine_name == TypeService::TYPE_TABLE) {
             $this->validateTable($data);
             return $this->createAttributeWithTableType($data);
@@ -225,7 +234,6 @@ class AttributeService
                 $row = $this->repository->createTableTypeRow($parentAttribute->id, $rowValue['name']);
 
                 foreach ($rowValue['columns'] as $columnKey => $columnValue) {
-                    $childAttributeData = [];
                     $childAttributeData['typeId'] = $columnValue['typeId'];
                     $childAttributeData['name'] = $this->generateNameForCell($rowKey, $columnKey, $parentAttribute->templateId);
                     $childAttributeData['parentAttributeId'] = $parentAttribute->id;
@@ -273,5 +281,88 @@ class AttributeService
         } else {
             return $this->repository->delete($id);
         }
+    }
+
+    /**
+     * @param array $data
+     * @param $id
+     * @return Attribute
+     * @throws FailedAttributeCreateException
+     * @throws InvalidAttributeDataStructureException
+     * @throws InvalidAttributeTypeException
+     */
+    private function updateComplexAttribute(array $data, $id): Attribute
+    {
+        $attribute = $this->repository->find($id);
+
+        if ($attribute->type->machineName == TypeService::TYPE_TABLE) {
+            $this->validateTable($data);
+            return $this->updateAttributeWithTableType($data, $id);
+        } else {
+            throw new InvalidAttributeTypeException('Unsupported attribute type');
+        }
+    }
+
+    /**
+     * @param array $data
+     * @param $id
+     * @return Attribute
+     * @throws FailedAttributeCreateException
+     */
+    private function updateAttributeWithTableType(array $data, $id): Attribute
+    {
+        try {
+            $tableData = $data['data'];
+
+            $this->repository->update($data, $id);
+            $parentAttribute = $this->repository->find($id);
+
+            $childAttributesIds = [];
+
+            $columns = $this->updateTableTypeColumns($tableData['headers'], $parentAttribute->id);
+
+            $this->repository->deleteTableTypeRowsByAttributeId($parentAttribute->id);
+
+            foreach ($tableData['rows'] as $rowKey => $rowValue) {
+                $row = $this->repository->createTableTypeRow($parentAttribute->id, $rowValue['name']);
+
+                foreach ($rowValue['columns'] as $columnKey => $columnValue) {
+                    $childAttributeData['typeId'] = $columnValue['typeId'];
+                    $childAttributeData['name'] = $this->generateNameForCell($rowKey, $columnKey, $parentAttribute->templateId);
+                    $childAttributeData['parentAttributeId'] = $parentAttribute->id;
+                    $childAttributeData['templateId'] = $parentAttribute->templateId;
+                    $childAttributeData['tableTypeRowId'] = $row->id;
+                    $childAttributeData['tableTypeColumnId'] = $columns[$columnKey]->id;
+                    $childAttributeData['isLocked'] = !empty($columnValue['isLocked']) ? $columnValue['isLocked'] : false;
+
+                    if (!empty($columnValue['id']) && $this->repository->isExistChildAttribute($columnValue['id'], $parentAttribute->id)) {
+                        $createdAttribute = $this->repository->update($childAttributeData, $columnValue['id']);
+                    } else {
+                        $createdAttribute = $this->repository->create($childAttributeData);
+                    }
+                    array_push($childAttributesIds, $createdAttribute->id);
+                }
+            }
+
+            $this->repository->deleteAttributesByIds(array_diff($parentAttribute->childAttributes->pluck('id')->toArray(), $childAttributesIds));
+        } catch (Exception $e) {
+            throw new FailedAttributeCreateException('The process of updating the attribute failed with an error', $e->getCode(), $e);
+        }
+
+        return $parentAttribute;
+    }
+
+    /**
+     * @param array $headers
+     * @param int $parentAttributeId
+     * @return array
+     */
+    private function updateTableTypeColumns(array $headers, int $parentAttributeId)
+    {
+        $this->repository->deleteTableTypeColumnsByAttributeId($parentAttributeId);
+
+        return array_map(function ($item) use ($parentAttributeId) {
+            return $this->repository->createTableTypeColumn($parentAttributeId, $item['name']);
+        }, $headers);
     }
 }

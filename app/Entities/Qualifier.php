@@ -10,6 +10,7 @@ use Prettus\Repository\Traits\TransformableTrait;
  * Class Qualifier
  * @package App\Entities
  *
+ * @property int $id
  * @property string $name
  * @property string $label
  *

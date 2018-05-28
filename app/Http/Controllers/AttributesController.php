@@ -69,6 +69,15 @@ class AttributesController extends Controller
         return new AttributeResource($attribute, $this->service);
     }
 
+    /**
+     * @param $templateId
+     * @param $id
+     * @param AttributeUpdateRequest $request
+     * @return AttributeResource
+     * @throws \App\Exceptions\FailedAttributeCreateException
+     * @throws \App\Exceptions\InvalidAttributeDataStructureException
+     * @throws \App\Exceptions\InvalidAttributeTypeException
+     */
     public function update($templateId, $id, AttributeUpdateRequest $request)
     {
         $attribute = $this->service->update($templateId, $id, $request->getInputData());

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Handlers\Permissions;
+
 use App\Contracts\Entity\IHasId;
 use App\Contracts\Entity\IHasOwnerId;
 

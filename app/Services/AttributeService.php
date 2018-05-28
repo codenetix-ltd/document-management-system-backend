@@ -75,13 +75,13 @@ class AttributeService
         return $this->repository->find($attribute->id);
     }
 
-    /**
-     * @param array $data
-     * @param int $id
-     * @return mixed
-     */
-    public function update(array $data, int $id)
+    public function update($templateId, $id, array $data)
     {
+        if (empty($data['data']) || TRUE) {
+            $attribute = $this->repository->update($data, $id);
+        }
+        dd($attribute);
+
         return $this->repository->update($data, $id);
     }
 

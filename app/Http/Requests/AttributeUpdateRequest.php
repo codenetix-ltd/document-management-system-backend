@@ -25,7 +25,6 @@ class AttributeUpdateRequest extends FormRequest
     {
         return [
             "name" => "sometimes|required|string|max:255",
-            "typeId" => "sometimes|required|integer",
             "data" => "array"
         ];
     }

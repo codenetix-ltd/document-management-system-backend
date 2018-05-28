@@ -156,29 +156,42 @@ class AttributeTest extends TestCase
         $response->assertStatus(Response::HTTP_NO_CONTENT);
     }
 
+    /**
+     * @throws \Exception
+     */
+    public function testAttributeUpdateTypeTable()
+    {
+        $attributeStub = new AttributeWithTypeTableStub([], false, 'table');
+        $attribute = $attributeStub->getModel();
 
-//    public function testAttributeUpdate()
-//    {
-//        $attributeStub = new AttributeWithTypeTableStub([], false, 'table');
-//        $attribute = $attributeStub->getModel();
-//        $attributeData = $attributeStub->buildAttributeData();
-//        dd($attributeData);
-//
-//        $response = $this->json('PUT', '/api/labels/' . $label->id, $labelStub->buildRequest([
-//            'name' => $newLabelName
-//        ]));
-//
-//        $labelUpdated = Label::find($response->decodeResponseJson('id'));
-//
-//        $response
-//            ->assertStatus(Response::HTTP_OK)
-//            ->assertExactJson($labelStub->buildResponse([
-//                'id' => $labelUpdated->id,
-//                'name' => $newLabelName,
-//                'createdAt' => $labelUpdated->createdAt->timestamp,
-//                'updatedAt' => $labelUpdated->updatedAt->timestamp
-//            ]));
-//    }
+        $response = $this->json('POST', '/api/templates/' . $attribute->templateId . '/attributes', $attributeStub->buildRequest());
+        $createdAttribute = $response->decodeResponseJson();
+        unset($createdAttribute['data']['rows'][1]);
+
+        $dataForUpdate = $createdAttribute['data'];
+        $nameForUpdate = 'new name of attribute';
+
+        $requestData = $attributeStub->buildRequest([
+            'name' => $nameForUpdate,
+            'data' => $dataForUpdate,
+            'typeId' => null
+        ]);
+
+        $attributeModel = Attribute::find($response->decodeResponseJson('id'));
+
+        $response = $this->json('PUT', '/api/templates/' . $attributeModel->templateId . '/attributes/' . $attributeModel->id, $requestData);
+
+        $response->dump();
+
+
+        $response
+            ->assertStatus(Response::HTTP_CREATED)
+            ->assertExactJson($attributeStub->buildResponse([
+                'id' => $attributeModel->id,
+                'createdAt' => $attributeModel->createdAt->timestamp,
+                'updatedAt' => $attributeModel->updatedAt->timestamp,
+            ]));
+    }
 
 
 }

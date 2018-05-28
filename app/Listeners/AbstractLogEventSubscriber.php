@@ -5,7 +5,6 @@ namespace App\Listeners;
 use App\Contracts\Helpers\ILogger;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Events\Dispatcher;
-use Illuminate\Support\Facades\Auth;
 
 /**
  * @author Vladimir Barmotin <barmotinvladimir@gmail.com>

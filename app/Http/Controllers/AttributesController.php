@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AttributeCreateRequest;
+use App\Http\Requests\AttributeUpdateRequest;
 use App\Http\Resources\AttributeCollectionResource;
 use App\Http\Resources\AttributeResource;
 use App\Services\AttributeService;
@@ -35,7 +36,7 @@ class AttributesController extends Controller
 
     public function index($templateId)
     {
-        $this->templateService->find($templateId); //TODO - add method 'exist' in EloquentRepository
+        $this->templateService->find($templateId);
         $attributes = $this->service->paginateAttributes($templateId);
 
         return (new AttributeCollectionResource($attributes, $this->service));
@@ -68,11 +69,11 @@ class AttributesController extends Controller
         return new AttributeResource($attribute, $this->service);
     }
 
-//    public function update(AttributeUpdateRequest $request, $id)
-//    {
-//        $attribute = $this->service->update($request->all(), $id);
-//        return new AttributeResource($attribute);
-//    }
+    public function update($templateId, $id, AttributeUpdateRequest $request)
+    {
+        $attribute = $this->service->update($templateId, $id, $request->all());
+        return new AttributeResource($attribute, $this->service);
+    }
 
     /**
      * @param $templateId

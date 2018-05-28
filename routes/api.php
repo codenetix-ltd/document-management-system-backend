@@ -15,23 +15,16 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
     Route::apiResource('users', 'API\UserController');
-
     //Order is important (patch overrides apiResource)
     Route::patch('documents/{id}', 'API\DocumentController@patchUpdate');
     Route::put('documents/{id}', 'API\DocumentController@update');
     Route::apiResource('documents', 'API\DocumentController');
-
     Route::delete('documents', 'API\DocumentController@bulkDestroy');
     Route::patch('documents', 'API\DocumentController@bulkPatchUpdate');
-
-
-
     Route::get('documents/{id}/versions', 'API\DocumentVersionController@index');
     Route::put('documents/{id}/actualVersion', 'API\DocumentController@setActualVersion');
     Route::get('documents/{id}/versions/{versionId}', 'API\DocumentVersionController@show');
     Route::delete('documents/{id}/versions/{versionId}', 'API\DocumentVersionController@destroy');
-    Route::get('logs', 'Api\LogController@index');
-
 });
 
 Route::resource('templates', 'TemplatesController');
@@ -43,6 +36,7 @@ Route::apiResource('roles', 'RolesController');
 Route::post('templates/{templateId}/attributes', 'AttributesController@store');
 Route::get('templates/{templateId}/attributes', 'AttributesController@index');
 Route::get('templates/{templateId}/attributes/{id}', 'AttributesController@show');
+Route::match(['PUT', 'PATCH'],'templates/{templateId}/attributes/{id}', 'AttributesController@update');
 Route::delete('templates/{templateId}/attributes/{id}', 'AttributesController@destroy');
 
 Route::apiResource('users', 'UsersController');

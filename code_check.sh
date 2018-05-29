@@ -6,8 +6,7 @@
 #
 # see the README
 
-echo "CHECK"
-    exit 1
+
 
 PHPCS_BIN=./vendor/bin/phpcs
 PHPCS_CODING_STANDARD=./phpcs.xml.dist
@@ -44,6 +43,8 @@ fi
 # but no deletions etc
 FILES=$(git diff-index --name-only --cached --diff-filter=ACMR $against -- )
 
+#FILES=$(git diff --cached --name-status --diff-filter=ACM)
+
 if [ "$FILES" == "" ]; then
     exit 0
 fi
@@ -69,8 +70,6 @@ done
 if [ "$FILES_TO_CHECK" == "" ]; then
     exit 0
 fi
-
-
 
 # execute the code sniffer
 if [ "$PHPCS_IGNORE" != "" ]; then
@@ -112,7 +111,10 @@ do
   STAGED_FILES="$STAGED_FILES $TMP_STAGING/$FILE"
 done
 
-OUTPUT=$($PHPCS_BIN -s $IGNORE_WARNINGS --standard=$PHPCS_CODING_STANDARD $ENCODING $IGNORE $SNIFFS $STAGED_FILES)
+#OUTPUT=$($PHPCS_BIN -s $IGNORE_WARNINGS --standard=$PHPCS_CODING_STANDARD $ENCODING $IGNORE $SNIFFS $STAGED_FILES)
+
+OUTPUT=$($PHPCS_BIN -s $IGNORE_WARNINGS $STAGED_FILES --standard=$PHPCS_CODING_STANDARD $ENCODING $IGNORE)
+
 RETVAL=$?
 
 # delete temporary copy of staging area

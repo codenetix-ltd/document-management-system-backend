@@ -66,6 +66,11 @@
        directory.
     -->
     <rule ref="PSR2"/>
+    <!--<rule ref="Squiz.Commenting.FunctionComment" />-->
+    <!--<rule ref="Squiz.Commenting.FunctionCommentThrowTag" />-->
+    <!--<rule ref="Squiz.Commenting.ClassComment" />-->
+    <!--<rule ref="Squiz.Commenting.FileComment" />-->
+    <!--<rule ref="Squiz.Commenting.VariableComment" />-->
 
     <rule ref="Generic.Files.LineLength">
         <properties>

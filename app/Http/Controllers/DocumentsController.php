@@ -18,12 +18,12 @@ use Illuminate\Validation\ValidationException;
 /**
  * Created by Codenetix team <support@codenetix.com>
  */
-class DocumentsController exten                                                                                                 ds Controller
+class DocumentsController extends Controller
 {
     /**
      * @var DocumentService
      */
-    protected $service;asd as
+    protected $service;
 
     /**
      * DocumentsController constructor.

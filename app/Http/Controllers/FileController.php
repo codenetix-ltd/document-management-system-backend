@@ -17,7 +17,8 @@ class FileController extends Controller
      *
      * @return FileResource
      */
-    public function uploadFile(Request $request, FileService $createService){
+    public function uploadFile(Request $request, FileService $createService)
+    {
         $file = $request->file('file');
         $fileEntity = $createService->createFile($file, config('filesystems.paths.files'));
 

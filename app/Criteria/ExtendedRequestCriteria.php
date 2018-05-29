@@ -22,7 +22,8 @@ class ExtendedRequestCriteria extends RequestCriteria
      * @return Builder
      * @throws \Exception
      */
-    protected function applySearch($search, $fieldsSearchable, $searchFields, $searchJoin, $model) {
+    protected function applySearch($search, $fieldsSearchable, $searchFields, $searchJoin, $model)
+    {
         $searchFields = is_array($searchFields) || is_null($searchFields) ? $searchFields : explode(';', $searchFields);
         $fields = $this->parserFieldsSearch($fieldsSearchable, $searchFields);
         $isFirstField = true;
@@ -34,7 +35,6 @@ class ExtendedRequestCriteria extends RequestCriteria
             /** @var Builder $query */
 
             foreach ($fields as $field => $condition) {
-
                 if (is_numeric($field)) {
                     $field = $condition;
                     $condition = "=";
@@ -53,28 +53,28 @@ class ExtendedRequestCriteria extends RequestCriteria
                 }
 
                 $relation = null;
-                if(stripos($field, '.')) {
+                if (stripos($field, '.')) {
                     $explode = explode('.', $field);
                     $field = array_pop($explode);
                     $relation = implode('.', $explode);
                 }
                 $modelTableName = $query->getModel()->getTable();
-                if ( $isFirstField || $modelForceAndWhere ) {
+                if ($isFirstField || $modelForceAndWhere) {
                     if (!is_null($value)) {
-                        if(!is_null($relation)) {
-                            $query->whereHas($relation, function($query) use($field,$condition,$value) {
-                                $query->where($field,$condition,$value);
+                        if (!is_null($relation)) {
+                            $query->whereHas($relation, function ($query) use ($field, $condition, $value) {
+                                $query->where($field, $condition, $value);
                             });
                         } else {
-                            $query->where($modelTableName.'.'.$field,$condition,$value);
+                            $query->where($modelTableName.'.'.$field, $condition, $value);
                         }
                         $isFirstField = false;
                     }
                 } else {
                     if (!is_null($value)) {
-                        if(!is_null($relation)) {
-                            $query->orWhereHas($relation, function($query) use($field,$condition,$value) {
-                                $query->where($field,$condition,$value);
+                        if (!is_null($relation)) {
+                            $query->orWhereHas($relation, function ($query) use ($field, $condition, $value) {
+                                $query->where($field, $condition, $value);
                             });
                         } else {
                             $query->orWhere($modelTableName.'.'.$field, $condition, $value);
@@ -96,7 +96,7 @@ class ExtendedRequestCriteria extends RequestCriteria
     {
         $orderBy = snake_case($orderBy);
         $split = explode('|', $orderBy);
-        if(count($split) > 1) {
+        if (count($split) > 1) {
             /*
              * ex.
              * products|description -> join products on current_table.product_id = products.id order by description
@@ -109,7 +109,7 @@ class ExtendedRequestCriteria extends RequestCriteria
             $sortColumn = $split[1];
 
             $split = explode(':', $sortTable);
-            if(count($split) > 1) {
+            if (count($split) > 1) {
                 $sortTable = $split[0];
                 $keyName = $table.'.'.$split[1];
             } else {
@@ -179,5 +179,4 @@ class ExtendedRequestCriteria extends RequestCriteria
 
         return $model;
     }
-
 }

@@ -8,12 +8,13 @@ abstract class AAuthorizer
 {
     protected $context;
 
-    public function authorize($permission){
+    public function authorize($permission)
+    {
         $user = $this->context->getUser();
 
-        foreach ($user->roles as $role){
+        foreach ($user->roles as $role) {
             $permissionModel = $role->permissions()->where('name', $permission)->first();
-            if(!$permissionModel){
+            if (!$permissionModel) {
                 continue;
             }
             $group = $permissionModel->permissionGroup;
@@ -27,5 +28,5 @@ abstract class AAuthorizer
         throw new AccessDeniedHttpException('You don\'t have enough rights to perform this operation');
     }
 
-    protected abstract function getPermissionFactoryMethod();
+    abstract protected function getPermissionFactoryMethod();
 }

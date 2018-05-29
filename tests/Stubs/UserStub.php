@@ -22,7 +22,7 @@ class UserStub extends AbstractStub
 
         $this->templateIds = factory(Template::class, 5)->create()->pluck('id')->toArray();
 
-        if($persisted) {
+        if ($persisted) {
             $this->model->templates()->sync($this->templateIds);
         }
     }

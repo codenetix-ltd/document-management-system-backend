@@ -36,7 +36,7 @@ class TemplateStub extends AbstractStub
         parent::buildModel($valuesToOverride, $persisted, $states);
 
         $this->attributeStubs = new Collection();
-        for($i=0;$i<3 && $this->withAttributes;++$i) {
+        for ($i=0; $i<3 && $this->withAttributes; ++$i) {
             $this->attributeStubs->push(new AttributeWithTypeStringStub(['template_id' => $this->model->id], $persisted, []));
         }
     }
@@ -48,7 +48,7 @@ class TemplateStub extends AbstractStub
     {
         parent::initiateByModel($model);
 
-        $this->attributeStubs = $model->attributes->map(function(Attribute $item){
+        $this->attributeStubs = $model->attributes->map(function (Attribute $item) {
             return new AttributeWithTypeStringStub([], true, [], $item);
         });
     }
@@ -79,7 +79,7 @@ class TemplateStub extends AbstractStub
     {
         return [
             'name' => $this->model->name,
-            'attributes' => $this->attributeStubs->map(function(AttributeWithTypeStringStub $item){
+            'attributes' => $this->attributeStubs->map(function (AttributeWithTypeStringStub $item) {
                 return $item->buildResponse();
             })->toArray()
         ];

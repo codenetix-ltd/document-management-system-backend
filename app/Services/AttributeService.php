@@ -207,7 +207,7 @@ class AttributeService
                 throw new InvalidAttributeDataStructureException('Bad data structure');
             }
 
-            array_walk($item['columns'], function($item) use ($availableTypeIds) {
+            array_walk($item['columns'], function ($item) use ($availableTypeIds) {
                 if (!key_exists('typeId', $item) || !in_array($item['typeId'], $availableTypeIds)) {
                     throw new InvalidAttributeTypeException('Unsupported attribute type');
                 }

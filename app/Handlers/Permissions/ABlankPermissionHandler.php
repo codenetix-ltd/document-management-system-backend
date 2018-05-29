@@ -12,7 +12,9 @@ abstract class ABlankPermissionHandler
     {
         $roles = $context->getUser()->roles;
         foreach ($roles as $role) {
-            if ($role->hasPermission($this->getPermissionName())) return true;
+            if ($role->hasPermission($this->getPermissionName())) {
+                return true;
+            }
         }
 
         return false;

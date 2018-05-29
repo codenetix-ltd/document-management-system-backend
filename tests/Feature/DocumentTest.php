@@ -58,7 +58,7 @@ class DocumentTest extends TestCase
         /** @var User $newOwner */
         $newOwner = factory(User::class)->create();
 
-        $response = $this->json('PATCH',self::PATH .'/' . $stub->getModel()->id, $stub->buildRequest([
+        $response = $this->json('PATCH', self::PATH .'/' . $stub->getModel()->id, $stub->buildRequest([
             'ownerId' => $newOwner->id
         ]));
 
@@ -96,7 +96,7 @@ class DocumentTest extends TestCase
         $oldVersion = $document->documentActualVersion;
         $newDocumentVersionStub = new DocumentVersionStub();
 
-        $response = $this->json('PUT',self::PATH .'/' . $document->id, $documentStub->buildRequest([
+        $response = $this->json('PUT', self::PATH .'/' . $document->id, $documentStub->buildRequest([
             'createNewVersion' => false,
             'actualVersion' => $newDocumentVersionStub->buildRequest()
         ]));
@@ -125,7 +125,7 @@ class DocumentTest extends TestCase
         $oldVersion = $document->documentActualVersion;
         $newDocumentVersionStub = new DocumentVersionStub();
 
-        $response = $this->json('PUT',self::PATH .'/' . $document->id, $documentStub->buildRequest([
+        $response = $this->json('PUT', self::PATH .'/' . $document->id, $documentStub->buildRequest([
             'createNewVersion' => true,
             'actualVersion' => $newDocumentVersionStub->buildRequest()
         ]));
@@ -144,7 +144,6 @@ class DocumentTest extends TestCase
         ]));
 
         $this->assertCount(2, $updatedDocument->documentVersions);
-
     }
 //
     public function testDeleteDocumentSuccess()
@@ -184,7 +183,7 @@ class DocumentTest extends TestCase
         factory(DocumentVersion::class)->create(['name'=> 'match_1']);
         factory(DocumentVersion::class)->create(['name'=> 'match_2']);
 
-        $responseArr = $this->json('GET',self::PATH . '?filters[name]=match')->decodeResponseJson();
+        $responseArr = $this->json('GET', self::PATH . '?filters[name]=match')->decodeResponseJson();
 
         $this->assertCount(2, $responseArr['data']);
         $this->assertEquals('match_1', $responseArr['data'][0]['actualVersion']['name']);
@@ -197,7 +196,7 @@ class DocumentTest extends TestCase
         $tag2 = factory(Label::class)->create();
         $tag3 = factory(Label::class)->create();
         /** @var DocumentVersion $dv1 */
-        factory(DocumentVersion::class,2)->create();
+        factory(DocumentVersion::class, 2)->create();
         $dv1 = factory(DocumentVersion::class)->create();
         $dv2 = factory(DocumentVersion::class)->create();
         $dv3 = factory(DocumentVersion::class)->create();
@@ -215,7 +214,7 @@ class DocumentTest extends TestCase
 
     public function testPatchUpdateDocumentSuccess()
     {
-        $documentStub = new DocumentStub([],true);
+        $documentStub = new DocumentStub([], true);
         /** @var Document $document */
         $document = $documentStub->getModel();
 
@@ -263,14 +262,14 @@ class DocumentTest extends TestCase
     {
         $docCollection = new Collection();
 
-        for($i=0;$i<3;++$i) {
+        for ($i=0; $i<3; ++$i) {
             $docCollection->push((new DocumentStub([], true))->getModel());
         }
 
         $response = $this->json('DELETE', self::PATH.'?ids='.$docCollection->implode('id', ','));
         $response->assertStatus(204);
 
-        $docCollection->each(function(Document $item){
+        $docCollection->each(function (Document $item) {
             $this->assertSoftDeleted('documents', ['id' => $item->id]);
         });
     }
@@ -279,11 +278,11 @@ class DocumentTest extends TestCase
     {
         $documentsStubCollection = new Collection();
 
-        for($i=0;$i<3;++$i) {
+        for ($i=0; $i<3; ++$i) {
             $documentsStubCollection->push(new DocumentStub([], true));
         }
 
-        $documentsCollection = $documentsStubCollection->map(function(DocumentStub $item){
+        $documentsCollection = $documentsStubCollection->map(function (DocumentStub $item) {
             return $item->getModel();
         });
 
@@ -293,14 +292,14 @@ class DocumentTest extends TestCase
         $response = $this->json(
             'PATCH',
             self::PATH . '?ids=' . $documentsCollection->implode('id', ','),
-            $documentsCollection->map(function()use($documentSubstitute){
+            $documentsCollection->map(function () use ($documentSubstitute) {
                 return ['substituteDocumentId' => $documentSubstitute->id];
             })->toArray()
         );
 
         $response->decodeResponseJson();
 
-        $expected = $documentsStubCollection->map(function(DocumentStub $item)use ($documentSubstitute){
+        $expected = $documentsStubCollection->map(function (DocumentStub $item) use ($documentSubstitute) {
             /** @var Document $d */
             $d = $item->getModel();
             $d = Document::find($d->id);

@@ -25,8 +25,9 @@ class DocumentPermissionFactoryMethod
         $this->context = $context;
     }
 
-    public function make(Role $role, Permission $permission, $handlerClass){
-        switch($handlerClass){
+    public function make(Role $role, Permission $permission, $handlerClass)
+    {
+        switch ($handlerClass) {
             case ByTemplatePermissionHandler::class:
                 return new ByTemplatePermissionHandler($this->context->getUser(), $role, new Collection([$this->context->getDocument()->template]));
             case ByOwnerPermissionHandler::class:

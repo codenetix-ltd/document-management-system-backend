@@ -43,41 +43,41 @@ class DocumentFilterCriteria implements CriteriaInterface
     {
         $filters = $this->request->query->get('filters');
 
-        if(!$filters) {
+        if (!$filters) {
             return $model;
         }
 
         $builder = $model->newQuery();
 
-        if(isset($filters['id'])) {
+        if (isset($filters['id'])) {
             (new EqualsFilter('id', $filters['id']))->apply($builder);
         }
 
-        if(isset($filters['ids'])) {
+        if (isset($filters['ids'])) {
             (new OneOfFilter('id', $filters['ids']))->apply($builder);
         }
 
-        if(isset($filters['ownerId'])) {
+        if (isset($filters['ownerId'])) {
             (new EqualsFilter('owner_id', $filters['ownerId']))->apply($builder);
         }
 
-        if(isset($filters['name'])) {
+        if (isset($filters['name'])) {
             $startsWithFilter = (new StartsWithFilter('name', $filters['name']));
             (new RelationFilter($startsWithFilter, 'documentActualVersion'))->apply($builder);
         }
 
-        if(isset($filters['templateIds'])) {
+        if (isset($filters['templateIds'])) {
             $inFilter = new OneOfFilter('template_id', $filters['templateIds']);
             (new RelationFilter($inFilter, 'documentActualVersion'))->apply($builder);
         }
 
-        if(isset($filters['labelIds'])) {
+        if (isset($filters['labelIds'])) {
             $inFilter = new OneOfFilter('id', $filters['labelIds']);
             $documentVersionFilter = new RelationFilter($inFilter, 'labels');
             (new RelationFilter($documentVersionFilter, 'documentActualVersion'))->apply($builder);
         }
 
-        if(isset($filters['archived'])) {
+        if (isset($filters['archived'])) {
             if ($filters['archived'] === 1) {
                 (new NotNullFilter('substitute_document_id'))->apply($builder);
             } else {
@@ -89,16 +89,15 @@ class DocumentFilterCriteria implements CriteriaInterface
         $this->applyDateFilters($builder, 'updatedAt', $filters, 'updated_at');
 
         return $builder;
-
     }
 
     private function applyDateFilters(Builder $builder, $field, $filters, $dbAttribute)
     {
-        if(isset($filters[$field.'.from'])) {
+        if (isset($filters[$field.'.from'])) {
             (new DateFilter($dbAttribute, $filters[$field.'.from'], DateFilter::FROM))->apply($builder);
         }
 
-        if(isset($filters[$field.'.to'])) {
+        if (isset($filters[$field.'.to'])) {
             (new DateFilter($dbAttribute, $filters[$field.'.from'], DateFilter::TO))->apply($builder);
         }
     }

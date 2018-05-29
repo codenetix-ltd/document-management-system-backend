@@ -36,7 +36,7 @@ Route::apiResource('roles', 'RolesController');
 Route::post('templates/{templateId}/attributes', 'AttributesController@store');
 Route::get('templates/{templateId}/attributes', 'AttributesController@index');
 Route::get('templates/{templateId}/attributes/{id}', 'AttributesController@show');
-Route::match(['PUT', 'PATCH'],'templates/{templateId}/attributes/{id}', 'AttributesController@update');
+Route::match(['PUT', 'PATCH'], 'templates/{templateId}/attributes/{id}', 'AttributesController@update');
 Route::delete('templates/{templateId}/attributes/{id}', 'AttributesController@destroy');
 
 Route::apiResource('users', 'UsersController');
@@ -52,4 +52,3 @@ Route::patch('documents', 'DocumentsController@bulkPatchUpdate');
 Route::apiResource('documents/{documentId}/documentVersions', 'DocumentVersionsController');
 
 Route::post('files', 'FileController@uploadFile');
-

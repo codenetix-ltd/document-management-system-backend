@@ -24,5 +24,4 @@ class Label extends BaseEntity implements Transformable
      * @var array
      */
     protected $fillable = ['name'];
-
 }

@@ -65,7 +65,7 @@ abstract class AbstractStub
         if ($this->persisted) {
             $response['id'] = $this->model->id;
 
-            if($this->replaceTimeStamps) {
+            if ($this->replaceTimeStamps) {
                 if ($this->model->createdAt) {
                     $response['createdAt'] = $this->model->createdAt->timestamp;
                 }

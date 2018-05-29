@@ -22,8 +22,9 @@ class UserPermissionFactoryMethod
         $this->context = $context;
     }
 
-    public function make(Role $role, Permission $permission, $handlerClass){
-        switch($handlerClass){
+    public function make(Role $role, Permission $permission, $handlerClass)
+    {
+        switch ($handlerClass) {
             case AnyPermissionHandler::class:
                 return new AnyPermissionHandler();
             case NonePermissionHandler::class:

@@ -23,7 +23,7 @@ class RelationFilter implements FilterInterface
 
     public function apply(Builder $builder)
     {
-        $builder->whereHas($this->relationName, function(Builder $query){
+        $builder->whereHas($this->relationName, function (Builder $query) {
             $this->relationFilter->apply($query);
         });
     }

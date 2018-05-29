@@ -2,7 +2,6 @@
 
 namespace Tests\Stubs;
 
-
 /**
  * Created by Andrew Sparrow <andrew.sprw@gmail.com>
  */

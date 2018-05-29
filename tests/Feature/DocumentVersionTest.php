@@ -66,7 +66,7 @@ class DocumentVersionTest extends TestCase
         /** @var Document $document */
         $document = (new DocumentStub([], true))->getModel();
 
-        for($i=0;$i<3;++$i) {
+        for ($i=0; $i<3; ++$i) {
             new DocumentVersionStub(['document_id' => $document->id], true);
         }
         new DocumentVersionStub([], true);
@@ -100,7 +100,6 @@ class DocumentVersionTest extends TestCase
         $response
             ->assertStatus(Response::HTTP_OK)
             ->assertExactJson($documentVersionStub->buildResponse());
-
     }
 
     /**
@@ -173,7 +172,5 @@ class DocumentVersionTest extends TestCase
         $response = $this->json('DELETE', '/api/documents/0/documentVersions/0');
 
         $response->assertStatus(Response::HTTP_NO_CONTENT);
-
     }
-
 }

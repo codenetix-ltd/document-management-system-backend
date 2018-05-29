@@ -43,8 +43,12 @@ class Role extends BaseEntity implements Transformable
     public function hasPermission(string $permissionName, int $targetId = null, string $targetType = null) : bool
     {
         $query = $this->permissions()->where('name', $permissionName);
-        if (!is_null($targetId)) $query->where('role_permission.entity_id', $targetId);
-        if (!is_null($targetType)) $query->where('role_permission.entity_type', $targetType);
+        if (!is_null($targetId)) {
+            $query->where('role_permission.entity_id', $targetId);
+        }
+        if (!is_null($targetType)) {
+            $query->where('role_permission.entity_type', $targetType);
+        }
 
         return $query->exists();
     }
@@ -53,5 +57,4 @@ class Role extends BaseEntity implements Transformable
     {
         return $this->belongsToMany(User::class, 'user_role');
     }
-
 }

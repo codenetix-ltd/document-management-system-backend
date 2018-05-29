@@ -42,9 +42,9 @@ class UserRepositoryEloquent extends BaseRepository implements UserRepository
             // we should pass data that has been casts by the model
             // to make sure data type are same because validator may need to use
             // this data to compare with data that fetch from database.
-            if( $this->versionCompare($this->app->version(), "5.2.*", ">") ){
+            if ($this->versionCompare($this->app->version(), "5.2.*", ">")) {
                 $attributes = $this->model->newInstance()->forceFill($attributes)->makeVisible($this->model->getHidden())->toArray();
-            }else{
+            } else {
                 $model = $this->model->newInstance()->forceFill($attributes);
                 $model->addVisible($this->model->getHidden());
                 $attributes = $model->toArray();

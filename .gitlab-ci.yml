@@ -23,7 +23,6 @@ test:
   stage: test
   image:
     name: $CONTAINER_IMAGE
-    entrypoint: ["./bin/run_test.sh"]
   services:
     - mysql:5.7.22
   variables:

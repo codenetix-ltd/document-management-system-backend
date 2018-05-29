@@ -1,111 +1,126 @@
-FROM php:7.1-fpm
+FROM php:7.1.15-fpm-jessie
 
-MAINTAINER Andrew Sparrow <a.vorobyev@mildberry.com>
-
-#####################################
-# Non-Root User Codenetix:
-#####################################
-RUN groupadd -g 1000 codenetix && \
-    useradd -u 1000 -g codenetix -m codenetix
+MAINTAINER Andrey Vorobyev <avorobyev@codenetix.com>
 
 #####################################
-# APT-GET:
+# Common software:
 #####################################
+ENV DEBIAN_FRONTEND noninteractive
+
 RUN curl -sL https://deb.nodesource.com/setup_6.x | bash -
+RUN apt-get update && \
+    apt-get install -y \
+    nginx \
+    nodejs \
+    cron \
+    supervisor \
+    git \
+    openssl \
+    libxml2-dev libxslt-dev \
+    libfreetype6-dev \
+    libjpeg62-turbo-dev \
+    libpng12-dev \
+    libgd-dev
 
-RUN apt-key adv --keyserver hkp://pgp.mit.edu:80 --recv-keys 573BFD6B3D8FBC641079A6ABABF5BD827BD9BF62 \
-        && echo "deb http://nginx.org/packages/debian/ jessie nginx" >> /etc/apt/sources.list \
-        && apt-get update \
-        && apt-get install --no-install-recommends --no-install-suggests -y \
-        ca-certificates \
-        nginx \
-        git \
-        ssh \
-        libjpeg-dev \
-        libpng12-dev \
-        libfreetype6-dev \
-        libmcrypt-dev \
-        nano
+RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ && \
+    docker-php-ext-install \
+    pcntl \
+    mysqli \
+    pdo \
+    pdo_mysql \
+	mbstring \
+	dom \
+	xmlrpc \
+	xsl \
+    gd \
+    exif && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/cache/*
 
-RUN apt-get clean
+#####################################
+# PHPUnit:
+#####################################
+RUN curl -OL https://phar.phpunit.de/phpunit.phar \
+    && chmod 755 phpunit.phar \
+    && mv phpunit.phar /usr/local/bin/ \
+    && ln -s /usr/local/bin/phpunit.phar /usr/local/bin/phpunit
 
-RUN docker-php-ext-install -j$(nproc) iconv zip mcrypt pdo mysqli pdo_mysql \
-    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
-    && docker-php-ext-install -j$(nproc) gd
-
+#####################################
+# Composer:
+#####################################
 RUN curl https://getcomposer.org/composer.phar > /usr/local/bin/composer \
     && chmod +x /usr/local/bin/composer
 
 #####################################
+# PHP opcache:
+#####################################
+ARG ENABLE_OPCACHE=false
+ENV ENABLE_OPCACHE ${ENABLE_OPCACHE}
+RUN RUN if [ ${INSTALL_XDEBUG} = true ]; then { \
+		echo 'opcache.memory_consumption=128'; \
+		echo 'opcache.interned_strings_buffer=8'; \
+		echo 'opcache.max_accelerated_files=4000'; \
+		echo 'opcache.revalidate_freq=60'; \
+		echo 'opcache.fast_shutdown=1'; \
+		echo 'opcache.enable_cli=1'; \
+	} > /usr/local/etc/php/conf.d/opcache-recommended.ini \
+;fi
+
+#####################################
 # xDebug:
 #####################################
-ARG INSTALL_XDEBUG=true
+ARG INSTALL_XDEBUG=false
 ENV INSTALL_XDEBUG ${INSTALL_XDEBUG}
 RUN if [ ${INSTALL_XDEBUG} = true ]; then \
     pecl install xdebug && \
     docker-php-ext-enable xdebug \
 ;fi
 
-ARG XDEBUG_REMOTE_HOST=""
-ENV XDEBUG_REMOTE_HOST ${XDEBUG_REMOTE_HOST}
-
-###################################
-# App files:
 #####################################
-WORKDIR /var/www/
-ADD . /var/www/
-RUN rm -rf /var/www/container
-
-######################################
-## Container files:
-######################################
-ADD ./container /container
-
+# Extract & prepare apps configuration
 #####################################
-# RSA ssh
-#####################################
-ADD ./container/rsa/ /root/.ssh/
-RUN cp /container/rsa/* /root/.ssh/ && \
-    chmod 600 /root/.ssh/id_rsa && \
-    echo "Host git.codenetix.com\n\tStrictHostKeyChecking no\n" >> /root/.ssh/config
+COPY ./container/nginx.conf /etc/nginx/nginx.conf
+COPY ./container/php.pool.conf /usr/local/etc/php-fpm.d/php.pool.conf
+COPY ./container/php.ini.php /usr/local/etc/php/conf.d/php.ini.php
+COPY container/supervisord.conf.php /etc/supervisor/supervisord.conf.php
+COPY container/run.sh /usr/sbin/run.sh
+
+RUN php /usr/local/etc/php/conf.d/php.ini.php > /usr/local/etc/php/conf.d/php.ini && \
+    php /etc/supervisor/supervisord.conf.php > /etc/supervisor/supervisord.conf && \
+    rm /etc/supervisor/supervisord.conf.php && \
+    rm /usr/local/etc/php/conf.d/php.ini.php && \
+    rm /usr/local/etc/php-fpm.d/www.conf /usr/local/etc/php-fpm.d/zz-docker.conf && \
+    mkdir /var/log/supervisord && \
+    chmod +x /usr/sbin/run.sh
 
 #####################################
-# PHP-FPM conf
+# Cron
 #####################################
-RUN php /container/templates/php.ini.php > /usr/local/etc/php/conf.d/php.ini && \
-    rm /usr/local/etc/php-fpm.d/www.conf && \
-    cp /container/config/php.pool.conf /usr/local/etc/php-fpm.d/php.pool.conf
+COPY container/crontab /etc/cron.d/photon
+RUN chmod 644 /etc/cron.d/photon && \
+    crontab /etc/cron.d/photon
 
 #####################################
-# NGINX conf
+# Project files
 #####################################
-RUN cp /container/config/nginx.conf /etc/nginx/nginx.conf && \
-    cp /container/config/server_defaults.conf /etc/nginx/server_defaults.conf && \
-    cp /container/config/laravel.conf /etc/nginx/conf.d/laravel.conf && \
-    rm /etc/nginx/conf.d/default.conf
+WORKDIR /var/www
+
+RUN chown www-data /var/www
+
+COPY --chown=www-data:www-data . /var/www
+
+RUN rm -rf container
 
 #####################################
-# Composer install
+# Composer
 #####################################
-ARG COMPOSER_INSTALL_RUN=true
-ENV COMPOSER_INSTALL_RUN ${COMPOSER_INSTALL_RUN}
-RUN if [ ${COMPOSER_INSTALL_RUN} = true ]; then \
-composer install && composer dump-autoload \
-;fi
+USER www-data
 
-#####################################
-# App files permissions & Clean up and ready to go:
-#####################################
-RUN find ./ -type d -exec chmod 755 {} + && \
-    find ./ -type f -exec chmod 644 {} + && \
-    chmod -R ug+rwx ./storage && \
-    chown -R codenetix:codenetix ./ && \
-    chmod 700 /var/www/bin/run.sh && \
-    chmod 700 /var/www/bin/run_test.sh && \
-    rm -rf /container && \
-    chmod 700 ./vendor/bin/phpunit && \
-    php artisan storage:link
+RUN composer install && composer clearcache
 
-EXPOSE 80 443
+# Run supervisor as root
+USER root
 
-ENTRYPOINT ["./bin/run.sh"]
+EXPOSE 80
+
+CMD ["/usr/sbin/run.sh"]

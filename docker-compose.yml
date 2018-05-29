@@ -1,56 +1,69 @@
-version: '2'
+version: '3'
+
 services:
   app:
-    image: registry.gitlab.com/document-management-system/laraveldms:master
+    image: codenetix/laravel-dms-backend:dev
+    container_name: dms_app
+    build:
+      context: ./
+      dockerfile: Dockerfile
+      args:
+        - ENABLE_OPCACHE=false
+        - INSTALL_XDEBUG=true
     environment:
-      APP_ENV: production
-      APP_DEBUG: 'false'
+      APP_ENV: local
+      APP_DEBUG: 'true'
       APP_KEY: '"base64:N5A11hYX5GxzTqEPRtoRHjtdtqg65hGpw2Qis1V4b8M="'
-      DB_DATABASE: laraveldms
+      DB_DATABASE: dms
       DB_HOST: mysql
-      DB_PASSWORD: JV4yLWsPlzQkCvMz3E5j
+      DB_PASSWORD: dms
       DB_USERNAME: root
-    stdin_open: true
+      XDEBUG_CONFIG: 'remote_host=192.168.88.109 remote_connect_back=0 idekey=PHPSTORM'
     volumes:
-    - /mnt/storage:/var/www/storage/app
+      - ./app:/var/www/app
+      - ./tests:/var/www/tests
+      - ./config:/var/www/config
+      - ./database:/var/www/database
+      - ./resources:/var/www/resources
+      - ./routes:/var/www/routes
     links:
-    - mysql:mysql
+      - mysql:mysql
     ports:
-    - 80:80/tcp
-    restart: "always"
-    logging:
-      driver: syslog
-      options:
-        syslog-facility: daemon
-        tag: application
+      - 80:80/tcp
+
   mysql:
-    image: mysql:latest
+    image: mysql:5.7.22
+    container_name: dms_mysql
     environment:
-      MYSQL_DATABASE: laraveldms
-      MYSQL_ROOT_PASSWORD: JV4yLWsPlzQkCvMz3E5j
+      MYSQL_DATABASE: dms
+      MYSQL_ROOT_PASSWORD: dms
     volumes:
-    - /mnt/mysql:/var/lib/mysql
+      - mysql-data:/var/lib/mysql
     ports:
-    - 3306:3306/tcp
-    restart: "always"
-    logging:
-     driver: syslog
-     options:
-       syslog-facility: daemon
-       tag: mysql
-  zabbix-agent:
-    pid: "host"
-    privileged: true
-    image: registry.gitlab.com/zabbix_treesoft/zabbix-agent:master
+      - 3306:3306/tcp
+
+  app_php_unit:
+    image: codenetix/laravel-dms-backend
+    container_name: dms_app_php_unit
     environment:
-      ZBX_HOSTNAME: DMS
-      ZBX_SERVER_HOST: zabbix.codenetix.com
+      APP_ENV: local
+      APP_DEBUG: 'true'
+      APP_KEY: '"base64:N5A11hYX5GxzTqEPRtoRHjtdtqg65hGpw2Qis1V4b8M="'
+      DB_DATABASE: dms
+      DB_HOST: mysql
+      DB_PASSWORD: dms
+      DB_USERNAME: root
+      XDEBUG_CONFIG: 'remote_host=192.168.88.109 remote_connect_back=0 idekey=PHPSTORM'
     volumes:
-      - /:/rootfs
-    ports:
-      - 10050:10050/tcp
-    logging:
-      driver: syslog
-      options:
-        syslog-facility: daemon
-        tag: zabbix
+      - ./app:/var/www/app
+      - ./tests:/var/www/tests
+      - ./config:/var/www/config
+      - ./database:/var/www/database
+      - ./resources:/var/www/resources
+      - ./routes:/var/www/routes
+    links:
+      - mysql:mysql
+
+volumes:
+  mysql-data:
+  schema:

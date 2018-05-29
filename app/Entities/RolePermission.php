@@ -27,7 +27,10 @@ class RolePermission extends BasePivotEntity implements Transformable
 
     public function qualifiers()
     {
-        return $this->belongsToMany(Qualifier::class, 'qualifier_role_permission', 'role_permission_id', 'qualifier_id')->using(QualifierRolePermission::class)->withPivot(['id', 'qualifier_id', 'role_permission_id', 'access_type']);
+        return $this
+            ->belongsToMany(Qualifier::class, 'qualifier_role_permission', 'role_permission_id', 'qualifier_id')
+            ->using(QualifierRolePermission::class)
+            ->withPivot(['id', 'qualifier_id', 'role_permission_id', 'access_type']);
     }
 
     public function accessType()

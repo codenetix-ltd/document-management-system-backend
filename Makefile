@@ -17,4 +17,4 @@ test_stop_fail:
 	docker exec dms_app ./vendor/bin/phpunit --stop-on-failure
 
 code_check:
-	docker exec -it dms_app ./code_check.sh
+	docker exec -it ./vendor/bin/phpcs --standard=./phpcs.xml.dist

@@ -108,9 +108,9 @@ WORKDIR /var/www
 
 RUN chown www-data /var/www
 
-COPY --chown=www-data:www-data . /var/www
+COPY . /var/www
 
-RUN rm -rf container
+RUN chown -R www-data:www-data /var/www && rm -rf container
 
 #####################################
 # Composer

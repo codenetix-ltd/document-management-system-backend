@@ -16,7 +16,7 @@ use Prettus\Repository\Traits\TransformableTrait;
  * @property Carbon $createdAt
  * @property Carbon $updatedAt
  */
-class Template  extends BaseEntity implements Transformable
+class Template extends BaseEntity implements Transformable
 {
     use TransformableTrait;
 

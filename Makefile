@@ -5,7 +5,7 @@ push:
 	docker-compose -f docker-compose.yml push
 
 up:
-	docker-compose -f docker-compose.yml up -d app
+	docker-compose -f docker-compose.yml up -d app mysql
 
 test:
 	docker exec -it dms_app ./vendor/bin/phpunit tests/Feature

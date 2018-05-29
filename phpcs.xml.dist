@@ -25,6 +25,7 @@
     <file>tests</file>
 
     <!--
+
        You can hard-code ignore patterns directly into your
        custom standard so you don't have to specify the
        patterns on the command line.

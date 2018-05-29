@@ -2,7 +2,6 @@
 
 namespace Tests\Stubs;
 
-
 use App\Entities\Document;
 use App\Entities\DocumentVersion;
 use Illuminate\Database\Eloquent\Model;

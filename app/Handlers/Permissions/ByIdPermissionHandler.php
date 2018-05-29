@@ -24,7 +24,9 @@ class ByIdPermissionHandler
     {
         $roles = $this->user->roles;
         foreach ($roles as $role) {
-            if ($role->hasPermission($this->permission, $this->entity->getId(), $this->entityClassName)) return true;
+            if ($role->hasPermission($this->permission, $this->entity->getId(), $this->entityClassName)) {
+                return true;
+            }
         }
 
         return false;

@@ -79,7 +79,6 @@ class LabelService
 
         $this->repository->delete($id);
         Event::dispatch(new LabelDeleteEvent($label));
-
     }
 
     public function paginate()

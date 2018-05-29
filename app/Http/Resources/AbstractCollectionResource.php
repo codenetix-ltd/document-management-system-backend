@@ -32,6 +32,4 @@ abstract class AbstractCollectionResource extends ResourceCollection
             ? (new CamelCasePaginatedResourceResponse($this))->toResponse($request)
             : parent::toResponse($request);
     }
-
-
 }

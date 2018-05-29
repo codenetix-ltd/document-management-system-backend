@@ -107,20 +107,19 @@ class DocumentsController extends Controller
      */
     public function bulkPatchUpdate(DocumentBulkPatchUpdateRequest $request, DocumentService $service)
     {
-        $ids = explode(',',$request->get('ids',''));
+        $ids = explode(',', $request->get('ids', ''));
 
         $data = $request->json()->all();
 
-        if(count($ids) != count($data)) {
+        if (count($ids) != count($data)) {
             $request->failValidation();
         }
 
         $collection = new Collection();
-        for($i=0;$i<count($ids);++$i) {
+        for ($i=0; $i<count($ids); ++$i) {
             try {
                 $collection->push($service->update($data[$i], $ids[$i]));
             } catch (Exception $e) {
-
             }
         }
 
@@ -129,9 +128,9 @@ class DocumentsController extends Controller
 
     public function bulkDestroy(Request $request, DocumentService $documentService)
     {
-        $ids = explode(',',$request->get('ids',''));
+        $ids = explode(',', $request->get('ids', ''));
 
-        foreach($ids as $id) {
+        foreach ($ids as $id) {
             $documentService->delete($id);
         }
 

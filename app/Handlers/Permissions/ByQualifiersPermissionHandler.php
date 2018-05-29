@@ -23,10 +23,10 @@ class ByQualifiersPermissionHandler
     {
         $qualifiers = $this->permission->pivot->qualifiers;
 
-        foreach ($qualifiers as $qualifier){
-            $handlerClass = config('permissions.groups.'.$this->permission->permissionGroup->name.'.qualifiers.'.$qualifier->name.'.access_types.'.$qualifier->pivot->access_type.'.handler');
+        foreach ($qualifiers as $qualifier) {
+            $handlerClass = config('permissions.groups.' . $this->permission->permissionGroup->name . '.qualifiers.' . $qualifier->name . '.access_types.' . $qualifier->pivot->access_type . '.handler');
             $handlerInstance = $this->factoryMethod->make($this->role, $this->permission, $handlerClass);
-            if(!$handlerInstance->handle()){
+            if (!$handlerInstance->handle()) {
                 return false;
             }
         }

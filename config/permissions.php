@@ -6,7 +6,6 @@ use App\Handlers\Permissions\ByQualifiersPermissionHandler;
 use App\Handlers\Permissions\ByTemplatePermissionHandler;
 use App\Handlers\Permissions\NonePermissionHandler;
 
-
 $createAccessTypes = [
     'none' => [
         'machine_name' => 'none',
@@ -445,4 +444,3 @@ return [
         ]
     ]
 ];
-

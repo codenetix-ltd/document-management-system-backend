@@ -40,7 +40,8 @@ class DocumentService
     /**
      * @return mixed
      */
-    public function list(){
+    public function list()
+    {
         return $this->repository->paginate();
     }
 
@@ -48,7 +49,8 @@ class DocumentService
      * @param int $id
      * @return Document
      */
-    public function find(int $id){
+    public function find(int $id)
+    {
         $document = $this->repository->find($id);
         Event::dispatch(new DocumentReadEvent($document));
 
@@ -59,7 +61,8 @@ class DocumentService
      * @param array $data
      * @return Document
      */
-    public function create(array $data){
+    public function create(array $data)
+    {
         /** @var Document $document */
         $document = $this->repository->create($data);
 
@@ -74,11 +77,12 @@ class DocumentService
      * @param int $id
      * @return mixed
      */
-    public function update(array $data, int $id){
+    public function update(array $data, int $id)
+    {
         /** @var Document $document */
         $document = $this->repository->update($data, $id);
 
-        if(isset($data['actualVersionId'])) {
+        if (isset($data['actualVersionId'])) {
             $this->setActualVersion($document->id, $data['actualVersionId']);
         }
 
@@ -92,7 +96,8 @@ class DocumentService
      * @param int $id
      * @return mixed
      */
-    public function updateVersion(array $data, int $id){
+    public function updateVersion(array $data, int $id)
+    {
         $createNewVersion = $data['createNewVersion'];
 
         $document = $this->find($id);
@@ -106,7 +111,7 @@ class DocumentService
             true
         );
 
-        if($createNewVersion) {
+        if ($createNewVersion) {
             $this->documentVersionService->updateActual(false, $oldActualVersion->id);
         } else {
             $this->documentVersionService->delete($oldActualVersion->id);
@@ -118,7 +123,8 @@ class DocumentService
     /**
      * @param int $id
      */
-    public function delete(int $id){
+    public function delete(int $id)
+    {
         $document = $this->repository->findWhere([['id', '=', $id]])->first();
 
         if (is_null($document)) {
@@ -130,7 +136,8 @@ class DocumentService
         $this->repository->delete($id);
     }
 
-    public function setActualVersion($documentId, $versionId) {
+    public function setActualVersion($documentId, $versionId)
+    {
         $document = $this->find($documentId);
         $newVersion = $this->documentVersionService->find($versionId);
 
@@ -143,5 +150,4 @@ class DocumentService
         $this->documentVersionService->updateActual(false, $oldVersion->id);
         $this->documentVersionService->updateActual(true, $newVersion->id);
     }
-
 }

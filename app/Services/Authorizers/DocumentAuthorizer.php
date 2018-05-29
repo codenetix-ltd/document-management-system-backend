@@ -15,7 +15,7 @@ class DocumentAuthorizer extends AAuthorizer
     public function getAvailableTemplatesIds()
     {
         $templateIds = $this->context->getUser()->templates->pluck('id');
-        foreach ($this->context->getUser()->roles as $role){
+        foreach ($this->context->getUser()->roles as $role) {
             $templateIds = $templateIds->merge($role->templates->pluck('id'));
         }
 

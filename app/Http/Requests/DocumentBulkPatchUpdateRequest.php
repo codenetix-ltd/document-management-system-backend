@@ -16,7 +16,7 @@ class DocumentBulkPatchUpdateRequest extends DocumentPatchUpdateRequest
             '' => 'array'
         ];
 
-        foreach($rules as $k => $v) {
+        foreach ($rules as $k => $v) {
             $bulkRules['*.'.$k] = $v;
         }
 

@@ -176,5 +176,4 @@ class UserTest extends TestCase
         $response = $this->json('GET', '/api/users/' . 0);
         $response->assertStatus(Response::HTTP_NOT_FOUND);
     }
-
 }

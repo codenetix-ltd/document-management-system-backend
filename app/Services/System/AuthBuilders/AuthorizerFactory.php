@@ -15,10 +15,10 @@ class AuthorizerFactory
     public static function make($type = null, $target = null)
     {
         switch ($type) {
-            case 'document' :
+            case 'document':
                 $documentAuthorizeContext = new DocumentAuthorizeContext(Auth::user(), $target);
                 return new DocumentAuthorizer($documentAuthorizeContext);
-            case 'user' :
+            case 'user':
                 $userAuthorizeContext = new UserAuthorizeContext(Auth::user(), $target);
                 return new UserAuthorizer($userAuthorizeContext);
             default:

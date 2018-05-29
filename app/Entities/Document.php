@@ -55,7 +55,7 @@ class Document extends BaseEntity implements Transformable
 
     public function documentActualVersion()
     {
-        return $this->hasOne(DocumentVersion::class)->where('is_actual','=',1);
+        return $this->hasOne(DocumentVersion::class)->where('is_actual', '=', 1);
     }
 
     /**

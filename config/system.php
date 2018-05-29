@@ -8,4 +8,3 @@ return [
         'label' => 'App\Label'
     ]
 ];
-

@@ -13,9 +13,8 @@ class CamelCasePaginatedResourceResponse extends PaginatedResourceResponse
     {
         $meta = parent::meta($paginated);
 
-        return array_combine(array_map(function($item){
+        return array_combine(array_map(function ($item) {
             return camel_case($item);
         }, array_keys($meta)), array_values($meta));
     }
-
 }

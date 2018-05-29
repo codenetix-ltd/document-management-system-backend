@@ -62,5 +62,4 @@ class DocumentVersion extends BaseEntity implements Transformable
     {
         return $this->belongsToMany(Label::class, 'document_version_label');
     }
-
 }

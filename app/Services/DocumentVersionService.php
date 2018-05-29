@@ -34,7 +34,8 @@ class DocumentVersionService
      * @param $documentId
      * @return mixed
      */
-    public function list($documentId){
+    public function list($documentId)
+    {
         return $this->repository->paginateByDocument($documentId);
     }
 
@@ -42,7 +43,8 @@ class DocumentVersionService
      * @param int $id
      * @return DocumentVersion
      */
-    public function find(int $id){
+    public function find(int $id)
+    {
         return $this->repository->find($id);
     }
 
@@ -54,7 +56,8 @@ class DocumentVersionService
      *
      * @return DocumentVersion
      */
-    public function create(array $data, $documentId, $versionName, $isActual){
+    public function create(array $data, $documentId, $versionName, $isActual)
+    {
         $data['documentId'] = $documentId;
         $data['versionName'] = $versionName;
         $data['isActual'] = $isActual;
@@ -63,7 +66,7 @@ class DocumentVersionService
         $documentVersion = $this->repository->create($data);
         $documentVersion->files()->sync($data['fileIds']);
         $documentVersion->labels()->sync($data['labelIds']);
-        foreach($data['attributeValues'] as $attributeValue) {
+        foreach ($data['attributeValues'] as $attributeValue) {
             $this->attributeValueService->create([
                 'attributeId' => $attributeValue['id'],
                 'documentVersionId' => $documentVersion->id,
@@ -79,7 +82,8 @@ class DocumentVersionService
      * @param int $id
      * @return mixed
      */
-    public function update(array $data, int $id){
+    public function update(array $data, int $id)
+    {
         /** @var DocumentVersion $documentVersion */
         $documentVersion = $this->repository->update($data, $id);
 
@@ -88,7 +92,7 @@ class DocumentVersionService
 
         $documentVersion->attributeValues()->delete();
 
-        foreach($data['attributeValues'] as $attributeValue) {
+        foreach ($data['attributeValues'] as $attributeValue) {
             $this->attributeValueService->create([
                 'attributeId' => $attributeValue['id'],
                 'documentVersionId' => $documentVersion->id,
@@ -99,14 +103,16 @@ class DocumentVersionService
         return $documentVersion;
     }
 
-    public function updateActual($actual, $id) {
+    public function updateActual($actual, $id)
+    {
         return $this->repository->update(['isActual' => $actual], $id);
     }
 
     /**
      * @param int $id
      */
-    public function delete(int $id){
+    public function delete(int $id)
+    {
         $dv = $this->repository->findWhere([['id', '=', $id]])->first();
         if (is_null($dv)) {
             return;

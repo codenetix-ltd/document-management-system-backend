@@ -193,6 +193,4 @@ class AttributeTest extends TestCase
             ->assertStatus(Response::HTTP_OK)
             ->assertJson($stubResponse);
     }
-
-
 }

@@ -31,7 +31,8 @@ class UserService
     /**
      * @return mixed
      */
-    public function paginate(){
+    public function paginate()
+    {
         return $this->repository->paginate();
     }
 
@@ -39,7 +40,8 @@ class UserService
      * @param int $id
      * @return User
      */
-    public function find(int $id){
+    public function find(int $id)
+    {
         return $this->repository->find($id);
     }
 
@@ -47,7 +49,8 @@ class UserService
      * @param array $data
      * @return User
      */
-    public function create(array $data){
+    public function create(array $data)
+    {
         /** @var User $user */
         $user = $this->repository->create($data);
         $user->templates()->sync($data['templatesIds']);
@@ -62,7 +65,8 @@ class UserService
      * @param int $id
      * @return User
      */
-    public function update(array $data, int $id){
+    public function update(array $data, int $id)
+    {
         /** @var User $user */
         $user = $this->repository->update($data, $id);
         $user->templates()->sync($data['templatesIds']);
@@ -75,7 +79,8 @@ class UserService
     /**
      * @param int $id
      */
-    public function delete(int $id){
+    public function delete(int $id)
+    {
 
         $user = $this->repository->findWhere([['id', '=', $id]])->first();
 

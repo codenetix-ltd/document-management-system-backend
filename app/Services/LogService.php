@@ -28,9 +28,9 @@ class LogService implements ILogger
      * @param $userId
      * @return mixed
      */
-    public function list($userId){
+    public function list($userId)
+    {
         return $this->repository->paginateByUser($userId);
-
     }
 
     public function write($userId, $body, $referenceId, $referenceType)

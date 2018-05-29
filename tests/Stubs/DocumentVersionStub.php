@@ -45,7 +45,7 @@ class DocumentVersionStub extends AbstractStub
         $this->files = factory(File::class, 3)->create();
 
         $this->attributeValuesStubs = new Collection();
-        for($i=0;$i<3;++$i) {
+        for ($i=0; $i<3; ++$i) {
             $this->attributeValuesStubs->push(new AttributeValueStub(['document_version_id' => $this->model->id], $persisted));
         }
 
@@ -65,7 +65,7 @@ class DocumentVersionStub extends AbstractStub
         $this->labels = $model->labels;
         $this->files = $model->files;
 
-        $this->attributeValuesStubs = $model->attributeValues->map(function($item){
+        $this->attributeValuesStubs = $model->attributeValues->map(function ($item) {
             return new AttributeValueStub([], true, [], $item);
         });
     }
@@ -90,7 +90,7 @@ class DocumentVersionStub extends AbstractStub
             'comment' => $this->model->comment,
             'labelIds' => $this->labels->pluck('id')->toArray(),
             'fileIds' => $this->files->pluck('id')->toArray(),
-            'attributeValues' => $this->attributeValuesStubs->map(function($item){
+            'attributeValues' => $this->attributeValuesStubs->map(function ($item) {
                 /** @var AttributeValueStub $item */
                 return $item->doBuildRequest();
             })->toArray(),
@@ -114,7 +114,7 @@ class DocumentVersionStub extends AbstractStub
             'files' => $this->files->map(function ($item) {
                 return (new FileStub([], true, [], $item))->buildResponse();
             })->toArray(),
-            'attributeValues' => $this->attributeValuesStubs->map(function($item){
+            'attributeValues' => $this->attributeValuesStubs->map(function ($item) {
                 /** @var AttributeValueStub $item */
                 return $item->doBuildResponse();
             })->toArray(),

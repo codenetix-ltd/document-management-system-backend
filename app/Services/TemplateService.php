@@ -74,5 +74,4 @@ class TemplateService
     {
         return $this->repository->paginate();
     }
-
 }

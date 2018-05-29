@@ -41,5 +41,4 @@ class Log extends BaseEntity implements Transformable
     {
         return $this->belongsTo(User::class);
     }
-
 }

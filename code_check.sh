@@ -6,6 +6,9 @@
 #
 # see the README
 
+echo "CHECK"
+    exit 1
+
 PHPCS_BIN=./vendor/bin/phpcs
 PHPCS_CODING_STANDARD=./phpcs.xml.dist
 PHPCS_IGNORE=

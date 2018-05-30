@@ -33,7 +33,7 @@ class FileTest extends TestCase
         Storage::fake('files');
         UploadedFile::fake()->image('avatar.jpg');
 
-        $response = $this->json('POST', 'api/files', [
+        $response = $this->json('POST', self::API_ROOT . 'files', [
             'file' => UploadedFile::fake()->image('avatar.jpg')
         ]);
         $createdFile = File::find($response->decodeResponseJson()['id']);

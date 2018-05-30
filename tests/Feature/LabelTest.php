@@ -35,7 +35,7 @@ class LabelTest extends TestCase
     {
         factory(Label::class, 10)->create();
 
-        $response = $this->json('GET', '/api/labels');
+        $response = $this->json('GET', self::API_ROOT . 'labels');
         $this->assetJsonPaginationStructure($response);
 
         $response->assertStatus(Response::HTTP_OK);
@@ -50,7 +50,7 @@ class LabelTest extends TestCase
         $labelStub = new LabelStub([], true);
         $label = $labelStub->getModel();
 
-        $response = $this->json('GET', '/api/labels/' . $label->id);
+        $response = $this->json('GET', self::API_ROOT . 'labels/' . $label->id);
 
         $response
             ->assertStatus(Response::HTTP_OK)
@@ -66,7 +66,7 @@ class LabelTest extends TestCase
     {
         $labelStub = new LabelStub();
 
-        $response = $this->json('POST', '/api/labels', $labelStub->buildRequest());
+        $response = $this->json('POST', self::API_ROOT . 'labels', $labelStub->buildRequest());
 
         /** @var Label $label */
         $label = Label::find($response->decodeResponseJson('id'));
@@ -92,7 +92,7 @@ class LabelTest extends TestCase
         $fieldKey = 'name';
         unset($data[$fieldKey]);
 
-        $response = $this->json('POST', '/api/labels', $data);
+        $response = $this->json('POST', self::API_ROOT . 'labels', $data);
 
         $response
             ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
@@ -105,7 +105,7 @@ class LabelTest extends TestCase
      */
     public function testGetLabelNotFound()
     {
-        $response = $this->json('GET', '/api/labels/' . 0);
+        $response = $this->json('GET', self::API_ROOT . 'labels/' . 0);
         $response->assertStatus(Response::HTTP_NOT_FOUND);
     }
 
@@ -120,7 +120,7 @@ class LabelTest extends TestCase
         $label = $labelStub->getModel();
         $newLabelName = 'new label name';
 
-        $response = $this->json('PUT', '/api/labels/' . $label->id, $labelStub->buildRequest([
+        $response = $this->json('PUT', self::API_ROOT . 'labels/' . $label->id, $labelStub->buildRequest([
             'name' => $newLabelName
         ]));
 
@@ -144,7 +144,7 @@ class LabelTest extends TestCase
         $labelStub = new LabelStub([], true);
         $label = $labelStub->getModel();
 
-        $response = $this->json('DELETE', '/api/labels/' . $label->id);
+        $response = $this->json('DELETE', self::API_ROOT . 'labels/' . $label->id);
 
         $response->assertStatus(Response::HTTP_NO_CONTENT);
     }
@@ -155,7 +155,7 @@ class LabelTest extends TestCase
      */
     public function testLabelDeleteWhichDoesNotExist()
     {
-        $response = $this->json('DELETE', '/api/labels/' . 0);
+        $response = $this->json('DELETE', self::API_ROOT . 'labels/' . 0);
 
         $response->assertStatus(Response::HTTP_NO_CONTENT);
     }

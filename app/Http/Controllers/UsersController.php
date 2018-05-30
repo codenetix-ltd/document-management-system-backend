@@ -8,6 +8,7 @@ use App\Http\Resources\UserCollectionResource;
 use App\Http\Resources\UserResource;
 use App\Services\UserService;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Created by Codenetix team <support@codenetix.com>
@@ -57,12 +58,16 @@ class UsersController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  integer $id
+     * @param  integer|string $id
      *
      * @return UserResource
      */
     public function show($id)
     {
+        if($id == 'current'){
+            $id = Auth::user()->id;
+        }
+
         $user = $this->service->find($id);
         return new UserResource($user);
     }

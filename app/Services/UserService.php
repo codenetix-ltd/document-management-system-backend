@@ -40,7 +40,7 @@ class UserService
      * @param integer $id
      * @return User
      */
-    public function find(int $id)
+    public function find($id)
     {
         return $this->repository->find($id);
     }

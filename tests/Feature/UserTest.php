@@ -36,7 +36,7 @@ class UserTest extends TestCase
     {
         factory(User::class, 10)->create();
 
-        $response = $this->json('GET', '/api/users');
+        $response = $this->json('GET', self::API_ROOT . 'users');
 
         $this->assetJsonPaginationStructure($response);
 
@@ -44,7 +44,7 @@ class UserTest extends TestCase
     }
 
     /**
-     * Get user
+     * Get user by id
      * @return void
      */
     public function testUserGet()
@@ -53,12 +53,28 @@ class UserTest extends TestCase
         /** @var User $user */
         $user = $userStub->getModel();
 
-        $response = $this->json('GET', '/api/users/' . $user->id);
+        $response = $this->json('GET', self::API_ROOT . 'users/' . $user->id);
 
         $response
             ->assertStatus(200)
             ->assertExactJson($userStub->buildResponse(['id' => $user->id]));
     }
+
+    /**
+     * Get current user
+     * @return void
+     */
+    public function testCurrentUserGet()
+    {
+        $response = $this->json('GET', self::API_ROOT . 'users/current');
+
+        $userStub = new UserStub([], true, [], $this->authUser);
+
+        $response
+            ->assertStatus(200)
+            ->assertExactJson($userStub->buildResponse());
+    }
+
 
     /**
      * Save user
@@ -69,7 +85,7 @@ class UserTest extends TestCase
     {
         /** @var User $user */
         $userStub = new UserStub();
-        $response = $this->json('POST', '/api/users', $userStub->buildRequest([
+        $response = $this->json('POST', self::API_ROOT.'users', $userStub->buildRequest([
             'password' => 'uSERpAsSWOrd',
             'passwordConfirmation' => 'uSERpAsSWOrd',
         ]));
@@ -96,7 +112,7 @@ class UserTest extends TestCase
         /** @var User $user */
         $user = $userStub->getModel();
 
-        $response = $this->json('PUT', '/api/users/' . $user->id, $userStub->buildRequest(['fullName' => $newFullName]));
+        $response = $this->json('PUT', self::API_ROOT . 'users/' . $user->id, $userStub->buildRequest(['fullName' => $newFullName]));
 
         $response
             ->assertStatus(200)
@@ -118,7 +134,7 @@ class UserTest extends TestCase
 
         $templateIds[0] = $newTemplateId;
 
-        $response = $this->json('PUT', '/api/users/' . $user->id, $userStub->buildRequest(['templatesIds' => $templateIds]));
+        $response = $this->json('PUT', self::API_ROOT . 'users/' . $user->id, $userStub->buildRequest(['templatesIds' => $templateIds]));
 
         $response
             ->assertStatus(200)
@@ -134,7 +150,7 @@ class UserTest extends TestCase
         /** @var User $user */
         $user = (new UserStub([], true))->getModel();
 
-        $response = $this->json('DELETE', '/api/users/' . $user->id);
+        $response = $this->json('DELETE', self::API_ROOT . 'users/' . $user->id);
 
         $response
             ->assertStatus(204);
@@ -146,7 +162,7 @@ class UserTest extends TestCase
      */
     public function testUserDeleteWhichDoesNotExist()
     {
-        $response = $this->json('DELETE', '/api/users/' . 0);
+        $response = $this->json('DELETE', self::API_ROOT . 'users/' . 0);
         $response->assertStatus(Response::HTTP_NO_CONTENT);
     }
 
@@ -162,7 +178,7 @@ class UserTest extends TestCase
         $fieldKey = 'fullName';
         unset($data[$fieldKey]);
 
-        $response = $this->json('POST', '/api/users', $data);
+        $response = $this->json('POST', self::API_ROOT . 'users', $data);
 
         $response
             ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
@@ -175,7 +191,7 @@ class UserTest extends TestCase
      */
     public function testGetUserNotFound()
     {
-        $response = $this->json('GET', '/api/users/' . 0);
+        $response = $this->json('GET', self::API_ROOT . 'users/' . 0);
         $response->assertStatus(Response::HTTP_NOT_FOUND);
     }
 }

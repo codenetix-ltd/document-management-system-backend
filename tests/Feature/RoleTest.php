@@ -34,7 +34,7 @@ class RoleTest extends TestCase
     {
         factory(Role::class, 10)->create();
 
-        $response = $this->json('GET', '/api/roles');
+        $response = $this->json('GET', self::API_ROOT . 'roles');
 
         $this->assetJsonPaginationStructure($response);
         $response->assertStatus(200);
@@ -49,7 +49,7 @@ class RoleTest extends TestCase
         $roleStub = new RoleStub([], true);
         $role = $roleStub->getModel();
 
-        $response = $this->json('GET', '/api/roles/' . $role->id);
+        $response = $this->json('GET', self::API_ROOT . 'roles/' . $role->id);
 
         $response
             ->assertStatus(Response::HTTP_OK)
@@ -72,7 +72,7 @@ class RoleTest extends TestCase
     {
         $roleStub = new RoleStub();
 
-        $response = $this->json('POST', '/api/roles', $roleStub->buildRequest());
+        $response = $this->json('POST', self::API_ROOT . 'roles', $roleStub->buildRequest());
 
         $role = Role::find($response->decodeResponseJson('id'));
 
@@ -96,7 +96,7 @@ class RoleTest extends TestCase
         $fieldKey = 'name';
         unset($data[$fieldKey]);
 
-        $response = $this->json('POST', '/api/roles', $data);
+        $response = $this->json('POST', self::API_ROOT . 'roles', $data);
 
         $response
             ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
@@ -109,7 +109,7 @@ class RoleTest extends TestCase
      */
     public function testGetRoleNotFound()
     {
-        $response = $this->json('GET', '/api/roles/' . 0);
+        $response = $this->json('GET', self::API_ROOT . 'roles/' . 0);
         $response->assertStatus(Response::HTTP_NOT_FOUND);
     }
 
@@ -124,7 +124,7 @@ class RoleTest extends TestCase
         $role = $roleStub->getModel();
         $newRoleName = 'new role name';
 
-        $response = $this->json('PUT', '/api/roles/' . $role->id, $roleStub->buildRequest([
+        $response = $this->json('PUT', self::API_ROOT . 'roles/' . $role->id, $roleStub->buildRequest([
             'name' => $newRoleName
         ]));
 
@@ -149,7 +149,7 @@ class RoleTest extends TestCase
         $roleStub = new RoleStub([], true);
         $role = $roleStub->getModel();
 
-        $response = $this->json('DELETE', '/api/roles/' . $role->id);
+        $response = $this->json('DELETE', self::API_ROOT . 'roles/' . $role->id);
 
         $response->assertStatus(Response::HTTP_NO_CONTENT);
     }
@@ -160,7 +160,7 @@ class RoleTest extends TestCase
      */
     public function testRoleDeleteWhichDoesNotExist()
     {
-        $response = $this->json('DELETE', '/api/roles/' . 0);
+        $response = $this->json('DELETE', self::API_ROOT . 'roles/' . 0);
         $response->assertStatus(Response::HTTP_NO_CONTENT);
     }
 }

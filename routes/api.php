@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,6 +15,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::prefix('v1')->group(function () {
+    Auth::routes();
+
+
     Route::resource('templates', 'TemplatesController');
     Route::resource('labels', 'LabelsController');
     Route::apiResource('types', 'TypesController', ['only' => ['index']]);

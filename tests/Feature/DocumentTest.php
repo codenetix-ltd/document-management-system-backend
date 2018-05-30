@@ -18,7 +18,7 @@ use Tests\Stubs\UserStub;
  */
 class DocumentTest extends TestCase
 {
-    private const PATH = 'api/documents';
+    private const PATH = self::API_ROOT . 'documents';
     protected const DB_TABLE = 'documents';
 
     /**

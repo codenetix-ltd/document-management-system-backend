@@ -35,7 +35,7 @@ class TemplateTest extends TestCase
     {
         factory(Template::class, 10)->create();
 
-        $response = $this->json('GET', '/api/templates');
+        $response = $this->json('GET', self::API_ROOT . 'templates');
         $this->assetJsonPaginationStructure($response);
 
         $response->assertStatus(Response::HTTP_OK);
@@ -50,7 +50,7 @@ class TemplateTest extends TestCase
         $templateStub = new TemplateStub([], true);
         $template = $templateStub->getModel();
 
-        $response = $this->json('GET', '/api/templates/' . $template->id);
+        $response = $this->json('GET', self::API_ROOT . 'templates/' . $template->id);
 
         $response
             ->assertStatus(Response::HTTP_OK)
@@ -66,7 +66,7 @@ class TemplateTest extends TestCase
     {
         $templateStub = new TemplateStub();
 
-        $response = $this->json('POST', '/api/templates', $templateStub->buildRequest());
+        $response = $this->json('POST', self::API_ROOT . 'templates', $templateStub->buildRequest());
 
         $template = Template::find($response->decodeResponseJson('id'));
 
@@ -91,7 +91,7 @@ class TemplateTest extends TestCase
         $fieldKey = 'name';
         unset($data[$fieldKey]);
 
-        $response = $this->json('POST', '/api/templates', $data);
+        $response = $this->json('POST', self::API_ROOT . 'templates', $data);
 
         $response
             ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
@@ -104,7 +104,7 @@ class TemplateTest extends TestCase
      */
     public function testGetTemplateNotFound()
     {
-        $response = $this->json('GET', '/api/templates/' . 0);
+        $response = $this->json('GET', self::API_ROOT . 'templates/' . 0);
         $response->assertStatus(Response::HTTP_NOT_FOUND);
     }
 
@@ -119,7 +119,7 @@ class TemplateTest extends TestCase
         $template = $templateStub->getModel();
         $newTemplateName = 'new template name';
 
-        $response = $this->json('PUT', '/api/templates/' . $template->id, $templateStub->buildRequest([
+        $response = $this->json('PUT', self::API_ROOT . 'templates/' . $template->id, $templateStub->buildRequest([
             'name' => $newTemplateName
         ]));
 
@@ -144,7 +144,7 @@ class TemplateTest extends TestCase
         $templateStub = new TemplateStub([], true);
         $template = $templateStub->getModel();
 
-        $response = $this->json('DELETE', '/api/templates/' . $template->id);
+        $response = $this->json('DELETE', self::API_ROOT . 'templates/' . $template->id);
 
         $response->assertStatus(Response::HTTP_NO_CONTENT);
     }
@@ -155,7 +155,7 @@ class TemplateTest extends TestCase
      */
     public function testTemplateDeleteWhichDoesNotExist()
     {
-        $response = $this->json('DELETE', '/api/templates/' . 0);
+        $response = $this->json('DELETE', self::API_ROOT . 'templates/' . 0);
         $response->assertStatus(Response::HTTP_NO_CONTENT);
     }
 }

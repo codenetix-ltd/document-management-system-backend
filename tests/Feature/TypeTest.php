@@ -38,7 +38,7 @@ class TypeTest extends TestCase
         factory(Type::class, 10)->create();
         $total = Type::all()->count();
 
-        $response = $this->json('GET', '/api/types');
+        $response = $this->json('GET', self::API_ROOT . 'types');
 
         $response->assertJsonCount($total);
         $response->assertStatus(200);

@@ -58,7 +58,7 @@ class LogTest extends TestCase
 
         $response = $this
             ->actingAs($this->authUser)
-            ->json('GET', '/api/logs');
+            ->json('GET', self::API_ROOT . 'logs');
 
         $this->assetJsonPaginationStructure($response);
 

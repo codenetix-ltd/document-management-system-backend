@@ -44,7 +44,7 @@ class AttributeTest extends TestCase
             'templateId' => $template->id
         ]);
 
-        $response = $this->json('GET', '/api/templates/' . $template->id . '/attributes');
+        $response = $this->json('GET', self::API_ROOT . 'templates/' . $template->id . '/attributes');
         $response->assertStatus(Response::HTTP_OK);
         $this->assetJsonPaginationStructure($response);
     }
@@ -58,7 +58,7 @@ class AttributeTest extends TestCase
         $attributeStub = new AttributeWithTypeStringStub([], true);
         $attribute = $attributeStub->getModel();
 
-        $response = $this->json('GET', '/api/templates/' . $attribute->templateId . '/attributes/' . $attribute->id);
+        $response = $this->json('GET', self::API_ROOT . 'templates/' . $attribute->templateId . '/attributes/' . $attribute->id);
 
         $response
             ->assertStatus(Response::HTTP_OK)
@@ -79,7 +79,7 @@ class AttributeTest extends TestCase
         $attributeStub = new AttributeWithTypeStringStub();
         $attribute = $attributeStub->getModel();
 
-        $response = $this->json('POST', '/api/templates/' . $attribute->templateId . '/attributes', $attributeStub->buildRequest());
+        $response = $this->json('POST', self::API_ROOT . 'templates/' . $attribute->templateId . '/attributes', $attributeStub->buildRequest());
         $attributeModel = Attribute::find($response->decodeResponseJson('id'));
 
         $response
@@ -101,7 +101,7 @@ class AttributeTest extends TestCase
         $attributeStub = new AttributeWithTypeTableStub([], false, ['table']);
         $attribute = $attributeStub->getModel();
 
-        $response = $this->json('POST', '/api/templates/' . $attribute->templateId . '/attributes', $attributeStub->buildRequest());
+        $response = $this->json('POST', self::API_ROOT . 'templates/' . $attribute->templateId . '/attributes', $attributeStub->buildRequest());
         $attributeModel = Attribute::find($response->decodeResponseJson('id'));
 
         $response
@@ -125,7 +125,7 @@ class AttributeTest extends TestCase
         unset($data[$fieldKey]);
         $model = $attributeStub->getModel();
 
-        $response = $this->json('POST', '/api/templates/' . $model->templateId . '/attributes', $data);
+        $response = $this->json('POST', self::API_ROOT . 'templates/' . $model->templateId . '/attributes', $data);
 
         $response
             ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
@@ -139,7 +139,7 @@ class AttributeTest extends TestCase
     public function testGetAttributeNotFound()
     {
         $template = factory(Template::class)->create();
-        $response = $this->json('GET', '/api/templates/' . $template->id . '/attributes/' . 0);
+        $response = $this->json('GET', self::API_ROOT . 'templates/' . $template->id . '/attributes/' . 0);
 
         $response->assertStatus(Response::HTTP_NOT_FOUND);
     }
@@ -153,7 +153,7 @@ class AttributeTest extends TestCase
         $attributeStub = new AttributeWithTypeStringStub([], true);
         $attribute = $attributeStub->getModel();
 
-        $response = $this->json('DELETE', '/api/templates/' . $attribute->templateId . '/attributes/' . $attribute->id);
+        $response = $this->json('DELETE', self::API_ROOT . 'templates/' . $attribute->templateId . '/attributes/' . $attribute->id);
         $response->assertStatus(Response::HTTP_NO_CONTENT);
     }
 
@@ -165,7 +165,7 @@ class AttributeTest extends TestCase
     {
         $template = factory(Template::class)->create();
 
-        $response = $this->json('DELETE', '/api/templates/' . $template->id . '/attributes/' . 0);
+        $response = $this->json('DELETE', self::API_ROOT . 'templates/' . $template->id . '/attributes/' . 0);
         $response->assertStatus(Response::HTTP_NO_CONTENT);
     }
 
@@ -179,7 +179,7 @@ class AttributeTest extends TestCase
         $attributeStub = new AttributeWithTypeTableStub([], false, ['table']);
         $attribute = $attributeStub->getModel();
 
-        $response = $this->json('POST', '/api/templates/' . $attribute->templateId . '/attributes', $attributeStub->buildRequest());
+        $response = $this->json('POST', self::API_ROOT . 'templates/' . $attribute->templateId . '/attributes', $attributeStub->buildRequest());
         $createdAttribute = $response->decodeResponseJson();
 
         unset($createdAttribute['data']['rows'][1]);
@@ -194,7 +194,7 @@ class AttributeTest extends TestCase
         $requestData['data'] = $dataForUpdate;
         $attributeModel = Attribute::find($response->decodeResponseJson('id'));
 
-        $response = $this->json('PUT', '/api/templates/' . $attributeModel->templateId . '/attributes/' . $attributeModel->id, $requestData);
+        $response = $this->json('PUT', self::API_ROOT . 'templates/' . $attributeModel->templateId . '/attributes/' . $attributeModel->id, $requestData);
 
         $stubResponse = $attributeStub->buildResponse([
             'id' => $attributeModel->id,

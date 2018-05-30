@@ -1,9 +1,9 @@
 version: '3'
 
 services:
-  app:
+  backend_api:
     image: codenetix/laravel-dms-backend:dev
-    container_name: dms_backend_app
+    container_name: dms_backend_api
     build:
       context: ./
       dockerfile: Dockerfile
@@ -39,9 +39,9 @@ services:
     networks:
       - backend
 
-  app_php_unit:
+  backend_phpunit:
     image: codenetix/laravel-dms-backend
-    container_name: dms_app_php_unit
+    container_name: dms_backend_phpunit
     environment:
       APP_ENV: local
       APP_DEBUG: 'true'

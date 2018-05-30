@@ -16,7 +16,7 @@ abstract class TestCase extends BaseTestCase
 
     use CreatesApplication;
 
-    const API_ROOT = '/api/';
+    const API_ROOT = '/api/v1/';
 
     /** @var User $authUser */
     protected $authUser;

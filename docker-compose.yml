@@ -22,7 +22,12 @@ services:
     networks:
       - backend
     volumes:
-      - ./:/var/www/
+      - ./app:/var/www/app
+      - ./tests:/var/www/tests
+      - ./config:/var/www/config
+      - ./database:/var/www/database
+      - ./resources:/var/www/resources
+      - ./routes:/var/www/routes
 
   mysql:
     image: mysql:5.7.22
@@ -50,7 +55,12 @@ services:
       DB_USERNAME: root
       XDEBUG_CONFIG: 'remote_host=192.168.88.109 remote_connect_back=0 idekey=PHPSTORM'
     volumes:
-      - ./:/var/www/
+      - ./app:/var/www/app
+      - ./tests:/var/www/tests
+      - ./config:/var/www/config
+      - ./database:/var/www/database
+      - ./resources:/var/www/resources
+      - ./routes:/var/www/routes
     networks:
       - backend
 

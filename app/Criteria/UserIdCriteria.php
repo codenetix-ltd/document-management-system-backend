@@ -24,7 +24,7 @@ class UserIdCriteria implements CriteriaInterface
     /**
      * Apply criteria in query repository
      *
-     * @param Model|Builder              $model
+     * @param Model|Builder       $model
      * @param RepositoryInterface $repository
      *
      * @return mixed

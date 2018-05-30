@@ -6,17 +6,19 @@ use App\Entities\Label;
 
 /**
  * Class LabelStub
- * @package Tests\Stubs
  * @property Label $model
  */
 class LabelStub extends AbstractStub
 {
+    /**
+     * @var boolean
+     */
     protected $replaceTimeStamps = true;
 
     /**
      * @return string
      */
-    protected function getModelName()
+    protected function getModelName(): string
     {
         return Label::class;
     }
@@ -24,7 +26,7 @@ class LabelStub extends AbstractStub
     /**
      * @return array
      */
-    protected function doBuildRequest()
+    protected function doBuildRequest(): array
     {
         return [
             'name' => $this->model->name,
@@ -34,7 +36,7 @@ class LabelStub extends AbstractStub
     /**
      * @return array
      */
-    protected function doBuildResponse()
+    protected function doBuildResponse(): array
     {
         return [
             'name' => $this->model->name,

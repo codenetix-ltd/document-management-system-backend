@@ -5,17 +5,15 @@ namespace Tests\Stubs;
 use App\Entities\AttributeValue;
 
 /**
- * @author Vladimir Barmotin <barmotinvladimir@gmail.com>
- *
+ * Class AttributeValueStub
  * @property AttributeValue $model
  */
 class AttributeValueStub extends AbstractStub
 {
-
     /**
      * @return string
      */
-    protected function getModelName()
+    protected function getModelName(): string
     {
         return AttributeValue::class;
     }
@@ -23,7 +21,7 @@ class AttributeValueStub extends AbstractStub
     /**
      * @return array
      */
-    protected function doBuildRequest()
+    protected function doBuildRequest(): array
     {
         return [
             'id' => $this->model->attribute->id,
@@ -35,7 +33,7 @@ class AttributeValueStub extends AbstractStub
     /**
      * @return array
      */
-    protected function doBuildResponse()
+    protected function doBuildResponse(): array
     {
         return [
             'id' => $this->model->attribute->id,

@@ -9,17 +9,25 @@ use Tests\Stubs\FileStub;
 use Tests\TestCase;
 
 /**
- * @author Vladimir Barmotin <barmotinvladimir@gmail.com>
+ * Created by Codenetix team <support@codenetix.com>
  */
 class FileTest extends TestCase
 {
-
+    /**
+     * Setup the test environment.
+     * @return void
+     */
     protected function setUp()
     {
         parent::setUp();
         $this->actingAs($this->authUser);
     }
 
+    /**
+     * Upload file
+     * @throws \Exception The exception that triggered the error response (if applicable).
+     * @return void
+     */
     public function testUpload()
     {
         Storage::fake('files');

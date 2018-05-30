@@ -8,8 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class DocumentStub
- * @package Tests\Stubs
- *
  * @property Document $model
  */
 class DocumentStub extends AbstractStub
@@ -19,6 +17,9 @@ class DocumentStub extends AbstractStub
      */
     protected $actualDocumentVersionStub;
 
+    /**
+     * @var boolean
+     */
     protected $replaceTimeStamps = true;
 
     /**
@@ -26,7 +27,13 @@ class DocumentStub extends AbstractStub
      */
     protected $actualVersion;
 
-    protected function buildModel($valuesToOverride = [], $persisted = false, $states = [])
+    /**
+     * @param array   $valuesToOverride
+     * @param boolean $persisted
+     * @param array   $states
+     * @return void
+     */
+    protected function buildModel(array $valuesToOverride = [], bool $persisted = false, array $states = []): void
     {
         parent::buildModel($valuesToOverride, $persisted, $states);
 
@@ -37,9 +44,10 @@ class DocumentStub extends AbstractStub
     }
 
     /**
-     * @param Document $model
+     * @param Model $model
+     * @return void
      */
-    protected function initiateByModel($model)
+    protected function initiateByModel(Model $model): void
     {
         parent::initiateByModel($model);
 
@@ -49,7 +57,7 @@ class DocumentStub extends AbstractStub
     /**
      * @return string
      */
-    protected function getModelName()
+    protected function getModelName(): string
     {
         return Document::class;
     }
@@ -57,7 +65,7 @@ class DocumentStub extends AbstractStub
     /**
      * @return array
      */
-    protected function doBuildRequest()
+    protected function doBuildRequest(): array
     {
         return [
             'ownerId' => $this->model->ownerId,
@@ -68,7 +76,7 @@ class DocumentStub extends AbstractStub
     /**
      * @return array
      */
-    protected function doBuildResponse()
+    protected function doBuildResponse(): array
     {
         return [
             'ownerId' => $this->model->ownerId,

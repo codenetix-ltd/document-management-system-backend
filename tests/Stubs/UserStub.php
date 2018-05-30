@@ -4,19 +4,24 @@ namespace Tests\Stubs;
 
 use App\Entities\Template;
 use App\Entities\User;
-use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class UserStub
- * @package Tests\Stubs
- *
  * @property User $model
  */
 class UserStub extends AbstractStub
 {
+    /** @var array $templateIds */
     private $templateIds = [];
 
-    protected function buildModel($valuesToOverride = [], $persisted = false, $states = [])
+    /**
+     * @param array   $valuesToOverride
+     * @param boolean $persisted
+     * @param array   $states
+     * @return void
+     */
+    protected function buildModel(array $valuesToOverride = [], bool $persisted = false, array $states = []): void
     {
         parent::buildModel($valuesToOverride, $persisted, $states);
 
@@ -27,7 +32,11 @@ class UserStub extends AbstractStub
         }
     }
 
-    protected function initiateByModel($model)
+    /**
+     * @param Model $model
+     * @return void
+     */
+    protected function initiateByModel(Model $model): void
     {
         parent::initiateByModel($model);
 
@@ -38,7 +47,7 @@ class UserStub extends AbstractStub
     /**
      * @return string
      */
-    protected function getModelName()
+    protected function getModelName(): string
     {
         return User::class;
     }
@@ -46,7 +55,7 @@ class UserStub extends AbstractStub
     /**
      * @return array
      */
-    protected function doBuildRequest()
+    protected function doBuildRequest(): array
     {
         return [
             'email' => $this->model->email,
@@ -59,7 +68,7 @@ class UserStub extends AbstractStub
     /**
      * @return array
      */
-    protected function doBuildResponse()
+    protected function doBuildResponse(): array
     {
         return [
             'fullName' => $this->model->fullName,

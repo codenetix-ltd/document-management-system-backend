@@ -37,7 +37,7 @@ class UserService
     }
 
     /**
-     * @param int $id
+     * @param integer $id
      * @return User
      */
     public function find(int $id)
@@ -61,8 +61,8 @@ class UserService
     }
 
     /**
-     * @param array $data
-     * @param int $id
+     * @param array   $data
+     * @param integer $id
      * @return User
      */
     public function update(array $data, int $id)
@@ -77,7 +77,7 @@ class UserService
     }
 
     /**
-     * @param int $id
+     * @param integer $id
      */
     public function delete(int $id)
     {

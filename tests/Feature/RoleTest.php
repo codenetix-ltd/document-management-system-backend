@@ -18,7 +18,6 @@ class RoleTest extends TestCase
 
     /**
      * Setup the test environment.
-     *
      * @return void
      */
     protected function setUp()
@@ -28,8 +27,7 @@ class RoleTest extends TestCase
     }
 
     /**
-     * Tests role list endpoint
-     *
+     * List of roles
      * @return void
      */
     public function testRoleList()
@@ -43,8 +41,7 @@ class RoleTest extends TestCase
     }
 
     /**
-     * Tests $role get endpoint
-     *
+     * Get role
      * @return void
      */
     public function testRoleGet()
@@ -67,7 +64,9 @@ class RoleTest extends TestCase
     }
 
     /**
-     * @throws \Exception
+     * Save role
+     * @throws \Exception The exception that triggered the error response (if applicable).
+     * @return void
      */
     public function testRoleStore()
     {
@@ -87,7 +86,8 @@ class RoleTest extends TestCase
     }
 
     /**
-     * @throws \Exception
+     * Save role with a validation error
+     * @return void
      */
     public function testRoleStoreValidationError()
     {
@@ -103,6 +103,10 @@ class RoleTest extends TestCase
             ->assertJsonValidationErrors([$fieldKey]);
     }
 
+    /**
+     * Role not found
+     * @return void
+     */
     public function testGetRoleNotFound()
     {
         $response = $this->json('GET', '/api/roles/' . 0);
@@ -110,7 +114,9 @@ class RoleTest extends TestCase
     }
 
     /**
-     * @throws \Exception
+     * Update role
+     * @throws \Exception The exception that triggered the error response (if applicable).
+     * @return void
      */
     public function testRoleUpdate()
     {
@@ -134,6 +140,10 @@ class RoleTest extends TestCase
             ]));
     }
 
+    /**
+     * Delete role
+     * @return void
+     */
     public function testRoleDelete()
     {
         $roleStub = new RoleStub([], true);
@@ -144,10 +154,13 @@ class RoleTest extends TestCase
         $response->assertStatus(Response::HTTP_NO_CONTENT);
     }
 
+    /**
+     * Delete role which does not exist
+     * @return void
+     */
     public function testRoleDeleteWhichDoesNotExist()
     {
         $response = $this->json('DELETE', '/api/roles/' . 0);
-
         $response->assertStatus(Response::HTTP_NO_CONTENT);
     }
 }

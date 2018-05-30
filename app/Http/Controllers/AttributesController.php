@@ -26,7 +26,7 @@ class AttributesController extends Controller
     /**
      * AttributesController constructor.
      * @param AttributeService $service
-     * @param TemplateService $templateService
+     * @param TemplateService  $templateService
      */
     public function __construct(AttributeService $service, TemplateService $templateService)
     {

@@ -5,45 +5,42 @@ namespace Tests\Stubs;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @author Vladimir Barmotin <barmotinvladimir@gmail.com>
+ * Class AbstractStub
  */
 abstract class AbstractStub
 {
+    /** @var Model */
     protected $model;
 
-    /**
-     * @var bool
-     */
+    /** @var boolean */
     protected $persisted;
 
-    /**
-     * @var bool
-     */
+    /** @var boolean */
     protected $replaceTimeStamps = false;
 
     /**
      * @return string
      */
-    abstract protected function getModelName();
+    abstract protected function getModelName(): string;
 
     /**
      * @return array
      */
-    abstract protected function doBuildRequest();
+    abstract protected function doBuildRequest(): array;
 
     /**
      * @return array
      */
-    abstract protected function doBuildResponse();
+    abstract protected function doBuildResponse(): array;
 
     /**
      * AbstractStub constructor.
-     * @param array $valuesToOverride
-     * @param bool $persisted
-     * @param array $states
+     * @param array      $valuesToOverride
+     * @param boolean    $persisted
+     * @param array      $states
      * @param Model|null $model
      */
-    public function __construct($valuesToOverride = [], $persisted = false, $states = [], Model $model = null)
+    public function __construct(array $valuesToOverride = [], bool $persisted = false, array $states = [], Model $model = null)
     {
         $this->persisted = $persisted;
         if ($model) {
@@ -53,12 +50,20 @@ abstract class AbstractStub
         }
     }
 
-    public function buildRequest($valuesToOverride = [])
+    /**
+     * @param array $valuesToOverride
+     * @return array
+     */
+    public function buildRequest(array $valuesToOverride = []): array
     {
         return array_replace_recursive($this->doBuildRequest(), $valuesToOverride);
     }
 
-    public function buildResponse($valuesToOverride = [])
+    /**
+     * @param array $valuesToOverride
+     * @return array
+     */
+    public function buildResponse(array $valuesToOverride = []): array
     {
         $response = $this->doBuildResponse();
 
@@ -78,17 +83,30 @@ abstract class AbstractStub
         return array_replace_recursive($response, $valuesToOverride);
     }
 
-    public function getModel()
+    /**
+     * @return Model
+     */
+    public function getModel(): Model
     {
         return $this->model;
     }
 
-    protected function buildModel($valuesToOverride = [], $persisted = false, $states = [])
+    /**
+     * @param array   $valuesToOverride
+     * @param boolean $persisted
+     * @param array   $states
+     * @return void
+     */
+    protected function buildModel(array $valuesToOverride = [], bool $persisted = false, array $states = []): void
     {
         $this->model = factory($this->getModelName())->states($states)->{$persisted ? 'create' : 'make'}($valuesToOverride);
     }
 
-    protected function initiateByModel($model)
+    /**
+     * @param Model $model
+     * @return void
+     */
+    protected function initiateByModel(Model $model): void
     {
         $this->model = $model;
     }

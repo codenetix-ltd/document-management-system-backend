@@ -37,7 +37,7 @@ class LabelService
     }
 
     /**
-     * @param int $id
+     * @param integer $id
      * @return Label
      */
     public function find(int $id)
@@ -58,8 +58,8 @@ class LabelService
     }
 
     /**
-     * @param array $data
-     * @param int $id
+     * @param array   $data
+     * @param integer $id
      * @return mixed
      */
     public function update(array $data, int $id)

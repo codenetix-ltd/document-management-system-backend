@@ -71,7 +71,7 @@ class LabelsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
+     * @param  integer $id
      *
      * @return \Illuminate\Http\Response
      */

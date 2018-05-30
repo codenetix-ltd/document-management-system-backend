@@ -9,11 +9,13 @@ use Illuminate\Support\Collection;
 
 /**
  * Class LabelStub
- * @package Tests\Stubs
  * @property Template $model
  */
 class TemplateStub extends AbstractStub
 {
+    /**
+     * @var boolean
+     */
     protected $replaceTimeStamps = true;
 
     /**
@@ -21,30 +23,45 @@ class TemplateStub extends AbstractStub
      */
     protected $attributeStubs;
     /**
-     * @var bool
+     * @var bool $withAttributes
      */
     private $withAttributes;
 
-    public function __construct(array $valuesToOverride = [], bool $persisted = false, array $states = [], ?Model $model = null, $withAttributes = true)
+    /**
+     * TemplateStub constructor.
+     * @param array      $valuesToOverride
+     * @param boolean    $persisted
+     * @param array      $states
+     * @param Model|null $model
+     * @param boolean    $withAttributes
+     */
+    public function __construct(array $valuesToOverride = [], bool $persisted = false, array $states = [], ?Model $model = null, bool $withAttributes = true)
     {
         parent::__construct($valuesToOverride, $persisted, $states, $model);
         $this->withAttributes = $withAttributes;
     }
 
-    protected function buildModel($valuesToOverride = [], $persisted = false, $states = [])
+    /**
+     * @param array   $valuesToOverride
+     * @param boolean $persisted
+     * @param array   $states
+     * @return void
+     */
+    protected function buildModel(array $valuesToOverride = [], bool $persisted = false, array $states = []): void
     {
         parent::buildModel($valuesToOverride, $persisted, $states);
 
         $this->attributeStubs = new Collection();
-        for ($i=0; $i<3 && $this->withAttributes; ++$i) {
+        for ($i = 0; $i < 3 && $this->withAttributes; ++$i) {
             $this->attributeStubs->push(new AttributeWithTypeStringStub(['template_id' => $this->model->id], $persisted, []));
         }
     }
 
     /**
-     * @param Template $model
+     * @param Model $model
+     * @return void
      */
-    protected function initiateByModel($model)
+    protected function initiateByModel(Model $model): void
     {
         parent::initiateByModel($model);
 
@@ -53,11 +70,10 @@ class TemplateStub extends AbstractStub
         });
     }
 
-
     /**
      * @return string
      */
-    protected function getModelName()
+    protected function getModelName(): string
     {
         return Template::class;
     }
@@ -65,7 +81,7 @@ class TemplateStub extends AbstractStub
     /**
      * @return array
      */
-    protected function doBuildRequest()
+    protected function doBuildRequest(): array
     {
         return [
             'name' => $this->model->name,
@@ -75,7 +91,7 @@ class TemplateStub extends AbstractStub
     /**
      * @return array
      */
-    protected function doBuildResponse()
+    protected function doBuildResponse(): array
     {
         return [
             'name' => $this->model->name,

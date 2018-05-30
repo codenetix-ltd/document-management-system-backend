@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 class FileController extends Controller
 {
     /**
-     * @param Request $request
+     * @param Request     $request
      * @param FileService $createService
      *
      * @return FileResource

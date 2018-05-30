@@ -7,8 +7,6 @@ use App\Repositories\TypeRepository;
 
 /**
  * Class AttributeWithTypeTableStub
- * @package Tests\Stubs
- *
  * @property Attribute $model
  */
 class AttributeWithTypeTableStub extends AbstractStub
@@ -16,7 +14,7 @@ class AttributeWithTypeTableStub extends AbstractStub
     /**
      * @return string
      */
-    protected function getModelName()
+    protected function getModelName(): string
     {
         return Attribute::class;
     }
@@ -24,7 +22,7 @@ class AttributeWithTypeTableStub extends AbstractStub
     /**
      * @return array
      */
-    protected function doBuildRequest()
+    protected function doBuildRequest(): array
     {
         return [
             'name' => $this->model->name,
@@ -36,7 +34,7 @@ class AttributeWithTypeTableStub extends AbstractStub
     /**
      * @return array
      */
-    protected function doBuildResponse()
+    protected function doBuildResponse(): array
     {
         return [
             'type' => [
@@ -54,6 +52,9 @@ class AttributeWithTypeTableStub extends AbstractStub
         ];
     }
 
+    /**
+     * @return array
+     */
     public function buildAttributeData(): array
     {
         /** @var TypeRepository $typeRepository */

@@ -5,17 +5,19 @@ namespace Tests\Stubs;
 use App\Entities\DocumentVersion;
 use App\Entities\Label;
 use App\Entities\File;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Tests\Stubs\Requests\DocumentAttributeValueStub;
 
 /**
  * Class DocumentVersionStub
- * @package Tests\Stubs
- *
  * @property DocumentVersion $model
  */
 class DocumentVersionStub extends AbstractStub
 {
+    /**
+     * @var boolean
+     */
     protected $replaceTimeStamps = true;
     /**
      * @var Collection
@@ -37,7 +39,13 @@ class DocumentVersionStub extends AbstractStub
      */
     protected $documentAttributeValueStub;
 
-    protected function buildModel($valuesToOverride = [], $persisted = false, $states = [])
+    /**
+     * @param array   $valuesToOverride
+     * @param boolean $persisted
+     * @param array   $states
+     * @return void
+     */
+    protected function buildModel(array $valuesToOverride = [], bool $persisted = false, array $states = []): void
     {
         parent::buildModel($valuesToOverride, $persisted, $states);
 
@@ -56,9 +64,10 @@ class DocumentVersionStub extends AbstractStub
     }
 
     /**
-     * @param DocumentVersion $model
+     * @param Model $model
+     * @return void
      */
-    protected function initiateByModel($model)
+    protected function initiateByModel(Model $model): void
     {
         parent::initiateByModel($model);
 
@@ -74,7 +83,7 @@ class DocumentVersionStub extends AbstractStub
     /**
      * @return string
      */
-    protected function getModelName()
+    protected function getModelName(): string
     {
         return DocumentVersion::class;
     }
@@ -82,7 +91,7 @@ class DocumentVersionStub extends AbstractStub
     /**
      * @return array
      */
-    protected function doBuildRequest()
+    protected function doBuildRequest(): array
     {
         return [
             'name' => $this->model->name,
@@ -100,7 +109,7 @@ class DocumentVersionStub extends AbstractStub
     /**
      * @return array
      */
-    protected function doBuildResponse()
+    protected function doBuildResponse(): array
     {
         return [
             'name' => $this->model->name,

@@ -6,17 +6,17 @@ use App\Entities\Attribute;
 
 /**
  * Class AttributeWithTypeStringStub
- * @package Tests\Stubs
- *
  * @property Attribute $model
  */
 class AttributeWithTypeStringStub extends AbstractStub
 {
+    /** @var bool $replaceTimeStamps */
     protected $replaceTimeStamps = true;
+
     /**
      * @return string
      */
-    protected function getModelName()
+    protected function getModelName(): string
     {
         return Attribute::class;
     }
@@ -24,7 +24,7 @@ class AttributeWithTypeStringStub extends AbstractStub
     /**
      * @return array
      */
-    protected function doBuildRequest()
+    protected function doBuildRequest(): array
     {
         return [
             'name' => $this->model->name,
@@ -35,7 +35,7 @@ class AttributeWithTypeStringStub extends AbstractStub
     /**
      * @return array
      */
-    protected function doBuildResponse()
+    protected function doBuildResponse(): array
     {
         return [
             'type' => [

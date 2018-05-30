@@ -18,7 +18,6 @@ class LabelTest extends TestCase
 
     /**
      * Setup the test environment.
-     *
      * @return void
      */
     protected function setUp()
@@ -29,8 +28,7 @@ class LabelTest extends TestCase
     }
 
     /**
-     * Tests label list endpoint
-     *
+     * List of labels
      * @return void
      */
     public function testLabelList()
@@ -44,8 +42,7 @@ class LabelTest extends TestCase
     }
 
     /**
-     * Tests $label get endpoint
-     *
+     * Get label
      * @return void
      */
     public function testLabelGet()
@@ -61,7 +58,9 @@ class LabelTest extends TestCase
     }
 
     /**
-     * @throws \Exception
+     * Save label
+     * @throws \Exception The exception that triggered the error response (if applicable).
+     * @return void
      */
     public function testLabelStore()
     {
@@ -82,7 +81,9 @@ class LabelTest extends TestCase
     }
 
     /**
-     * @throws \Exception
+     * Save label with validation error
+     * @throws \Exception The exception that triggered the error response (if applicable).
+     * @return void
      */
     public function testLabelStoreValidationError()
     {
@@ -98,6 +99,10 @@ class LabelTest extends TestCase
             ->assertJsonValidationErrors([$fieldKey]);
     }
 
+    /**
+     * Label not found
+     * @return void
+     */
     public function testGetLabelNotFound()
     {
         $response = $this->json('GET', '/api/labels/' . 0);
@@ -105,7 +110,9 @@ class LabelTest extends TestCase
     }
 
     /**
-     * @throws \Exception
+     * Update label
+     * @throws \Exception The exception that triggered the error response (if applicable).
+     * @return void
      */
     public function testLabelUpdate()
     {
@@ -129,8 +136,7 @@ class LabelTest extends TestCase
     }
 
     /**
-     * Tests label delete endpoint
-     *
+     * Delete label
      * @return void
      */
     public function testLabelDelete()
@@ -143,6 +149,10 @@ class LabelTest extends TestCase
         $response->assertStatus(Response::HTTP_NO_CONTENT);
     }
 
+    /**
+     * Delete label which does not exist
+     * @return void
+     */
     public function testLabelDeleteWhichDoesNotExist()
     {
         $response = $this->json('DELETE', '/api/labels/' . 0);

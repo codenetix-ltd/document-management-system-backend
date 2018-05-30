@@ -28,7 +28,7 @@ class DocumentService
 
     /**
      * DocumentService constructor.
-     * @param DocumentRepository $repository
+     * @param DocumentRepository     $repository
      * @param DocumentVersionService $documentVersionService
      */
     public function __construct(DocumentRepository $repository, DocumentVersionService $documentVersionService)
@@ -46,7 +46,7 @@ class DocumentService
     }
 
     /**
-     * @param int $id
+     * @param integer $id
      * @return Document
      */
     public function find(int $id)
@@ -73,8 +73,8 @@ class DocumentService
     }
 
     /**
-     * @param array $data
-     * @param int $id
+     * @param array   $data
+     * @param integer $id
      * @return mixed
      */
     public function update(array $data, int $id)
@@ -92,8 +92,8 @@ class DocumentService
     }
 
     /**
-     * @param array $data
-     * @param int $id
+     * @param array   $data
+     * @param integer $id
      * @return mixed
      */
     public function updateVersion(array $data, int $id)
@@ -121,7 +121,7 @@ class DocumentService
     }
 
     /**
-     * @param int $id
+     * @param integer $id
      */
     public function delete(int $id)
     {

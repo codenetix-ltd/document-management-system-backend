@@ -5,17 +5,20 @@ namespace Tests\Stubs;
 use App\Entities\Type;
 
 /**
- * @author Vladimir Barmotin <barmotinvladimir@gmail.com>
- *
+ * Class TypeStub
  * @property Type $model
  */
 class TypeStub extends AbstractStub
 {
+    /**
+     * @var boolean
+     */
     protected $replaceTimeStamps = true;
+
     /**
      * @return string
      */
-    protected function getModelName()
+    protected function getModelName(): string
     {
         return Type::class;
     }
@@ -23,7 +26,7 @@ class TypeStub extends AbstractStub
     /**
      * @return array
      */
-    protected function doBuildRequest()
+    protected function doBuildRequest(): array
     {
         return [];
     }
@@ -31,7 +34,7 @@ class TypeStub extends AbstractStub
     /**
      * @return array
      */
-    protected function doBuildResponse()
+    protected function doBuildResponse(): array
     {
         return [
             'name' => $this->model->name,

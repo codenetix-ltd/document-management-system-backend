@@ -19,7 +19,6 @@ class UserTest extends TestCase
 
     /**
      * Setup the test environment.
-     *
      * @return void
      */
     protected function setUp()
@@ -30,8 +29,7 @@ class UserTest extends TestCase
     }
 
     /**
-     * Tests user list endpoint
-     *
+     * List of users
      * @return void
      */
     public function testUserList()
@@ -46,8 +44,7 @@ class UserTest extends TestCase
     }
 
     /**
-     * Tests $user get endpoint
-     *
+     * Get user
      * @return void
      */
     public function testUserGet()
@@ -64,8 +61,8 @@ class UserTest extends TestCase
     }
 
     /**
-     * Tests user store endpoint
-     *
+     * Save user
+     * @throws \Exception The exception that triggered the error response (if applicable).
      * @return void
      */
     public function testUserStore()
@@ -88,8 +85,7 @@ class UserTest extends TestCase
     }
 
     /**
-     * Tests user update endpoint
-     *
+     * Update user
      * @return void
      */
     public function testUserUpdate()
@@ -108,8 +104,7 @@ class UserTest extends TestCase
     }
 
     /**
-     * Tests user update endpoint
-     *
+     * Update templateIds in user
      * @return void
      */
     public function testUserUpdateTemplateIds()
@@ -123,7 +118,6 @@ class UserTest extends TestCase
 
         $templateIds[0] = $newTemplateId;
 
-
         $response = $this->json('PUT', '/api/users/' . $user->id, $userStub->buildRequest(['templatesIds' => $templateIds]));
 
         $response
@@ -132,8 +126,7 @@ class UserTest extends TestCase
     }
 
     /**
-     * Tests user delete endpoint
-     *
+     * Delete user
      * @return void
      */
     public function testUserDelete()
@@ -147,15 +140,20 @@ class UserTest extends TestCase
             ->assertStatus(204);
     }
 
-    public function testLabelDeleteWhichDoesNotExist()
+    /**
+     * Delete user which does not exist
+     * @return void
+     */
+    public function testUserDeleteWhichDoesNotExist()
     {
         $response = $this->json('DELETE', '/api/users/' . 0);
-
         $response->assertStatus(Response::HTTP_NO_CONTENT);
     }
 
     /**
-     * @throws \Exception
+     * Save user with validation error
+     * @throws \Exception The exception that triggered the error response (if applicable).
+     * @return void
      */
     public function testUserStoreValidationError()
     {
@@ -171,6 +169,10 @@ class UserTest extends TestCase
             ->assertJsonValidationErrors([$fieldKey]);
     }
 
+    /**
+     * User not found
+     * @return void
+     */
     public function testGetUserNotFound()
     {
         $response = $this->json('GET', '/api/users/' . 0);

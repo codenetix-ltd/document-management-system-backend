@@ -57,7 +57,7 @@ class UsersController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int $id
+     * @param  integer $id
      *
      * @return UserResource
      */
@@ -83,7 +83,7 @@ class UsersController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
+     * @param  integer $id
      *
      * @return \Illuminate\Http\Response
      */

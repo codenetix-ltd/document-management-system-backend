@@ -18,7 +18,6 @@ class TemplateTest extends TestCase
 
     /**
      * Setup the test environment.
-     *
      * @return void
      */
     protected function setUp()
@@ -29,8 +28,7 @@ class TemplateTest extends TestCase
     }
 
     /**
-     * Tests template list endpoint
-     *
+     * List of templates
      * @return void
      */
     public function testTemplateList()
@@ -44,8 +42,7 @@ class TemplateTest extends TestCase
     }
 
     /**
-     * Tests $template get endpoint
-     *
+     * Get template
      * @return void
      */
     public function testTemplateGet()
@@ -61,7 +58,9 @@ class TemplateTest extends TestCase
     }
 
     /**
-     * @throws \Exception
+     * Save template
+     * @throws \Exception The exception that triggered the error response (if applicable).
+     * @return void
      */
     public function testTemplateStore()
     {
@@ -81,7 +80,9 @@ class TemplateTest extends TestCase
     }
 
     /**
-     * @throws \Exception
+     * Save template with validation error
+     * @throws \Exception The exception that triggered the error response (if applicable).
+     * @return void
      */
     public function testTemplateStoreValidationError()
     {
@@ -97,6 +98,10 @@ class TemplateTest extends TestCase
             ->assertJsonValidationErrors([$fieldKey]);
     }
 
+    /**
+     * Template not found
+     * @return void
+     */
     public function testGetTemplateNotFound()
     {
         $response = $this->json('GET', '/api/templates/' . 0);
@@ -104,7 +109,9 @@ class TemplateTest extends TestCase
     }
 
     /**
-     * @throws \Exception
+     * Update template
+     * @throws \Exception The exception that triggered the error response (if applicable).
+     * @return void
      */
     public function testTemplateUpdate()
     {
@@ -129,8 +136,7 @@ class TemplateTest extends TestCase
     }
 
     /**
-     * Tests template delete endpoint
-     *
+     * Delete template
      * @return void
      */
     public function testTemplateDelete()
@@ -143,10 +149,13 @@ class TemplateTest extends TestCase
         $response->assertStatus(Response::HTTP_NO_CONTENT);
     }
 
+    /**
+     * Delete role which does not exist
+     * @return void
+     */
     public function testTemplateDeleteWhichDoesNotExist()
     {
         $response = $this->json('DELETE', '/api/templates/' . 0);
-
         $response->assertStatus(Response::HTTP_NO_CONTENT);
     }
 }

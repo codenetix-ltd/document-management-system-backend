@@ -20,7 +20,6 @@ class DocumentVersionTest extends TestCase
 
     /**
      * Setup the test environment.
-     *
      * @return void
      */
     protected function setUp()
@@ -31,8 +30,8 @@ class DocumentVersionTest extends TestCase
     }
 
     /**
-     * Tests documentVersion store endpoint
-     *
+     * Save document version
+     * @throws \Exception The exception that triggered the error response (if applicable).
      * @return void
      */
     public function testDocumentVersionStore()
@@ -57,8 +56,8 @@ class DocumentVersionTest extends TestCase
     }
 
     /**
-     * Tests documentVersion list endpoint
-     *
+     * List of document versions
+     * @throws \Exception The exception that triggered the error response (if applicable).
      * @return void
      */
     public function testDocumentVersionList()
@@ -83,8 +82,7 @@ class DocumentVersionTest extends TestCase
     }
 
     /**
-     * Tests $documentVersion get endpoint
-     *
+     * Get document version
      * @return void
      */
     public function testDocumentVersionGet()
@@ -103,8 +101,7 @@ class DocumentVersionTest extends TestCase
     }
 
     /**
-     * Tests documentVersion update endpoint
-     *
+     * Update document version
      * @return void
      */
     public function testDocumentVersionUpdate()
@@ -124,7 +121,6 @@ class DocumentVersionTest extends TestCase
         /** @var DocumentVersion $updatedVersion */
         $updatedVersion = DocumentVersion::find($documentVersion->id);
 
-
         $response
             ->assertStatus(Response::HTTP_OK)
             ->assertExactJson($documentVersionStub->buildResponse([
@@ -133,6 +129,10 @@ class DocumentVersionTest extends TestCase
             ]));
     }
 
+    /**
+     * Update document version with validation error
+     * @return void
+     */
     public function testDocumentVersionUpdateValidationError()
     {
         $documentStub = new DocumentStub([], true);
@@ -152,8 +152,7 @@ class DocumentVersionTest extends TestCase
     }
 
     /**
-     * Tests documentVersion delete endpoint
-     *
+     * Delete document version
      * @return void
      */
     public function testDocumentVersionDelete()
@@ -166,19 +165,16 @@ class DocumentVersionTest extends TestCase
         $response = $this->json('DELETE', '/api/documents/' . $document->id . '/documentVersions/' . $documentVersion->id);
 
         $response->assertStatus(Response::HTTP_NO_CONTENT);
-
         $this->assertDatabaseMissing('document_versions', ['id' => $documentVersion->id]);
     }
 
     /**
-     * Tests documentVersion delete endpoint
-     *
+     * Delete document version which does not exist
      * @return void
      */
     public function testDocumentVersionDeleteNotFound()
     {
         $response = $this->json('DELETE', '/api/documents/0/documentVersions/0');
-
         $response->assertStatus(Response::HTTP_NO_CONTENT);
     }
 }

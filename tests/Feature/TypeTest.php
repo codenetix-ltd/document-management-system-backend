@@ -1,4 +1,7 @@
 <?php
+/**
+ * @file
+ */
 
 namespace Tests\Feature;
 

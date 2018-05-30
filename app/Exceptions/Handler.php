@@ -48,7 +48,7 @@ class Handler extends ExceptionHandler
     /**
      * Render an exception into an HTTP response.
      *
-     * @param  Request $request
+     * @param  Request    $request
      * @param  \Exception $exception
      *
      * @return JsonResponse|\Symfony\Component\HttpFoundation\Response
@@ -78,7 +78,7 @@ class Handler extends ExceptionHandler
     /**
      * Convert an authentication exception into an unauthenticated response.
      *
-     * @param  Request  $request
+     * @param  Request                 $request
      * @param  AuthenticationException $exception
      * @return Response
      */

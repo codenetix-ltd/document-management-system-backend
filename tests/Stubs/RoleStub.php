@@ -7,22 +7,41 @@ use App\Entities\Permission;
 use App\Entities\Role;
 use App\Entities\Template;
 use App\Services\AccessTypeService;
+use Illuminate\Database\Eloquent\Collection;
 
 /**
  * Class RoleStub
- * @package Tests\Stubs
  * @property Role $model
  */
 class RoleStub extends AbstractStub
 {
+    /**
+     * @var Collection
+     */
     private $templates;
 
+    /**
+     * @var array
+     */
     private $permissionValueWithQualifiersAccessType;
+
+    /**
+     * @var array
+     */
     private $permissionValueWithoutQualifiersAccessType;
-    
+
+    /**
+     * @var array
+     */
     private $variablesContainer;
 
-    protected function buildModel($valuesToOverride = [], $persisted = false, $states = [])
+    /**
+     * @param array   $valuesToOverride
+     * @param boolean $persisted
+     * @param array   $states
+     * @return void
+     */
+    protected function buildModel(array $valuesToOverride = [], bool $persisted = false, array $states = []): void
     {
         parent::buildModel($valuesToOverride, $persisted, $states);
 
@@ -34,7 +53,7 @@ class RoleStub extends AbstractStub
     /**
      * @return string
      */
-    protected function getModelName()
+    protected function getModelName(): string
     {
         return Role::class;
     }
@@ -42,7 +61,7 @@ class RoleStub extends AbstractStub
     /**
      * @return array
      */
-    protected function doBuildRequest()
+    protected function doBuildRequest(): array
     {
         return [
             'name' => $this->model->name,
@@ -57,7 +76,7 @@ class RoleStub extends AbstractStub
     /**
      * @return array
      */
-    protected function doBuildResponse()
+    protected function doBuildResponse(): array
     {
         return [
             'name' => $this->model->name,
@@ -128,14 +147,12 @@ class RoleStub extends AbstractStub
     }
 
     /**
-     * Build data for permission value access type != by_qualifiers
-     *
-     * @param array $excerptIds
+     * @param int $excerptId
      * @return array
      */
-    private function buildPermissionValueWithoutQualifiersAccessType($excerptIds = []): array
+    private function buildPermissionValueWithoutQualifiersAccessType(int $excerptId): array
     {
-        $permission = Permission::where('id', '!=', $excerptIds)->first();
+        $permission = Permission::where('id', '!=', $excerptId)->first();
         $accessType = $permission->accessTypes->whereNotIn('id', AccessTypeService::TYPE_BY_QUALIFIERS)->first();
 
         $this->variablesContainer['permissionValueWithoutQualifiersAccessType']['accessType'] = $accessType;

@@ -15,19 +15,27 @@ use Tests\Stubs\UserStub;
 
 /**
  * Class DocumentTest
- * @package Tests\Feature
  */
 class DocumentTest extends TestCase
 {
     private const PATH = 'api/documents';
     protected const DB_TABLE = 'documents';
 
+    /**
+     * Setup the test environment.
+     * @return void
+     */
     public function setUp()
     {
         parent::setUp();
         $this->actingAs($this->authUser);
     }
 
+    /**
+     * Save document
+     * @throws \Exception The exception that triggered the error response (if applicable).
+     * @return void
+     */
     public function testDocumentStoreSuccess()
     {
         $stub = new DocumentStub();
@@ -52,6 +60,10 @@ class DocumentTest extends TestCase
         $response->assertExactJson($expectedResponse);
     }
 
+    /**
+     * Update document
+     * @return void
+     */
     public function testDocumentUpdateSuccess()
     {
         $stub = new DocumentStub([], true);
@@ -72,6 +84,10 @@ class DocumentTest extends TestCase
         ]));
     }
 
+    /**
+     * Get document
+     * @return void
+     */
     public function testDocumentGetSuccess()
     {
         $stub = (new DocumentStub([], true));
@@ -81,13 +97,20 @@ class DocumentTest extends TestCase
         $response->assertExactJson($stub->buildResponse());
     }
 
+    /**
+     * Document not found
+     * @return void
+     */
     public function testDocumentGetNotFound()
     {
         $response = $this->json('GET', self::PATH .'/0');
         $response->assertStatus(404);
     }
 
-
+    /**
+     * Update document without creating new version
+     * @return void
+     */
     public function testUpdateDocumentNoCreateNewVersionSuccess()
     {
         $documentStub = new DocumentStub([], true);
@@ -117,6 +140,10 @@ class DocumentTest extends TestCase
         $this->assertCount(1, $updatedDocument->documentVersions);
     }
 
+    /**
+     * Update document with creating new version
+     * @return void
+     */
     public function testUpdateDocumentCreateNewVersionSuccess()
     {
         $documentStub = new DocumentStub([], true);
@@ -145,7 +172,11 @@ class DocumentTest extends TestCase
 
         $this->assertCount(2, $updatedDocument->documentVersions);
     }
-//
+
+    /**
+     * Delete document
+     * @return void
+     */
     public function testDeleteDocumentSuccess()
     {
         /** @var Document $document */
@@ -156,6 +187,10 @@ class DocumentTest extends TestCase
         $this->assertSoftDeleted('documents', ['id' => $document->id]);
     }
 
+    /**
+     * Delete document which does not exist
+     * @return void
+     */
     public function testDeleteNotExistDocumentSuccess()
     {
         /** @var Document $document */
@@ -163,6 +198,10 @@ class DocumentTest extends TestCase
         $response->assertStatus(Response::HTTP_NO_CONTENT);
     }
 
+    /**
+     * List of documents
+     * @return void
+     */
     public function testListOfDocumentsWithPaginationSuccess()
     {
         factory(DocumentVersion::class, 10)->create();
@@ -173,6 +212,11 @@ class DocumentTest extends TestCase
         $response->assertStatus(Response::HTTP_OK);
     }
 
+    /**
+     * List of documents with filters
+     * @throws \Exception The exception that triggered the error response (if applicable).
+     * @return void
+     */
     public function testListOfDocumentsWithPaginationWithFiltersSuccess()
     {
 
@@ -190,28 +234,37 @@ class DocumentTest extends TestCase
         $this->assertEquals('match_2', $responseArr['data'][1]['actualVersion']['name']);
     }
 
+    /**
+     * List of documents with filters by label
+     * @throws \Exception The exception that triggered the error response (if applicable).
+     * @return void
+     */
     public function testListOfDocumentsWithPaginationWithFiltersLabelSuccess()
     {
-        $tag1 = factory(Label::class)->create();
-        $tag2 = factory(Label::class)->create();
-        $tag3 = factory(Label::class)->create();
+        $label1 = factory(Label::class)->create();
+        $label2 = factory(Label::class)->create();
+        $label3 = factory(Label::class)->create();
         /** @var DocumentVersion $dv1 */
         factory(DocumentVersion::class, 2)->create();
         $dv1 = factory(DocumentVersion::class)->create();
         $dv2 = factory(DocumentVersion::class)->create();
         $dv3 = factory(DocumentVersion::class)->create();
 
-        $dv1->labels()->sync([$tag2->id]);
-        $dv2->labels()->sync([$tag1->id]);
-        $dv3->labels()->sync([$tag3->id]);
+        $dv1->labels()->sync([$label2->id]);
+        $dv2->labels()->sync([$label1->id]);
+        $dv3->labels()->sync([$label3->id]);
 
-        $responseArr = $this->json('GET', self::PATH . '?filters[labelIds]='.$tag1->id.','.$tag2->id)->decodeResponseJson();
+        $responseArr = $this->json('GET', self::PATH . '?filters[labelIds]='.$label1->id.','.$label2->id)->decodeResponseJson();
 
         $this->assertCount(2, $responseArr['data']);
         $this->assertEquals($dv1->id, $responseArr['data'][0]['actualVersion']['id']);
         $this->assertEquals($dv2->id, $responseArr['data'][1]['actualVersion']['id']);
     }
 
+    /**
+     * Update document
+     * @return void
+     */
     public function testPatchUpdateDocumentSuccess()
     {
         $documentStub = new DocumentStub([], true);
@@ -242,7 +295,8 @@ class DocumentTest extends TestCase
     }
 
     /**
-     * @throws \Exception
+     * Save document with validation error
+     * @return void
      */
     public function testDocumentStoreValidationError()
     {
@@ -258,6 +312,10 @@ class DocumentTest extends TestCase
             ->assertJsonValidationErrors(['substituteDocumentId', 'actualVersion.templateId']);
     }
 
+    /**
+     * Bulk delete
+     * @return void
+     */
     public function testBulkDeleteDocumentSuccess()
     {
         $docCollection = new Collection();
@@ -274,6 +332,11 @@ class DocumentTest extends TestCase
         });
     }
 
+    /**
+     * Bulk update
+     * @throws \Exception The exception that triggered the error response (if applicable).
+     * @return void
+     */
     public function testBulkPatchUpdateDocumentSuccess()
     {
         $documentsStubCollection = new Collection();
@@ -312,6 +375,10 @@ class DocumentTest extends TestCase
         $response->assertExactJson($expected);
     }
 
+    /**
+     * Bulk update with validation error
+     * @return void
+     */
     public function testBulkPatchUpdateDocumentFail()
     {
         $response = $this->json(

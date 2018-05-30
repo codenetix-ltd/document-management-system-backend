@@ -22,7 +22,7 @@ class DocumentVersionService
     /**
      * DocumentVersionService constructor.
      * @param DocumentVersionRepository $repository
-     * @param AttributeValueService $attributeValueService
+     * @param AttributeValueService     $attributeValueService
      */
     public function __construct(DocumentVersionRepository $repository, AttributeValueService $attributeValueService)
     {
@@ -40,7 +40,7 @@ class DocumentVersionService
     }
 
     /**
-     * @param int $id
+     * @param integer $id
      * @return DocumentVersion
      */
     public function find(int $id)
@@ -49,10 +49,10 @@ class DocumentVersionService
     }
 
     /**
-     * @param array $data
-     * @param int $documentId
-     * @param string $versionName
-     * @param bool $isActual
+     * @param array   $data
+     * @param integer $documentId
+     * @param string  $versionName
+     * @param boolean $isActual
      *
      * @return DocumentVersion
      */
@@ -78,8 +78,8 @@ class DocumentVersionService
     }
 
     /**
-     * @param array $data
-     * @param int $id
+     * @param array   $data
+     * @param integer $id
      * @return mixed
      */
     public function update(array $data, int $id)
@@ -109,7 +109,7 @@ class DocumentVersionService
     }
 
     /**
-     * @param int $id
+     * @param integer $id
      */
     public function delete(int $id)
     {

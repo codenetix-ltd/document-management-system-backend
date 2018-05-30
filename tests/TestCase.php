@@ -7,6 +7,9 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Foundation\Testing\TestResponse;
 
+/**
+ * Class TestCase
+ */
 abstract class TestCase extends BaseTestCase
 {
     use RefreshDatabase;
@@ -15,8 +18,13 @@ abstract class TestCase extends BaseTestCase
 
     const API_ROOT = '/api/';
 
+    /** @var User $authUser */
     protected $authUser;
 
+    /**
+     * Setup the test environment.
+     * @return void
+     */
     protected function setUp()
     {
         parent::setUp();
@@ -27,6 +35,10 @@ abstract class TestCase extends BaseTestCase
         $this->authUser = User::whereFullName('admin')->first();
     }
 
+    /**
+     * @param TestResponse $response
+     * @return void
+     */
     protected function assetJsonPaginationStructure(TestResponse $response)
     {
         $response->assertJsonStructure([

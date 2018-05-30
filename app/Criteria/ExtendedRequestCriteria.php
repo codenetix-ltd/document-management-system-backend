@@ -17,7 +17,7 @@ class ExtendedRequestCriteria extends RequestCriteria
      * @param $fieldsSearchable
      * @param $searchFields
      * @param $searchJoin
-     * @param Builder $model
+     * @param Builder          $model
      *
      * @return Builder
      * @throws \Exception
@@ -88,7 +88,7 @@ class ExtendedRequestCriteria extends RequestCriteria
     /**
      * @param $orderBy
      * @param $sortedBy
-     * @param Builder $model
+     * @param Builder  $model
      *
      * @return Builder
      */
@@ -139,7 +139,7 @@ class ExtendedRequestCriteria extends RequestCriteria
      * For changing orderBy value on snake_case
      *
      * @param \Illuminate\Database\Eloquent\Builder|Model $model
-     * @param RepositoryInterface $repository
+     * @param RepositoryInterface                         $repository
      *
      * @return \Illuminate\Database\Eloquent\Builder|Model|Builder|mixed
      * @throws \Exception

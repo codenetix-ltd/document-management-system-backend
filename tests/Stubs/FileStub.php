@@ -5,17 +5,15 @@ namespace Tests\Stubs;
 use App\Entities\File;
 
 /**
- * @author Vladimir Barmotin <barmotinvladimir@gmail.com>
- *
+ * Class FileStub
  * @property File $model
  */
 class FileStub extends AbstractStub
 {
-
     /**
      * @return string
      */
-    protected function getModelName()
+    protected function getModelName(): string
     {
         return File::class;
     }
@@ -23,7 +21,7 @@ class FileStub extends AbstractStub
     /**
      * @return array
      */
-    protected function doBuildRequest()
+    protected function doBuildRequest(): array
     {
         return [];
     }
@@ -31,7 +29,7 @@ class FileStub extends AbstractStub
     /**
      * @return array
      */
-    protected function doBuildResponse()
+    protected function doBuildResponse(): array
     {
         return [
             'name' => $this->model->originalName,

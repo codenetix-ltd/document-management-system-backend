@@ -28,7 +28,7 @@ class AttributeService
     /**
      * AttributeService constructor.
      * @param AttributeRepository $repository
-     * @param TypeRepository $typeRepository
+     * @param TypeRepository      $typeRepository
      */
     public function __construct(AttributeRepository $repository, TypeRepository $typeRepository)
     {
@@ -45,7 +45,7 @@ class AttributeService
     }
 
     /**
-     * @param int $id
+     * @param integer $id
      * @return Attribute
      */
     public function find(int $id)
@@ -55,7 +55,7 @@ class AttributeService
 
     /**
      * @param $templateId
-     * @param array $data
+     * @param array      $data
      * @return mixed
      * @throws FailedAttributeCreateException
      * @throws InvalidAttributeDataStructureException
@@ -78,7 +78,7 @@ class AttributeService
     /**
      * @param $templateId
      * @param $id
-     * @param array $data
+     * @param array      $data
      * @return mixed
      * @throws FailedAttributeCreateException
      * @throws InvalidAttributeDataStructureException
@@ -179,7 +179,7 @@ class AttributeService
 
     /**
      * @param array $data
-     * @return bool
+     * @return boolean
      * @throws InvalidAttributeDataStructureException
      */
     private function validateTable(array $data): bool
@@ -265,8 +265,8 @@ class AttributeService
     }
 
     /**
-     * @param int $id
-     * @return int|null
+     * @param integer $id
+     * @return integer|null
      * @throws FailedAttributeDeleteException
      */
     public function delete(int $id)
@@ -353,8 +353,8 @@ class AttributeService
     }
 
     /**
-     * @param array $headers
-     * @param int $parentAttributeId
+     * @param array   $headers
+     * @param integer $parentAttributeId
      * @return array
      */
     private function updateTableTypeColumns(array $headers, int $parentAttributeId)

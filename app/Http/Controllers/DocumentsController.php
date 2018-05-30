@@ -88,7 +88,7 @@ class DocumentsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
+     * @param  integer $id
      *
      * @return \Illuminate\Http\Response
      */
@@ -100,7 +100,7 @@ class DocumentsController extends Controller
 
     /**
      * @param DocumentBulkPatchUpdateRequest $request
-     * @param DocumentService $service
+     * @param DocumentService                $service
      *
      * @return DocumentCollectionResource
      * @throws ValidationException

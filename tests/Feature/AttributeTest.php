@@ -19,11 +19,11 @@ class AttributeTest extends TestCase
 {
     use RefreshDatabase;
 
+    /** @var AttributeService $attributeService*/
     private $attributeService;
 
     /**
      * Setup the test environment.
-     *
      * @return void
      */
     protected function setUp()
@@ -34,8 +34,7 @@ class AttributeTest extends TestCase
     }
 
     /**
-     * Tests attribute list endpoint
-     *
+     * List of attributes
      * @return void
      */
     public function testAttributeList()
@@ -51,8 +50,7 @@ class AttributeTest extends TestCase
     }
 
     /**
-     * Tests $attribute get endpoint
-     *
+     * Get attribute
      * @return void
      */
     public function testAttributeGet()
@@ -72,7 +70,9 @@ class AttributeTest extends TestCase
     }
 
     /**
-     * @throws \Exception
+     * Save attribute with string type
+     * @throws \Exception The exception that triggered the error response (if applicable).
+     * @return void
      */
     public function testAttributeStoreTypeString()
     {
@@ -92,11 +92,13 @@ class AttributeTest extends TestCase
     }
 
     /**
-     * @throws \Exception
+     * Save attribute with table type
+     * @throws \Exception The exception that triggered the error response (if applicable).
+     * @return void
      */
     public function testAttributeStoreTypeTable()
     {
-        $attributeStub = new AttributeWithTypeTableStub([], false, 'table');
+        $attributeStub = new AttributeWithTypeTableStub([], false, ['table']);
         $attribute = $attributeStub->getModel();
 
         $response = $this->json('POST', '/api/templates/' . $attribute->templateId . '/attributes', $attributeStub->buildRequest());
@@ -111,6 +113,10 @@ class AttributeTest extends TestCase
             ]));
     }
 
+    /**
+     * Save attribute with validation error
+     * @return void
+     */
     public function testAttributeStoreValidationError()
     {
         $attributeStub = new AttributeWithTypeStringStub();
@@ -126,6 +132,10 @@ class AttributeTest extends TestCase
             ->assertJsonValidationErrors([$fieldKey]);
     }
 
+    /**
+     * Attribute not found
+     * @return void
+     */
     public function testGetAttributeNotFound()
     {
         $template = factory(Template::class)->create();
@@ -135,8 +145,7 @@ class AttributeTest extends TestCase
     }
 
     /**
-     * Tests attribute delete endpoint
-     *
+     * Delete attribute
      * @return void
      */
     public function testAttributeDelete()
@@ -148,6 +157,10 @@ class AttributeTest extends TestCase
         $response->assertStatus(Response::HTTP_NO_CONTENT);
     }
 
+    /**
+     * Delete attribute which does not exist
+     * @return void
+     */
     public function testAttributeDeleteWhichDoesNotExist()
     {
         $template = factory(Template::class)->create();
@@ -157,11 +170,13 @@ class AttributeTest extends TestCase
     }
 
     /**
-     * @throws \Exception
+     * Update attribute with table type
+     * @throws \Exception The exception that triggered the error response (if applicable).
+     * @return void
      */
     public function testAttributeUpdateTypeTable()
     {
-        $attributeStub = new AttributeWithTypeTableStub([], false, 'table');
+        $attributeStub = new AttributeWithTypeTableStub([], false, ['table']);
         $attribute = $attributeStub->getModel();
 
         $response = $this->json('POST', '/api/templates/' . $attribute->templateId . '/attributes', $attributeStub->buildRequest());

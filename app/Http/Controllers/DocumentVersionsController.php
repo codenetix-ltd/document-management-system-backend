@@ -47,7 +47,7 @@ class DocumentVersionsController extends Controller
      * @param $documentId
      * @param  DocumentVersionCreateRequest $request
      *
-     * @param DocumentService $documentService
+     * @param DocumentService              $documentService
      * @return DocumentVersionResource
      */
     public function store($documentId, DocumentVersionCreateRequest $request, DocumentService $documentService)

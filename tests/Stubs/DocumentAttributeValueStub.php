@@ -4,12 +4,9 @@ namespace Tests\Stubs\Requests;
 
 use App\Entities\Attribute;
 use Tests\Stubs\AbstractStub;
-use Tests\Stubs\StubInterface;
 
 /**
  * Class DocumentAttributeValueStub
- * @package Tests\Stubs\Requests
- *
  * @property Attribute $model
  */
 class DocumentAttributeValueStub extends AbstractStub
@@ -17,7 +14,7 @@ class DocumentAttributeValueStub extends AbstractStub
     /**
      * @return string
      */
-    protected function getModelName()
+    protected function getModelName(): string
     {
         return Attribute::class;
     }
@@ -25,7 +22,7 @@ class DocumentAttributeValueStub extends AbstractStub
     /**
      * @return array
      */
-    protected function doBuildRequest()
+    protected function doBuildRequest(): array
     {
         return [
             'id' => $this->model->id,
@@ -36,7 +33,7 @@ class DocumentAttributeValueStub extends AbstractStub
     /**
      * @return array
      */
-    protected function doBuildResponse()
+    protected function doBuildResponse(): array
     {
         return [];
     }

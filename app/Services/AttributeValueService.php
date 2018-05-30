@@ -33,7 +33,7 @@ class AttributeValueService
     }
 
     /**
-     * @param int $id
+     * @param integer $id
      * @return AttributeValue
      */
     public function find(int $id)
@@ -51,8 +51,8 @@ class AttributeValueService
     }
 
     /**
-     * @param array $data
-     * @param int $id
+     * @param array   $data
+     * @param integer $id
      * @return mixed
      */
     public function update(array $data, int $id)

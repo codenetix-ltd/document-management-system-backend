@@ -30,6 +30,9 @@ class EventServiceProvider extends ServiceProvider
         //
     }
 
+    /**
+     * @var array
+     */
     protected $subscribe = [
         DocumentEventSubscriber::class,
         LabelEventSubscriber::class,

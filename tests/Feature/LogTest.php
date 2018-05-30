@@ -34,13 +34,10 @@ use Tests\TestCase;
  */
 class LogTest extends TestCase
 {
-    private const PATH = 'logs';
-
     use RefreshDatabase;
 
     /**
      * Setup the test environment.
-     *
      * @return void
      */
     protected function setUp()
@@ -50,8 +47,8 @@ class LogTest extends TestCase
     }
 
     /**
-     * Tests log list endpoint
-     *
+     * List of logs
+     * @throws \Exception The exception that triggered the error response (if applicable).
      * @return void
      */
     public function testLogList()
@@ -71,7 +68,10 @@ class LogTest extends TestCase
         $this->assertCount(5, $responseArr['data']);
     }
 
-
+    /**
+     * Log document reading event
+     * @return void
+     */
     public function testDocumentReadEventLogSuccess()
     {
         $user = factory(User::class)->create();
@@ -86,6 +86,10 @@ class LogTest extends TestCase
         $this->assertCount(1, Log::all());
     }
 
+    /**
+     * Log events
+     * @return void
+     */
     public function testEventsLogs()
     {
         $user = factory(User::class)->create();

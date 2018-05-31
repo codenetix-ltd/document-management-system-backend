@@ -10,7 +10,6 @@ use Prettus\Repository\Exceptions\RepositoryException;
  */
 abstract class BaseRepository extends \Prettus\Repository\Eloquent\BaseRepository
 {
-
     /**
      * @throws RepositoryException
      */
@@ -19,5 +18,10 @@ abstract class BaseRepository extends \Prettus\Repository\Eloquent\BaseRepositor
         parent::boot();
 
         $this->pushCriteria(app(ExtendedRequestCriteria::class));
+    }
+
+    public function findModel($id)
+    {
+        return $this->model->find($id);
     }
 }

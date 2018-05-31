@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\LogCollectionResource;
 use App\Services\LogService;
+use App\System\AuthBuilders\AuthorizerFactory;
 use Illuminate\Contracts\Auth\Guard;
 
 /**
@@ -33,6 +34,9 @@ class LogsController extends Controller
      */
     public function index(Guard $guard)
     {
+        $authorizer = AuthorizerFactory::make('logs');
+        $authorizer->authorize('logs_view');
+
         $user = $guard->user();
         $logs = $this->service->list($user ? $user->getAuthIdentifier() : null);
 

@@ -125,7 +125,7 @@ class DocumentService
      */
     public function delete(int $id)
     {
-        $document = $this->repository->findWhere([['id', '=', $id]])->first();
+        $document = $this->repository->findModel($id);
 
         if (is_null($document)) {
             return;
@@ -149,5 +149,10 @@ class DocumentService
 
         $this->documentVersionService->updateActual(false, $oldVersion->id);
         $this->documentVersionService->updateActual(true, $newVersion->id);
+    }
+
+    public function findModel($id)
+    {
+        return $this->repository->findModel($id);
     }
 }

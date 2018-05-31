@@ -6,6 +6,7 @@ use App\Entities\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Foundation\Testing\TestResponse;
+use Laravel\Passport\Passport;
 
 /**
  * Class TestCase
@@ -33,6 +34,7 @@ abstract class TestCase extends BaseTestCase
         $this->artisan("db:seed", ['--class' => 'PermissionsSeeder']);
 
         $this->authUser = User::whereFullName('admin')->first();
+        Passport::actingAs($this->authUser);
     }
 
     /**

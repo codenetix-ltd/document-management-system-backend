@@ -8,6 +8,7 @@ use App\Services\AttributeService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Resources\Json\Resource;
 use Illuminate\Http\Response;
+use Laravel\Passport\Passport;
 use Tests\Stubs\AttributeWithTypeStringStub;
 use Tests\Stubs\AttributeWithTypeTableStub;
 use Tests\TestCase;

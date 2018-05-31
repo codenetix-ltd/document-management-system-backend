@@ -113,11 +113,16 @@ class DocumentVersionService
      */
     public function delete(int $id)
     {
-        $dv = $this->repository->findWhere([['id', '=', $id]])->first();
+        $dv = $this->repository->findModel($id);
         if (is_null($dv)) {
             return;
         }
 
         $this->repository->delete($id);
+    }
+
+    public function findModel($id)
+    {
+        return $this->repository->findModel($id);
     }
 }

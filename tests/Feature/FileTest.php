@@ -20,7 +20,6 @@ class FileTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->actingAs($this->authUser);
     }
 
     /**

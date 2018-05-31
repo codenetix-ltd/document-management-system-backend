@@ -7,6 +7,7 @@ use App\Http\Requests\RoleUpdateRequest;
 use App\Http\Resources\RoleCollectionResource;
 use App\Http\Resources\RoleResource;
 use App\Services\RoleService;
+use App\System\AuthBuilders\AuthorizerFactory;
 use Illuminate\Http\Response;
 
 /**
@@ -43,6 +44,9 @@ class RolesController extends Controller
      */
     public function store(RoleCreateRequest $request)
     {
+        $authorizer = AuthorizerFactory::make('role');
+        $authorizer->authorize('role_create');
+
         $role = $this->service->create($request->all());
         return new RoleResource($role);
     }
@@ -54,6 +58,10 @@ class RolesController extends Controller
     public function show($id)
     {
         $role = $this->service->find($id);
+
+        $authorizer = AuthorizerFactory::make('role', $role);
+        $authorizer->authorize('role_view');
+
         return new RoleResource($role);
     }
 
@@ -64,6 +72,11 @@ class RolesController extends Controller
      */
     public function update(RoleUpdateRequest $request, $id)
     {
+        $role = $this->service->find($id);
+
+        $authorizer = AuthorizerFactory::make('role', $role);
+        $authorizer->authorize('role_update');
+
         $role = $this->service->update($request->all(), $id);
         return new RoleResource($role);
     }
@@ -77,6 +90,13 @@ class RolesController extends Controller
      */
     public function destroy($id)
     {
+        $role = $this->service->findModel($id);
+
+        if ($role) {
+            $authorizer = AuthorizerFactory::make('role', $role);
+            $authorizer->authorize('role_delete');
+        }
+
         $this->service->delete($id);
         return response()->json([], Response::HTTP_NO_CONTENT);
     }

@@ -7,6 +7,7 @@ use App\Http\Requests\TemplateUpdateRequest;
 use App\Http\Resources\TemplateCollectionResource;
 use App\Http\Resources\TemplateResource;
 use App\Services\TemplateService;
+use App\System\AuthBuilders\AuthorizerFactory;
 use Illuminate\Http\Response;
 
 /**
@@ -43,6 +44,9 @@ class TemplatesController extends Controller
      */
     public function store(TemplateCreateRequest $request)
     {
+        $authorizer = AuthorizerFactory::make('template');
+        $authorizer->authorize('template_create');
+
         $template = $this->service->create($request->all());
         return new TemplateResource($template);
     }
@@ -54,6 +58,10 @@ class TemplatesController extends Controller
     public function show($id)
     {
         $template = $this->service->find($id);
+
+        $authorizer = AuthorizerFactory::make('template', $template);
+        $authorizer->authorize('template_view');
+
         return new TemplateResource($template);
     }
 
@@ -64,6 +72,11 @@ class TemplatesController extends Controller
      */
     public function update(TemplateUpdateRequest $request, $id)
     {
+        $template = $this->service->find($id);
+
+        $authorizer = AuthorizerFactory::make('template', $template);
+        $authorizer->authorize('template_update');
+
         $template = $this->service->update($request->all(), $id);
         return new TemplateResource($template);
     }
@@ -77,6 +90,13 @@ class TemplatesController extends Controller
      */
     public function destroy($id)
     {
+        $template = $this->service->findModel($id);
+
+        if ($template) {
+            $authorizer = AuthorizerFactory::make('template', $template);
+            $authorizer->authorize('template_delete');
+        }
+
         $this->service->delete($id);
         return response()->json([], Response::HTTP_NO_CONTENT);
     }

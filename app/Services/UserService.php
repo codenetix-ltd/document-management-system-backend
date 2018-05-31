@@ -92,4 +92,9 @@ class UserService
 
         $this->repository->delete($id);
     }
+
+    public function findModel($id)
+    {
+        return $this->repository->findModel($id);
+    }
 }

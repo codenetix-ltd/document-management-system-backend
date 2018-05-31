@@ -9,5 +9,5 @@ use Prettus\Repository\Contracts\RepositoryInterface;
  */
 interface TemplateRepository extends RepositoryInterface
 {
-    //
+    public function findModel($id);
 }

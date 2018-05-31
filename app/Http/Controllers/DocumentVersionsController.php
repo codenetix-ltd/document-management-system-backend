@@ -8,6 +8,7 @@ use App\Http\Resources\DocumentVersionCollectionResource;
 use App\Http\Resources\DocumentVersionResource;
 use App\Services\DocumentService;
 use App\Services\DocumentVersionService;
+use App\System\AuthBuilders\AuthorizerFactory;
 use Illuminate\Http\Response;
 
 /**
@@ -53,6 +54,10 @@ class DocumentVersionsController extends Controller
     public function store($documentId, DocumentVersionCreateRequest $request, DocumentService $documentService)
     {
         $document = $documentService->find($documentId);
+
+        $authorizer = AuthorizerFactory::make('document', $document);
+        $authorizer->authorize('document_update');
+
         $version = (int)$document->documentActualVersion->versionName + 1;
 
         $documentVersion = $this->service->create($request->all(), $document->id, $version, false);
@@ -70,6 +75,10 @@ class DocumentVersionsController extends Controller
     public function show($documentId, $documentVersionId)
     {
         $documentVersion = $this->service->find($documentVersionId);
+
+        $authorizer = AuthorizerFactory::make('document', $documentVersion->document);
+        $authorizer->authorize('document_view');
+
         return new DocumentVersionResource($documentVersion);
     }
 
@@ -81,6 +90,11 @@ class DocumentVersionsController extends Controller
      */
     public function update($documentId, $documentVersionId, DocumentVersionUpdateRequest $request)
     {
+        $documentVersion = $this->service->find($documentVersionId);
+
+        $authorizer = AuthorizerFactory::make('document', $documentVersion->document);
+        $authorizer->authorize('document_update');
+
         $documentVersion = $this->service->update($request->all(), $documentVersionId);
         return new DocumentVersionResource($documentVersion);
     }
@@ -94,6 +108,13 @@ class DocumentVersionsController extends Controller
      */
     public function destroy($documentId, $documentVersionId)
     {
+        $documentVersion = $this->service->findModel($documentVersionId);
+
+        if ($documentVersion) {
+            $authorizer = AuthorizerFactory::make('document', $documentVersion->document);
+            $authorizer->authorize('document_update');
+        }
+
         $this->service->delete($documentVersionId);
         return response()->json([], Response::HTTP_NO_CONTENT);
     }

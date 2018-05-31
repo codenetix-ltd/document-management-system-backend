@@ -16,4 +16,6 @@ interface RoleRepository extends RepositoryInterface
     public function createRolePermission(array $data): RolePermission;
 
     public function attachQualifierToRolePermission(RolePermission $rolePermission, array $data);
+
+    public function findModel($id);
 }

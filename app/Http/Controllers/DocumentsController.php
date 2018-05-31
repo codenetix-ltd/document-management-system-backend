@@ -9,6 +9,7 @@ use App\Http\Requests\DocumentUpdateRequest;
 use App\Http\Resources\DocumentCollectionResource;
 use App\Http\Resources\DocumentResource;
 use App\Services\DocumentService;
+use App\System\AuthBuilders\AuthorizerFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
@@ -49,6 +50,9 @@ class DocumentsController extends Controller
      */
     public function store(DocumentCreateRequest $request)
     {
+        $authorizer = AuthorizerFactory::make('document');
+        $authorizer->authorize('document_create');
+
         $document = $this->service->create($request->all());
         return new DocumentResource($document);
     }
@@ -60,6 +64,10 @@ class DocumentsController extends Controller
     public function show($id)
     {
         $document = $this->service->find($id);
+
+        $authorizer = AuthorizerFactory::make('document', $document);
+        $authorizer->authorize('document_view');
+
         return new DocumentResource($document);
     }
 
@@ -70,7 +78,13 @@ class DocumentsController extends Controller
      */
     public function update(DocumentUpdateRequest $request, $id)
     {
+        $document = $this->service->find($id);
+
+        $authorizer = AuthorizerFactory::make('document', $document);
+        $authorizer->authorize('document_update');
+
         $document = $this->service->updateVersion($request->all(), $id);
+
         return new DocumentResource($document);
     }
 
@@ -81,6 +95,11 @@ class DocumentsController extends Controller
      */
     public function patchUpdate(DocumentPatchUpdateRequest $request, $id)
     {
+        $document = $this->service->find($id);
+
+        $authorizer = AuthorizerFactory::make('document', $document);
+        $authorizer->authorize('document_update');
+
         $document = $this->service->update($request->all(), $id);
         return new DocumentResource($document);
     }
@@ -94,13 +113,20 @@ class DocumentsController extends Controller
      */
     public function destroy($id)
     {
+        $document = $this->service->findModel($id);
+
+        if ($document) {
+            $authorizer = AuthorizerFactory::make('document', $document);
+            $authorizer->authorize('document_delete');
+        }
+
         $this->service->delete($id);
         return response()->json([], Response::HTTP_NO_CONTENT);
     }
 
     /**
      * @param DocumentBulkPatchUpdateRequest $request
-     * @param DocumentService                $service
+     * @param DocumentService $service
      *
      * @return DocumentCollectionResource
      * @throws ValidationException
@@ -116,8 +142,15 @@ class DocumentsController extends Controller
         }
 
         $collection = new Collection();
-        for ($i=0; $i<count($ids); ++$i) {
+        for ($i = 0; $i < count($ids); ++$i) {
             try {
+                $document = $this->service->find($ids[$i]);
+                $authorizer = AuthorizerFactory::make('document', $document);
+                try {
+                    $authorizer->authorize('document_update');
+                } catch (Exception $e) {
+                }
+
                 $collection->push($service->update($data[$i], $ids[$i]));
             } catch (Exception $e) {
             }
@@ -131,6 +164,15 @@ class DocumentsController extends Controller
         $ids = explode(',', $request->get('ids', ''));
 
         foreach ($ids as $id) {
+            $document = $this->service->findModel($id);
+            if ($document) {
+                $authorizer = AuthorizerFactory::make('document', $document);
+                try {
+                    $authorizer->authorize('document_delete');
+                } catch (Exception $e) {
+                }
+            }
+
             $documentService->delete($id);
         }
 

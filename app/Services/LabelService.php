@@ -85,4 +85,9 @@ class LabelService
     {
         return $this->repository->paginate();
     }
+
+    public function findModel($id)
+    {
+        return $this->repository->findModel($id);
+    }
 }

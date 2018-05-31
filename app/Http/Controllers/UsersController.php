@@ -7,6 +7,7 @@ use App\Http\Requests\UserUpdateRequest;
 use App\Http\Resources\UserCollectionResource;
 use App\Http\Resources\UserResource;
 use App\Services\UserService;
+use App\System\AuthBuilders\AuthorizerFactory;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
@@ -49,6 +50,9 @@ class UsersController extends Controller
      */
     public function store(UserCreateRequest $request)
     {
+        $authorizer = AuthorizerFactory::make('user');
+        $authorizer->authorize('user_create');
+
         $data = $request->all();
         $data['avatarFileId']= $data['avatarId'];
         $user = $this->service->create($data);
@@ -79,6 +83,12 @@ class UsersController extends Controller
      */
     public function update(UserUpdateRequest $request, $id)
     {
+        if ($id != Auth::user()->id) {
+            $user = $this->service->find($id);
+            $authorizer = AuthorizerFactory::make('user', $user);
+            $authorizer->authorize('user_update');
+        }
+
         $data = $request->all();
         $data['avatarFileId']= $data['avatarId'];
         $user = $this->service->update($data, $id);
@@ -94,6 +104,13 @@ class UsersController extends Controller
      */
     public function destroy($id)
     {
+        $user = $this->service->findModel($id);
+
+        if ($user) {
+            $authorizer = AuthorizerFactory::make('user', $user);
+            $authorizer->authorize('user_delete');
+        }
+
         $this->service->delete($id);
         return response()->json([], Response::HTTP_NO_CONTENT);
     }

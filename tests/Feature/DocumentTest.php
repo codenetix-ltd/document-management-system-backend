@@ -28,7 +28,6 @@ class DocumentTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->actingAs($this->authUser);
     }
 
     /**

@@ -123,4 +123,9 @@ class RoleService
             }
         }
     }
+
+    public function findModel($id)
+    {
+        return $this->repository->findModel($id);
+    }
 }

@@ -3,8 +3,8 @@
 namespace App\Listeners;
 
 use App\Contracts\Helpers\ILogger;
-use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Events\Dispatcher;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * @author Vladimir Barmotin <barmotinvladimir@gmail.com>
@@ -17,9 +17,9 @@ abstract class AbstractLogEventSubscriber
     private $logger;
     private $user;
 
-    public function __construct(ILogger $logger, Guard $auth)
+    public function __construct(ILogger $logger)
     {
-        $this->user = $auth->user();
+        $this->user = Auth::user();
         $this->logger = $logger;
     }
 

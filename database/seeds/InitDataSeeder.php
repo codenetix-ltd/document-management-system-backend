@@ -4,7 +4,7 @@ use App\Entities\Type;
 use App\Entities\User;
 use Illuminate\Database\Seeder;
 
-class TestingDataSeeder extends Seeder
+class InitDataSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -17,16 +17,15 @@ class TestingDataSeeder extends Seeder
         factory(User::class)->create([
             'full_name' => 'admin',
             'email' => 'admin@example.com',
-            'password' => bcrypt('admin'),
+            'password' => 'admin',
         ]);
 
         factory(User::class)->create([
             'full_name' => 'test',
             'email' => 'test@example.com',
-            'password' => bcrypt('test'),
+            'password' => 'test',
         ]);
 
-        //TODO - данные необходимые для функционирования системы вынести в отдельный сидер
         //Create types
         factory(Type::class)->create(['name' => 'String', 'machine_name' => 'string']);
         factory(Type::class)->create(['name' => 'Numeric', 'machine_name' => 'numeric']);

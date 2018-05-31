@@ -22,12 +22,13 @@ services:
     networks:
       - backend
     volumes:
-      - ./app:/var/www/app
-      - ./tests:/var/www/tests
-      - ./config:/var/www/config
-      - ./database:/var/www/database
-      - ./resources:/var/www/resources
-      - ./routes:/var/www/routes
+#      - ./app:/var/www/app
+#      - ./tests:/var/www/tests
+#      - ./config:/var/www/config
+#      - ./database:/var/www/database
+#      - ./resources:/var/www/resources
+#      - ./routes:/var/www/routes
+      - ./:/var/www
 
   mysql:
     image: mysql:5.7.22

@@ -30,7 +30,7 @@ abstract class TestCase extends BaseTestCase
     {
         parent::setUp();
 
-        $this->artisan("db:seed", ['--class' => 'TestingDataSeeder']);
+        $this->artisan("db:seed", ['--class' => 'InitDataSeeder']);
         $this->artisan("db:seed", ['--class' => 'PermissionsSeeder']);
 
         $this->authUser = User::whereFullName('admin')->first();

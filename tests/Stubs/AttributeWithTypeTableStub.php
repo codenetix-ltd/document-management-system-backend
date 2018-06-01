@@ -37,13 +37,7 @@ class AttributeWithTypeTableStub extends AbstractStub
     protected function doBuildResponse(): array
     {
         return [
-            'type' => [
-                'id' => $this->model->typeId,
-                'name' => $this->model->type->name,
-                'machineName' => $this->model->type->machineName,
-                'createdAt' => $this->model->type->createdAt->timestamp,
-                'updatedAt' => $this->model->type->updatedAt->timestamp
-            ],
+            'typeId' => $this->model->typeId,
             'name' => $this->model->name,
             'data' => $this->buildAttributeData(),
             'isLocked' => false,

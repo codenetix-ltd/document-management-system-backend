@@ -40,7 +40,7 @@ class AttributeResource extends JsonResource
     {
         return [
             'id' => $this->resource->id,
-            'type' => (new TypeResource($this->resource->type))->toArray($request),
+            'typeId' => $this->resource->typeId,
             'name' => $this->resource->name,
             'data' => $this->attributeService->buildData($this->resource),
             'isLocked' => $this->resource->isLocked,

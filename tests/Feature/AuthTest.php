@@ -2,10 +2,13 @@
 
 namespace Tests\Feature;
 
+use App\Entities\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Resources\Json\Resource;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
+use Laravel\Passport\Passport;
 use Tests\CreatesApplication;
 
 class AuthTest extends BaseTestCase
@@ -57,5 +60,14 @@ class AuthTest extends BaseTestCase
             'access_token',
             'refresh_token'
         ]);
+    }
+
+    public function testLogout()
+    {
+        $this->authUser = User::whereFullName('admin')->first();
+        Passport::actingAs($this->authUser);
+
+        $response = $this->json('POST', '/api/v1/oauth/logout');
+        $response->assertStatus(Response::HTTP_NO_CONTENT);
     }
 }

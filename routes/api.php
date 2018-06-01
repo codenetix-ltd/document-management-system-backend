@@ -39,4 +39,7 @@ Route::prefix('v1')->middleware('auth:api')->group(function () {
     Route::apiResource('documents/{documentId}/documentVersions', 'DocumentVersionsController');
 
     Route::post('files', 'FileController@uploadFile');
+
+    Route::post('oauth/logout', 'Auth\LoginController@logout');
 });
+

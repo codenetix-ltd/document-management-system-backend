@@ -15,17 +15,17 @@ use Illuminate\Http\Request;
 use Prettus\Repository\Contracts\CriteriaInterface;
 use Prettus\Repository\Contracts\RepositoryInterface;
 
-/**
- * @author Vladimir Barmotin <barmotinvladimir@gmail.com>
- */
 class DocumentFilterCriteria implements CriteriaInterface
 {
-
     /**
      * @var Request
      */
     private $request;
 
+    /**
+     * DocumentFilterCriteria constructor.
+     * @param Request $request
+     */
     public function __construct(Request $request)
     {
         $this->request = $request;

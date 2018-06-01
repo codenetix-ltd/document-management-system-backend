@@ -10,9 +10,6 @@ use App\Services\LabelService;
 use App\System\AuthBuilders\AuthorizerFactory;
 use Illuminate\Http\Response;
 
-/**
- * Created by Codenetix team <support@codenetix.com>
- */
 class LabelsController extends Controller
 {
     /**
@@ -52,10 +49,10 @@ class LabelsController extends Controller
     }
 
     /**
-     * @param $id
+     * @param integer $id
      * @return LabelResource
      */
-    public function show($id)
+    public function show(int $id)
     {
         $label = $this->service->find($id);
 
@@ -67,10 +64,10 @@ class LabelsController extends Controller
 
     /**
      * @param LabelUpdateRequest $request
-     * @param $id
+     * @param integer            $id
      * @return LabelResource
      */
-    public function update(LabelUpdateRequest $request, $id)
+    public function update(LabelUpdateRequest $request, int $id)
     {
         $label = $this->service->find($id);
 
@@ -88,7 +85,7 @@ class LabelsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(int $id)
     {
         $label = $this->service->findModel($id);
 

@@ -11,9 +11,6 @@ use App\Services\TemplateService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
-/**
- * Created by Codenetix team <support@codenetix.com>
- */
 class AttributesController extends Controller
 {
     /**
@@ -21,6 +18,9 @@ class AttributesController extends Controller
      */
     protected $service;
 
+    /**
+     * @var TemplateService
+     */
     protected $templateService;
 
     /**
@@ -34,7 +34,11 @@ class AttributesController extends Controller
         $this->templateService = $templateService;
     }
 
-    public function index($templateId)
+    /**
+     * @param integer $templateId
+     * @return AttributeCollectionResource
+     */
+    public function index(int $templateId)
     {
         $this->templateService->find($templateId);
         $attributes = $this->service->paginateAttributes($templateId);
@@ -43,14 +47,14 @@ class AttributesController extends Controller
     }
 
     /**
-     * @param $templateId
+     * @param integer                $templateId
      * @param AttributeCreateRequest $request
      * @return JsonResponse
      * @throws \App\Exceptions\FailedAttributeCreateException
      * @throws \App\Exceptions\InvalidAttributeDataStructureException
      * @throws \App\Exceptions\InvalidAttributeTypeException
      */
-    public function store($templateId, AttributeCreateRequest $request)
+    public function store(int $templateId, AttributeCreateRequest $request)
     {
         $attribute = $this->service->create($templateId, $request->all());
 
@@ -58,11 +62,11 @@ class AttributesController extends Controller
     }
 
     /**
-     * @param $templateId
-     * @param $id
+     * @param integer $templateId
+     * @param integer $id
      * @return AttributeResource
      */
-    public function show($templateId, $id)
+    public function show(int $templateId, int $id)
     {
         $this->templateService->find($templateId);
         $attribute = $this->service->find($id);
@@ -70,27 +74,27 @@ class AttributesController extends Controller
     }
 
     /**
-     * @param $templateId
-     * @param $id
+     * @param integer                $templateId
+     * @param integer                $id
      * @param AttributeUpdateRequest $request
      * @return AttributeResource
      * @throws \App\Exceptions\FailedAttributeCreateException
      * @throws \App\Exceptions\InvalidAttributeDataStructureException
      * @throws \App\Exceptions\InvalidAttributeTypeException
      */
-    public function update($templateId, $id, AttributeUpdateRequest $request)
+    public function update(int $templateId, int $id, AttributeUpdateRequest $request)
     {
         $attribute = $this->service->update($templateId, $id, $request->getInputData());
         return new AttributeResource($attribute, $this->service);
     }
 
     /**
-     * @param $templateId
-     * @param $id
+     * @param integer $templateId
+     * @param integer $id
      * @return JsonResponse
      * @throws \App\Exceptions\FailedAttributeDeleteException
      */
-    public function destroy($templateId, $id)
+    public function destroy(int $templateId, int $id)
     {
         $this->templateService->find($templateId);
         $this->service->delete($id);

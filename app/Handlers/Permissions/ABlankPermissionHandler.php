@@ -6,8 +6,15 @@ use App\Context\BlankAuthorizeContext;
 
 abstract class ABlankPermissionHandler
 {
+    /**
+     * @return string
+     */
     abstract public function getPermissionName() : string;
 
+    /**
+     * @param BlankAuthorizeContext $context
+     * @return boolean
+     */
     public function handle(BlankAuthorizeContext $context): bool
     {
         $roles = $context->getUser()->roles;

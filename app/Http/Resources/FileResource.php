@@ -6,12 +6,16 @@ use App\Entities\File;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * @author Vladimir Barmotin <barmotinvladimir@gmail.com>
- *
  * @property File $resource
  */
 class FileResource extends JsonResource
 {
+    /**
+     * Transform the resource into an array.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return array
+     */
     public function toArray($request): array
     {
         return [

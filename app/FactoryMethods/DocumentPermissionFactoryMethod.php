@@ -13,19 +13,29 @@ use App\Handlers\Permissions\NonePermissionHandler;
 use Illuminate\Support\Collection;
 use RuntimeException;
 
-/**
- * @author Andrey Vorobiov<andrew.sprw@gmail.com>
- */
-class DocumentPermissionFactoryMethod
+class DocumentPermissionFactoryMethod extends AbstractPermissionFactoryMethod
 {
+    /**
+     * @var DocumentAuthorizeContext
+     */
     private $context;
 
+    /**
+     * DocumentPermissionFactoryMethod constructor.
+     * @param DocumentAuthorizeContext $context
+     */
     public function __construct(DocumentAuthorizeContext $context)
     {
         $this->context = $context;
     }
 
-    public function make(Role $role, Permission $permission, $handlerClass)
+    /**
+     * @param Role       $role
+     * @param Permission $permission
+     * @param string     $handlerClass
+     * @return AnyPermissionHandler|ByOwnerPermissionHandler|ByQualifiersPermissionHandler|ByTemplatePermissionHandler|NonePermissionHandler|mixed
+     */
+    public function make(Role $role, Permission $permission, string $handlerClass)
     {
         switch ($handlerClass) {
             case ByTemplatePermissionHandler::class:

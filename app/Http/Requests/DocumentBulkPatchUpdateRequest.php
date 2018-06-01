@@ -4,11 +4,11 @@ namespace App\Http\Requests;
 
 use Illuminate\Validation\ValidationException;
 
-/**
- * @author Vladimir Barmotin <barmotinvladimir@gmail.com>
- */
 class DocumentBulkPatchUpdateRequest extends DocumentPatchUpdateRequest
 {
+    /**
+     * @return array
+     */
     public function rules()
     {
         $rules = parent::rules();
@@ -25,6 +25,7 @@ class DocumentBulkPatchUpdateRequest extends DocumentPatchUpdateRequest
 
     /**
      * @throws ValidationException
+     * @return void
      */
     public function failValidation()
     {

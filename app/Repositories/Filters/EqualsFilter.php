@@ -4,20 +4,33 @@ namespace App\Repositories\Filters;
 
 use Illuminate\Database\Eloquent\Builder;
 
-/**
- * @author Vladimir Barmotin <barmotinvladimir@gmail.com>
- */
 class EqualsFilter implements FilterInterface
 {
+    /**
+     * @var string
+     */
     private $attribute;
+
+    /**
+     * @var string
+     */
     private $value;
 
-    public function __construct($attribute, $value)
+    /**
+     * EqualsFilter constructor.
+     * @param string $attribute
+     * @param string $value
+     */
+    public function __construct(string $attribute, string $value)
     {
         $this->attribute = $attribute;
         $this->value = $value;
     }
 
+    /**
+     * @param Builder $builder
+     * @return void
+     */
     public function apply(Builder $builder)
     {
         $builder->where($this->attribute, '=', $this->value);

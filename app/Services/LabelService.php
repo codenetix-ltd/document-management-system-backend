@@ -9,9 +9,6 @@ use App\Events\Label\LabelUpdateEvent;
 use App\Repositories\LabelRepository;
 use Illuminate\Support\Facades\Event;
 
-/**
- * Created by Codenetix team <support@codenetix.com>
- */
 class LabelService
 {
     /**
@@ -70,23 +67,34 @@ class LabelService
         return $label;
     }
 
-    public function delete(int $id)
+    /**
+     * @param integer $id
+     * @return integer
+     */
+    public function delete(int $id): int
     {
-        $label = $this->repository->findWhere([['id', '=', $id]])->first();
+        $label = $this->repository->findModel($id);
         if (is_null($label)) {
-            return null;
+            return 0;
         }
 
-        $this->repository->delete($id);
         Event::dispatch(new LabelDeleteEvent($label));
+        return $this->repository->delete($id);
     }
 
+    /**
+     * @return mixed
+     */
     public function paginate()
     {
         return $this->repository->paginate();
     }
 
-    public function findModel($id)
+    /**
+     * @param integer $id
+     * @return mixed
+     */
+    public function findModel(int $id)
     {
         return $this->repository->findModel($id);
     }

@@ -5,11 +5,12 @@ namespace App\Http\Resources;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Pagination\AbstractPaginator;
 
-/**
- * @author Vladimir Barmotin <barmotinvladimir@gmail.com>
- */
 abstract class AbstractCollectionResource extends ResourceCollection
 {
+    /**
+     * @param $item
+     * @return mixed
+     */
     abstract protected function transformSingle($item);
 
     /**
@@ -26,6 +27,10 @@ abstract class AbstractCollectionResource extends ResourceCollection
         return parent::toArray($request);
     }
 
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function toResponse($request)
     {
         return $this->resource instanceof AbstractPaginator

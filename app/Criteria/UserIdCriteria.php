@@ -14,9 +14,16 @@ use Prettus\Repository\Contracts\RepositoryInterface;
  */
 class UserIdCriteria implements CriteriaInterface
 {
+    /**
+     * @var integer
+     */
     private $userId;
 
-    public function __construct($userId)
+    /**
+     * UserIdCriteria constructor.
+     * @param integer $userId
+     */
+    public function __construct(int $userId)
     {
         $this->userId = $userId;
     }

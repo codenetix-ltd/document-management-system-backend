@@ -20,11 +20,19 @@ class RoleRepositoryEloquent extends BaseRepository implements RoleRepository
         return Role::class;
     }
 
+    /**
+     * @param Role $model
+     * @return integer
+     */
     public function detachPermissions(Role $model): int
     {
         return $model->permissions()->detach();
     }
 
+    /**
+     * @param array $data
+     * @return RolePermission
+     */
     public function createRolePermission(array $data): RolePermission
     {
         $rolePermission = new RolePermission($data);
@@ -34,7 +42,12 @@ class RoleRepositoryEloquent extends BaseRepository implements RoleRepository
         return $rolePermission;
     }
 
-    public function attachQualifierToRolePermission(RolePermission $rolePermission, array $data)
+    /**
+     * @param RolePermission $rolePermission
+     * @param array          $data
+     * @return void
+     */
+    public function attachQualifierToRolePermission(RolePermission $rolePermission, array $data): void
     {
         $rolePermission->qualifiers()->attach($data);
     }

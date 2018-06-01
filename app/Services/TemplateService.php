@@ -5,9 +5,6 @@ namespace App\Services;
 use App\Entities\Template;
 use App\Repositories\TemplateRepository;
 
-/**
- * Created by Codenetix team <support@codenetix.com>
- */
 class TemplateService
 {
     /**
@@ -53,29 +50,40 @@ class TemplateService
     /**
      * @param array   $data
      * @param integer $id
-     * @return mixed
+     * @return Template
      */
     public function update(array $data, int $id)
     {
         return $this->repository->update($data, $id);
     }
 
-    public function delete(int $id)
+    /**
+     * @param integer $id
+     * @return integer
+     */
+    public function delete(int $id): int
     {
-        $template = $this->repository->findWhere([['id', '=', $id]])->first();
+        $template = $this->repository->findModel($id);
         if (is_null($template)) {
-            return null;
+            return 0;
         }
 
-        $this->repository->delete($id);
+        return $this->repository->delete($id);
     }
 
+    /**
+     * @return mixed
+     */
     public function paginate()
     {
         return $this->repository->paginate();
     }
 
-    public function findModel($id)
+    /**
+     * @param integer $id
+     * @return mixed
+     */
+    public function findModel(int $id)
     {
         return $this->repository->findModel($id);
     }

@@ -17,5 +17,8 @@ use Carbon\Carbon;
  */
 class File extends BaseEntity
 {
+    /**
+     * @var array
+     */
     protected $fillable = ['path', 'original_name'];
 }

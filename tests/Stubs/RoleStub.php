@@ -147,7 +147,7 @@ class RoleStub extends AbstractStub
     }
 
     /**
-     * @param int $excerptId
+     * @param integer $excerptId
      * @return array
      */
     private function buildPermissionValueWithoutQualifiersAccessType(int $excerptId): array

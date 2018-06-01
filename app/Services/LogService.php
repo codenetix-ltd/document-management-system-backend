@@ -5,9 +5,6 @@ namespace App\Services;
 use App\Contracts\Helpers\ILogger;
 use App\Repositories\LogRepository;
 
-/**
- * Created by Codenetix team <support@codenetix.com>
- */
 class LogService implements ILogger
 {
     /**
@@ -25,15 +22,22 @@ class LogService implements ILogger
     }
 
     /**
-     * @param $userId
+     * @param integer $userId
      * @return mixed
      */
-    public function list($userId)
+    public function list(int $userId)
     {
         return $this->repository->paginateByUser($userId);
     }
 
-    public function write($userId, $body, $referenceId, $referenceType)
+    /**
+     * @param integer $userId
+     * @param string  $body
+     * @param integer $referenceId
+     * @param string  $referenceType
+     * @return mixed|void
+     */
+    public function write(int $userId, string $body, int $referenceId, string $referenceType)
     {
         $this->repository->create([
             'user_id' => $userId,

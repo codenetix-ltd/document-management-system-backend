@@ -5,9 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Resources\TypeResource;
 use App\Services\TypeService;
 
-/**
- * Created by Codenetix team <support@codenetix.com>
- */
 class TypesController extends Controller
 {
     /**

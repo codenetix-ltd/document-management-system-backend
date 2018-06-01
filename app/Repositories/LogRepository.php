@@ -9,5 +9,9 @@ use Prettus\Repository\Contracts\RepositoryInterface;
  */
 interface LogRepository extends RepositoryInterface
 {
-    public function paginateByUser($userId);
+    /**
+     * @param integer $userId
+     * @return mixed
+     */
+    public function paginateByUser(int $userId);
 }

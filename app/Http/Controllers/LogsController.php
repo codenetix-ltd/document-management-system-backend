@@ -7,9 +7,6 @@ use App\Services\LogService;
 use App\System\AuthBuilders\AuthorizerFactory;
 use Illuminate\Contracts\Auth\Guard;
 
-/**
- * Created by Codenetix team <support@codenetix.com>
- */
 class LogsController extends Controller
 {
     /**

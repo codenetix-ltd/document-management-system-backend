@@ -5,9 +5,6 @@ namespace App\Services;
 use App\Entities\Role;
 use App\Repositories\RoleRepository;
 
-/**
- * Created by Codenetix team <support@codenetix.com>
- */
 class RoleService
 {
     /**
@@ -41,6 +38,9 @@ class RoleService
         return $this->repository->find($id);
     }
 
+    /**
+     * @return mixed
+     */
     public function paginate()
     {
         return $this->repository->paginate();
@@ -68,7 +68,7 @@ class RoleService
     /**
      * @param array   $data
      * @param integer $id
-     * @return mixed
+     * @return Role
      */
     public function update(array $data, int $id)
     {
@@ -87,18 +87,24 @@ class RoleService
 
     /**
      * @param integer $id
+     * @return integer
      */
-    public function delete(int $id)
+    public function delete(int $id): int
     {
-        $label = $this->repository->findWhere([['id', '=', $id]])->first();
+        $label = $this->repository->findModel($id);
         if (is_null($label)) {
-            return;
+            return 0;
         }
 
-        $this->repository->delete($id);
+        return $this->repository->delete($id);
     }
 
-    private function savePermissionValues(Role $role, array $permissionValues)
+    /**
+     * @param Role  $role
+     * @param array $permissionValues
+     * @return void
+     */
+    private function savePermissionValues(Role $role, array $permissionValues): void
     {
         $this->repository->detachPermissions($role);
 
@@ -107,7 +113,12 @@ class RoleService
         }
     }
 
-    private function attachPermission(Role $role, array $permissionValue)
+    /**
+     * @param Role  $role
+     * @param array $permissionValue
+     * @return void
+     */
+    private function attachPermission(Role $role, array $permissionValue): void
     {
         $rolePermission = $this->repository->createRolePermission([
             'roleId' => $role->id,
@@ -124,7 +135,11 @@ class RoleService
         }
     }
 
-    public function findModel($id)
+    /**
+     * @param integer $id
+     * @return mixed
+     */
+    public function findModel(int $id)
     {
         return $this->repository->findModel($id);
     }

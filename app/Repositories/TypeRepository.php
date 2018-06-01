@@ -10,5 +10,9 @@ use Prettus\Repository\Contracts\RepositoryInterface;
  */
 interface TypeRepository extends RepositoryInterface
 {
-    public function getTypeByMachineName($machineName): Type;
+    /**
+     * @param string $machineName
+     * @return Type
+     */
+    public function getTypeByMachineName(string $machineName): Type;
 }

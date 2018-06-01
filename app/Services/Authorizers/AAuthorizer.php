@@ -2,13 +2,22 @@
 
 namespace App\Services\Authorizers;
 
+use App\Context\AAuthorizeContext;
+use App\FactoryMethods\AbstractPermissionFactoryMethod;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 abstract class AAuthorizer
 {
+    /**
+     * @var AAuthorizeContext
+     */
     protected $context;
 
-    public function authorize($permission)
+    /**
+     * @param string $permission
+     * @return boolean
+     */
+    public function authorize(string $permission)
     {
         $user = $this->context->getUser();
 
@@ -28,5 +37,8 @@ abstract class AAuthorizer
         throw new AccessDeniedHttpException('You don\'t have enough rights to perform this operation');
     }
 
-    abstract protected function getPermissionFactoryMethod();
+    /**
+     * @return AbstractPermissionFactoryMethod
+     */
+    abstract protected function getPermissionFactoryMethod(): AbstractPermissionFactoryMethod;
 }

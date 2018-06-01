@@ -8,11 +8,27 @@ use Illuminate\Support\Collection;
 
 class ByTemplatePermissionHandler
 {
-
+    /**
+     * @var Collection
+     */
     protected $templates;
+
+    /**
+     * @var User
+     */
     private $user;
+
+    /**
+     * @var Role
+     */
     private $role;
 
+    /**
+     * ByTemplatePermissionHandler constructor.
+     * @param User       $user
+     * @param Role       $role
+     * @param Collection $templates
+     */
     public function __construct(User $user, Role $role, Collection $templates)
     {
         $this->user = $user;
@@ -20,6 +36,9 @@ class ByTemplatePermissionHandler
         $this->templates = $templates;
     }
 
+    /**
+     * @return boolean
+     */
     public function handle(): bool
     {
         $userTemplatesIds = $this->user->templates->pluck('id');

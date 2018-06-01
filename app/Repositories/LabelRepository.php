@@ -9,5 +9,9 @@ use Prettus\Repository\Contracts\RepositoryInterface;
  */
 interface LabelRepository extends RepositoryInterface
 {
-    public function findModel($id);
+    /**
+     * @param integer $id
+     * @return mixed
+     */
+    public function findModel(int $id);
 }

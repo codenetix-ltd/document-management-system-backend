@@ -2,16 +2,41 @@
 
 namespace App\Handlers\Permissions;
 
+use App\Context\AAuthorizeContext;
 use App\Entities\Permission;
+use App\Entities\Role;
+use App\FactoryMethods\AbstractPermissionFactoryMethod;
 
 class ByQualifiersPermissionHandler
 {
+    /**
+     * @var AbstractPermissionFactoryMethod
+     */
     private $factoryMethod;
+
+    /**
+     * @var Permission
+     */
     private $permission;
+
+    /**
+     * @var AAuthorizeContext
+     */
     private $context;
+
+    /**
+     * @var Role
+     */
     private $role;
 
-    public function __construct($context, $role, $factoryMethod, Permission $permission)
+    /**
+     * ByQualifiersPermissionHandler constructor.
+     * @param AAuthorizeContext               $context
+     * @param Role                            $role
+     * @param AbstractPermissionFactoryMethod $factoryMethod
+     * @param Permission                      $permission
+     */
+    public function __construct(AAuthorizeContext $context, Role $role, AbstractPermissionFactoryMethod $factoryMethod, Permission $permission)
     {
         $this->permission = $permission;
         $this->context = $context;
@@ -19,6 +44,9 @@ class ByQualifiersPermissionHandler
         $this->role = $role;
     }
 
+    /**
+     * @return boolean
+     */
     public function handle(): bool
     {
         $qualifiers = $this->permission->pivot->qualifiers;

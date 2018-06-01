@@ -7,11 +7,17 @@ use Illuminate\Support\Collection;
 
 class PermissionService
 {
+    /**
+     * @return array
+     */
     public function getPermissionsGroupsFromConfig()
     {
         return config('permissions.groups');
     }
 
+    /**
+     * @return Collection
+     */
     public function getAccessTypesByPermissionId()
     {
         $permissions = Permission::get();
@@ -23,14 +29,4 @@ class PermissionService
         }
         return $result;
     }
-
-//    public function getAccessTypesByPermissionId($permissionId)
-//    {
-//        $permission = Permission::find($permissionId);
-//        $config = $this->getPermissionsGroupsFromConfig();
-//
-//        $permissionConfig = $config[$permission->permissionGroup->name]['permissions'][$permission->name];
-//
-//        return empty($permissionConfig['access_types']) ? new Collection([]) : new Collection($permissionConfig['access_types']);
-//    }
 }

@@ -5,9 +5,6 @@ namespace App\Services;
 use App\Entities\DocumentVersion;
 use App\Repositories\DocumentVersionRepository;
 
-/**
- * Created by Codenetix team <support@codenetix.com>
- */
 class DocumentVersionService
 {
     /**
@@ -31,10 +28,10 @@ class DocumentVersionService
     }
 
     /**
-     * @param $documentId
+     * @param integer $documentId
      * @return mixed
      */
-    public function list($documentId)
+    public function list(int $documentId)
     {
         return $this->repository->paginateByDocument($documentId);
     }
@@ -56,7 +53,7 @@ class DocumentVersionService
      *
      * @return DocumentVersion
      */
-    public function create(array $data, $documentId, $versionName, $isActual)
+    public function create(array $data, int $documentId, string $versionName, bool $isActual)
     {
         $data['documentId'] = $documentId;
         $data['versionName'] = $versionName;
@@ -80,7 +77,7 @@ class DocumentVersionService
     /**
      * @param array   $data
      * @param integer $id
-     * @return mixed
+     * @return DocumentVersion
      */
     public function update(array $data, int $id)
     {
@@ -103,25 +100,35 @@ class DocumentVersionService
         return $documentVersion;
     }
 
-    public function updateActual($actual, $id)
+    /**
+     * @param boolean $actual
+     * @param integer $id
+     * @return DocumentVersion
+     */
+    public function updateActual(bool $actual, int $id)
     {
         return $this->repository->update(['isActual' => $actual], $id);
     }
 
     /**
      * @param integer $id
+     * @return integer
      */
-    public function delete(int $id)
+    public function delete(int $id): int
     {
         $dv = $this->repository->findModel($id);
         if (is_null($dv)) {
-            return;
+            return 0;
         }
 
-        $this->repository->delete($id);
+        return $this->repository->delete($id);
     }
 
-    public function findModel($id)
+    /**
+     * @param integer $id
+     * @return mixed
+     */
+    public function findModel(int $id)
     {
         return $this->repository->findModel($id);
     }

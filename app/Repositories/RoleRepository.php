@@ -11,11 +11,28 @@ use Prettus\Repository\Contracts\RepositoryInterface;
  */
 interface RoleRepository extends RepositoryInterface
 {
+    /**
+     * @param Role $model
+     * @return integer
+     */
     public function detachPermissions(Role $model): int;
 
+    /**
+     * @param array $data
+     * @return RolePermission
+     */
     public function createRolePermission(array $data): RolePermission;
 
-    public function attachQualifierToRolePermission(RolePermission $rolePermission, array $data);
+    /**
+     * @param RolePermission $rolePermission
+     * @param array          $data
+     * @return void
+     */
+    public function attachQualifierToRolePermission(RolePermission $rolePermission, array $data): void;
 
-    public function findModel($id);
+    /**
+     * @param integer $id
+     * @return mixed
+     */
+    public function findModel(int $id);
 }

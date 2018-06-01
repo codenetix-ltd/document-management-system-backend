@@ -2,11 +2,12 @@
 
 namespace App\Http\Resources;
 
-/**
- * @author Vladimir Barmotin <barmotinvladimir@gmail.com>
- */
 class FileCollectionResource extends AbstractCollectionResource
 {
+    /**
+     * @param $item
+     * @return FileResource|mixed
+     */
     protected function transformSingle($item)
     {
         return new FileResource($item);

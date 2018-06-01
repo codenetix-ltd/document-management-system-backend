@@ -4,18 +4,26 @@ namespace App\Repositories\Filters;
 
 use Illuminate\Database\Eloquent\Builder;
 
-/**
- * @author Vladimir Barmotin <barmotinvladimir@gmail.com>
- */
 class NotNullFilter implements FilterInterface
 {
+    /**
+     * @var string
+     */
     private $attribute;
 
-    public function __construct($attribute)
+    /**
+     * NotNullFilter constructor.
+     * @param string $attribute
+     */
+    public function __construct(string $attribute)
     {
         $this->attribute = $attribute;
     }
 
+    /**
+     * @param Builder $builder
+     * @return void
+     */
     public function apply(Builder $builder)
     {
         $builder->whereNotNull($this->attribute);

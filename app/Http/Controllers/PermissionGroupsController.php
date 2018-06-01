@@ -5,9 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Resources\PermissionGroupResource;
 use App\Services\PermissionGroupService;
 
-/**
- * Created by Codenetix team <support@codenetix.com>
- */
 class PermissionGroupsController extends Controller
 {
     /**

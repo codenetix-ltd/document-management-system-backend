@@ -4,11 +4,12 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\PaginatedResourceResponse;
 
-/**
- * @author Vladimir Barmotin <barmotinvladimir@gmail.com>
- */
 class CamelCasePaginatedResourceResponse extends PaginatedResourceResponse
 {
+    /**
+     * @param array $paginated
+     * @return array
+     */
     protected function meta($paginated)
     {
         $meta = parent::meta($paginated);

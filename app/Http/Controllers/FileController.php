@@ -6,9 +6,6 @@ use App\Http\Resources\FileResource;
 use App\Services\FileService;
 use Illuminate\Http\Request;
 
-/**
- * @author Vladimir Barmotin <barmotinvladimir@gmail.com>
- */
 class FileController extends Controller
 {
     /**

@@ -10,19 +10,29 @@ use App\Handlers\Permissions\ByOwnerPermissionHandler;
 use App\Handlers\Permissions\NonePermissionHandler;
 use RuntimeException;
 
-/**
- * @author Andrey Vorobiov<andrew.sprw@gmail.com>
- */
-class UserPermissionFactoryMethod
+class UserPermissionFactoryMethod extends AbstractPermissionFactoryMethod
 {
+    /**
+     * @var UserAuthorizeContext
+     */
     private $context;
 
+    /**
+     * UserPermissionFactoryMethod constructor.
+     * @param UserAuthorizeContext $context
+     */
     public function __construct(UserAuthorizeContext $context)
     {
         $this->context = $context;
     }
 
-    public function make(Role $role, Permission $permission, $handlerClass)
+    /**
+     * @param Role       $role
+     * @param Permission $permission
+     * @param string     $handlerClass
+     * @return AnyPermissionHandler|ByOwnerPermissionHandler|NonePermissionHandler|mixed
+     */
+    public function make(Role $role, Permission $permission, string $handlerClass)
     {
         switch ($handlerClass) {
             case AnyPermissionHandler::class:

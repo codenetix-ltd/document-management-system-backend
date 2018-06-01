@@ -10,9 +10,6 @@ use App\Services\RoleService;
 use App\System\AuthBuilders\AuthorizerFactory;
 use Illuminate\Http\Response;
 
-/**
- * Created by Codenetix team <support@codenetix.com>
- */
 class RolesController extends Controller
 {
     /**
@@ -52,10 +49,10 @@ class RolesController extends Controller
     }
 
     /**
-     * @param $id
+     * @param integer $id
      * @return RoleResource
      */
-    public function show($id)
+    public function show(int $id)
     {
         $role = $this->service->find($id);
 
@@ -67,10 +64,10 @@ class RolesController extends Controller
 
     /**
      * @param RoleUpdateRequest $request
-     * @param $id
+     * @param integer           $id
      * @return RoleResource
      */
-    public function update(RoleUpdateRequest $request, $id)
+    public function update(RoleUpdateRequest $request, int $id)
     {
         $role = $this->service->find($id);
 
@@ -83,12 +80,10 @@ class RolesController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     *
      * @param  integer $id
-     *
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(int $id)
     {
         $role = $this->service->findModel($id);
 

@@ -12,9 +12,6 @@ use App\Repositories\DocumentRepository;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Event;
 
-/**
- * Created by Codenetix team <support@codenetix.com>
- */
 class DocumentService
 {
     /**
@@ -75,7 +72,7 @@ class DocumentService
     /**
      * @param array   $data
      * @param integer $id
-     * @return mixed
+     * @return Document
      */
     public function update(array $data, int $id)
     {
@@ -94,7 +91,7 @@ class DocumentService
     /**
      * @param array   $data
      * @param integer $id
-     * @return mixed
+     * @return Document
      */
     public function updateVersion(array $data, int $id)
     {
@@ -122,21 +119,27 @@ class DocumentService
 
     /**
      * @param integer $id
+     * @return integer
      */
-    public function delete(int $id)
+    public function delete(int $id): int
     {
         $document = $this->repository->findModel($id);
 
         if (is_null($document)) {
-            return;
+            return 0;
         }
 
         Event::dispatch(new DocumentDeleteEvent($document));
 
-        $this->repository->delete($id);
+        return $this->repository->delete($id);
     }
 
-    public function setActualVersion($documentId, $versionId)
+    /**
+     * @param integer $documentId
+     * @param integer $versionId
+     * @return void
+     */
+    public function setActualVersion(int $documentId, int $versionId): void
     {
         $document = $this->find($documentId);
         $newVersion = $this->documentVersionService->find($versionId);
@@ -151,7 +154,11 @@ class DocumentService
         $this->documentVersionService->updateActual(true, $newVersion->id);
     }
 
-    public function findModel($id)
+    /**
+     * @param integer $id
+     * @return mixed
+     */
+    public function findModel(int $id)
     {
         return $this->repository->findModel($id);
     }

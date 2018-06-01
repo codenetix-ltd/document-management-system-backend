@@ -4,14 +4,16 @@ namespace App\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 
-/**[
+/**
  * Class BaseEntity
- * @package App\Entities
- *
  * @property int $id
  */
 class BaseEntity extends Model
 {
+    /**
+     * @param string $key
+     * @return mixed
+     */
     public function getAttribute($key)
     {
         if (array_key_exists($key, $this->relations)) {
@@ -23,11 +25,19 @@ class BaseEntity extends Model
         }
     }
 
+    /**
+     * @param string $key
+     * @param mixed $value
+     * @return $this
+     */
     public function setAttribute($key, $value)
     {
         return parent::setAttribute(snake_case($key), $value);
     }
 
+    /**
+     * @return array
+     */
     public function toArray()
     {
         $data = parent::toArray();

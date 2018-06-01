@@ -6,6 +6,9 @@ use App\Contracts\Services\IMorphMapService;
 
 class MorphMapService implements IMorphMapService
 {
+    /**
+     * @return array
+     */
     public function getList(): array
     {
         $list = [];

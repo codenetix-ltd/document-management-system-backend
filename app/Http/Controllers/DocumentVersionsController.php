@@ -11,9 +11,6 @@ use App\Services\DocumentVersionService;
 use App\System\AuthBuilders\AuthorizerFactory;
 use Illuminate\Http\Response;
 
-/**
- * Created by Codenetix team <support@codenetix.com>
- */
 class DocumentVersionsController extends Controller
 {
     /**
@@ -33,10 +30,10 @@ class DocumentVersionsController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param $documentId
+     * @param integer $documentId
      * @return DocumentVersionCollectionResource
      */
-    public function index($documentId)
+    public function index(int $documentId)
     {
         $documentVersions = $this->service->list($documentId);
         return new DocumentVersionCollectionResource($documentVersions);
@@ -45,13 +42,13 @@ class DocumentVersionsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param $documentId
+     * @param integer                      $documentId
      * @param  DocumentVersionCreateRequest $request
      *
      * @param DocumentService              $documentService
      * @return DocumentVersionResource
      */
-    public function store($documentId, DocumentVersionCreateRequest $request, DocumentService $documentService)
+    public function store(int $documentId, DocumentVersionCreateRequest $request, DocumentService $documentService)
     {
         $document = $documentService->find($documentId);
 
@@ -68,11 +65,11 @@ class DocumentVersionsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param $documentId
-     * @param $documentVersionId
+     * @param integer $documentId
+     * @param integer $documentVersionId
      * @return DocumentVersionResource
      */
-    public function show($documentId, $documentVersionId)
+    public function show(int $documentId, int $documentVersionId)
     {
         $documentVersion = $this->service->find($documentVersionId);
 
@@ -83,12 +80,12 @@ class DocumentVersionsController extends Controller
     }
 
     /**
-     * @param $documentId
-     * @param $documentVersionId
+     * @param integer                      $documentId
+     * @param integer                      $documentVersionId
      * @param DocumentVersionUpdateRequest $request
      * @return DocumentVersionResource
      */
-    public function update($documentId, $documentVersionId, DocumentVersionUpdateRequest $request)
+    public function update(int $documentId, int $documentVersionId, DocumentVersionUpdateRequest $request)
     {
         $documentVersion = $this->service->find($documentVersionId);
 
@@ -102,11 +99,11 @@ class DocumentVersionsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param $documentId
-     * @param $documentVersionId
+     * @param integer $documentId
+     * @param integer $documentVersionId
      * @return \Illuminate\Http\Response
      */
-    public function destroy($documentId, $documentVersionId)
+    public function destroy(int $documentId, int $documentVersionId)
     {
         $documentVersion = $this->service->findModel($documentVersionId);
 

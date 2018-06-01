@@ -43,6 +43,19 @@
     <exclude-pattern>*/migrations/*</exclude-pattern>
 
     <!--
+        Exclude external
+    -->
+    <exclude-pattern>*/app/Entities/*</exclude-pattern>
+    <exclude-pattern>*/app/Http/Middleware/*</exclude-pattern>
+    <exclude-pattern>*/app/Http/Resources/*</exclude-pattern>
+
+    <exclude-pattern>*/app/Exceptions/Handler.php</exclude-pattern>
+    <exclude-pattern>*/app/Criteria/DocumentFilterCriteria.php</exclude-pattern>
+    <exclude-pattern>*/app/Criteria/ExtendedRequestCriteria.php</exclude-pattern>
+
+
+
+    <!--
        You can hard-code command line values into your custom standard.
        Note that this does not work for the command line values:
        -v[v][v], -l, -d, -sniffs and -standard

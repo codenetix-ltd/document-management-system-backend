@@ -4,9 +4,6 @@ namespace App\Services;
 
 use App\Repositories\TypeRepository;
 
-/**
- * Created by Codenetix team <support@codenetix.com>
- */
 class TypeService
 {
     const TYPE_STRING = 'string';

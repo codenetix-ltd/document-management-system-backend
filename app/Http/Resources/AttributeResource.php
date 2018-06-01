@@ -14,8 +14,16 @@ use Illuminate\Http\Resources\Json\JsonResource;
  */
 class AttributeResource extends JsonResource
 {
+    /**
+     * @var AttributeService
+     */
     private $attributeService;
 
+    /**
+     * AttributeResource constructor.
+     * @param $resource
+     * @param AttributeService $attributeService
+     */
     public function __construct($resource, AttributeService $attributeService)
     {
         $this->attributeService = $attributeService;

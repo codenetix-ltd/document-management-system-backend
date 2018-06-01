@@ -9,9 +9,6 @@ use App\Events\User\UserUpdateEvent;
 use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Event;
 
-/**
- * Created by Codenetix team <support@codenetix.com>
- */
 class UserService
 {
     /**
@@ -40,7 +37,7 @@ class UserService
      * @param integer $id
      * @return User
      */
-    public function find($id)
+    public function find(int $id)
     {
         return $this->repository->find($id);
     }
@@ -78,22 +75,26 @@ class UserService
 
     /**
      * @param integer $id
+     * @return integer
      */
-    public function delete(int $id)
+    public function delete(int $id): int
     {
-
-        $user = $this->repository->findWhere([['id', '=', $id]])->first();
+        $user = $this->repository->findModel($id);
 
         if (is_null($user)) {
-            return;
+            return 0;
         }
 
         Event::dispatch(new UserDeleteEvent($user));
 
-        $this->repository->delete($id);
+        return $this->repository->delete($id);
     }
 
-    public function findModel($id)
+    /**
+     * @param integer $id
+     * @return mixed
+     */
+    public function findModel(int $id)
     {
         return $this->repository->findModel($id);
     }

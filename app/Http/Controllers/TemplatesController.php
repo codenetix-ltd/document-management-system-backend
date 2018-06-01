@@ -10,9 +10,6 @@ use App\Services\TemplateService;
 use App\System\AuthBuilders\AuthorizerFactory;
 use Illuminate\Http\Response;
 
-/**
- * Created by Codenetix team <support@codenetix.com>
- */
 class TemplatesController extends Controller
 {
     /**
@@ -52,10 +49,10 @@ class TemplatesController extends Controller
     }
 
     /**
-     * @param $id
+     * @param integer $id
      * @return TemplateResource
      */
-    public function show($id)
+    public function show(int $id)
     {
         $template = $this->service->find($id);
 
@@ -67,10 +64,10 @@ class TemplatesController extends Controller
 
     /**
      * @param TemplateUpdateRequest $request
-     * @param $id
+     * @param integer               $id
      * @return TemplateResource
      */
-    public function update(TemplateUpdateRequest $request, $id)
+    public function update(TemplateUpdateRequest $request, int $id)
     {
         $template = $this->service->find($id);
 
@@ -88,7 +85,7 @@ class TemplatesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(int $id)
     {
         $template = $this->service->findModel($id);
 

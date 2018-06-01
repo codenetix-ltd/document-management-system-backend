@@ -13,9 +13,6 @@ use App\Repositories\AttributeRepository;
 use App\Repositories\TypeRepository;
 use Exception;
 
-/**
- * Created by Codenetix team <support@codenetix.com>
- */
 class AttributeService
 {
     /**
@@ -23,6 +20,9 @@ class AttributeService
      */
     protected $repository;
 
+    /**
+     * @var TypeRepository
+     */
     protected $typeRepository;
 
     /**
@@ -54,14 +54,14 @@ class AttributeService
     }
 
     /**
-     * @param $templateId
-     * @param array      $data
-     * @return mixed
+     * @param integer $templateId
+     * @param array   $data
+     * @return Attribute
      * @throws FailedAttributeCreateException
      * @throws InvalidAttributeDataStructureException
      * @throws InvalidAttributeTypeException
      */
-    public function create($templateId, array $data)
+    public function create(int $templateId, array $data)
     {
         $data['templateId'] = $templateId;
         $data['order'] = $this->getDefaultAttributeOrderByTemplateId($templateId);
@@ -76,15 +76,15 @@ class AttributeService
     }
 
     /**
-     * @param $templateId
-     * @param $id
-     * @param array      $data
-     * @return mixed
+     * @param integer $templateId
+     * @param integer $id
+     * @param array   $data
+     * @return Attribute
      * @throws FailedAttributeCreateException
      * @throws InvalidAttributeDataStructureException
      * @throws InvalidAttributeTypeException
      */
-    public function update($templateId, $id, array $data)
+    public function update(int $templateId, int $id, array $data)
     {
         if (empty($data['data'])) {
             $attribute = $this->repository->update($data, $id);
@@ -95,12 +95,20 @@ class AttributeService
         return $this->repository->find($attribute->id);
     }
 
-    public function paginateAttributes($templateId)
+    /**
+     * @param integer $templateId
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
+    public function paginateAttributes(int $templateId)
     {
         return $this->repository->paginateAttributes($templateId);
     }
 
-    private function getDefaultAttributeOrderByTemplateId($templateId): int
+    /**
+     * @param integer $templateId
+     * @return integer
+     */
+    private function getDefaultAttributeOrderByTemplateId(int $templateId): int
     {
         $maxOrder = $this->repository->findWhere([
             ['template_id', '=', $templateId],
@@ -114,6 +122,10 @@ class AttributeService
         }
     }
 
+    /**
+     * @param Attribute $attribute
+     * @return array|null
+     */
     public function buildData(Attribute $attribute): ?array
     {
         $type = $this->typeRepository->find($attribute->typeId);
@@ -124,6 +136,10 @@ class AttributeService
         return null;
     }
 
+    /**
+     * @param integer $id
+     * @return array
+     */
     private function buildDataForTable(int $id): array
     {
         $rows = $this->repository->getTableRowsByAttributeId($id);
@@ -252,12 +268,23 @@ class AttributeService
         return $parentAttribute;
     }
 
-    private function generateNameForCell(int $row, int $column, int $templateId)
+    /**
+     * @param integer $row
+     * @param integer $column
+     * @param integer $templateId
+     * @return string
+     */
+    private function generateNameForCell(int $row, int $column, int $templateId): string
     {
         return 'row_' . $row . '*' . 'column_' . $column . '*' . 'template_' . $templateId;
     }
 
-    private function createTableTypeColumns(array $headers, int $parentAttributeId)
+    /**
+     * @param array   $headers
+     * @param integer $parentAttributeId
+     * @return array
+     */
+    private function createTableTypeColumns(array $headers, int $parentAttributeId): array
     {
         return array_map(function ($item) use ($parentAttributeId) {
             return $this->repository->createTableTypeColumn($parentAttributeId, $item['name']);
@@ -266,14 +293,14 @@ class AttributeService
 
     /**
      * @param integer $id
-     * @return integer|null
+     * @return integer
      * @throws FailedAttributeDeleteException
      */
-    public function delete(int $id)
+    public function delete(int $id): int
     {
         $attribute = $this->repository->findWhere([['id', '=', $id]])->first();
         if (is_null($attribute)) {
-            return null;
+            return 0;
         }
 
         if ($attribute->parent_attribute_id) {
@@ -284,14 +311,14 @@ class AttributeService
     }
 
     /**
-     * @param array $data
-     * @param $id
+     * @param array   $data
+     * @param integer $id
      * @return Attribute
      * @throws FailedAttributeCreateException
      * @throws InvalidAttributeDataStructureException
      * @throws InvalidAttributeTypeException
      */
-    private function updateComplexAttribute(array $data, $id): Attribute
+    private function updateComplexAttribute(array $data, int $id): Attribute
     {
         $attribute = $this->repository->find($id);
 
@@ -304,12 +331,12 @@ class AttributeService
     }
 
     /**
-     * @param array $data
-     * @param $id
+     * @param array   $data
+     * @param integer $id
      * @return Attribute
      * @throws FailedAttributeCreateException
      */
-    private function updateAttributeWithTableType(array $data, $id): Attribute
+    private function updateAttributeWithTableType(array $data, int $id): Attribute
     {
         try {
             $tableData = $data['data'];

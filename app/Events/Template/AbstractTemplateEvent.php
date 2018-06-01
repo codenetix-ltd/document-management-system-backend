@@ -5,9 +5,6 @@ namespace App\Events\Template;
 use App\Events\Event;
 use App\Entities\Template;
 
-/**
- * @author Vladimir Barmotin <barmotinvladimir@gmail.com>
- */
 abstract class AbstractTemplateEvent extends Event
 {
     /**
@@ -15,11 +12,18 @@ abstract class AbstractTemplateEvent extends Event
      */
     private $template;
 
+    /**
+     * AbstractTemplateEvent constructor.
+     * @param Template $template
+     */
     public function __construct(Template $template)
     {
         $this->template = $template;
     }
 
+    /**
+     * @return Template
+     */
     public function getTemplate(): Template
     {
         return $this->template;

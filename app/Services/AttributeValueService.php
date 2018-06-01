@@ -5,9 +5,6 @@ namespace App\Services;
 use App\Entities\AttributeValue;
 use App\Repositories\AttributeValueRepository;
 
-/**
- * Created by Codenetix team <support@codenetix.com>
- */
 class AttributeValueService
 {
     /**
@@ -53,23 +50,30 @@ class AttributeValueService
     /**
      * @param array   $data
      * @param integer $id
-     * @return mixed
+     * @return AttributeValue
      */
     public function update(array $data, int $id)
     {
         return $this->repository->update($data, $id);
     }
 
-    public function delete(int $id)
+    /**
+     * @param integer $id
+     * @return integer
+     */
+    public function delete(int $id): int
     {
         $value = $this->repository->findWhere([['id', '=', $id]])->first();
         if (is_null($value)) {
-            return null;
+            return 0;
         }
 
         $this->repository->delete($id);
     }
 
+    /**
+     * @return mixed
+     */
     public function paginate()
     {
         return $this->repository->paginate();

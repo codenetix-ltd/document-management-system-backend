@@ -4,6 +4,14 @@ namespace App\Contracts\Entity;
 
 interface IHasId
 {
-    public function getId();
-    public function setId($id);
+    /**
+     * @return integer
+     */
+    public function getId(): int;
+
+    /**
+     * @param integer $id
+     * @return void
+     */
+    public function setId(int $id): void;
 }

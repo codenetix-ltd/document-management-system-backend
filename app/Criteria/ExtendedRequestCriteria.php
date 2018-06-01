@@ -7,9 +7,6 @@ use Illuminate\Database\Query\Builder;
 use Prettus\Repository\Contracts\RepositoryInterface;
 use Prettus\Repository\Criteria\RequestCriteria;
 
-/**
- * @author Vladimir Barmotin <barmotinvladimir@gmail.com>
- */
 class ExtendedRequestCriteria extends RequestCriteria
 {
     /**

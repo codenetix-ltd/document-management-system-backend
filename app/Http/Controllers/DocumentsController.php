@@ -16,9 +16,6 @@ use Illuminate\Support\Collection;
 use Exception;
 use Illuminate\Validation\ValidationException;
 
-/**
- * Created by Codenetix team <support@codenetix.com>
- */
 class DocumentsController extends Controller
 {
     /**
@@ -58,10 +55,10 @@ class DocumentsController extends Controller
     }
 
     /**
-     * @param $id
+     * @param integer $id
      * @return DocumentResource
      */
-    public function show($id)
+    public function show(int $id)
     {
         $document = $this->service->find($id);
 
@@ -73,10 +70,10 @@ class DocumentsController extends Controller
 
     /**
      * @param DocumentUpdateRequest $request
-     * @param $id
+     * @param integer               $id
      * @return DocumentResource
      */
-    public function update(DocumentUpdateRequest $request, $id)
+    public function update(DocumentUpdateRequest $request, int $id)
     {
         $document = $this->service->find($id);
 
@@ -90,10 +87,10 @@ class DocumentsController extends Controller
 
     /**
      * @param DocumentPatchUpdateRequest $request
-     * @param $id
+     * @param integer                    $id
      * @return DocumentResource
      */
-    public function patchUpdate(DocumentPatchUpdateRequest $request, $id)
+    public function patchUpdate(DocumentPatchUpdateRequest $request, int $id)
     {
         $document = $this->service->find($id);
 
@@ -111,7 +108,7 @@ class DocumentsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(int $id)
     {
         $document = $this->service->findModel($id);
 
@@ -126,7 +123,7 @@ class DocumentsController extends Controller
 
     /**
      * @param DocumentBulkPatchUpdateRequest $request
-     * @param DocumentService $service
+     * @param DocumentService                $service
      *
      * @return DocumentCollectionResource
      * @throws ValidationException
@@ -159,6 +156,11 @@ class DocumentsController extends Controller
         return new DocumentCollectionResource($collection);
     }
 
+    /**
+     * @param Request         $request
+     * @param DocumentService $documentService
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function bulkDestroy(Request $request, DocumentService $documentService)
     {
         $ids = explode(',', $request->get('ids', ''));

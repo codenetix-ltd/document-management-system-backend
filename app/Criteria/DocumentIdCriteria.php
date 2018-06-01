@@ -14,9 +14,16 @@ use Prettus\Repository\Contracts\RepositoryInterface;
  */
 class DocumentIdCriteria implements CriteriaInterface
 {
+    /**
+     * @var integer
+     */
     private $documentId;
 
-    public function __construct($documentId)
+    /**
+     * DocumentIdCriteria constructor.
+     * @param integer $documentId
+     */
+    public function __construct(int $documentId)
     {
         $this->documentId = $documentId;
     }

@@ -19,7 +19,11 @@ class TypeRepositoryEloquent extends BaseRepository implements TypeRepository
         return Type::class;
     }
 
-    public function getTypeByMachineName($machineName): Type
+    /**
+     * @param string $machineName
+     * @return Type
+     */
+    public function getTypeByMachineName(string $machineName): Type
     {
         return $this->findWhere([
             ['machine_name', '=', $machineName]

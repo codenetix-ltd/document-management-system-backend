@@ -22,11 +22,11 @@ class DocumentVersionRepositoryEloquent extends BaseRepository implements Docume
     }
 
     /**
-     * @param $documentId
+     * @param integer $documentId
      * @return mixed
      * @throws RepositoryException
      */
-    public function paginateByDocument($documentId)
+    public function paginateByDocument(int $documentId)
     {
         $this->pushCriteria(new DocumentIdCriteria($documentId));
         return $this->paginate();

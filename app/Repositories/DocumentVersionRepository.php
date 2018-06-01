@@ -9,6 +9,15 @@ use Prettus\Repository\Contracts\RepositoryInterface;
  */
 interface DocumentVersionRepository extends RepositoryInterface
 {
-    public function paginateByDocument($documentId);
-    public function findModel($id);
+    /**
+     * @param integer $documentId
+     * @return mixed
+     */
+    public function paginateByDocument(int $documentId);
+
+    /**
+     * @param integer $id
+     * @return mixed
+     */
+    public function findModel(int $id);
 }

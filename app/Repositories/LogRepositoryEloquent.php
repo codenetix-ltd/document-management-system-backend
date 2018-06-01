@@ -21,12 +21,12 @@ class LogRepositoryEloquent extends BaseRepository implements LogRepository
     }
 
     /**
-     * @param $userId
+     * @param integer $userId
      *
      * @return mixed
      * @throws \Prettus\Repository\Exceptions\RepositoryException
      */
-    public function paginateByUser($userId)
+    public function paginateByUser(int $userId)
     {
         $this->pushCriteria(new UserIdCriteria($userId));
         return $this->paginate();

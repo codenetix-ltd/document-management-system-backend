@@ -4,10 +4,11 @@ namespace App\Repositories\Filters;
 
 use Illuminate\Database\Eloquent\Builder;
 
-/**
- * @author Vladimir Barmotin <barmotinvladimir@gmail.com>
- */
 interface FilterInterface
 {
+    /**
+     * @param Builder $builder
+     * @return void
+     */
     public function apply(Builder $builder);
 }

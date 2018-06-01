@@ -11,9 +11,6 @@ use App\System\AuthBuilders\AuthorizerFactory;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
-/**
- * Created by Codenetix team <support@codenetix.com>
- */
 class UsersController extends Controller
 {
     /**
@@ -32,7 +29,6 @@ class UsersController extends Controller
 
     /**
      * Display a listing of the resource.
-     *
      * @return UserCollectionResource
      */
     public function index()
@@ -66,9 +62,9 @@ class UsersController extends Controller
      *
      * @return UserResource
      */
-    public function show($id)
+    public function show(string $id)
     {
-        if($id == 'current'){
+        if ($id == 'current') {
             $id = Auth::user()->id;
         }
 
@@ -78,10 +74,10 @@ class UsersController extends Controller
 
     /**
      * @param UserUpdateRequest $request
-     * @param $id
+     * @param integer           $id
      * @return UserResource
      */
-    public function update(UserUpdateRequest $request, $id)
+    public function update(UserUpdateRequest $request, int $id)
     {
         if ($id != Auth::user()->id) {
             $user = $this->service->find($id);
@@ -102,7 +98,7 @@ class UsersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(int $id)
     {
         $user = $this->service->findModel($id);
 

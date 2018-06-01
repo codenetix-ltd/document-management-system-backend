@@ -4,9 +4,6 @@ namespace App\Services;
 
 use App\Repositories\PermissionGroupRepository;
 
-/**
- * Created by Codenetix team <support@codenetix.com>
- */
 class PermissionGroupService
 {
     /**

@@ -8,9 +8,6 @@ use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Support\Facades\DB;
 use Tests\CreatesApplication;
 
-/**
- * Created by Codenetix team <support@codenetix.com>
- */
 class AuthTest extends BaseTestCase
 {
     use RefreshDatabase;
@@ -30,11 +27,18 @@ class AuthTest extends BaseTestCase
         $this->artisan("dms:passport-init", []);
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Model|null|object|static
+     */
     private function getPasswordClient()
     {
         return DB::table('oauth_clients')->where('password_client', 1)->first();
     }
 
+    /**
+     * Get password grant token
+     * @return void
+     */
     public function testPasswordGrantToken()
     {
         $client = $this->getPasswordClient();
@@ -54,5 +58,4 @@ class AuthTest extends BaseTestCase
             'refresh_token'
         ]);
     }
-
 }

@@ -10,14 +10,26 @@ use Intervention\Image\Facades\Image;
 
 class FileService
 {
+    /**
+     * @var FileRepository
+     */
     private $repository;
 
+    /**
+     * FileService constructor.
+     * @param FileRepository $repository
+     */
     public function __construct(FileRepository $repository)
     {
         $this->repository = $repository;
     }
 
-    public function createImage(UploadedFile $file, $path = '')
+    /**
+     * @param UploadedFile $file
+     * @param string       $path
+     * @return UploadedFile|mixed
+     */
+    public function createImage(UploadedFile $file, string $path = '')
     {
         $storagePath = Storage::disk('public')->getDriver()->getAdapter()->getPathPrefix();
         $fileName = str_random(16) . '.' . $file->extension();
@@ -33,7 +45,12 @@ class FileService
         return $file;
     }
 
-    public function createFile(UploadedFile $file, $path = '')
+    /**
+     * @param UploadedFile $file
+     * @param string       $path
+     * @return UploadedFile|mixed|\Symfony\Component\HttpFoundation\File\File
+     */
+    public function createFile(UploadedFile $file, string $path = '')
     {
         $storagePath = Storage::disk('public')->getDriver()->getAdapter()->getPathPrefix();
         $fileName = str_random(16) . '.' . $file->extension();
@@ -47,7 +64,11 @@ class FileService
         return $file;
     }
 
-    protected function createDirectory($path): bool
+    /**
+     * @param string $path
+     * @return boolean
+     */
+    protected function createDirectory(string $path): bool
     {
         return File::isDirectory($path) ? true : Storage::disk('public')->makeDirectory($path);
     }

@@ -8,11 +8,17 @@ use App\Context\UserAuthorizeContext;
 use App\Services\Authorizers\DefaultAuthorizer;
 use App\Services\Authorizers\DocumentAuthorizer;
 use App\Services\Authorizers\UserAuthorizer;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
 class AuthorizerFactory
 {
-    public static function make($type = null, $target = null)
+    /**
+     * @param string $type
+     * @param Model  $target
+     * @return DefaultAuthorizer|DocumentAuthorizer|UserAuthorizer
+     */
+    public static function make(string $type = null, Model $target = null)
     {
         switch ($type) {
             case 'document':

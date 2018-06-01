@@ -5,13 +5,11 @@ namespace App\Repositories;
 use App\Criteria\ExtendedRequestCriteria;
 use Prettus\Repository\Exceptions\RepositoryException;
 
-/**
- * @author Vladimir Barmotin <barmotinvladimir@gmail.com>
- */
 abstract class BaseRepository extends \Prettus\Repository\Eloquent\BaseRepository
 {
     /**
      * @throws RepositoryException
+     * @return void
      */
     public function boot()
     {
@@ -20,7 +18,11 @@ abstract class BaseRepository extends \Prettus\Repository\Eloquent\BaseRepositor
         $this->pushCriteria(app(ExtendedRequestCriteria::class));
     }
 
-    public function findModel($id)
+    /**
+     * @param integer $id
+     * @return mixed
+     */
+    public function findModel(int $id)
     {
         return $this->model->find($id);
     }

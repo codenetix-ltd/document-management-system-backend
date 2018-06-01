@@ -3,8 +3,13 @@
 namespace App\System\AuthBuilders;
 
 use App\Services\Authorizers\AAuthorizer;
+use Illuminate\Database\Eloquent\Model;
 
 abstract class AAuthorizerBuilder
 {
-    abstract public function build($target = null) : AAuthorizer;
+    /**
+     * @param Model|null $target
+     * @return AAuthorizer
+     */
+    abstract public function build(Model $target = null) : AAuthorizer;
 }

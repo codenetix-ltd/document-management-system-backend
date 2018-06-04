@@ -25,7 +25,7 @@ class DocumentCreateRequest extends FormRequest
     {
         return [
             'ownerId' => 'integer|required',
-            'substituteDocumentId' => 'integer',
+            'substituteDocumentId' => 'nullable|integer',
 
             'actualVersion' => 'array|required',
 
@@ -33,15 +33,15 @@ class DocumentCreateRequest extends FormRequest
 
             'actualVersion.templateId' => 'integer|required|exists:templates,id',
 
-            'actualVersion.labelIds' => 'array|required',
+            'actualVersion.labelIds' => 'sometimes|array',
             'actualVersion.labelIds.*' => 'integer|exists:labels,id',
 
-            'actualVersion.fileIds' => 'array|required',
+            'actualVersion.fileIds' => 'sometimes|array',
             'actualVersion.fileIds.*' => 'integer|exists:files,id',
 
-            'actualVersion.comment' => 'string|required',
+            'actualVersion.comment' => 'sometimes|string',
 
-            'actualVersion.attributeValues' => 'array|required',
+            'actualVersion.attributeValues' => 'sometimes|array',
             'actualVersion.attributeValues.*.id' => 'required|integer|exists:attributes,id',
             'actualVersion.attributeValues.*.type' => 'required|string|exists:types,machine_name',
             'actualVersion.attributeValues.*.value' => 'required',

@@ -7,6 +7,8 @@ use App\Repositories\RoleRepository;
 
 class RoleService
 {
+    const ROLE_ADMIN = 'admin';
+
     /**
      * @var RoleRepository
      */

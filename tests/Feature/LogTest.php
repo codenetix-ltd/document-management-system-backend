@@ -62,10 +62,30 @@ class LogTest extends TestCase
 
         $this->assetJsonPaginationStructure($response);
 
-        $response->assertStatus(Response::HTTP_OK);
-        $responseArr = $response->decodeResponseJson();
+        $decodedResponse = $response->decodeResponseJson();
+        $item = $decodedResponse['data'][0];
 
-        $this->assertCount(5, $responseArr['data']);
+        $response->assertJsonStructure([
+            'id',
+            'user' => [
+                'id',
+                'fullName',
+                'email',
+            ],
+            'action',
+            'referenceId',
+            'referenceType',
+            'link' => [
+                'title',
+                'url'
+            ],
+            'createdAt',
+            'updatedAt'
+        ], $item);
+
+        $response->assertStatus(Response::HTTP_OK);
+
+        $this->assertCount(10, $decodedResponse['data']);
     }
 
     /**

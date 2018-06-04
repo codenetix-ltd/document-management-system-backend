@@ -2,6 +2,7 @@
 
 namespace App\Entities;
 
+use App\Contracts\Entity\IHasTitle;
 use Carbon\Carbon;
 use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
@@ -14,7 +15,7 @@ use Prettus\Repository\Traits\TransformableTrait;
  * @property Carbon $createdAt
  * @property Carbon $updatedAt
  */
-class Label extends BaseEntity implements Transformable
+class Label extends BaseEntity implements Transformable, IHasTitle
 {
     use TransformableTrait;
 
@@ -24,4 +25,9 @@ class Label extends BaseEntity implements Transformable
      * @var array
      */
     protected $fillable = ['name'];
+
+    public function getTitle(): string
+    {
+        return $this->name;
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Entities;
 
+use App\Contracts\Entity\IHasTitle;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Passport\HasApiTokens;
@@ -21,7 +22,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property Collection|Template[] $templates
  * @property Collection|Role[] $roles
  */
-class User extends Authenticatable implements Transformable
+class User extends Authenticatable implements Transformable, IHasTitle
 {
     use TransformableTrait;
     use HasApiTokens;
@@ -87,5 +88,36 @@ class User extends Authenticatable implements Transformable
         }
 
         return $result;
+    }
+
+    public function getTitle(): string
+    {
+        return $this->fullName;
+    }
+
+    public function hasAnyRole($roles)
+    {
+        if (is_array($roles)) {
+            return $this->roles()->whereIn('name', $roles)->exists();
+        } else {
+            return $this->roles()->where('name', $roles)->exists();
+        }
+    }
+
+    public function hasAnyPermission($permissions)
+    {
+        if (is_array($permissions)) {
+            foreach ($permissions as $permission) {
+                foreach ($this->roles as $role) {
+                    if ($role->hasPermission($permission)) return true;
+                }
+            }
+        } else {
+            foreach ($this->roles as $role) {
+                if ($role->hasPermission($permissions)) return true;
+            }
+        }
+
+        return false;
     }
 }

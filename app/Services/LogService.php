@@ -25,9 +25,9 @@ class LogService implements ILogger
      * @param integer $userId
      * @return mixed
      */
-    public function list(int $userId)
+    public function list(int $userId = null)
     {
-        return $this->repository->paginateByUser($userId);
+        return is_null($userId) ? $this->repository->paginate() : $this->repository->paginateByUser($userId);
     }
 
     /**
@@ -40,10 +40,10 @@ class LogService implements ILogger
     public function write(int $userId, string $body, int $referenceId, string $referenceType)
     {
         $this->repository->create([
-            'user_id' => $userId,
+            'userId' => $userId,
             'body' => $body,
-            'reference_id' => $referenceId,
-            'reference_type' => $referenceType
+            'referenceId' => $referenceId,
+            'referenceType' => $referenceType
         ]);
     }
 }

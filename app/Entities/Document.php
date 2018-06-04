@@ -2,6 +2,7 @@
 
 namespace App\Entities;
 
+use App\Contracts\Entity\IHasTitle;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Collection;
@@ -24,7 +25,7 @@ use Prettus\Repository\Traits\TransformableTrait;
  * @property Carbon $updatedAt
  * @property Carbon $deletedAt
  */
-class Document extends BaseEntity implements Transformable
+class Document extends BaseEntity implements Transformable, IHasTitle
 {
     use TransformableTrait;
     use SoftDeletes;
@@ -69,5 +70,10 @@ class Document extends BaseEntity implements Transformable
     public function logs()
     {
         return $this->morphMany(Log::class, 'reference');
+    }
+
+    public function getTitle(): string
+    {
+        return $this->documentActualVersion->name;
     }
 }

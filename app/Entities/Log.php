@@ -29,7 +29,7 @@ class Log extends BaseEntity implements Transformable
      * @var array
      */
     protected $fillable = [
-        'body', 'user_id', 'reference_id', 'reference_type'
+        'body', 'userId', 'referenceId', 'referenceType'
     ];
 
     public function reference()

@@ -2,9 +2,9 @@
 
 return [
     'morphMap' => [
-        'user' => 'App\User',
-        'document' => 'App\Document',
-        'template' => 'App\Template',
-        'label' => 'App\Label'
+        'user' => 'App\Entities\User',
+        'document' => 'App\Entities\Document',
+        'template' => 'App\Entities\Template',
+        'label' => 'App\Entities\Label'
     ]
 ];

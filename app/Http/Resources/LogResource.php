@@ -25,6 +25,10 @@ class LogResource extends JsonResource
             "id" => $this->resource->id,
             'user' => (new UserResource($this->resource->user)),
             'action' => $this->resource->body,
+            'link' => [
+                'title' => $this->resource->reference->getTitle(),
+                'url' => $this->resource->reference->getTable() . '/' . $this->resource->reference->id
+            ],
             "referenceType" => $this->resource->referenceType,
             "referenceId" => $this->resource->referenceId,
             "createdAt" => $this->resource->createdAt->timestamp,

@@ -26,7 +26,7 @@ class DocumentUpdateRequest extends FormRequest
         return [
             'createNewVersion' => 'boolean|required',
             'ownerId' => 'integer|required',
-            'substituteDocumentId' => 'integer',
+            'substituteDocumentId' => 'nullable|integer',
 
             'actualVersion' => 'array|required',
 

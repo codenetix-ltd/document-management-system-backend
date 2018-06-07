@@ -95,6 +95,17 @@ class AttributeService
         return $this->repository->find($attribute->id);
     }
 
+    public function updateOrderOfAttributes(int $templateId, array $ids)
+    {
+        foreach ($ids as $attributeOrder => $attributeId) {
+            try {
+                $this->update($templateId, $attributeId, ['order' => $attributeOrder]);
+            } catch (Exception $e) {
+
+            }
+        }
+    }
+
     /**
      * @param integer $templateId
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator

@@ -75,7 +75,8 @@ class UserStub extends AbstractStub
             'email' => $this->model->email,
             'templatesIds' => $this->templateIds,
             'avatarId' => $this->model->avatar->id,
-            'avatar' => (new FileStub([], true, [], $this->model->avatar))->buildResponse()
+            'avatar' => (new FileStub([], true, [], $this->model->avatar))->buildResponse(),
+            'rolesIds' => $this->model->roles->pluck('id')
         ];
     }
 }

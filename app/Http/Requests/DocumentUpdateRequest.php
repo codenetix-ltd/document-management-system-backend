@@ -34,15 +34,15 @@ class DocumentUpdateRequest extends FormRequest
 
             'actualVersion.templateId' =>  'integer|required|exists:templates,id',
 
-            'actualVersion.labelIds' => 'array|present',
+            'actualVersion.labelIds' => 'sometimes|array',
             'actualVersion.labelIds.*' => 'integer|exists:labels,id',
 
-            'actualVersion.fileIds' => 'array|present',
+            'actualVersion.fileIds' => 'sometimes|array',
             'actualVersion.fileIds.*' => 'integer|exists:files,id',
 
-            'actualVersion.comment' => 'string|present',
+            'actualVersion.comment' => 'sometimes|string',
 
-            'actualVersion.attributeValues' => 'array|present',
+            'actualVersion.attributeValues' => 'sometimes|array',
             'actualVersion.attributeValues.*.id' => 'required|integer|exists:attributes,id',
             'actualVersion.attributeValues.*.type' => 'required|string|exists:types,machine_name',
             'actualVersion.attributeValues.*.value' => 'required',

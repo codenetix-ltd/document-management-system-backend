@@ -6,8 +6,10 @@ use App\Http\Requests\TemplateCreateRequest;
 use App\Http\Requests\TemplateUpdateRequest;
 use App\Http\Resources\TemplateCollectionResource;
 use App\Http\Resources\TemplateResource;
+use App\Services\AttributeService;
 use App\Services\TemplateService;
 use App\System\AuthBuilders\AuthorizerFactory;
+use Exception;
 use Illuminate\Http\Response;
 
 class TemplatesController extends Controller
@@ -18,12 +20,19 @@ class TemplatesController extends Controller
     protected $service;
 
     /**
+     * @var AttributeService
+     */
+    protected $attributeService;
+
+    /**
      * TemplatesController constructor.
      * @param TemplateService $service
+     * @param AttributeService $attributeService
      */
-    public function __construct(TemplateService $service)
+    public function __construct(TemplateService $service, AttributeService $attributeService)
     {
         $this->service = $service;
+        $this->attributeService = $attributeService;
     }
 
     /**
@@ -73,6 +82,10 @@ class TemplatesController extends Controller
 
         $authorizer = AuthorizerFactory::make('template', $template);
         $authorizer->authorize('template_update');
+
+        if ($request->get('orderOfAttributes')) {
+            $this->attributeService->updateOrderOfAttributes($id, $request->get('orderOfAttributes'));
+        }
 
         $template = $this->service->update($request->all(), $id);
         return new TemplateResource($template);

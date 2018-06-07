@@ -3,6 +3,7 @@
 namespace Tests\Stubs;
 
 use App\Entities\File;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * Class FileStub
@@ -33,7 +34,7 @@ class FileStub extends AbstractStub
     {
         return [
             'name' => $this->model->originalName,
-            'url' => $this->model->path
+            'url' => url('/') . Storage::url($this->model->path)
         ];
     }
 }

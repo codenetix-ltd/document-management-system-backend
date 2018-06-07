@@ -5,7 +5,7 @@ use Faker\Generator as Faker;
 
 $factory->define(File::class, function (Faker $faker) {
     return [
-        'path' => $faker->unique()->url,
+        'path' => '/storage/files/' . $faker->unique()->word,
         'original_name' => $faker->unique()->word
     ];
 });

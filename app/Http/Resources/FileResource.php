@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use App\Entities\File;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * @property File $resource
@@ -21,7 +22,7 @@ class FileResource extends JsonResource
         return [
             'id' => $this->resource->id,
             'name'=>$this->resource->originalName,
-            'url' => $this->resource->path
+            'url' => url('/') . Storage::url($this->resource->path)
         ];
     }
 }

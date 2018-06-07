@@ -63,7 +63,7 @@ class TemplateTest extends TestCase
      */
     public function testTemplateStore()
     {
-        $templateStub = new TemplateStub();
+        $templateStub = new TemplateStub([],false, [],null, false);
 
         $response = $this->json('POST', self::API_ROOT . 'templates', $templateStub->buildRequest());
 
@@ -115,11 +115,13 @@ class TemplateTest extends TestCase
     public function testTemplateUpdate()
     {
         $templateStub = new TemplateStub([], true);
+
         $template = $templateStub->getModel();
         $newTemplateName = 'new template name';
 
         $response = $this->json('PUT', self::API_ROOT . 'templates/' . $template->id, $templateStub->buildRequest([
-            'name' => $newTemplateName
+            'name' => $newTemplateName,
+            'orderOfAttributes' => array_reverse($template->attributes->pluck('id')->toArray())
         ]));
 
         $templateUpdated = Template::find($response->decodeResponseJson('id'));
@@ -130,7 +132,8 @@ class TemplateTest extends TestCase
                 'id' => $templateUpdated->id,
                 'name' => $newTemplateName,
                 'createdAt' => $templateUpdated->createdAt->timestamp,
-                'updatedAt' => $templateUpdated->updatedAt->timestamp
+                'updatedAt' => $templateUpdated->updatedAt->timestamp,
+                'attributes' => $response->decodeResponseJson('attributes')
             ]));
     }
 

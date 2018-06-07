@@ -37,8 +37,8 @@ class TemplateStub extends AbstractStub
      */
     public function __construct(array $valuesToOverride = [], bool $persisted = false, array $states = [], ?Model $model = null, bool $withAttributes = true)
     {
-        parent::__construct($valuesToOverride, $persisted, $states, $model);
         $this->withAttributes = $withAttributes;
+        parent::__construct($valuesToOverride, $persisted, $states, $model);
     }
 
     /**
@@ -50,10 +50,10 @@ class TemplateStub extends AbstractStub
     protected function buildModel(array $valuesToOverride = [], bool $persisted = false, array $states = []): void
     {
         parent::buildModel($valuesToOverride, $persisted, $states);
-
         $this->attributeStubs = new Collection();
         for ($i = 0; $i < 3 && $this->withAttributes; ++$i) {
             $this->attributeStubs->push(new AttributeWithTypeStringStub(['template_id' => $this->model->id], $persisted, []));
+
         }
     }
 

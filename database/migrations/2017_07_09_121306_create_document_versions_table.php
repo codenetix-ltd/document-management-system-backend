@@ -19,7 +19,7 @@ class CreateDocumentVersionsTable extends Migration
             $table->unsignedInteger('template_id');
             $table->unsignedInteger('document_id');
             $table->string('version_name', 255);
-            $table->string('name', 255)->unique();
+            $table->string('name', 255);
             $table->string('comment', 2048)->default('');
             $table->timestamps();
         });

@@ -49,6 +49,7 @@ class DocumentVersionTest extends TestCase
             ->assertStatus(201)
             ->assertExactJson($documentVersionStub->buildResponse([
                 'id' => $documentVersion->id,
+                'versionName' => $documentVersion->versionName,
                 'createdAt' => $documentVersion->createdAt->timestamp,
                 'updatedAt' => $documentVersion->updatedAt->timestamp
             ]));

@@ -42,4 +42,3 @@ Route::prefix('v1')->middleware('auth:api')->group(function () {
 
     Route::post('oauth/logout', 'Auth\LoginController@logout');
 });
-

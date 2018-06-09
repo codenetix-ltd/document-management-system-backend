@@ -8,7 +8,7 @@ class AttributeTypeCaster
 {
     /**
      * @param AttributeValue $attributeValue
-     * @return bool|float|string
+     * @return boolean|float|string
      */
     public static function getValue(AttributeValue $attributeValue)
     {

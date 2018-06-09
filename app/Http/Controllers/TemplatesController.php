@@ -26,7 +26,7 @@ class TemplatesController extends Controller
 
     /**
      * TemplatesController constructor.
-     * @param TemplateService $service
+     * @param TemplateService  $service
      * @param AttributeService $attributeService
      */
     public function __construct(TemplateService $service, AttributeService $attributeService)

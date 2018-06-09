@@ -23,7 +23,7 @@ class AttributeUpdateRequest extends ABaseFormRequest
     {
         return [
             'name' => 'sometimes|required|string|max:255',
-            'data' => 'sometimes|required|array'
+            'data' => 'sometimes|nullable|array'
         ];
     }
 }

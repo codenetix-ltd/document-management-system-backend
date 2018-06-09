@@ -63,6 +63,7 @@ class DocumentVersionService
         $documentVersion = $this->repository->create($data);
         $documentVersion->files()->sync($data['fileIds']);
         $documentVersion->labels()->sync($data['labelIds']);
+
         foreach ($data['attributeValues'] as $attributeValue) {
             $this->attributeValueService->create([
                 'attributeId' => $attributeValue['id'],

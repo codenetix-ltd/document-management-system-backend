@@ -36,7 +36,7 @@ Route::prefix('v1')->middleware('auth:api')->group(function () {
     Route::delete('documents', 'DocumentsController@bulkDestroy');
     Route::patch('documents', 'DocumentsController@bulkPatchUpdate');
 
-    Route::apiResource('documents/{documentId}/documentVersions', 'DocumentVersionsController');
+    Route::apiResource('documents/{documentId}/versions', 'DocumentVersionsController');
 
     Route::post('files', 'FileController@uploadFile');
 

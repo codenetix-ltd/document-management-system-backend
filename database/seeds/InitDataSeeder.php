@@ -31,6 +31,5 @@ class InitDataSeeder extends Seeder
         factory(Type::class)->create(['name' => 'Numeric', 'machine_name' => 'numeric']);
         factory(Type::class)->create(['name' => 'Boolean', 'machine_name' => 'boolean']);
         factory(Type::class)->create(['name' => 'Table', 'machine_name' => 'table']);
-        factory(Type::class)->create(['name' => 'Value with deviations', 'machine_name' => 'value_with_deviations']);
     }
 }

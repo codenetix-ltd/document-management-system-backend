@@ -1,4 +1,5 @@
 build:
+	export LOCAL_IP="$(shell ifconfig | sed -En 's/127.0.0.1//;s/.*inet (addr:)?(([0-9]*\.){3}[0-9]*).*/\2/p' | head -n1)"; \
 	docker-compose -f docker-compose.yml build
 
 push:

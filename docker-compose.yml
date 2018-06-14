@@ -9,7 +9,7 @@ services:
       dockerfile: Dockerfile
       args:
         - ENABLE_OPCACHE=false
-        - INSTALL_XDEBUG=true
+        - INSTALL_XDEBUG=false
     environment:
       APP_ENV: local
       APP_DEBUG: 'true'
@@ -18,7 +18,7 @@ services:
       DB_HOST: mysql
       DB_PASSWORD: dms
       DB_USERNAME: root
-      XDEBUG_CONFIG: 'remote_host=192.168.88.109 remote_connect_back=0 idekey=PHPSTORM'
+      XDEBUG_CONFIG: 'remote_host=${LOCAL_IP} remote_connect_back=0 idekey=PHPSTORM'
     networks:
       - backend
     volumes:

@@ -53,6 +53,19 @@ release:
   tags:
     - docker-build
 
+deploy_dev:
+  image: codenetix/kubectl
+  variables:
+    GIT_STRATEGY: none
+  stage: deploy
+  only:
+    - dev
+  script:
+    - kubectl set env deploy/dms-backend-deployment DEPLOY_DATE="$(date)" -n dms-dev
+  tags:
+    - docker-build
+
+
 #deploy_dev:
 #  variables:
 #    GIT_STRATEGY: none

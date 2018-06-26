@@ -9,6 +9,7 @@ use App\Repositories\Filters\NullFilter;
 use App\Repositories\Filters\OneOfFilter;
 use App\Repositories\Filters\RelationFilter;
 use App\Repositories\Filters\StartsWithFilter;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -94,11 +95,13 @@ class DocumentFilterCriteria implements CriteriaInterface
     private function applyDateFilters(Builder $builder, $field, $filters, $dbAttribute)
     {
         if (isset($filters[$field.'.from'])) {
-            (new DateFilter($dbAttribute, $filters[$field.'.from'], DateFilter::FROM))->apply($builder);
+            $carbon = Carbon::parse(str_replace('"', '', $filters[$field.'.from']))->startOfDay();
+            (new DateFilter($dbAttribute, $carbon, DateFilter::FROM))->apply($builder);
         }
 
         if (isset($filters[$field.'.to'])) {
-            (new DateFilter($dbAttribute, $filters[$field.'.from'], DateFilter::TO))->apply($builder);
+            $carbon = Carbon::parse(str_replace('"', '', $filters[$field.'.to']))->endOfDay();
+            (new DateFilter($dbAttribute, $carbon, DateFilter::TO))->apply($builder);
         }
     }
 }

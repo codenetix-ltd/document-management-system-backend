@@ -30,6 +30,8 @@ class UserCreateRequest extends FormRequest
             'email' => 'required|email|unique:users',
             'templatesIds' => 'sometimes|array',
             'templatesIds.*' => 'integer|exists:templates,id',
+            'rolesIds' => 'sometimes|array',
+            'rolesIds.*' => 'integer|exists:roles,id',
             'avatarId' => 'sometimes|integer|exists:files,id'
         ];
     }

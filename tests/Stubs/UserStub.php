@@ -2,6 +2,7 @@
 
 namespace Tests\Stubs;
 
+use App\Entities\Role;
 use App\Entities\Template;
 use App\Entities\User;
 use Illuminate\Database\Eloquent\Model;
@@ -15,6 +16,9 @@ class UserStub extends AbstractStub
     /** @var array $templateIds */
     private $templateIds = [];
 
+    /** @var array $roleIds */
+    private $roleIds = [];
+
     /**
      * @param array   $valuesToOverride
      * @param boolean $persisted
@@ -26,9 +30,11 @@ class UserStub extends AbstractStub
         parent::buildModel($valuesToOverride, $persisted, $states);
 
         $this->templateIds = factory(Template::class, 5)->create()->pluck('id')->toArray();
+        $this->roleIds = Role::all()->pluck('id')->toArray();
 
         if ($persisted) {
             $this->model->templates()->sync($this->templateIds);
+            $this->model->roles()->sync($this->roleIds);
         }
     }
 
@@ -41,6 +47,7 @@ class UserStub extends AbstractStub
         parent::initiateByModel($model);
 
         $this->templateIds = $this->model->templates->pluck('id')->toArray();
+        $this->roleIds = $this->model->roles->pluck('id')->toArray();
     }
 
 
@@ -61,6 +68,7 @@ class UserStub extends AbstractStub
             'email' => $this->model->email,
             'fullName' => $this->model->fullName,
             'templatesIds' => $this->templateIds,
+            'rolesIds' => $this->roleIds,
             'avatarId' => $this->model->avatar->id,
         ];
     }
@@ -74,9 +82,9 @@ class UserStub extends AbstractStub
             'fullName' => $this->model->fullName,
             'email' => $this->model->email,
             'templatesIds' => $this->templateIds,
+            'rolesIds' => $this->roleIds,
             'avatarId' => $this->model->avatar->id,
             'avatar' => (new FileStub([], true, [], $this->model->avatar))->buildResponse(),
-            'rolesIds' => $this->model->roles->pluck('id')
         ];
     }
 }

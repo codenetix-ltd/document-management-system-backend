@@ -51,6 +51,7 @@ class UserService
         /** @var User $user */
         $user = $this->repository->create($data);
         $user->templates()->sync($data['templatesIds']);
+        $user->roles()->sync($data['rolesIds']);
 
         Event::dispatch(new UserCreateEvent($user));
 
@@ -67,6 +68,7 @@ class UserService
         /** @var User $user */
         $user = $this->repository->update($data, $id);
         $user->templates()->sync($data['templatesIds']);
+        $user->roles()->sync($data['rolesIds']);
 
         Event::dispatch(new UserUpdateEvent($user));
 

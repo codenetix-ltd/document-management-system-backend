@@ -85,6 +85,7 @@ class UserStub extends AbstractStub
             'rolesIds' => $this->roleIds,
             'avatarId' => $this->model->avatar->id,
             'avatar' => (new FileStub([], true, [], $this->model->avatar))->buildResponse(),
+            'roles' => null
         ];
     }
 }

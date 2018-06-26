@@ -29,7 +29,8 @@ class UserResource extends JsonResource
             'templatesIds' => $this->resource->templates->pluck('id')->toArray(),
             'avatar' => new FileResource($this->resource->avatar),
             'avatarId' => $this->resource->avatar->id,
-            'rolesIds' => $this->resource->roles->pluck('id')
+            'rolesIds' => $this->resource->roles->pluck('id'),
+            'roles' => $request->route('user') == 'current' ? RoleResource::collection($this->resource->roles) : null
         ];
     }
 }

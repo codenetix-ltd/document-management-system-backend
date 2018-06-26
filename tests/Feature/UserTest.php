@@ -61,6 +61,7 @@ class UserTest extends TestCase
 
     /**
      * Get current user
+     * @throws \Exception
      * @return void
      */
     public function testCurrentUserGet()
@@ -71,7 +72,9 @@ class UserTest extends TestCase
 
         $response
             ->assertStatus(200)
-            ->assertExactJson($userStub->buildResponse());
+            ->assertExactJson($userStub->buildResponse([
+                'roles' => $response->decodeResponseJson('roles')
+            ]));
     }
 
 

@@ -95,7 +95,6 @@ class UserTest extends TestCase
         $response->assertStatus(Response::HTTP_CREATED);
 
         $user = User::find($response->decodeResponseJson()['id']);
-
         $response
             ->assertExactJson($userStub->buildResponse([
                 'id' => $user->id

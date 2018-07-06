@@ -17,6 +17,7 @@ build:
   stage: build
   script:
     - docker build --pull -t $CONTAINER_IMAGE --build-arg INSTALL_XDEBUG=true .
+    - docker tag $CONTAINER_IMAGE
   tags:
     - docker-build
 

@@ -8,7 +8,7 @@ stages:
 
 variables:
 #  CONTAINER_IMAGE: $CI_REGISTRY_IMAGE:$CI_BUILD_REF_NAME
-  CONTAINER_IMAGE: codenetix/laravel-dms-backend:$CI_BUILD_REF_NAME
+  CONTAINER_IMAGE: codenetix/laravel-dms-backend
 
 #before_script:
 #  - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
@@ -46,7 +46,8 @@ release:
   stage: release
   script:
     - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASSWORD
-    - docker push $CONTAINER_IMAGE
+    - docker tag $CI_BUILD_REF_NAME $CI_BUILD_REF_NAME:$CI_BUILD_REF_NAME
+    - docker push $CONTAINER_IMAGE:$CI_BUILD_REF_NAME
   only:
     - dev
     - master

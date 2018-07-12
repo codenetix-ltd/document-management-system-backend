@@ -2,7 +2,7 @@ image: docker
 
 stages:
   - build
-  - test
+#  - test
   - release
   - deploy
 
@@ -20,27 +20,27 @@ build:
   tags:
     - docker-build
 
-test:
-  stage: test
-  image:
-    name: $CONTAINER_IMAGE
-  services:
-    - mysql:5.7.22
-  variables:
-    MYSQL_DATABASE: dms_test
-    MYSQL_ROOT_PASSWORD: dms
-    APP_ENV: test
-    DB_DATABASE: dms_test
-    DB_HOST: mysql
-    DB_PASSWORD: dms
-    DB_USERNAME: root
-    APP_KEY: '"base64:N5A11hYX5GxzTqEPRtoRHjtdtqg65hGpw2Qis1V4b8M="'
-    GIT_STRATEGY: none
-  script:
-    - /var/www/vendor/bin/phpcs --standard=/var/www/phpcs.xml --runtime-set ignore_warnings_on_exit true
-    - /var/www/vendor/bin/phpunit /var/www/tests/Feature -c /var/www/phpunit.xml --coverage-text --colors=never
-  tags:
-    - docker-build
+#test:
+#  stage: test
+#  image:
+#    name: $CONTAINER_IMAGE
+#  services:
+#    - mysql:5.7.22
+#  variables:
+#    MYSQL_DATABASE: dms_test
+#    MYSQL_ROOT_PASSWORD: dms
+#    APP_ENV: test
+#    DB_DATABASE: dms_test
+#    DB_HOST: mysql
+#    DB_PASSWORD: dms
+#    DB_USERNAME: root
+#    APP_KEY: '"base64:N5A11hYX5GxzTqEPRtoRHjtdtqg65hGpw2Qis1V4b8M="'
+#    GIT_STRATEGY: none
+#  script:
+#    - /var/www/vendor/bin/phpcs --standard=/var/www/phpcs.xml --runtime-set ignore_warnings_on_exit true
+#    - /var/www/vendor/bin/phpunit /var/www/tests/Feature -c /var/www/phpunit.xml --coverage-text --colors=never
+#  tags:
+#    - docker-build
 
 release:
   stage: release

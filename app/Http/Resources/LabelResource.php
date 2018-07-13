@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Entities\Label;
+use App\Facades\AuthPermissions;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
@@ -25,7 +26,8 @@ class LabelResource extends JsonResource
             'id' => $this->resource->id,
             'name' => $this->resource->name,
             'createdAt' => $this->resource->createdAt->timestamp,
-            'updatedAt' => $this->resource->updatedAt->timestamp
+            'updatedAt' => $this->resource->updatedAt->timestamp,
+            'authPermissions' => AuthPermissions::getList('label', $this->resource)
         ];
     }
 }

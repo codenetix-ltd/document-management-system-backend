@@ -96,7 +96,8 @@ class TemplateStub extends AbstractStub
             'name' => $this->model->name,
             'attributes' => $this->attributeStubs->map(function (AttributeWithTypeStringStub $item) {
                 return $item->buildResponse();
-            })->toArray()
+            })->toArray(),
+            'authPermissions' => ['template_view' , 'template_update',  'template_delete', 'template_create']
         ];
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Entities\User;
+use App\Facades\AuthPermissions;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -30,7 +31,8 @@ class UserResource extends JsonResource
             'avatar' => new FileResource($this->resource->avatar),
             'avatarId' => $this->resource->avatar->id,
             'rolesIds' => $this->resource->roles->pluck('id'),
-            'roles' => $request->route('user') == 'current' ? RoleResource::collection($this->resource->roles) : null
+            'roles' => $request->route('user') == 'current' ? RoleResource::collection($this->resource->roles) : null,
+            'authPermissions' => AuthPermissions::getList('user', $this->resource)
         ];
     }
 }

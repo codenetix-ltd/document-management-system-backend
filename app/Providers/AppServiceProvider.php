@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Contracts\Helpers\ILogger;
+use App\Services\AuthPermissions;
 use App\Services\LogService;
 use Illuminate\Http\Resources\Json\Resource;
 use Illuminate\Support\ServiceProvider;
@@ -27,5 +28,6 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind(ILogger::class, LogService::class);
+        $this->app->bind('AuthPermissions', AuthPermissions::class);
     }
 }

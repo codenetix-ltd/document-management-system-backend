@@ -3,7 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Entities\Document;
-use App\System\AuthBuilders\AuthorizerFactory;
+use App\Facades\AuthPermissions;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
@@ -31,28 +31,7 @@ class DocumentResource extends JsonResource
             'actualVersion' => new DocumentVersionResource($this->resource->documentActualVersion),
             'version' => $this->resource->documentActualVersion->versionName,
             'owner' => new UserResource($this->resource->owner),
-            'actions' => $this->buildAvailableActions()
+            'authPermissions' => AuthPermissions::getList('document', $this->resource)
         ];
-    }
-
-    private function buildAvailableActions()
-    {
-        $actions = [];
-        $authorizer = AuthorizerFactory::make('document', $this->resource);
-
-        if ($authorizer->isAuthorize('document_view')) {
-            array_push($actions, 'view');
-        }
-        if ($authorizer->isAuthorize('document_update')) {
-            array_push($actions, 'update');
-        }
-        if ($authorizer->isAuthorize('document_delete')) {
-            array_push($actions, 'delete');
-        }
-        if ($authorizer->isAuthorize('document_archive')) {
-            array_push($actions, 'archive');
-        }
-
-        return $actions;
     }
 }

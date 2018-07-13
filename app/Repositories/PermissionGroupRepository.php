@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use Illuminate\Support\Collection;
 use Prettus\Repository\Contracts\RepositoryInterface;
 
 /**
@@ -9,5 +10,9 @@ use Prettus\Repository\Contracts\RepositoryInterface;
  */
 interface PermissionGroupRepository extends RepositoryInterface
 {
-    //
+    /**
+     * @param string $permissionGroupName
+     * @return Collection
+     */
+    public function getPermissionsName(string $permissionGroupName): Collection;
 }

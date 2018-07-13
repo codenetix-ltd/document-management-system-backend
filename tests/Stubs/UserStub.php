@@ -85,7 +85,8 @@ class UserStub extends AbstractStub
             'rolesIds' => $this->roleIds,
             'avatarId' => $this->model->avatar->id,
             'avatar' => (new FileStub([], true, [], $this->model->avatar))->buildResponse(),
-            'roles' => null
+            'roles' => null,
+            'authPermissions' => ['user_view' , 'user_update',  'user_delete', 'user_create']
         ];
     }
 }

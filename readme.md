@@ -6,6 +6,27 @@
 
 ## Installation
 
-```
-TODO
-```
+### Production
+
+- Download base docker-compose file
+    > curl //TODO
+
+- Override it with your environments
+
+- Initiate database migrations and seeders (only once before first start)
+    > docker-compose up init
+
+- Start application
+    > docker-compose up -d backend-app
+
+### Develop
+- Clone repository
+
+- Initiate database migrations and seeders (only once before first start)
+    > make init_dev
+
+- Start application
+    > make up_dev
+
+- Run tests
+    > make test

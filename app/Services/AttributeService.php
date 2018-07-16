@@ -95,13 +95,17 @@ class AttributeService
         return $this->repository->find($attribute->id);
     }
 
+    /**
+     * @param integer $templateId
+     * @param array   $ids
+     * @return void
+     */
     public function updateOrderOfAttributes(int $templateId, array $ids)
     {
         foreach ($ids as $attributeOrder => $attributeId) {
             try {
                 $this->update($templateId, $attributeId, ['order' => $attributeOrder]);
             } catch (Exception $e) {
-
             }
         }
     }

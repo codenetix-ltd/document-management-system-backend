@@ -38,6 +38,19 @@ abstract class AAuthorizer
     }
 
     /**
+     * @param string $permission
+     * @return boolean
+     */
+    public function isAuthorize(string $permission)
+    {
+        try {
+            return $this->authorize($permission);
+        } catch (AccessDeniedHttpException $exception) {
+            return false;
+        }
+    }
+
+    /**
      * @return AbstractPermissionFactoryMethod
      */
     abstract protected function getPermissionFactoryMethod(): AbstractPermissionFactoryMethod;

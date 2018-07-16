@@ -53,7 +53,6 @@ class TemplateStub extends AbstractStub
         $this->attributeStubs = new Collection();
         for ($i = 0; $i < 3 && $this->withAttributes; ++$i) {
             $this->attributeStubs->push(new AttributeWithTypeStringStub(['template_id' => $this->model->id], $persisted, []));
-
         }
     }
 
@@ -97,7 +96,8 @@ class TemplateStub extends AbstractStub
             'name' => $this->model->name,
             'attributes' => $this->attributeStubs->map(function (AttributeWithTypeStringStub $item) {
                 return $item->buildResponse();
-            })->toArray()
+            })->toArray(),
+            'authPermissions' => ['template_view' , 'template_update',  'template_delete', 'template_create']
         ];
     }
 }

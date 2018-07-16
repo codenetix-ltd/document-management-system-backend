@@ -24,7 +24,7 @@ class LogsController extends Controller
 
     /**
      * LogsController constructor.
-     * @param LogService $service
+     * @param LogService  $service
      * @param RoleService $roleService
      */
     public function __construct(LogService $service, RoleService $roleService)
@@ -33,9 +33,8 @@ class LogsController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
-     *
-     * @param Guard $guard
+     * @param Request $request
+     * @param Guard   $guard
      * @return LogCollectionResource
      */
     public function index(Request $request, Guard $guard)
@@ -51,8 +50,6 @@ class LogsController extends Controller
         } else {
             $logs = $this->service->list($user->getAuthIdentifier());
         }
-
-
 
         return new LogCollectionResource($logs);
     }

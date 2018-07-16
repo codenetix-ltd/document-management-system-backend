@@ -40,6 +40,7 @@ class LabelStub extends AbstractStub
     {
         return [
             'name' => $this->model->name,
+            'authPermissions' => ['label_view' , 'label_update',  'label_delete', 'label_create']
         ];
     }
 }

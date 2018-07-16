@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Entities\Template;
+use App\Facades\AuthPermissions;
 use App\Services\AttributeService;
 use Illuminate\Http\Resources\Json\Resource;
 
@@ -29,7 +30,8 @@ class TemplateResource extends Resource
             'name' => $this->resource->name,
             'attributes' => new AttributeCollectionResource($this->resource->attributes, $attributeService),
             'createdAt' => $this->resource->createdAt->timestamp,
-            'updatedAt' => $this->resource->updatedAt->timestamp
+            'updatedAt' => $this->resource->updatedAt->timestamp,
+            'authPermissions' => AuthPermissions::getList('template', $this->resource)
         ];
     }
 }

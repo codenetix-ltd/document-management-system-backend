@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Entities\Document;
+use App\Facades\AuthPermissions;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
@@ -30,6 +31,7 @@ class DocumentResource extends JsonResource
             'actualVersion' => new DocumentVersionResource($this->resource->documentActualVersion),
             'version' => $this->resource->documentActualVersion->versionName,
             'owner' => new UserResource($this->resource->owner),
+            'authPermissions' => AuthPermissions::getList('document', $this->resource)
         ];
     }
 }

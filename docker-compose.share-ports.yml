@@ -1,6 +1,6 @@
 version: '3'
 
 services:
-  backend_app:
+  backend-app:
     ports:
       - 80:80/tcp

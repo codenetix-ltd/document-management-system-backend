@@ -39,7 +39,7 @@ class DocumentVersionTest extends TestCase
         $document = (new DocumentStub([], true))->getModel();
         $documentVersionStub = new DocumentVersionStub(['documentId' => $document->id]);
 
-        $response = $this->json('POST', self::API_ROOT . 'documents/' . $document->id . '/documentVersions', $documentVersionStub->buildRequest([]));
+        $response = $this->json('POST', self::API_ROOT . 'documents/' . $document->id . '/versions', $documentVersionStub->buildRequest([]));
 
         $id = $response->decodeResponseJson()['id'];
         /** @var DocumentVersion $documentVersion */
@@ -49,6 +49,7 @@ class DocumentVersionTest extends TestCase
             ->assertStatus(201)
             ->assertExactJson($documentVersionStub->buildResponse([
                 'id' => $documentVersion->id,
+                'versionName' => $documentVersion->versionName,
                 'createdAt' => $documentVersion->createdAt->timestamp,
                 'updatedAt' => $documentVersion->updatedAt->timestamp
             ]));
@@ -71,7 +72,7 @@ class DocumentVersionTest extends TestCase
         new DocumentVersionStub([], true);
 
 
-        $response = $this->json('GET', self::API_ROOT . 'documents/' . $document->id . '/documentVersions');
+        $response = $this->json('GET', self::API_ROOT . 'documents/' . $document->id . '/versions');
 
         $this->assetJsonPaginationStructure($response);
         $response->assertStatus(Response::HTTP_OK);
@@ -92,7 +93,7 @@ class DocumentVersionTest extends TestCase
 
         /** @var DocumentVersion $documentVersion */
         $documentVersion = $documentVersionStub->getModel();
-        $response = $this->json('GET', self::API_ROOT . 'documents/' . $document->id . '/documentVersions/' . $documentVersion->id);
+        $response = $this->json('GET', self::API_ROOT . 'documents/' . $document->id . '/versions/' . $documentVersion->id);
 
         $response
             ->assertStatus(Response::HTTP_OK)
@@ -114,7 +115,7 @@ class DocumentVersionTest extends TestCase
 
         $response = $this->json(
             'PUT',
-            self::API_ROOT . 'documents/' . $document->id . '/documentVersions/' . $documentVersion->id,
+            self::API_ROOT . 'documents/' . $document->id . '/versions/' . $documentVersion->id,
             $documentVersionStub->buildRequest(['comment' => 'newComment'])
         );
         /** @var DocumentVersion $updatedVersion */
@@ -143,7 +144,7 @@ class DocumentVersionTest extends TestCase
 
         $response = $this->json(
             'PUT',
-            self::API_ROOT . 'documents/' . $document->id . '/documentVersions/' . $documentVersion->id,
+            self::API_ROOT . 'documents/' . $document->id . '/versions/' . $documentVersion->id,
             $documentVersionStub->buildRequest(['comment' => 'newComment', 'name' => null])
         );
 
@@ -161,7 +162,7 @@ class DocumentVersionTest extends TestCase
         /** @var DocumentVersion $documentVersion */
         $documentVersion = (new DocumentVersionStub(['document_id' => $document->id], true))->getModel();
 
-        $response = $this->json('DELETE', self::API_ROOT . 'documents/' . $document->id . '/documentVersions/' . $documentVersion->id);
+        $response = $this->json('DELETE', self::API_ROOT . 'documents/' . $document->id . '/versions/' . $documentVersion->id);
 
         $response->assertStatus(Response::HTTP_NO_CONTENT);
         $this->assertDatabaseMissing('document_versions', ['id' => $documentVersion->id]);
@@ -173,7 +174,7 @@ class DocumentVersionTest extends TestCase
      */
     public function testDocumentVersionDeleteNotFound()
     {
-        $response = $this->json('DELETE', self::API_ROOT . 'documents/0/documentVersions/0');
+        $response = $this->json('DELETE', self::API_ROOT . 'documents/0/versions/0');
         $response->assertStatus(Response::HTTP_NO_CONTENT);
     }
 }

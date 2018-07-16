@@ -200,8 +200,8 @@ class AttributeTest extends TestCase
         $stubResponse = $attributeStub->buildResponse([
             'id' => $attributeModel->id,
             'name' => $nameForUpdate,
-            'createdAt' => $attributeModel->createdAt->timestamp,
-            'updatedAt' => $attributeModel->updatedAt->timestamp
+            'createdAt' => $response->decodeResponseJson('createdAt'),
+            'updatedAt' => $response->decodeResponseJson('updatedAt')
         ]);
         $stubResponse['data'] = $dataForUpdate;
 

@@ -84,6 +84,7 @@ class DocumentStub extends AbstractStub
             'actualVersion' => $this->actualDocumentVersionStub->buildResponse(),
             'version' => (string)$this->actualDocumentVersionStub->getModel()->versionName,
             'owner' => (new UserStub([], true, [], $this->model->owner))->buildResponse(),
+            'authPermissions' => ['document_view' , 'document_update',  'document_delete', 'document_archive', 'document_create']
         ];
     }
 }

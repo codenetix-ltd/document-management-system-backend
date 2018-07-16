@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Entities\AttributeValue;
+use App\Services\AttributeTypeCaster;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
@@ -21,7 +22,7 @@ class AttributeValueResource extends JsonResource
         return [
             'id' => $this->resource->attribute->id,
             'type' => $this->resource->attribute->type->machineName,
-            'value' => $this->resource->value
+            'value' => AttributeTypeCaster::getValue($this->resource)
         ];
     }
 }

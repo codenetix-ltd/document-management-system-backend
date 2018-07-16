@@ -24,7 +24,7 @@ class AttributeCreateRequest extends ABaseFormRequest
         return [
             'name' => 'required|string|max:255',
             'typeId' => "required|integer|exists:types,id",
-            'data' => 'sometimes|required|array'//TODO - Add validator
+            'data' => 'sometimes|nullable|array'
         ];
     }
 }

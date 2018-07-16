@@ -61,6 +61,7 @@ class UserTest extends TestCase
 
     /**
      * Get current user
+     * @throws \Exception
      * @return void
      */
     public function testCurrentUserGet()
@@ -71,7 +72,9 @@ class UserTest extends TestCase
 
         $response
             ->assertStatus(200)
-            ->assertExactJson($userStub->buildResponse());
+            ->assertExactJson($userStub->buildResponse([
+                'roles' => $response->decodeResponseJson('roles')
+            ]));
     }
 
 
@@ -92,7 +95,6 @@ class UserTest extends TestCase
         $response->assertStatus(Response::HTTP_CREATED);
 
         $user = User::find($response->decodeResponseJson()['id']);
-
         $response
             ->assertExactJson($userStub->buildResponse([
                 'id' => $user->id

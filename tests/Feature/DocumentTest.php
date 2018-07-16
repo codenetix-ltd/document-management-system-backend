@@ -166,6 +166,7 @@ class DocumentTest extends TestCase
                 'id' => $savedDocumentVersion->id,
                 'updatedAt' => $savedDocumentVersion->updatedAt->timestamp,
                 'createdAt' => $savedDocumentVersion->createdAt->timestamp,
+                'versionName' => $savedDocumentVersion->versionName
             ]),
         ]));
 

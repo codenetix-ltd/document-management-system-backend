@@ -62,6 +62,10 @@ class AuthTest extends BaseTestCase
         ]);
     }
 
+    /**
+     * Logout
+     * @return void
+     */
     public function testLogout()
     {
         $this->authUser = User::whereFullName('admin')->first();

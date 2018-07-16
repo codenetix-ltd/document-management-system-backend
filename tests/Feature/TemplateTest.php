@@ -63,7 +63,7 @@ class TemplateTest extends TestCase
      */
     public function testTemplateStore()
     {
-        $templateStub = new TemplateStub([],false, [],null, false);
+        $templateStub = new TemplateStub([], false, [], null, false);
 
         $response = $this->json('POST', self::API_ROOT . 'templates', $templateStub->buildRequest());
 

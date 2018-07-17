@@ -22,17 +22,17 @@ class LogResource extends JsonResource
     public function toArray($request)
     {
         return [
-            "id" => $this->resource->id,
-            'user' => (new UserResource($this->resource->user)),
+            'id' => $this->resource->id,
+            'user' => new UserResource($this->resource->user),
             'action' => $this->resource->body,
             'link' => [
                 'title' => $this->resource->reference->getTitle(),
                 'url' => $this->resource->reference->getTable() . '/' . $this->resource->reference->id
             ],
-            "referenceType" => $this->resource->referenceType,
-            "referenceId" => $this->resource->referenceId,
-            "createdAt" => $this->resource->createdAt->timestamp,
-            "updatedAt" => $this->resource->updatedAt->timestamp,
+            'referenceType' => $this->resource->referenceType,
+            'referenceId' => $this->resource->referenceId,
+            'createdAt' => $this->resource->createdAt->timestamp,
+            'updatedAt' => $this->resource->updatedAt->timestamp,
         ];
     }
 }

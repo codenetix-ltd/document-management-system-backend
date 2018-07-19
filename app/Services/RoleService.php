@@ -56,13 +56,9 @@ class RoleService
     {
         $role = $this->repository->create($data);
 
-        if (!empty($data['templateIds'])) {
-            $this->repository->sync($role->id, 'templates', $data['templateIds']);
-        }
+        $this->repository->sync($role->id, 'templates', array_get($data, 'templatesIds'));
 
-        if (!empty($data['permissionValues'])) {
-            $this->savePermissionValues($role, $data['permissionValues']);
-        }
+        $this->savePermissionValues($role, array_get($data, 'permissionValues'));
 
         return $role;
     }
@@ -76,13 +72,9 @@ class RoleService
     {
         $role = $this->repository->update($data, $id);
 
-        if (!empty($data['templateIds'])) {
-            $this->repository->sync($role->id, 'templates', $data['templateIds']);
-        }
+        $this->repository->sync($role->id, 'templates', array_get($data, 'templatesIds'));
 
-        if (!empty($data['permissionValues'])) {
-            $this->savePermissionValues($role, $data['permissionValues']);
-        }
+        $this->savePermissionValues($role, array_get($data, 'permissionValues'));
 
         return $role;
     }

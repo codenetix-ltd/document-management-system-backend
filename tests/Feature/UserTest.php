@@ -121,25 +121,25 @@ class UserTest extends TestCase
     }
 
     /**
-     * Update templateIds in user
+     * Update templatesIds in user
      * @return void
      */
-    public function testUserUpdateTemplateIds()
+    public function testUserUpdateTemplatesIds()
     {
         $userStub = new UserStub([], true);
 
         /** @var User $user */
         $user = $userStub->getModel();
-        $templateIds = $user->templates->pluck('id')->toArray();
+        $templatesIds = $user->templates->pluck('id')->toArray();
         $newTemplateId = factory(Template::class)->create()->id;
 
-        $templateIds[0] = $newTemplateId;
+        $templatesIds[0] = $newTemplateId;
 
-        $response = $this->json('PUT', self::API_ROOT . 'users/' . $user->id, $userStub->buildRequest(['templatesIds' => $templateIds]));
+        $response = $this->json('PUT', self::API_ROOT . 'users/' . $user->id, $userStub->buildRequest(['templatesIds' => $templatesIds]));
 
         $response
             ->assertStatus(200)
-            ->assertExactJson($userStub->buildResponse(['templatesIds' => $templateIds, 'id' => $user->id]));
+            ->assertExactJson($userStub->buildResponse(['templatesIds' => $templatesIds, 'id' => $user->id]));
     }
 
     /**

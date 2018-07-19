@@ -25,7 +25,7 @@ class RoleUpdateRequest extends FormRequest
     {
         return [
             'name' => 'sometimes|required|string|unique:roles,name,'.$this->route('role'),
-            'templateIds' => 'array',
+            'templatesIds' => 'array',
             'templatesIds.*' => 'integer|exists:templates,id',
 
             //TODO rules for permissionValues.*

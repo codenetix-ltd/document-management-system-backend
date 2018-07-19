@@ -86,7 +86,7 @@ class UsersController extends Controller
         }
 
         $data = $request->all();
-        $data['avatarFileId']= $data['avatarId'];
+        $data['avatarFileId']= $request->get('avatarId');
         $user = $this->service->update($data, $id);
         return new UserResource($user);
     }

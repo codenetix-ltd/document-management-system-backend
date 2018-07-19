@@ -40,7 +40,6 @@ class DocumentVersionTest extends TestCase
         $documentVersionStub = new DocumentVersionStub(['documentId' => $document->id]);
 
         $response = $this->json('POST', self::API_ROOT . 'documents/' . $document->id . '/versions', $documentVersionStub->buildRequest([]));
-
         $id = $response->decodeResponseJson()['id'];
         /** @var DocumentVersion $documentVersion */
         $documentVersion = DocumentVersion::find($id);
@@ -51,7 +50,8 @@ class DocumentVersionTest extends TestCase
                 'id' => $documentVersion->id,
                 'versionName' => $documentVersion->versionName,
                 'createdAt' => $documentVersion->createdAt->timestamp,
-                'updatedAt' => $documentVersion->updatedAt->timestamp
+                'updatedAt' => $documentVersion->updatedAt->timestamp,
+                'isActual' => false
             ]));
     }
 
@@ -120,7 +120,6 @@ class DocumentVersionTest extends TestCase
         );
         /** @var DocumentVersion $updatedVersion */
         $updatedVersion = DocumentVersion::find($documentVersion->id);
-
         $response
             ->assertStatus(Response::HTTP_OK)
             ->assertExactJson($documentVersionStub->buildResponse([

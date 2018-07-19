@@ -64,7 +64,8 @@ class Handler extends ExceptionHandler
 //            return response()->view('errors.403', [], 403);
 //        }
 
-        if ($exception instanceof InvalidAttributeDataStructureException || $exception instanceof InvalidAttributeTypeException) {
+        //TODO - refactoring
+        if ($exception instanceof InvalidAttributeDataStructureException || $exception instanceof InvalidAttributeTypeException || $exception instanceof FailedDeleteActualDocumentVersion) {
             return response()->json([
                 'message' => $exception->getMessage(),
             ], 422);

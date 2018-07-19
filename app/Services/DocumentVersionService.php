@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Entities\DocumentVersion;
+use App\Exceptions\FailedDeleteActualDocumentVersion;
 use App\Repositories\DocumentVersionRepository;
 
 class DocumentVersionService
@@ -113,13 +114,19 @@ class DocumentVersionService
 
     /**
      * @param integer $id
+     * @param boolean $force
      * @return integer
+     * @throws FailedDeleteActualDocumentVersion
      */
-    public function delete(int $id): int
+    public function delete(int $id, bool $force = false): int
     {
         $dv = $this->repository->findModel($id);
         if (is_null($dv)) {
             return 0;
+        }
+
+        if ($dv->isActual && !$force) {
+            throw new FailedDeleteActualDocumentVersion('Actual version cannot be deleted');
         }
 
         return $this->repository->delete($id);

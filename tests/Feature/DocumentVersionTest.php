@@ -160,12 +160,28 @@ class DocumentVersionTest extends TestCase
         /** @var Document $document */
         $document = (new DocumentStub([], true))->getModel();
         /** @var DocumentVersion $documentVersion */
-        $documentVersion = (new DocumentVersionStub(['document_id' => $document->id], true))->getModel();
+        $documentVersion = (new DocumentVersionStub(['document_id' => $document->id, 'is_actual' => false], true))->getModel();
 
         $response = $this->json('DELETE', self::API_ROOT . 'documents/' . $document->id . '/versions/' . $documentVersion->id);
 
         $response->assertStatus(Response::HTTP_NO_CONTENT);
         $this->assertDatabaseMissing('document_versions', ['id' => $documentVersion->id]);
+    }
+
+    /**
+     * Delete actual document version
+     * @return void
+     */
+    public function testActualDocumentVersionDelete()
+    {
+        /** @var Document $document */
+        $document = (new DocumentStub([], true))->getModel();
+        /** @var DocumentVersion $documentVersion */
+        $documentVersion = (new DocumentVersionStub(['document_id' => $document->id, 'is_actual' => true], true))->getModel();
+
+        $response = $this->json('DELETE', self::API_ROOT . 'documents/' . $document->id . '/versions/' . $documentVersion->id);
+
+        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
     /**

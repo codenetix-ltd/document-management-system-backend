@@ -97,11 +97,10 @@ class DocumentVersionsController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
      * @param integer $documentId
      * @param integer $documentVersionId
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \App\Exceptions\FailedDeleteActualDocumentVersion
      */
     public function destroy(int $documentId, int $documentVersionId)
     {

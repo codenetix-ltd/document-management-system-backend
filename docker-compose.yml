@@ -2,7 +2,9 @@ version: '3'
 
 services:
   backend-app:
-    image: codenetix/laravel-dms-backend
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: dms-backend-app
     environment:
       APP_ENV: prod
@@ -16,7 +18,9 @@ services:
       - mysql
 
   init:
-    image: codenetix/laravel-dms-backend
+    build:
+      context: .
+      dockerfile: Dockerfile
     environment:
       APP_ENV: prod
       APP_DEBUG: 'false'

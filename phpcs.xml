@@ -51,6 +51,7 @@
 
     <exclude-pattern>*/app/Exceptions/Handler.php</exclude-pattern>
     <exclude-pattern>*/app/Criteria/DocumentFilterCriteria.php</exclude-pattern>
+    <exclude-pattern>*/app/Criteria/LogFilterCriteria.php</exclude-pattern>
     <exclude-pattern>*/app/Criteria/ExtendedRequestCriteria.php</exclude-pattern>
 
 

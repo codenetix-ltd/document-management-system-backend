@@ -72,6 +72,7 @@ class DocumentsController extends Controller
      * @param DocumentUpdateRequest $request
      * @param integer               $id
      * @return DocumentResource
+     * @throws \App\Exceptions\FailedDeleteActualDocumentVersion
      */
     public function update(DocumentUpdateRequest $request, int $id)
     {

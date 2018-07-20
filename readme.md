@@ -6,17 +6,17 @@
 
 ## Installation
 
-- Clone repository
+1. Clone repository
 
-- Initiate database migrations and seeders (only once before first start)
-```
-    $ make init_dev
-```
-- Start application
-```
-    $ make up_dev
-```
-- Run tests
-```
-    $ make test
-```
+2. Initiate database migrations and seeders (only once before first start)
+    ```bash
+    make init_dev
+    ```
+3. Start application
+    ```bash
+    make up_dev
+    ```
+4. Run tests
+    ```bash
+    make test
+    ```

@@ -35,11 +35,12 @@ class DocumentService
     }
 
     /**
+     * @param bool $withCriteria
      * @return mixed
      */
-    public function list()
+    public function list($withCriteria = false)
     {
-        return $this->repository->paginate();
+        return $this->repository->paginateList($withCriteria);
     }
 
     /**

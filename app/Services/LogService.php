@@ -23,11 +23,12 @@ class LogService implements ILogger
 
     /**
      * @param integer $userId
+     * @param bool $withCriteria
      * @return mixed
      */
-    public function list(int $userId = null)
+    public function list(int $userId = null, $withCriteria = false)
     {
-        return is_null($userId) ? $this->repository->paginate() : $this->repository->paginateByUser($userId);
+        return is_null($userId) ? $this->repository->paginateList($withCriteria) : $this->repository->paginateByUser($userId, $withCriteria);
     }
 
     /**

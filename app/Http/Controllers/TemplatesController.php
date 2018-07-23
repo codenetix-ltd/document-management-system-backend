@@ -40,7 +40,7 @@ class TemplatesController extends Controller
      */
     public function index()
     {
-        $templates = $this->service->paginate();
+        $templates = $this->service->paginate(true);
         return  new TemplateCollectionResource($templates);
     }
 

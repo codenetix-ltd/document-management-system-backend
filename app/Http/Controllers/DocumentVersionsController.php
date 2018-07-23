@@ -35,7 +35,7 @@ class DocumentVersionsController extends Controller
      */
     public function index(int $documentId)
     {
-        $documentVersions = $this->service->list($documentId);
+        $documentVersions = $this->service->list($documentId, true);
         return new DocumentVersionCollectionResource($documentVersions);
     }
 

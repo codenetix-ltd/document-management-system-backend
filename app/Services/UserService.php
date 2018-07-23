@@ -26,11 +26,12 @@ class UserService
     }
 
     /**
+     * @param bool $withCriteria
      * @return mixed
      */
-    public function paginate()
+    public function paginate($withCriteria = false)
     {
-        return $this->repository->paginate();
+        return $this->repository->paginateList($withCriteria);
     }
 
     /**

@@ -31,6 +31,11 @@ class Log extends BaseEntity implements Transformable
     protected $fillable = [
         'body', 'userId', 'referenceId', 'referenceType'
     ];
+    
+    public $fieldMap = [
+        'action' => 'body',
+        'link' => false,
+    ];
 
     public function reference()
     {

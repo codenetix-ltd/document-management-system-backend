@@ -65,12 +65,12 @@ return [
                     'machine_name' => 'template',
                     'label' => 'Template',
                     'access_types' => [
-                        'any' => [
+                        'any_template' => [
                             'machine_name' => 'any_template',
                             'label' => 'Any template',
                             'handler' => AnyPermissionHandler::class
                         ],
-                        'list' => [
+                        'list_templates' => [
                             'machine_name' => 'list_templates',
                             'label' => 'User\'s OR Role\'s templates',
                             'handler' => ByTemplatePermissionHandler::class

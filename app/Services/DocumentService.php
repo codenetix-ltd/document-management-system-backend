@@ -93,6 +93,7 @@ class DocumentService
      * @param array   $data
      * @param integer $id
      * @return Document
+     * @throws \App\Exceptions\FailedDeleteActualDocumentVersion
      */
     public function updateVersion(array $data, int $id)
     {
@@ -112,7 +113,7 @@ class DocumentService
         if ($createNewVersion) {
             $this->documentVersionService->updateActual(false, $oldActualVersion->id);
         } else {
-            $this->documentVersionService->delete($oldActualVersion->id);
+            $this->documentVersionService->delete($oldActualVersion->id, true);
         }
 
         return $this->update($data, $id);

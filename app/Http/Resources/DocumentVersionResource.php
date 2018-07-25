@@ -33,6 +33,7 @@ class DocumentVersionResource extends JsonResource
             'comment' => $this->resource->comment,
             'attributeValues' => new AttributeValueCollectionResource($this->resource->attributeValues),
             'versionName' => $this->resource->versionName,
+            'isActual' => $this->resource->isActual,
             'createdAt' => $this->resource->createdAt->timestamp,
             'updatedAt' => $this->resource->updatedAt->timestamp,
         ];

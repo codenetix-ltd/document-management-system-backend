@@ -40,7 +40,6 @@ class DocumentVersionTest extends TestCase
         $documentVersionStub = new DocumentVersionStub(['documentId' => $document->id]);
 
         $response = $this->json('POST', self::API_ROOT . 'documents/' . $document->id . '/versions', $documentVersionStub->buildRequest([]));
-
         $id = $response->decodeResponseJson()['id'];
         /** @var DocumentVersion $documentVersion */
         $documentVersion = DocumentVersion::find($id);
@@ -51,7 +50,8 @@ class DocumentVersionTest extends TestCase
                 'id' => $documentVersion->id,
                 'versionName' => $documentVersion->versionName,
                 'createdAt' => $documentVersion->createdAt->timestamp,
-                'updatedAt' => $documentVersion->updatedAt->timestamp
+                'updatedAt' => $documentVersion->updatedAt->timestamp,
+                'isActual' => false
             ]));
     }
 
@@ -120,7 +120,6 @@ class DocumentVersionTest extends TestCase
         );
         /** @var DocumentVersion $updatedVersion */
         $updatedVersion = DocumentVersion::find($documentVersion->id);
-
         $response
             ->assertStatus(Response::HTTP_OK)
             ->assertExactJson($documentVersionStub->buildResponse([
@@ -160,12 +159,28 @@ class DocumentVersionTest extends TestCase
         /** @var Document $document */
         $document = (new DocumentStub([], true))->getModel();
         /** @var DocumentVersion $documentVersion */
-        $documentVersion = (new DocumentVersionStub(['document_id' => $document->id], true))->getModel();
+        $documentVersion = (new DocumentVersionStub(['document_id' => $document->id, 'is_actual' => false], true))->getModel();
 
         $response = $this->json('DELETE', self::API_ROOT . 'documents/' . $document->id . '/versions/' . $documentVersion->id);
 
         $response->assertStatus(Response::HTTP_NO_CONTENT);
         $this->assertDatabaseMissing('document_versions', ['id' => $documentVersion->id]);
+    }
+
+    /**
+     * Delete actual document version
+     * @return void
+     */
+    public function testActualDocumentVersionDelete()
+    {
+        /** @var Document $document */
+        $document = (new DocumentStub([], true))->getModel();
+        /** @var DocumentVersion $documentVersion */
+        $documentVersion = (new DocumentVersionStub(['document_id' => $document->id, 'is_actual' => true], true))->getModel();
+
+        $response = $this->json('DELETE', self::API_ROOT . 'documents/' . $document->id . '/versions/' . $documentVersion->id);
+
+        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
     /**

@@ -129,6 +129,7 @@ class DocumentVersionStub extends AbstractStub
             })->toArray(),
             'template' => (new TemplateStub([], true, [], $this->model->template))->buildResponse(),
             'versionName' => strval($this->model->versionName),
+            'isActual' => true
         ];
     }
 }

@@ -3,8 +3,10 @@
 namespace App\Repositories;
 
 use App\Criteria\RelationSortingCriteria;
+use App\Criteria\LogFilterCriteria;
 use App\Criteria\UserIdCriteria;
 use App\Entities\Log;
+use Prettus\Repository\Exceptions\RepositoryException;
 
 /**
  * Class DocumentRepositoryEloquent.
@@ -26,7 +28,7 @@ class LogRepositoryEloquent extends BaseRepository implements LogRepository
      *
      * @param bool $withCriteria
      * @return mixed
-     * @throws \Prettus\Repository\Exceptions\RepositoryException
+     * @throws RepositoryException
      */
     public function paginateByUser(int $userId, $withCriteria = false)
     {
@@ -37,6 +39,7 @@ class LogRepositoryEloquent extends BaseRepository implements LogRepository
     public function getCriteriaList()
     {
         return [
+            app(LogFilterCriteria::class),
             app(RelationSortingCriteria::class),
         ];
     }

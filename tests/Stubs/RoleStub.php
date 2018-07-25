@@ -65,7 +65,7 @@ class RoleStub extends AbstractStub
     {
         return [
             'name' => $this->model->name,
-            'templateIds' => $this->templates->pluck('id')->toArray(),
+            'templatesIds' => $this->templates->pluck('id')->toArray(),
             'permissionValues' => [
                 $this->permissionValueWithQualifiersAccessType,
                 $this->permissionValueWithoutQualifiersAccessType
@@ -80,7 +80,7 @@ class RoleStub extends AbstractStub
     {
         return [
             'name' => $this->model->name,
-            'templateIds' => $this->templates->pluck('id')->toArray(),
+            'templatesIds' => $this->templates->pluck('id')->toArray(),
             'permissionValues' => [
                 [
                     'id' => $this->permissionValueWithQualifiersAccessType['id'],

@@ -72,7 +72,7 @@ class LogTest extends TestCase
                 'fullName',
                 'email',
             ],
-            'action',
+            'body',
             'referenceId',
             'referenceType',
             'link' => [
@@ -88,7 +88,7 @@ class LogTest extends TestCase
         $this->assertCount(10, $decodedResponse['data']);
     }
 
-    public function testLogListSortByAction()
+    public function testLogListSortByBody()
     {
 
         factory(Log::class)->create(['body' => 'a', 'user_id' => $this->authUser->id]);
@@ -97,7 +97,7 @@ class LogTest extends TestCase
 
         $response = $this
             ->actingAs($this->authUser)
-            ->json('GET', self::API_ROOT . 'logs?orderBy=action&sortedBy=desc');
+            ->json('GET', self::API_ROOT . 'logs?orderBy=body&sortedBy=desc');
 
         $this->assetJsonPaginationStructure($response);
 
@@ -105,8 +105,8 @@ class LogTest extends TestCase
         
         $response->assertStatus(Response::HTTP_OK);
         
-        $this->assertEquals('z',$decodedResponse['data'][0]['action']);
-        $this->assertEquals('a',$decodedResponse['data'][1]['action']);
+        $this->assertEquals('z',$decodedResponse['data'][0]['body']);
+        $this->assertEquals('a',$decodedResponse['data'][1]['body']);
 
     }
 

@@ -56,7 +56,7 @@ class RoleTest extends TestCase
             ->assertExactJson([
                 'id' => $role->id,
                 'name' => $role->name,
-                'templateIds' => [],
+                'templatesIds' => [],
                 'permissionValues' => [],
                 'createdAt' => $role->createdAt->timestamp,
                 'updatedAt' => $role->updatedAt->timestamp

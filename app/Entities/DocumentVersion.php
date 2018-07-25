@@ -15,6 +15,7 @@ use Prettus\Repository\Traits\TransformableTrait;
  * @property string $comment
  * @property int $templateId
  * @property int $documentId
+ * @property bool $isActual
  *
  * @property Document $document
  * @property Template $template
@@ -36,6 +37,10 @@ class DocumentVersion extends BaseEntity implements Transformable
      */
     protected $fillable = [
         'isActual', 'templateId', 'documentId', 'versionName', 'name', 'comment', 'fileId'
+    ];
+
+    protected $casts = [
+        'is_actual' => 'boolean'
     ];
 
     public function document()

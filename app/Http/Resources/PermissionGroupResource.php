@@ -22,6 +22,9 @@ class PermissionGroupResource extends JsonResource
     public function toArray($request)
     {
         return [
+            'id' => $this->resource->id,
+            'name' => $this->resource->name,
+            'label' => $this->resource->label,
             'permissions' => PermissionResource::collection($this->resource->permissions)->toArray($request),
             'qualifiers' => QualifierResource::collection($this->resource->qualifiers)->toArray($request)
         ];

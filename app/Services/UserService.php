@@ -51,8 +51,10 @@ class UserService
     {
         /** @var User $user */
         $user = $this->repository->create($data);
-        $user->templates()->sync($data['templatesIds']);
-        $user->roles()->sync($data['rolesIds']);
+
+        $this->repository->sync($user->id, 'templates', array_get($data, 'templatesIds'));
+        $this->repository->sync($user->id, 'roles', array_get($data, 'rolesIds'));
+
 
         Event::dispatch(new UserCreateEvent($user));
 
@@ -68,8 +70,8 @@ class UserService
     {
         /** @var User $user */
         $user = $this->repository->update($data, $id);
-        $user->templates()->sync($data['templatesIds']);
-        $user->roles()->sync($data['rolesIds']);
+        $this->repository->sync($user->id, 'templates', array_get($data, 'templatesIds'));
+        $this->repository->sync($user->id, 'roles', array_get($data, 'rolesIds'));
 
         Event::dispatch(new UserUpdateEvent($user));
 

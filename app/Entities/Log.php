@@ -33,7 +33,6 @@ class Log extends BaseEntity implements Transformable
     ];
     
     public $fieldMap = [
-        'action' => 'body',
         'link' => false,
     ];
 

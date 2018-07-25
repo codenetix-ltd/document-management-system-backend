@@ -6,7 +6,6 @@ use App\Entities\TableTypeColumn;
 use App\Entities\TableTypeRow;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
-use Prettus\Repository\Contracts\RepositoryInterface;
 
 /**
  * Interface AttributeRepository.

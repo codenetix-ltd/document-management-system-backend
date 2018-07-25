@@ -2,8 +2,6 @@
 
 namespace App\Repositories;
 
-use Prettus\Repository\Contracts\RepositoryInterface;
-
 /**
  * Interface DocumentVersionRepository.
  */
@@ -11,9 +9,10 @@ interface DocumentVersionRepository extends RepositoryInterface
 {
     /**
      * @param integer $documentId
+     * @param bool $withCriteria
      * @return mixed
      */
-    public function paginateByDocument(int $documentId);
+    public function paginateByDocument(int $documentId, $withCriteria = false);
 
     /**
      * @param integer $id

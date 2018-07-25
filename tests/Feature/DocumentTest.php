@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Entities\Document;
 use App\Entities\DocumentVersion;
 use App\Entities\Label;
+use App\Entities\Template;
 use App\Entities\User;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
@@ -92,9 +93,78 @@ class DocumentTest extends TestCase
         $stub = (new DocumentStub([], true));
 
         $response = $this->json('GET', self::PATH .'/' . $stub->getModel()->id);
-
         $response->assertExactJson($stub->buildResponse());
     }
+    
+    /**
+     * List of documents
+     * @return void
+     */
+    public function testListOfDocumentsWithPaginationSortingNameSuccess()
+    {
+        factory(DocumentVersion::class)->create(['name' => 'abc']);
+        /** @var DocumentVersion $dv */
+        $dv = factory(DocumentVersion::class)->create(['name' => 'xyz', 'is_actual' => false]);
+        factory(DocumentVersion::class)->create(['name' => 'eyz', 'document_id' => $dv->documentId ,'version_name' => 2, 'is_actual' => true]);
+
+        $response = $this->json('GET', self::PATH . '?orderBy=actualVersion.name&sortedBy=desc');
+        
+        $this->assetJsonPaginationStructure($response);
+        $response->assertStatus(Response::HTTP_OK);
+
+        $respArray = $response->decodeResponseJson()['data'];
+
+        $this->assertEquals('eyz', $respArray[0]['actualVersion']['name']);
+        $this->assertEquals('abc', $respArray[1]['actualVersion']['name']);
+    }
+
+    /**
+     * List of documents
+     * @return void
+     */
+    public function testListOfDocumentsWithPaginationSortingOwnerNameSuccess()
+    {
+        $u1 = factory(User::class)->create(['full_name' => 'abc']);
+        $u2 = factory(User::class)->create(['full_name' => 'xyz']);
+        
+        (new DocumentStub(['owner_id' => $u1->id], true));
+        (new DocumentStub(['owner_id' => $u2->id], true));
+        $response = $this->json('GET', self::PATH . '?orderBy=owner.fullName&sortedBy=desc');
+
+        $this->assetJsonPaginationStructure($response);
+        $response->assertStatus(Response::HTTP_OK);
+
+        $respArray = $response->decodeResponseJson()['data'];
+
+        $this->assertEquals('xyz', $respArray[0]['owner']['fullName']);
+        $this->assertEquals('abc', $respArray[1]['owner']['fullName']);
+    }
+
+    /**
+     * List of documents
+     * @return void
+     */
+    public function testListOfDocumentsWithPaginationSortingVersionTemplateNameSuccess()
+    {
+        $t1 = factory(Template::class)->create(['name' => 'abc']);
+        $t2 = factory(Template::class)->create(['name' => 'xyz']);
+
+        factory(DocumentVersion::class)->create(['template_id' => $t1->id]);
+        /** @var DocumentVersion $dv */
+        $dv = factory(DocumentVersion::class)->create(['is_actual' => false, 'template_id' => $t1->id]);
+        factory(DocumentVersion::class)->create(['document_id' => $dv->documentId ,'version_name' => 2, 'is_actual' => true, 'template_id' => $t2->id]);
+
+        $response = $this->json('GET', self::PATH . '?orderBy=actualVersion.template.name&sortedBy=desc');
+
+        $this->assetJsonPaginationStructure($response);
+        $response->assertStatus(Response::HTTP_OK);
+
+        $respArray = $response->decodeResponseJson()['data'];
+
+        $this->assertEquals('xyz', $respArray[0]['actualVersion']['template']['name']);
+        $this->assertEquals('abc', $respArray[1]['actualVersion']['template']['name']);
+    }
+
 
     /**
      * Document not found
@@ -180,7 +250,7 @@ class DocumentTest extends TestCase
     public function testDeleteDocumentSuccess()
     {
         /** @var Document $document */
-        $document = (new DocumentVersionStub([], true))->getModel();
+        $document = (new DocumentStub([], true))->getModel();
         $response = $this->json('DELETE', self::PATH . '/' . $document->id);
         $response->assertStatus(Response::HTTP_NO_CONTENT);
 

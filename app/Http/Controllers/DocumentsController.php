@@ -37,7 +37,7 @@ class DocumentsController extends Controller
      */
     public function index()
     {
-        $documents = $this->service->list();
+        $documents = $this->service->list(true);
         return new DocumentCollectionResource($documents);
     }
 

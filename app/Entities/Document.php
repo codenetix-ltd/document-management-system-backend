@@ -39,6 +39,10 @@ class Document extends BaseEntity implements Transformable, IHasTitle
         'ownerId', 'substituteDocumentId'
     ];
 
+    public $relationMap = [
+        'actualVersion' => 'documentActualVersion'
+    ];
+
     /**
      * @var array
      */

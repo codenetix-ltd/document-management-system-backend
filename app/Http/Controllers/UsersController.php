@@ -33,7 +33,7 @@ class UsersController extends Controller
      */
     public function index()
     {
-        $users = $this->service->paginate();
+        $users = $this->service->paginate(true);
         return new UserCollectionResource($users);
     }
 

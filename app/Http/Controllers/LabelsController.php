@@ -31,7 +31,7 @@ class LabelsController extends Controller
      */
     public function index()
     {
-        $labels = $this->service->paginate();
+        $labels = $this->service->paginate(true);
         return new LabelCollectionResource($labels);
     }
 

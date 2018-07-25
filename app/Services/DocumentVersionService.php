@@ -30,11 +30,12 @@ class DocumentVersionService
 
     /**
      * @param integer $documentId
+     * @param bool $withCriteria
      * @return mixed
      */
-    public function list(int $documentId)
+    public function list(int $documentId, $withCriteria = false)
     {
-        return $this->repository->paginateByDocument($documentId);
+        return $this->repository->paginateByDocument($documentId, $withCriteria);
     }
 
     /**

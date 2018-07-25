@@ -72,7 +72,7 @@ class LogTest extends TestCase
                 'fullName',
                 'email',
             ],
-            'action',
+            'body',
             'referenceId',
             'referenceType',
             'link' => [

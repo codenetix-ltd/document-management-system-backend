@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Entities\Role;
+use App\Facades\AuthPermissions;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
@@ -27,7 +28,8 @@ class RoleResource extends JsonResource
             'templatesIds' => $this->resource->templates->pluck('id')->toArray(),
             'permissionValues' => PermissionValueResource::collection($this->resource->permissions)->toArray($request),
             'createdAt' => $this->resource->createdAt->timestamp,
-            'updatedAt' => $this->resource->updatedAt->timestamp
+            'updatedAt' => $this->resource->updatedAt->timestamp,
+            'authPermissions' => AuthPermissions::getList('role', $this->resource)
         ];
     }
 }

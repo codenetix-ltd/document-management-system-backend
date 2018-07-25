@@ -113,7 +113,8 @@ class RoleStub extends AbstractStub
                     ],
                     'qualifiers' => []
                 ]
-            ]
+            ],
+            'authPermissions' => ['role_view' , 'role_update',  'role_delete', 'role_create', 'role_toggle']
         ];
     }
 

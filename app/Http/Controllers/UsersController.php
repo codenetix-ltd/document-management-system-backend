@@ -50,7 +50,7 @@ class UsersController extends Controller
         $authorizer->authorize('user_create');
 
         $data = $request->all();
-        $data['avatarFileId']= $data['avatarId'];
+        $data['avatarFileId']= $request->get('avatarId');
         $user = $this->service->create($data);
         return new UserResource($user);
     }

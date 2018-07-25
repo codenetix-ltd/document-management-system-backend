@@ -59,7 +59,8 @@ class RoleTest extends TestCase
                 'templatesIds' => [],
                 'permissionValues' => [],
                 'createdAt' => $role->createdAt->timestamp,
-                'updatedAt' => $role->updatedAt->timestamp
+                'updatedAt' => $role->updatedAt->timestamp,
+                'authPermissions' => ['role_view' , 'role_update',  'role_delete', 'role_create', 'role_toggle']
             ]);
     }
 

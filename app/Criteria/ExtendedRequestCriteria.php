@@ -7,6 +7,11 @@ use Illuminate\Database\Query\Builder;
 use Prettus\Repository\Contracts\RepositoryInterface;
 use Prettus\Repository\Criteria\RequestCriteria;
 
+/**
+ * @deprecated
+ * Class ExtendedRequestCriteria
+ * @package App\Criteria
+ */
 class ExtendedRequestCriteria extends RequestCriteria
 {
     /**

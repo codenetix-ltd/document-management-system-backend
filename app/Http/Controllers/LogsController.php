@@ -46,9 +46,9 @@ class LogsController extends Controller
         $user = $guard->user();
 
         if ($user->hasAnyRole(RoleService::ROLE_ADMIN)) {
-            $logs = $this->service->list(null);
+            $logs = $this->service->list(null, true);
         } else {
-            $logs = $this->service->list($user->getAuthIdentifier());
+            $logs = $this->service->list($user->getAuthIdentifier(), true);
         }
 
         return new LogCollectionResource($logs);

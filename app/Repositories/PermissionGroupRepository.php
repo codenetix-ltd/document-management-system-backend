@@ -3,7 +3,6 @@
 namespace App\Repositories;
 
 use Illuminate\Support\Collection;
-use Prettus\Repository\Contracts\RepositoryInterface;
 
 /**
  * Interface PermissionGroupRepository.

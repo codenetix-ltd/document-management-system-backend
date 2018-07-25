@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Criteria\RelationSortingCriteria;
 use App\Criteria\LogFilterCriteria;
 use App\Criteria\UserIdCriteria;
 use App\Entities\Log;
@@ -25,23 +26,21 @@ class LogRepositoryEloquent extends BaseRepository implements LogRepository
     /**
      * @param integer $userId
      *
+     * @param bool $withCriteria
      * @return mixed
-     * @throws \Prettus\Repository\Exceptions\RepositoryException
+     * @throws RepositoryException
      */
-    public function paginateByUser(int $userId)
+    public function paginateByUser(int $userId, $withCriteria = false)
     {
         $this->pushCriteria(new UserIdCriteria($userId));
-        return $this->paginate();
+        return $this->paginateList($withCriteria);
     }
 
-    /**
-     * Boot up the repository, pushing criteria
-     * @throws RepositoryException
-     * @return void
-     */
-    public function boot()
+    public function getCriteriaList()
     {
-        parent::boot();
-        $this->pushCriteria(app(LogFilterCriteria::class));
+        return [
+            app(LogFilterCriteria::class),
+            app(RelationSortingCriteria::class),
+        ];
     }
 }

@@ -3,8 +3,8 @@
 namespace App\Repositories;
 
 use App\Criteria\DocumentFilterCriteria;
+use App\Criteria\DocumentSortingCriteria;
 use App\Entities\Document;
-use Prettus\Repository\Exceptions\RepositoryException;
 
 /**
  * Class DocumentRepositoryEloquent.
@@ -20,15 +20,12 @@ class DocumentRepositoryEloquent extends BaseRepository implements DocumentRepos
     {
         return Document::class;
     }
-
-    /**
-     * Boot up the repository, pushing criteria
-     * @throws RepositoryException
-     * @return void
-     */
-    public function boot()
+    
+    public function getCriteriaList()
     {
-        parent::boot();
-        $this->pushCriteria(app(DocumentFilterCriteria::class));
+        return [
+            app(DocumentFilterCriteria::class),  
+            app(DocumentSortingCriteria::class),  
+        ];
     }
 }

@@ -4,7 +4,6 @@ namespace App\Repositories;
 
 use App\Entities\Role;
 use App\Entities\RolePermission;
-use Prettus\Repository\Contracts\RepositoryInterface;
 
 /**
  * Interface RoleRepository.

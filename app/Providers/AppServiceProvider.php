@@ -3,8 +3,10 @@
 namespace App\Providers;
 
 use App\Contracts\Helpers\ILogger;
+use App\Entities\Document;
 use App\Services\AuthPermissions;
 use App\Services\LogService;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\Resources\Json\Resource;
 use Illuminate\Support\ServiceProvider;
 
@@ -18,6 +20,9 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Resource::withoutWrapping();
+        Relation::morphMap([
+            'document' => Document::class,
+        ]);
     }
 
     /**

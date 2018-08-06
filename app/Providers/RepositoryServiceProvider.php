@@ -26,6 +26,8 @@ use App\Repositories\TypeRepository;
 use App\Repositories\TypeRepositoryEloquent;
 use App\Repositories\UserRepository;
 use App\Repositories\UserRepositoryEloquent;
+use App\Services\Comments\CommentRepository;
+use App\Services\Comments\ICommentRepository;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -59,5 +61,6 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(UserRepository::class, UserRepositoryEloquent::class);
         $this->app->bind(LogRepository::class, LogRepositoryEloquent::class);
         $this->app->bind(FileRepository::class, FileRepositoryEloquent::class);
+        $this->app->bind(ICommentRepository::class, CommentRepository::class);
     }
 }

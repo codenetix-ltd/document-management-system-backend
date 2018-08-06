@@ -29,7 +29,7 @@ Route::prefix('v1')->middleware('auth:api')->group(function () {
     Route::apiResource('users', 'UsersController');
     Route::get('logs', 'LogsController@index');
 
-//Order is important (patch overrides apiResource)
+    //Order is important (patch overrides apiResource)
     Route::patch('documents/{id}', 'DocumentsController@patchUpdate');
     Route::put('documents/{id}', 'DocumentsController@update');
     Route::apiResource('documents', 'DocumentsController');
@@ -41,4 +41,9 @@ Route::prefix('v1')->middleware('auth:api')->group(function () {
     Route::post('files', 'FileController@uploadFile');
 
     Route::post('oauth/logout', 'Auth\LoginController@logout');
+
+    //Testing comments
+    Route::apiResource('comments', 'CommentsController', ['only' => ['store', 'show', 'update', 'destroy']]);
+    Route::get('documents/{documentId}/comments/tree', 'CommentsController@getCommentTree'); // ???
+
 });

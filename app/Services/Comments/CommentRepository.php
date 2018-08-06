@@ -3,8 +3,7 @@
 namespace App\Services\Comments;
 
 use App\Entities\Comment;
-use Illuminate\Support\Facades\DB;
-
+use Illuminate\Database\Eloquent\Collection;
 /**
  * Class CommentCommentRepository.
  */
@@ -57,52 +56,35 @@ class CommentRepository extends BaseRepository implements ICommentRepository
     {
         $perPage = config('comments.perPage');
         $lvlDepth = config('comments.lvlDepth');
+        $comments = collect();
 
-//        return $this->getInstance()
-//            ->where([
-//                ['commentable_id', '=', $documentId],
-//                ['commentable_type', '=', 'document']
-//            ])
-//            ->skip(($perPage*$pageNumber) - $perPage)
-//            ->take($perPage)
-//            ->get();
-
-        $parentComments = DB::table('comments')
+        $lvlComments = $this->getInstance()
             ->whereNull('parent_id')
+            ->where([
+                'commentable_type' => 'document',
+                'commentable_id' => $documentId
+            ])
             ->skip(($perPage*$pageNumber) - $perPage)
             ->take($perPage)
             ->get();
 
-//        dd($parentComments);
+        $lvlCommentIds = $lvlComments->pluck('id');
 
-        $firstLvlComments = DB::table('comments as sub')
-            ->join('comments as parent', 'parent.parent_id', '=', 'sub.id')
-            ->whereNull('sub.parent_id')
-            ->skip(($perPage*$pageNumber) - $perPage)
-            ->take($perPage)
-            ->get();
+        $comments = $comments->merge($lvlComments);
 
-        $secondLvlComments = DB::table('comments as sub')
-            ->join('comments as parent1', 'parent1.parent_id', '=', 'sub.id')
-            ->join('comments as parent2', 'parent2.parent_id', '=', 'parent1.id')
-            ->whereNull('sub.parent_id')
-            ->skip(($perPage*$pageNumber) - $perPage)
-            ->take($perPage)
-            ->get();
-
-//        dd($secondLvlComments);
-
-        $comments = collect()
-            ->push($parentComments)
-            ->push($firstLvlComments)
-            ->push($secondLvlComments);
-
-//        dump($comments);
-
-        for ($i = 0; $i <= $lvlDepth; $i++ )
+        for ($i = 1; $i < $lvlDepth; $i++ )
         {
+            $lvlComments = $this->getInstance()
+                ->whereIn('parent_id', $lvlCommentIds)
+                ->skip(($perPage*$pageNumber) - $perPage)
+                ->take($perPage)
+                ->get();
 
+            $lvlCommentIds = $lvlComments->pluck('id');
+
+            $comments = $comments->merge($lvlComments);
         }
+
 
         return $comments;
     }
@@ -115,11 +97,30 @@ class CommentRepository extends BaseRepository implements ICommentRepository
     public function getPageCommentsByRootCommentId(int $rootCommentId, int $pageNumber)
     {
         $perPage = config('comments.perPage');
+        $lvlDepth = config('comments.lvlDepth');
+        $comments = collect();
 
-        return $this->getInstance()
-            ->where('parent_id', $rootCommentId)
+        $rootComment = $this->getInstance()
+            ->where('id', $rootCommentId)
             ->skip(($perPage*$pageNumber) - $perPage)
             ->take($perPage)
             ->get();
+
+        $lvlCommentIds = $rootComment->pluck('id');
+
+        for ($i = 1; $i < $lvlDepth; $i++ )
+        {
+            $lvlComments = $this->getInstance()
+                ->whereIn('parent_id', $lvlCommentIds)
+                ->skip(($perPage*$pageNumber) - $perPage)
+                ->take($perPage)
+                ->get();
+
+            $lvlCommentIds = $lvlComments->pluck('id');
+
+            $comments = $comments->merge($lvlComments);
+        }
+
+        return $comments;
     }
 }

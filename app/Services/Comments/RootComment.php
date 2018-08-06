@@ -44,6 +44,6 @@ class RootComment extends AComment implements IRootComment
      */
     public function get()
     {
-        // TODO: get() method.
+        return $this->children;
     }
 }

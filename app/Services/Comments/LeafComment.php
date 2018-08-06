@@ -6,10 +6,10 @@ class LeafComment extends AComment
 {
     /**
      * Get comment from tree
-     * @return \App\Entities\Comment
+     * @return LeafComment
      */
     public function get()
     {
-        // TODO: get() method.
+        return $this;
     }
 }

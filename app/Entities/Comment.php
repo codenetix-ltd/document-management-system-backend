@@ -12,8 +12,8 @@ use Prettus\Repository\Traits\TransformableTrait;
  *
  * @property int $id
  * @property int $user_id
- * @property int $entity_id
- * @property string $entity_type
+ * @property int $commentable_id
+ * @property string $commentable_type
  * @property int $parent_id
  * @property string $body
  * @property Carbon $created_at

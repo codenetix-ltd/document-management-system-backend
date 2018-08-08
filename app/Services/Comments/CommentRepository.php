@@ -72,7 +72,7 @@ class CommentRepository extends BaseRepository implements ICommentRepository
 
         $comments = $comments->merge($lvlComments);
 
-        for ($i = 1; $i < $lvlDepth; $i++ )
+        for ($i = 1; $i < $lvlDepth; $i++)
         {
             $lvlComments = $this->getInstance()
                 ->whereIn('parent_id', $lvlCommentIds)
@@ -108,7 +108,7 @@ class CommentRepository extends BaseRepository implements ICommentRepository
 
         $lvlCommentIds = $rootComment->pluck('id');
 
-        for ($i = 1; $i < $lvlDepth; $i++ )
+        for ($i = 1; $i < $lvlDepth; $i++)
         {
             $lvlComments = $this->getInstance()
                 ->whereIn('parent_id', $lvlCommentIds)

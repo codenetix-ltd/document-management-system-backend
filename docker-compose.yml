@@ -17,23 +17,6 @@ services:
     depends_on:
       - mysql
 
-  init:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    environment:
-      APP_ENV: prod
-      APP_DEBUG: 'false'
-      APP_KEY: '"base64:N5A11hYX5GxzTqEPRtoRHjtdtqg65hGpw2Qis1V4b8M="'
-      DB_DATABASE: dms
-      DB_HOST: mysql
-      DB_PASSWORD: dms
-      DB_USERNAME: root
-    command:
-      - ./init.sh
-    depends_on:
-      - mysql
-
   mysql:
     image: mysql:5.7.22
     container_name: dms-mysql

@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Criteria\IQueryParamsObject;
 use App\Entities\Document;
 use App\Entities\DocumentVersion;
 use App\Events\Document\DocumentCreateEvent;
@@ -35,12 +36,12 @@ class DocumentService
     }
 
     /**
-     * @param bool $withCriteria
+     * @param IQueryParamsObject $queryParamsObject
      * @return mixed
      */
-    public function list($withCriteria = false)
+    public function list(IQueryParamsObject $queryParamsObject)
     {
-        return $this->repository->paginateList($withCriteria);
+        return $this->repository->paginateList($queryParamsObject);
     }
 
     /**
@@ -123,17 +124,15 @@ class DocumentService
      * @param integer $id
      * @return integer
      */
-    public function delete(int $id): int
+    public function delete(int $id): ?int
     {
-        $document = $this->repository->findModel($id);
-
-        if (is_null($document)) {
-            return 0;
+        try {
+            $document = $this->repository->find($id);
+            Event::dispatch(new DocumentDeleteEvent($document));
+            return $this->repository->delete($id);
+        } catch(ModelNotFoundException $e){
+            return null;
         }
-
-        Event::dispatch(new DocumentDeleteEvent($document));
-
-        return $this->repository->delete($id);
     }
 
     /**
@@ -162,6 +161,10 @@ class DocumentService
      */
     public function findModel(int $id)
     {
-        return $this->repository->findModel($id);
+        try {
+            return $this->repository->find($id);
+        } catch(ModelNotFoundException $e){
+            return null;
+        }
     }
 }

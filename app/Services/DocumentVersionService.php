@@ -114,23 +114,19 @@ class DocumentVersionService
     }
 
     /**
-     * @param integer $id
-     * @param boolean $force
-     * @return integer
+     * @param int $id
+     * @param bool $force
      * @throws FailedDeleteActualDocumentVersion
      */
-    public function delete(int $id, bool $force = false): int
+    public function delete(int $id, bool $force = false)
     {
-        $dv = $this->repository->findModel($id);
-        if (is_null($dv)) {
-            return 0;
-        }
+        $documentVersion = $this->repository->find($id);
 
-        if ($dv->isActual && !$force) {
+        if ($documentVersion->isActual && !$force) {
             throw new FailedDeleteActualDocumentVersion('Actual version cannot be deleted');
         }
 
-        return $this->repository->delete($id);
+        $this->repository->delete($id);
     }
 
     /**

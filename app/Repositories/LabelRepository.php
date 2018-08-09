@@ -2,14 +2,20 @@
 
 namespace App\Repositories;
 
+use App\Entities\Label;
+
 /**
- * Interface LabelRepository.
+ * Class DocumentRepositoryEloquent.
  */
-interface LabelRepository extends RepositoryInterface
+class LabelRepository extends BaseRepository
 {
     /**
-     * @param integer $id
-     * @return mixed
+     * Specify Model class name
+     *
+     * @return string
      */
-    public function findModel(int $id);
+    public function getInstance()
+    {
+        return new Label();
+    }
 }

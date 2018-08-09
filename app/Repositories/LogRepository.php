@@ -2,15 +2,13 @@
 
 namespace App\Repositories;
 
-/**
- * Interface LogRepository.
- */
-interface LogRepository extends RepositoryInterface
+use App\Entities\Log;
+
+class LogRepository extends BaseRepository
 {
-    /**
-     * @param integer $userId
-     * @param bool $withCriteria
-     * @return mixed
-     */
-    public function paginateByUser(int $userId, $withCriteria = false);
+
+    protected function getInstance()
+    {
+        return new Log();
+    }
 }

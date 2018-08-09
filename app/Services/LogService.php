@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Contracts\Helpers\ILogger;
+use App\Criteria\IQueryParamsObject;
 use App\Repositories\LogRepository;
 
 class LogService implements ILogger
@@ -22,13 +23,12 @@ class LogService implements ILogger
     }
 
     /**
-     * @param integer $userId
-     * @param bool $withCriteria
+     * @param IQueryParamsObject $queryParamsObject
      * @return mixed
      */
-    public function list(int $userId = null, $withCriteria = false)
+    public function list(IQueryParamsObject $queryParamsObject)
     {
-        return is_null($userId) ? $this->repository->paginateList($withCriteria) : $this->repository->paginateByUser($userId, $withCriteria);
+        return $this->repository->paginateList($queryParamsObject);
     }
 
     /**

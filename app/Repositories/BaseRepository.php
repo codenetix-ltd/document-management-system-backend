@@ -2,52 +2,68 @@
 
 namespace App\Repositories;
 
-use App\Criteria\SimpleSortingCriteria;
-use Prettus\Repository\Contracts\CriteriaInterface;
-use Prettus\Repository\Exceptions\RepositoryException;
+use App\Criteria\IQueryParamsObject;
 
-abstract class BaseRepository extends \Prettus\Repository\Eloquent\BaseRepository implements RepositoryInterface
+abstract class BaseRepository
 {
+
     /**
-     * @param integer $id
      * @return mixed
      */
-    public function findModel(int $id)
-    {
-        return $this->model->find($id);
-    }
+    abstract protected function getInstance();
 
     /**
-     * @param bool $withCriteria
-     * @param null $limit
-     * @param array $columns
-     *
      * @return mixed
-     * @throws RepositoryException
      */
-    public function paginateList($withCriteria = false, $limit = null, $columns = ['*'])
-    {
-        if ($withCriteria) {
-            foreach ($this->getFullCriteriaList() as $criteria) {
-                $this->pushCriteria($criteria);
-            }
-        }
-
-        return $this->paginate($limit, $columns);
+    protected function getQuery(){
+        return $this->getInstance()->newQuery();
     }
 
     /**
-     * @return CriteriaInterface[]
+     * @param IQueryParamsObject $queryParamsObject
+     * @return mixed
      */
-    protected function getCriteriaList()
+    public function paginateList(IQueryParamsObject $queryParamsObject)
     {
-        return [];
+        return $this->getInstance()->paginate();
     }
 
-    private function getFullCriteriaList()
+    /**
+     * @param $data
+     * @return mixed
+     */
+    public function create($data)
     {
-        return array_merge([
-            app(SimpleSortingCriteria::class),
-        ], $this->getCriteriaList());
+        $entry = $this->getInstance()->create($data);
+
+        return $this->getInstance()->find($entry->id);
+    }
+
+    /**
+     * @param $id
+     * @param $data
+     * @return mixed
+     */
+    public function update($data, $id)
+    {
+        $this->getInstance()->findOrFail($id)->update($data);
+
+        return $this->getInstance()->find($id);
+    }
+
+    /**
+     * @param $id
+     * @return mixed
+     */
+    public function find($id){
+        return $this->getInstance()->findOrFail($id);
+    }
+
+    /**
+     * @param $id
+     * @return mixed
+     */
+    public function delete($id){
+        return $this->getInstance()->delete($id);
     }
 }

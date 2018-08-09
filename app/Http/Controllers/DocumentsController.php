@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\DocumentBulkPatchUpdateRequest;
 use App\Http\Requests\DocumentCreateRequest;
+use App\Http\Requests\DocumentListRequest;
 use App\Http\Requests\DocumentPatchUpdateRequest;
 use App\Http\Requests\DocumentUpdateRequest;
 use App\Http\Resources\DocumentCollectionResource;
@@ -33,11 +34,12 @@ class DocumentsController extends Controller
     }
 
     /**
+     * @param DocumentListRequest $request
      * @return DocumentCollectionResource
      */
-    public function index()
+    public function index(DocumentListRequest $request)
     {
-        $documents = $this->service->list(true);
+        $documents = $this->service->list($request->queryParamsObject());
         return new DocumentCollectionResource($documents);
     }
 
@@ -70,7 +72,7 @@ class DocumentsController extends Controller
 
     /**
      * @param DocumentUpdateRequest $request
-     * @param integer               $id
+     * @param integer $id
      * @return DocumentResource
      * @throws \App\Exceptions\FailedDeleteActualDocumentVersion
      */
@@ -88,7 +90,7 @@ class DocumentsController extends Controller
 
     /**
      * @param DocumentPatchUpdateRequest $request
-     * @param integer                    $id
+     * @param integer $id
      * @return DocumentResource
      */
     public function patchUpdate(DocumentPatchUpdateRequest $request, int $id)
@@ -124,7 +126,7 @@ class DocumentsController extends Controller
 
     /**
      * @param DocumentBulkPatchUpdateRequest $request
-     * @param DocumentService                $service
+     * @param DocumentService $service
      *
      * @return DocumentCollectionResource
      * @throws ValidationException
@@ -141,24 +143,18 @@ class DocumentsController extends Controller
 
         $collection = new Collection();
         for ($i = 0; $i < count($ids); ++$i) {
-            try {
-                $document = $this->service->find($ids[$i]);
-                $authorizer = AuthorizerFactory::make('document', $document);
-                try {
-                    $authorizer->authorize('document_update');
-                } catch (Exception $e) {
-                }
+            $document = $this->service->find($ids[$i]);
+            $authorizer = AuthorizerFactory::make('document', $document);
+            $authorizer->authorize('document_update');
 
-                $collection->push($service->update($data[$i], $ids[$i]));
-            } catch (Exception $e) {
-            }
+            $collection->push($service->update($data[$i], $ids[$i]));
         }
 
         return new DocumentCollectionResource($collection);
     }
 
     /**
-     * @param Request         $request
+     * @param Request $request
      * @param DocumentService $documentService
      * @return \Illuminate\Http\JsonResponse
      */

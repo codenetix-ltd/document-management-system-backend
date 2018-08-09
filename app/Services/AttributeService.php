@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Criteria\IQueryParamsObject;
 use App\Entities\Attribute;
 use App\Entities\TableTypeColumn;
 use App\Entities\TableTypeRow;
@@ -111,12 +112,13 @@ class AttributeService
     }
 
     /**
+     * @param IQueryParamsObject $queryParamsObject
      * @param integer $templateId
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function paginateAttributes(int $templateId)
+    public function paginateAttributes(IQueryParamsObject $queryParamsObject, int $templateId)
     {
-        return $this->repository->paginateAttributes($templateId);
+        return $this->repository->paginateAttributes($queryParamsObject, $templateId);
     }
 
     /**

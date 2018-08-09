@@ -107,8 +107,8 @@ class DocumentTest extends TestCase
         $dv = factory(DocumentVersion::class)->create(['name' => 'xyz', 'is_actual' => false]);
         factory(DocumentVersion::class)->create(['name' => 'eyz', 'document_id' => $dv->documentId ,'version_name' => 2, 'is_actual' => true]);
 
-        $response = $this->json('GET', self::PATH . '?orderBy=actualVersion.name&sortedBy=desc');
-        
+        $response = $this->json('GET', self::PATH . '?sort[actualVersion.name]=desc');
+
         $this->assetJsonPaginationStructure($response);
         $response->assertStatus(Response::HTTP_OK);
 
@@ -129,7 +129,7 @@ class DocumentTest extends TestCase
         
         (new DocumentStub(['owner_id' => $u1->id], true));
         (new DocumentStub(['owner_id' => $u2->id], true));
-        $response = $this->json('GET', self::PATH . '?orderBy=owner.fullName&sortedBy=desc');
+        $response = $this->json('GET', self::PATH . '?sort[owner.fullName]=desc');
 
         $this->assetJsonPaginationStructure($response);
         $response->assertStatus(Response::HTTP_OK);
@@ -154,7 +154,7 @@ class DocumentTest extends TestCase
         $dv = factory(DocumentVersion::class)->create(['is_actual' => false, 'template_id' => $t1->id]);
         factory(DocumentVersion::class)->create(['document_id' => $dv->documentId ,'version_name' => 2, 'is_actual' => true, 'template_id' => $t2->id]);
 
-        $response = $this->json('GET', self::PATH . '?orderBy=actualVersion.template.name&sortedBy=desc');
+        $response = $this->json('GET', self::PATH . '?sort[actualVersion.template.name]=desc');
 
         $this->assetJsonPaginationStructure($response);
         $response->assertStatus(Response::HTTP_OK);
@@ -173,6 +173,7 @@ class DocumentTest extends TestCase
     public function testDocumentGetNotFound()
     {
         $response = $this->json('GET', self::PATH .'/0');
+
         $response->assertStatus(404);
     }
 
@@ -204,9 +205,7 @@ class DocumentTest extends TestCase
                 'updatedAt' => $savedDocumentVersion->updatedAt->timestamp,
                 'createdAt' => $savedDocumentVersion->createdAt->timestamp,
             ]),
-        ]));
-
-        $this->assertCount(1, $updatedDocument->documentVersions);
+        ]))->assertCount(1, $updatedDocument->documentVersions);
     }
 
     /**
@@ -297,7 +296,7 @@ class DocumentTest extends TestCase
         factory(DocumentVersion::class)->create(['name'=> 'match_1']);
         factory(DocumentVersion::class)->create(['name'=> 'match_2']);
 
-        $responseArr = $this->json('GET', self::PATH . '?filters[name]=match')->decodeResponseJson();
+        $responseArr = $this->json('GET', self::PATH . '?filter[name]=match')->decodeResponseJson();
 
         $this->assertCount(2, $responseArr['data']);
         $this->assertEquals('match_1', $responseArr['data'][0]['actualVersion']['name']);
@@ -324,7 +323,7 @@ class DocumentTest extends TestCase
         $dv2->labels()->sync([$label1->id]);
         $dv3->labels()->sync([$label3->id]);
 
-        $responseArr = $this->json('GET', self::PATH . '?filters[labelIds]='.$label1->id.','.$label2->id)->decodeResponseJson();
+        $responseArr = $this->json('GET', self::PATH . '?filter[labelIds]='.$label1->id.','.$label2->id)->decodeResponseJson();
 
         $this->assertCount(2, $responseArr['data']);
         $this->assertEquals($dv1->id, $responseArr['data'][0]['actualVersion']['id']);
@@ -429,8 +428,6 @@ class DocumentTest extends TestCase
                 return ['substituteDocumentId' => $documentSubstitute->id];
             })->toArray()
         );
-
-        $response->decodeResponseJson();
 
         $expected = $documentsStubCollection->map(function (DocumentStub $item) use ($documentSubstitute) {
             /** @var Document $d */

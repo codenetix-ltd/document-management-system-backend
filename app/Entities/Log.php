@@ -3,6 +3,7 @@
 namespace App\Entities;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Model;
 use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
 
@@ -19,7 +20,7 @@ use Prettus\Repository\Traits\TransformableTrait;
  * @property Carbon $createdAt
  * @property Carbon $updatedAt
  */
-class Log extends BaseEntity implements Transformable
+class Log extends BaseModel implements Transformable
 {
     use TransformableTrait;
 
@@ -31,7 +32,7 @@ class Log extends BaseEntity implements Transformable
     protected $fillable = [
         'body', 'userId', 'referenceId', 'referenceType'
     ];
-    
+    public $enforceCamelCase = false;
     public $fieldMap = [
         'link' => false,
     ];

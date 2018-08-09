@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AttributeCreateRequest;
+use App\Http\Requests\AttributeListRequest;
 use App\Http\Requests\AttributeUpdateRequest;
 use App\Http\Resources\AttributeCollectionResource;
 use App\Http\Resources\AttributeResource;
@@ -35,10 +36,11 @@ class AttributesController extends Controller
     }
 
     /**
+     * @param AttributeListRequest $request
      * @param integer $templateId
      * @return AttributeCollectionResource
      */
-    public function index(int $templateId)
+    public function index(AttributeListRequest $request, int $templateId)
     {
         $this->templateService->find($templateId);
         $attributes = $this->service->paginateAttributes($templateId);

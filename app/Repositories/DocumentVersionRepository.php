@@ -2,21 +2,30 @@
 
 namespace App\Repositories;
 
-/**
- * Interface DocumentVersionRepository.
- */
-interface DocumentVersionRepository extends RepositoryInterface
+use App\Criteria\DocumentIdCriteria;
+use App\Criteria\IQueryParamsObject;
+use App\Entities\DocumentVersion;
+use App\QueryObject\DocumentListQueryObject;
+use Prettus\Repository\Exceptions\RepositoryException;
+
+
+class DocumentVersionRepository extends BaseRepository
 {
     /**
-     * @param integer $documentId
-     * @param bool $withCriteria
-     * @return mixed
+     * Specify Model class name
+     *
+     * @return string
      */
-    public function paginateByDocument(int $documentId, $withCriteria = false);
+    public function model()
+    {
+        return DocumentVersion::class;
+    }
 
     /**
-     * @param integer $id
      * @return mixed
      */
-    public function findModel(int $id);
+    protected function getInstance()
+    {
+        return new DocumentVersion;
+    }
 }

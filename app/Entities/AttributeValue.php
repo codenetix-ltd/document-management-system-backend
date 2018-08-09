@@ -3,6 +3,7 @@
 namespace App\Entities;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class AttributeValue
@@ -14,7 +15,7 @@ use Carbon\Carbon;
  * @property Carbon $createdAt
  * @property Carbon $updatedAt
  */
-class AttributeValue extends BaseEntity
+class AttributeValue extends BaseModel
 {
     /**
      * @var array
@@ -22,7 +23,7 @@ class AttributeValue extends BaseEntity
     protected $fillable = [
         'attributeId', 'documentVersionId', 'value',
     ];
-
+    public $enforceCamelCase = false;
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */

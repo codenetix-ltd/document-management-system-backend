@@ -51,18 +51,19 @@ class LogTest extends TestCase
      * @throws \Exception The exception that triggered the error response (if applicable).
      * @return void
      */
-    public function testLogList()
+    public function testLogListWithoutArgs()
     {
         factory(Log::class, 5)->create(['user_id' => $this->authUser->id]);
         factory(Log::class, 5)->create(['user_id' => factory(User::class)->create()->id]);
 
         $response = $this
             ->actingAs($this->authUser)
-            ->json('GET', self::API_ROOT . 'logs');
+            ->json('GET', self::API_ROOT. 'logs?sort[body]=desc');
 
         $this->assetJsonPaginationStructure($response);
 
         $decodedResponse = $response->decodeResponseJson();
+
         $item = $decodedResponse['data'][0];
 
         $response->assertJsonStructure([
@@ -93,16 +94,16 @@ class LogTest extends TestCase
 
         factory(Log::class)->create(['body' => 'a', 'user_id' => $this->authUser->id]);
         factory(Log::class)->create(['body' => 'z', 'user_id' => $this->authUser->id]);
-        
+
 
         $response = $this
             ->actingAs($this->authUser)
-            ->json('GET', self::API_ROOT . 'logs?orderBy=body&sortedBy=desc');
+            ->json('GET', self::API_ROOT . 'logs?sort[body]=desc');
 
         $this->assetJsonPaginationStructure($response);
 
         $decodedResponse = $response->decodeResponseJson();
-        
+
         $response->assertStatus(Response::HTTP_OK);
         
         $this->assertEquals('z',$decodedResponse['data'][0]['body']);
@@ -120,7 +121,8 @@ class LogTest extends TestCase
 
         $response = $this
             ->actingAs($this->authUser)
-            ->json('GET', self::API_ROOT . 'logs?orderBy=user.fullName&sortedBy=desc');
+            ->json('GET', self::API_ROOT . 'logs?sort[user.full_name]=desc');
+
 
         $this->assetJsonPaginationStructure($response);
 

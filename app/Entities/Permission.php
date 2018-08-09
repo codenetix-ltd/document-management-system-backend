@@ -2,6 +2,7 @@
 
 namespace App\Entities;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
@@ -16,12 +17,12 @@ use Prettus\Repository\Traits\TransformableTrait;
  * @property Collection|AccessType[] $accessTypes
  * @property Collection|Role[] $roles
  */
-class Permission extends BaseEntity implements Transformable
+class Permission extends BaseModel implements Transformable
 {
     use TransformableTrait;
 
     public $timestamps = false;
-
+    public $enforceCamelCase = false;
     public function roles()
     {
         return $this->belongsToMany(Role::class, 'role_permission')->withPivot(['entity_id', 'entity_type']);

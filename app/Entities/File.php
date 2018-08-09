@@ -3,6 +3,7 @@
 namespace App\Entities;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class File
@@ -15,10 +16,12 @@ use Carbon\Carbon;
  * @property Carbon $createdAt
  * @property Carbon $updatedAt
  */
-class File extends BaseEntity
+class File extends BaseModel
 {
     /**
      * @var array
      */
     protected $fillable = ['path', 'original_name'];
+
+    public $enforceCamelCase = false;
 }

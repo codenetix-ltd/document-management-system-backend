@@ -2,14 +2,20 @@
 
 namespace App\Repositories;
 
+use App\Entities\Template;
+
 /**
- * Interface TemplateRepository.
+ * Class DocumentRepositoryEloquent.
  */
-interface TemplateRepository extends RepositoryInterface
+class TemplateRepository extends BaseRepository
 {
     /**
-     * @param integer $id
-     * @return mixed
+     * Specify Model class name
+     *
+     * @return string
      */
-    public function findModel(int $id);
+    public function getInstance()
+    {
+        return new Template;
+    }
 }

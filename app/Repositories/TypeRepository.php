@@ -7,11 +7,23 @@ use App\Entities\Type;
 /**
  * Interface TypeRepository.
  */
-interface TypeRepository extends RepositoryInterface
+class TypeRepository extends BaseRepository
 {
+
     /**
      * @param string $machineName
      * @return Type
      */
-    public function getTypeByMachineName(string $machineName): Type;
+    public function getTypeByMachineName(string $machineName): Type
+    {
+        return $this->getInstance()->where('machine_name', '=', $machineName)->first();
+    }
+
+    /**
+     * @return mixed
+     */
+    protected function getInstance()
+    {
+        return new Type();
+    }
 }

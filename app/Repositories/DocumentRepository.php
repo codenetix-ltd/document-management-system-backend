@@ -2,14 +2,27 @@
 
 namespace App\Repositories;
 
-/**
- * Interface DocumentRepository.
- */
-interface DocumentRepository extends RepositoryInterface
+use App\Criteria\IQueryParamsObject;
+use App\Entities\Document;
+use App\QueryObject\DocumentListQueryObject;
+
+class DocumentRepository extends BaseRepository
 {
+
     /**
-     * @param integer $id
-     * @return mixed
+     * @return Document|mixed
      */
-    public function findModel(int $id);
+    protected function getInstance()
+    {
+        return new Document();
+    }
+
+    /**
+     * @param IQueryParamsObject $queryParamsObject
+     * @return null
+     */
+    public function paginateList(IQueryParamsObject $queryParamsObject)
+    {
+        return (new DocumentListQueryObject($this->getQuery()))->applyQueryParams($queryParamsObject)->paginate();
+    }
 }

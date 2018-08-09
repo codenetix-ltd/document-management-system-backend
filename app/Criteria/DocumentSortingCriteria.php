@@ -13,8 +13,7 @@ class DocumentSortingCriteria extends RelationSortingCriteria
         if($table == 'document_versions') {
             return $model
                 ->leftJoin('document_versions', 'document_versions.document_id', '=', 'documents.id')
-                ->where('document_versions.is_actual', '=', '1')
-            ;   
+                ->where('document_versions.is_actual', '=', '1');
         }
         
         return parent::addJoin($table, $foreignKey, $model);

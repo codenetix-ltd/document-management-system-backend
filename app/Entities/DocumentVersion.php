@@ -3,6 +3,7 @@
 namespace App\Entities;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
@@ -26,9 +27,11 @@ use Prettus\Repository\Traits\TransformableTrait;
  * @property Carbon $createdAt
  * @property Carbon $updatedAt
  */
-class DocumentVersion extends BaseEntity implements Transformable
+class DocumentVersion extends BaseModel implements Transformable
 {
     use TransformableTrait;
+
+    public $enforceCamelCase = false;
 
     /**
      * The attributes that are mass assignable.

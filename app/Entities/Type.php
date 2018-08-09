@@ -3,6 +3,7 @@
 namespace App\Entities;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Model;
 use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
 
@@ -15,9 +16,9 @@ use Prettus\Repository\Traits\TransformableTrait;
  * @property Carbon $createdAt
  * @property Carbon $updatedAt
  */
-class Type extends BaseEntity implements Transformable
+class Type extends BaseModel implements Transformable
 {
     use TransformableTrait;
-
+    public $enforceCamelCase = false;
     protected $fillable = ['name'];
 }

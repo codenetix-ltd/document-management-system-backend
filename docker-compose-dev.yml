@@ -1,0 +1,46 @@
+version: '3'
+
+services:
+  backend-app:
+    image: codenetix/laravel-dms-backend-platform
+    environment:
+      APP_ENV: local
+      APP_DEBUG: 'true'
+    expose:
+      - 80
+    volumes:
+      - ./:/var/www
+    command:
+      - '/usr/sbin/run.sh'
+    ports:
+      - 80:80
+
+  init:
+    image: codenetix/laravel-dms-backend-platform
+    environment:
+      APP_ENV: local
+      APP_DEBUG: 'false'
+    volumes:
+      - ./:/var/www
+    command:
+      - ./init.sh
+    depends_on:
+      - mysql
+
+  app-php-unit:
+    image: codenetix/laravel-dms-backend-platform
+    container_name: dms-app-php-unit
+    environment:
+      APP_ENV: prod
+      APP_DEBUG: 'false'
+      APP_KEY: '"base64:N5A11hYX5GxzTqEPRtoRHjtdtqg65hGpw2Qis1V4b8M="'
+      DB_DATABASE: dms
+      DB_HOST: mysql
+      DB_PASSWORD: dms
+      DB_USERNAME: root
+    volumes:
+      - ./:/var/www
+    command: ['vendor/bin/phpunit', 'tests/Feature', '-c', 'phpunit.xml']
+    depends_on:
+      - mysql
+

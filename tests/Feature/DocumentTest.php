@@ -95,7 +95,7 @@ class DocumentTest extends TestCase
         $response = $this->json('GET', self::PATH .'/' . $stub->getModel()->id);
         $response->assertExactJson($stub->buildResponse());
     }
-    
+
     /**
      * List of documents
      * @return void
@@ -126,7 +126,7 @@ class DocumentTest extends TestCase
     {
         $u1 = factory(User::class)->create(['full_name' => 'abc']);
         $u2 = factory(User::class)->create(['full_name' => 'xyz']);
-        
+
         (new DocumentStub(['owner_id' => $u1->id], true));
         (new DocumentStub(['owner_id' => $u2->id], true));
         $response = $this->json('GET', self::PATH . '?sort[owner.fullName]=desc');
@@ -193,10 +193,12 @@ class DocumentTest extends TestCase
             'createNewVersion' => false,
             'actualVersion' => $newDocumentVersionStub->buildRequest()
         ]));
+
         /** @var Document $updatedDocument */
         $updatedDocument = Document::find($document->id);
         $savedDocumentVersion = $updatedDocument->documentActualVersion;
 
+        $this->assertCount(1, $updatedDocument->documentVersions);
         $response->assertExactJson($documentStub->buildResponse([
             'updatedAt' => $updatedDocument->updatedAt->timestamp,
             'version' => $oldVersion->versionName,
@@ -205,7 +207,7 @@ class DocumentTest extends TestCase
                 'updatedAt' => $savedDocumentVersion->updatedAt->timestamp,
                 'createdAt' => $savedDocumentVersion->createdAt->timestamp,
             ]),
-        ]))->assertCount(1, $updatedDocument->documentVersions);
+        ]));
     }
 
     /**
@@ -323,11 +325,24 @@ class DocumentTest extends TestCase
         $dv2->labels()->sync([$label1->id]);
         $dv3->labels()->sync([$label3->id]);
 
-        $responseArr = $this->json('GET', self::PATH . '?filter[labelIds]='.$label1->id.','.$label2->id)->decodeResponseJson();
-
-        $this->assertCount(2, $responseArr['data']);
-        $this->assertEquals($dv1->id, $responseArr['data'][0]['actualVersion']['id']);
-        $this->assertEquals($dv2->id, $responseArr['data'][1]['actualVersion']['id']);
+        $this
+            ->json('GET', self::PATH . '?filter[labelIds]='.$label1->id.','.$label2->id)
+            ->assertStatus(200)
+            ->assertJsonCount(2, 'data')
+            ->assertJson([
+                'data' => [
+                    [
+                        'actualVersion' => [
+                            'id' => $dv2->id
+                        ]
+                    ],
+                    [
+                        'actualVersion' => [
+                            'id' => $dv1->id
+                        ]
+                    ]
+                ]
+            ]);
     }
 
     /**
@@ -374,9 +389,8 @@ class DocumentTest extends TestCase
         $request = $stub->buildRequest(['substituteDocumentId' => 'string']);
         unset($request['actualVersion']['templateId']);
 
-        $response = $this->json('POST', self::PATH, $request);
-
-        $response
+        $this
+            ->json('POST', self::PATH, $request)
             ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
             ->assertJsonValidationErrors(['substituteDocumentId', 'actualVersion.templateId']);
     }
@@ -393,8 +407,9 @@ class DocumentTest extends TestCase
             $docCollection->push((new DocumentStub([], true))->getModel());
         }
 
-        $response = $this->json('DELETE', self::PATH.'?ids='.$docCollection->implode('id', ','));
-        $response->assertStatus(204);
+        $this
+            ->json('DELETE', self::PATH.'?ids='.$docCollection->implode('id', ','))
+            ->assertStatus(204);
 
         $docCollection->each(function (Document $item) {
             $this->assertSoftDeleted('documents', ['id' => $item->id]);

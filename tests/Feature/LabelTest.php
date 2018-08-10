@@ -34,10 +34,11 @@ class LabelTest extends TestCase
     {
         factory(Label::class, 10)->create();
 
-        $response = $this->json('GET', self::API_ROOT . 'labels');
+        $response = $this
+            ->json('GET', self::API_ROOT . 'labels')
+            ->assertStatus(Response::HTTP_OK);
         $this->assetJsonPaginationStructure($response);
 
-        $response->assertStatus(Response::HTTP_OK);
     }
 
     /**

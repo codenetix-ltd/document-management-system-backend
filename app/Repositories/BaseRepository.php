@@ -60,10 +60,25 @@ abstract class BaseRepository
     }
 
     /**
+     * @param array $whereClauses
+     * @return mixed
+     */
+    public function findWhere(array $whereClauses){
+        return $this->getInstance()->where($whereClauses)->first();
+    }
+
+    /**
      * @param $id
      * @return mixed
      */
     public function delete($id){
-        return $this->getInstance()->delete($id);
+        return $this->getInstance()->where(['id' => $id])->delete();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function all(){
+        return $this->getInstance()->all();
     }
 }

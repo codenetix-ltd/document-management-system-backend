@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\LabelCreateRequest;
+use App\Http\Requests\LabelListRequest;
 use App\Http\Requests\LabelUpdateRequest;
 use App\Http\Resources\LabelCollectionResource;
 use App\Http\Resources\LabelResource;
 use App\Services\LabelService;
 use App\System\AuthBuilders\AuthorizerFactory;
+use Exception;
 use Illuminate\Http\Response;
 
 class LabelsController extends Controller
@@ -27,17 +29,19 @@ class LabelsController extends Controller
     }
 
     /**
+     * @param LabelListRequest $request
      * @return LabelCollectionResource
      */
-    public function index()
+    public function index(LabelListRequest $request)
     {
-        $labels = $this->service->paginate(true);
+        $labels = $this->service->paginate($request->queryParamsObject());
+
         return new LabelCollectionResource($labels);
     }
 
     /**
      * @param LabelCreateRequest $request
-     * @return LabelResource
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(LabelCreateRequest $request)
     {
@@ -45,7 +49,7 @@ class LabelsController extends Controller
         $authorizer->authorize('label_create');
 
         $label = $this->service->create($request->all());
-        return new LabelResource($label);
+        return (new LabelResource($label))->response()->setStatusCode(Response::HTTP_CREATED);
     }
 
     /**
@@ -87,7 +91,11 @@ class LabelsController extends Controller
      */
     public function destroy(int $id)
     {
-        $label = $this->service->findModel($id);
+        try {
+            $label = $this->service->find($id);
+        } catch (Exception $e) {
+            return response()->json([], Response::HTTP_NO_CONTENT);
+        }
 
         if ($label) {
             $authorizer = AuthorizerFactory::make('label', $label);

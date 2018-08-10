@@ -43,7 +43,7 @@ class AttributesController extends Controller
     public function index(AttributeListRequest $request, int $templateId)
     {
         $this->templateService->find($templateId);
-        $attributes = $this->service->paginateAttributes($templateId);
+        $attributes = $this->service->paginateAttributes($request->queryParamsObject(), $templateId);
 
         return (new AttributeCollectionResource($attributes, $this->service));
     }

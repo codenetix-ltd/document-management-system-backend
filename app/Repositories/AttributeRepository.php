@@ -103,7 +103,7 @@ class AttributeRepository extends BaseRepository
      */
     public function paginateAttributes(IQueryParamsObject $queryParamsObject, int $templateId): LengthAwarePaginator
     {
-        return $this->applyQueryParams($queryParamsObject, $this->getInstance(), 'paginateAttributes')->where('parent_attribute_id', null)->where('template_id', $templateId)->paginate();
+        return $this->getInstance()->where('parent_attribute_id', null)->where('template_id', $templateId)->paginate();
     }
 
     /**
@@ -123,5 +123,13 @@ class AttributeRepository extends BaseRepository
     public function deleteAttributesByIds(array $ids): int
     {
         return $this->getInstance()->whereIn('id', $ids)->delete();
+    }
+
+    /**
+     * @param int $templateId
+     * @return mixed
+     */
+    public function getMaxOrderValueOfAttributeByTemplateId(int $templateId): ?int {
+        return $this->getInstance()->whereTemplateId($templateId)->whereNull('parent_attribute_id')->max('order');
     }
 }

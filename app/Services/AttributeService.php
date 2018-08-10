@@ -13,6 +13,7 @@ use App\Exceptions\InvalidAttributeTypeException;
 use App\Repositories\AttributeRepository;
 use App\Repositories\TypeRepository;
 use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class AttributeService
 {
@@ -65,7 +66,7 @@ class AttributeService
     public function create(int $templateId, array $data)
     {
         $data['templateId'] = $templateId;
-        $data['order'] = $this->getDefaultAttributeOrderByTemplateId($templateId);
+        $data['order'] = $this->getNextAttributeOrderByTemplateId($templateId);
 
         if (empty($data['data'])) {
             $attribute = $this->repository->create($data);
@@ -125,18 +126,11 @@ class AttributeService
      * @param integer $templateId
      * @return integer
      */
-    private function getDefaultAttributeOrderByTemplateId(int $templateId): int
+    private function getNextAttributeOrderByTemplateId(int $templateId): int
     {
-        $maxOrder = $this->repository->findWhere([
-            ['template_id', '=', $templateId],
-            ['parent_attribute_id', '=', null]
-        ])->max('order');
+        $maxOrder = $this->repository->getMaxOrderValueOfAttributeByTemplateId($templateId);
 
-        if (is_null($maxOrder)) {
-            return 0;
-        } else {
-            return $maxOrder + 1;
-        }
+        return $maxOrder === null ? 0 : ($maxOrder + 1);
     }
 
     /**
@@ -313,11 +307,12 @@ class AttributeService
      * @return integer
      * @throws FailedAttributeDeleteException
      */
-    public function delete(int $id): int
+    public function delete(int $id): ?int
     {
-        $attribute = $this->repository->findWhere([['id', '=', $id]])->first();
-        if (is_null($attribute)) {
-            return 0;
+        try {
+            $attribute = $this->repository->find($id);
+        } catch (ModelNotFoundException $e){
+            return null;
         }
 
         if ($attribute->parent_attribute_id) {

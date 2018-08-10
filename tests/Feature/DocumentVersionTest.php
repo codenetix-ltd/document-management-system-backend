@@ -40,12 +40,14 @@ class DocumentVersionTest extends TestCase
         $documentVersionStub = new DocumentVersionStub(['documentId' => $document->id]);
 
         $response = $this->json('POST', self::API_ROOT . 'documents/' . $document->id . '/versions', $documentVersionStub->buildRequest([]));
+
+        $response->assertStatus(201);
+
         $id = $response->decodeResponseJson()['id'];
         /** @var DocumentVersion $documentVersion */
         $documentVersion = DocumentVersion::find($id);
 
         $response
-            ->assertStatus(201)
             ->assertExactJson($documentVersionStub->buildResponse([
                 'id' => $documentVersion->id,
                 'versionName' => $documentVersion->versionName,
@@ -72,10 +74,11 @@ class DocumentVersionTest extends TestCase
         new DocumentVersionStub([], true);
 
 
-        $response = $this->json('GET', self::API_ROOT . 'documents/' . $document->id . '/versions');
+        $response = $this
+            ->json('GET', self::API_ROOT . 'documents/' . $document->id . '/versions')
+            ->assertStatus(Response::HTTP_OK);
 
         $this->assetJsonPaginationStructure($response);
-        $response->assertStatus(Response::HTTP_OK);
 
         // 1 from DocumentStub + 3 from loop
         $this->assertCount(4, $response->decodeResponseJson()['data']);

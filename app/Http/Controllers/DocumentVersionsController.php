@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\DocumentVersionCreateRequest;
+use App\Http\Requests\DocumentVersionListRequest;
 use App\Http\Requests\DocumentVersionUpdateRequest;
 use App\Http\Resources\DocumentVersionCollectionResource;
 use App\Http\Resources\DocumentVersionResource;
 use App\Services\DocumentService;
 use App\Services\DocumentVersionService;
 use App\System\AuthBuilders\AuthorizerFactory;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Response;
 
 class DocumentVersionsController extends Controller
@@ -30,23 +32,24 @@ class DocumentVersionsController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param DocumentVersionListRequest $request
      * @param integer $documentId
      * @return DocumentVersionCollectionResource
      */
-    public function index(int $documentId)
+    public function index(DocumentVersionListRequest $request, int $documentId)
     {
-        $documentVersions = $this->service->list($documentId, true);
+        $documentVersions = $this->service->list($request->queryParamsObject(), $documentId);
         return new DocumentVersionCollectionResource($documentVersions);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param integer                      $documentId
+     * @param integer $documentId
      * @param  DocumentVersionCreateRequest $request
      *
-     * @param DocumentService              $documentService
-     * @return DocumentVersionResource
+     * @param DocumentService $documentService
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(int $documentId, DocumentVersionCreateRequest $request, DocumentService $documentService)
     {
@@ -59,7 +62,7 @@ class DocumentVersionsController extends Controller
 
         $documentVersion = $this->service->create($request->all(), $document->id, $version, false);
 
-        return new DocumentVersionResource($documentVersion);
+        return (new DocumentVersionResource($documentVersion))->response()->setStatusCode(Response::HTTP_CREATED);
     }
 
     /**
@@ -104,7 +107,11 @@ class DocumentVersionsController extends Controller
      */
     public function destroy(int $documentId, int $documentVersionId)
     {
-        $documentVersion = $this->service->findModel($documentVersionId);
+        try {
+            $documentVersion = $this->service->findModel($documentVersionId);
+        } catch (ModelNotFoundException $e){
+            return response()->json([], Response::HTTP_NO_CONTENT);
+        }
 
         if ($documentVersion) {
             $authorizer = AuthorizerFactory::make('document', $documentVersion->document);

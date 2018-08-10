@@ -2,9 +2,11 @@
 
 namespace App\Services;
 
+use App\Criteria\IQueryParamsObject;
 use App\Entities\DocumentVersion;
 use App\Exceptions\FailedDeleteActualDocumentVersion;
 use App\Repositories\DocumentVersionRepository;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class DocumentVersionService
 {
@@ -29,13 +31,13 @@ class DocumentVersionService
     }
 
     /**
-     * @param integer $documentId
-     * @param bool $withCriteria
+     * @param IQueryParamsObject $queryParamsObject
+     * @param int $documentId
      * @return mixed
      */
-    public function list(int $documentId, $withCriteria = false)
+    public function list(IQueryParamsObject $queryParamsObject, int $documentId)
     {
-        return $this->repository->paginateByDocument($documentId, $withCriteria);
+        return $this->repository->paginateByDocumentId($queryParamsObject, $documentId);
     }
 
     /**
@@ -116,11 +118,16 @@ class DocumentVersionService
     /**
      * @param int $id
      * @param bool $force
+     * @return void
      * @throws FailedDeleteActualDocumentVersion
      */
     public function delete(int $id, bool $force = false)
     {
-        $documentVersion = $this->repository->find($id);
+        try {
+            $documentVersion = $this->repository->find($id);
+        } catch (ModelNotFoundException $e){
+            return;
+        }
 
         if ($documentVersion->isActual && !$force) {
             throw new FailedDeleteActualDocumentVersion('Actual version cannot be deleted');
@@ -135,6 +142,6 @@ class DocumentVersionService
      */
     public function findModel(int $id)
     {
-        return $this->repository->findModel($id);
+        return $this->repository->find($id);
     }
 }

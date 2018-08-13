@@ -1,13 +1,8 @@
-build:
-	export LOCAL_IP="$(shell ifconfig | sed -En 's/127.0.0.1//;s/.*inet (addr:)?(([0-9]*\.){3}[0-9]*).*/\2/p' | head -n1)"; \
-	docker-compose -f docker-compose.yml build
-
 up:
 	docker-compose up -d backend-app
 
 up_dev:
-	[ -f ./docker-compose-local.yml ] && \
-	docker-compose -f docker-compose.yml -f docker-compose-dev.yml -f ./docker-compose-local.yml up -d backend-app || \
+	export XDEBUG_CONFIG="remote_host=$(shell ifconfig | sed -En 's/127.0.0.1//;s/.*inet (addr:)?(([0-9]*\.){3}[0-9]*).*/\2/p' | head -n1) remote_connect_back=0 idekey=PHPSTORM"; \
 	docker-compose -f docker-compose.yml -f docker-compose-dev.yml up -d backend-app
 
 init:

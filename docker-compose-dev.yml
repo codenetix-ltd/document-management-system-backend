@@ -6,6 +6,7 @@ services:
     environment:
       APP_ENV: local
       APP_DEBUG: 'true'
+      XDEBUG_CONFIG: ${XDEBUG_CONFIG}
     expose:
       - 80
     volumes:

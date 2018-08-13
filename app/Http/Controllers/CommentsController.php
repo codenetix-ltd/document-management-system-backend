@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CommentCreateRequest;
 use App\Http\Requests\CommentUpdateRequest;
+use App\Http\Resources\CommentCollectionResource;
 use App\Http\Resources\CommentResource;
 use App\Services\CommentService;
 use Illuminate\Http\Request;
@@ -79,12 +80,12 @@ class CommentsController extends Controller
      *
      * @param Request $request
      * @param int $rootCommentId
-     * @return \Illuminate\Http\Response
+     * @return CommentCollectionResource
      */
     public function getCommentsByRootCommentId(Request $request, int $rootCommentId)
     {
         $comments = $this->service->getCommentsTreeByRootCommentId($rootCommentId, $request->query('pageNumber', 1));
-        return response()->json($comments, 200);
+        return new CommentCollectionResource($comments);
     }
 
 
@@ -93,11 +94,11 @@ class CommentsController extends Controller
      *
      * @param Request $request
      * @param int $documentId
-     * @return \Illuminate\Http\Response
+     * @return CommentCollectionResource
      */
     public function getCommentsByDocumentId(Request $request, int $documentId) // tree structure return
     {
         $comments = $this->service->getCommentsTreeByDocumentId($documentId, $request->query('pageNumber', 1));
-        return response()->json($comments, 200);
+        return new CommentCollectionResource($comments);
     }
 }

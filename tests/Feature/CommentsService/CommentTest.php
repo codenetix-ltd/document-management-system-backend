@@ -137,27 +137,34 @@ class CommentTest extends TestCase
             'parent_id' => null,
             'commentable_id' => $document->id
         ]);
-        factory(Comment::class, 15)->create([
+
+        $firstLvlComment = factory(Comment::class)->create([
             'commentable_id' => $document->id,
+            'parent_id' => $rootComment->id
+        ]);
+
+        $secondLvlComment = factory(Comment::class)->create([
+            'commentable_id' => $document->id,
+            'parent_id' => $firstLvlComment->id
         ]);
 
         $response = $this->json('GET', self::API_ROOT . 'comments/' . $rootComment->id . '/children');
-
         dd($response);
-
         $response
             ->assertJson([
-                'data' => [
-                    'id',
-                    'userId',
-                    'commentableId',
-                    'commentableType',
-                    'parentId',
-                    'message',
-                    'createdAt',
-                    'updatedAt',
-                    'deletedAt',
-                    'children'
+                [
+                    'id' => '',
+                    'user_id' => '',
+                    'commentable_id' => '',
+                    'commentable_type' => '',
+                    'parent_id' => '',
+                    'message' => '',
+                    'created_at' => '',
+                    'updated_at' => '',
+                    'deleted_at' => '',
+                    'children' => [
+
+                    ]
                 ],
             ])
             ->assertStatus(Response::HTTP_OK);

@@ -18,12 +18,12 @@ interface IComment
     public function getParentId(): int;
     public function setMessage(string $message): void;
     public function getMessage(): string;
-    public function setCreatedAt($createdAt): void;
+    public function setCreatedAt(int $createdAt): void;
     public function getCreatedAt(): int;
-    public function setUpdatedAt($updatedAt): void;
+    public function setUpdatedAt(int $updatedAt): void;
     public function getUpdatedAt(): int;
-    public function setDeletedAt($deletedAt): void;
-    public function getDeletedAt(): int;
+    public function setDeletedAt(int $deletedAt): void;
+    public function getDeletedAt(): ?int;
     public function setChildren(CommentsCollection $children): void;
     public function addComment(IComment $comment): void;
     public function getComments(): CommentsCollection;

@@ -15,10 +15,9 @@ class CommentTransformer
         $comment->setEntityType($commentModel->commentable_type);
         $comment->setParentId($commentModel->parent_id);
         $comment->setMessage($commentModel->body);
-        $comment->setCreatedAt($commentModel->created_at);
-        $comment->setUpdatedAt($commentModel->updated_at);
-        $comment->setDeletedAt($commentModel->deleted_at);
-
+        $comment->setCreatedAt($commentModel->created_at->timestamp);
+        $comment->setUpdatedAt($commentModel->updated_at->timestamp);
+        $comment->setDeletedAt(data_get($commentModel, 'deleted_at.timestamp', null));
         return $comment;
     }
 }

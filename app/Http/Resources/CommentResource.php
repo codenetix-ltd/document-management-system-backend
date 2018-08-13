@@ -21,15 +21,24 @@ class CommentResource extends JsonResource
      */
     public function toArray($request)
     {
+        /**
+         * @var \App\Services\Comments\Comment $resource
+         */
+        $resource = $this->resource;
         return [
-            'id' => $this->resource->id,
-            'user_id' => $this->resource->user_id,
-            'commentable_id' => $this->resource->commentable_id,
-            'commentable_type' => $this->resource->commentable_type,
-            'parent_id' => $this->resource->parent_id,
-            'body' => $this->resource->body,
-            'created_at' => $this->resource->created_at->timestamp,
-            'updated_at' => $this->resource->updated_at->timestamp
+            'id' => $resource->getId(),
+            'user_id' => $resource->getUserId(),
+            'commentable_id' => $resource->getEntityId(),
+            'commentable_type' => $resource->getEntityType(),
+            'parent_id' => $resource->getParentId(),
+            'body' => $resource->getMessage(),
+            'created_at' => $resource->getCreatedAt(),
+            'updated_at' => $resource->getUpdatedAt(),
+            'deleted_at' => $resource->getDeletedAt(),
+
+            'children' => $resource->getComments()->map(function ($item) use ($request) {
+                return (new CommentResource($item))->toArray($request);
+            })
         ];
     }
 }

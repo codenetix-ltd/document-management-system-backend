@@ -143,7 +143,7 @@ class Comment implements IComment
      * @param $createdAt
      * @return void
      */
-    public function setCreatedAt($createdAt): void
+    public function setCreatedAt(int $createdAt): void
     {
         $this->createdAt = $createdAt;
     }
@@ -162,7 +162,7 @@ class Comment implements IComment
      * @param $updatedAt
      * @return void
      */
-    public function setUpdatedAt($updatedAt): void
+    public function setUpdatedAt(int $updatedAt): void
     {
         $this->updatedAt = $updatedAt;
     }
@@ -181,7 +181,7 @@ class Comment implements IComment
      * @param $deletedAt
      * @return void
      */
-    public function setDeletedAt($deletedAt): void
+    public function setDeletedAt(?int $deletedAt): void
     {
         $this->deletedAt = $deletedAt;
     }
@@ -190,7 +190,7 @@ class Comment implements IComment
      * Get deleted time
      * @return int
      */
-    public function getDeletedAt(): int
+    public function getDeletedAt(): ?int
     {
         return $this->deletedAt;
     }

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CommentCreateRequest;
+use App\Http\Requests\CommentUpdateRequest;
 use App\Http\Resources\CommentResource;
 use App\Services\CommentService;
 use Illuminate\Http\Request;
@@ -25,12 +27,11 @@ class CommentsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  CommentCreateRequest  $request
      * @return CommentResource
      */
-    public function store(Request $request)
+    public function store(CommentCreateRequest $request)
     {
-//        $comment = Comment::create($request->all(), 201);
         $comment = $this->service->create($request->all());
         return new CommentResource($comment);
     }
@@ -43,7 +44,6 @@ class CommentsController extends Controller
      */
     public function show(int $id)
     {
-//        $comment = Comment::findOrFail($id);
         $comment = $this->service->find($id);
         return new CommentResource($comment);
     }
@@ -51,14 +51,12 @@ class CommentsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  CommentUpdateRequest $request
      * @param  int  $id
      * @return CommentResource
      */
-    public function update(Request $request, int $id)
+    public function update(CommentUpdateRequest $request, int $id)
     {
-//        $comment = Comment::find($id);
-//        $comment->fill($request->all());
         $comment = $this->service->update($request->all(), $id);
 
         return new CommentResource($comment);
@@ -72,43 +70,34 @@ class CommentsController extends Controller
      */
     public function destroy(int $id)
     {
-//        $comment = Comment::find($id);
-//        if ($comment)
-//        {
-//            $comment->delete();
-//        }
-        $comment = $this->service->find($id);
-        if ($comment)
-        {
-            $this->service->delete($id);
-        }
+        $this->service->delete($id);
         return response()->json([], 204); // Response::HTTP_NO_CONTENT == 204
     }
 
     /**
      * Display comments in defined page and rootComment.
      *
-     * @param int $pageNumber
+     * @param Request $request
      * @param int $rootCommentId
      * @return \Illuminate\Http\Response
      */
-    public function getCommentsByPageNumberAndRootCommentId(int $rootCommentId, int $pageNumber)
+    public function getCommentsByRootCommentId(Request $request, int $rootCommentId)
     {
-        $comments = $this->service->getCommentsByRootCommentId($rootCommentId, $pageNumber);
-        return response()->json($comments);
+        $comments = $this->service->getCommentsTreeByRootCommentId($rootCommentId, $request->query('pageNumber', 1));
+        return response()->json($comments, 200);
     }
 
 
     /**
      * Display comments in defined page and document.
      *
-     * @param int $pageNumber
+     * @param Request $request
      * @param int $documentId
      * @return \Illuminate\Http\Response
      */
-    public function getCommentsByPageNumberAndDocumentId(int $documentId, int $pageNumber)
+    public function getCommentsByDocumentId(Request $request, int $documentId) // tree structure return
     {
-        $comments = $this->service->getCommentsTreeByDocumentId($documentId, $pageNumber);
-        return response()->json($comments);
+        $comments = $this->service->getCommentsTreeByDocumentId($documentId, $request->query('pageNumber', 1));
+        return response()->json($comments, 200);
     }
 }

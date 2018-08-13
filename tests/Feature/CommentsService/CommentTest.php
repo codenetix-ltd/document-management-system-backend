@@ -27,27 +27,11 @@ class CommentTest extends TestCase
         Resource::withoutWrapping();
     }
 
-//    /**
-//     * List of comments
-//     * @return void
-//     */
-//    public function testCommentList() // .
-//    {
-//        $document = factory(Document::class)->create();
-//        factory(Comment::class, 10)->create([
-//            'commentable_id' => $document->id,
-//            'commentable_type' => 'document'
-//        ]);
-//
-//        $response = $this->json('GET', self::API_ROOT . 'comments');
-//        $response->assertStatus(200); // 200 == Response::HTTP_OK
-//    }
-
     /**
      * Get comment
      * @return void
      */
-    public function testGetComment() // .
+    public function testGetComment()
     {
         $document = factory(Document::class)->create();
         $comment = factory(Comment::class)->create([
@@ -57,7 +41,7 @@ class CommentTest extends TestCase
 
         $response = $this->json('GET', self::API_ROOT . 'comments/' . $comment->id);
         $response
-            ->assertStatus(200)
+            ->assertStatus(Response::HTTP_OK)
             ->assertJson(['commentable_id' => $document->id, 'id' => $comment->id]);
     }
 
@@ -66,7 +50,7 @@ class CommentTest extends TestCase
      * @throws \Exception The exception that triggered the error response (if applicable).
      * @return void
      */
-    public function testCommentStore() //.
+    public function testCommentStore()
     {
         $document = factory(Document::class)->create();
         $data = [
@@ -79,7 +63,7 @@ class CommentTest extends TestCase
 
         $response = $this->json('POST', self::API_ROOT . 'comments', $data);
         $response
-            ->assertStatus(201) // 201 == Response::HTTP_CREATED
+            ->assertStatus(Response::HTTP_CREATED)
             ->assertJson($data);
     }
 
@@ -88,7 +72,7 @@ class CommentTest extends TestCase
      * @throws \Exception The exception that triggered the error response (if applicable).
      * @return void
      */
-    public function testCommentUpdate() // .
+    public function testCommentUpdate()
     {
         $document = factory(Document::class)->create();
         $comment = factory(Comment::class)->create([
@@ -104,35 +88,35 @@ class CommentTest extends TestCase
 
         $response = $this->json('PUT', self::API_ROOT . 'comments/' . $comment->id, $data);
         $response
-            ->assertStatus(200)
+            ->assertStatus(Response::HTTP_OK)
             ->assertJson($data);
     }
     /**
      * Comment not found
      * @return void
      */
-    public function testGetCommentNotFound() // .
+    public function testGetCommentNotFound()
     {
         $response = $this->json('GET', self::API_ROOT . 'comments/0');
         $response
-            ->assertStatus(404); //Response::HTTP_NOT_FOUND == 404
+            ->assertStatus(Response::HTTP_NOT_FOUND);
     }
 
     /**
      * Delete comment which does not exist
      * @return void
      */
-    public function testCommentDeleteWhichDoesNotExist() // .
+    public function testCommentDeleteWhichDoesNotExist()
     {
         $response = $this->json('DELETE', self::API_ROOT . 'comments/0');
-        $response->assertStatus(204);
+        $response->assertStatus(Response::HTTP_NO_CONTENT);
     }
 
     /**
      * Delete comment
      * @return void
      */
-    public function testCommentDelete() // .
+    public function testCommentDelete()
     {
         $document = factory(Document::class)->create();
         $comment = factory(Comment::class)->create([
@@ -140,6 +124,78 @@ class CommentTest extends TestCase
         ]);
 
         $response = $this->json('DELETE', self::API_ROOT . 'comments/' . $comment->id);
-        $response->assertStatus(Response::HTTP_NO_CONTENT); // Response::HTTP_NO_CONTENT == 204
+        $response->assertStatus(Response::HTTP_NO_CONTENT);
+    }
+
+    /**
+     *
+     */
+    public function testGetCommentsByRootCommentId()
+    {
+        $document = factory(Document::class)->create();
+        $rootComment = factory(Comment::class)->create([
+            'parent_id' => null,
+            'commentable_id' => $document->id
+        ]);
+        factory(Comment::class, 15)->create([
+            'commentable_id' => $document->id,
+        ]);
+
+        $response = $this->json('GET', self::API_ROOT . 'comments/' . $rootComment->id . '/children');
+
+        dd($response);
+
+        $response
+            ->assertJson([
+                'data' => [
+                    'id',
+                    'userId',
+                    'commentableId',
+                    'commentableType',
+                    'parentId',
+                    'message',
+                    'createdAt',
+                    'updatedAt',
+                    'deletedAt',
+                    'children'
+                ],
+            ])
+            ->assertStatus(Response::HTTP_OK);
+    }
+
+    /**
+     *
+     */
+    public function testGetCommentsByDocumentId()
+    {
+        $document = factory(Document::class)->create();
+        factory(Comment::class, 5)->create([
+            'parent_id' => null,
+            'commentable_id' => $document->id
+        ]);
+        factory(Comment::class, 10)->create([
+            'commentable_id' => $document->id,
+        ]);
+
+        $response = $this->json('GET', self::API_ROOT . 'documents/' . $document->id . '/comments/tree');
+
+        dd($response);
+
+        $response
+            ->assertJson([
+                'data' => [
+                    'id',
+                    'userId',
+                    'commentableId',
+                    'commentableType',
+                    'parentId',
+                    'message',
+                    'createdAt',
+                    'updatedAt',
+                    'deletedAt',
+                    'children'
+                ],
+            ])
+            ->assertStatus(Response::HTTP_OK);
     }
 }

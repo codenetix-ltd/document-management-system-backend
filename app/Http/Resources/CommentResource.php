@@ -24,8 +24,8 @@ class CommentResource extends JsonResource
         return [
             'id' => $this->resource->id,
             'user_id' => $this->resource->user_id,
-            'commentable_id' => $this->resource->entity_id,
-            'commentable_type' => $this->resource->entity_type,
+            'commentable_id' => $this->resource->commentable_id,
+            'commentable_type' => $this->resource->commentable_type,
             'parent_id' => $this->resource->parent_id,
             'body' => $this->resource->body,
             'created_at' => $this->resource->created_at->timestamp,

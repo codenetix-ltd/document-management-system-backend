@@ -24,7 +24,6 @@ interface IComment
     public function getUpdatedAt(): int;
     public function setDeletedAt($deletedAt): void;
     public function getDeletedAt(): int;
-    public function setAllProperty(CommentEntity $comment): void;
     public function setChildren(CommentsCollection $children): void;
     public function addComment(IComment $comment): void;
     public function getComments(): CommentsCollection;

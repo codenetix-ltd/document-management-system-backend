@@ -13,11 +13,19 @@ class CommentRepository extends BaseRepository implements ICommentRepository
     /**
      * @return Comment
      */
-    function getInstance()
+    public function getInstance()
     {
         return new Comment();
     }
 
+    /**
+     * @param int $id
+     * @return mixed
+     */
+    public function findModel(int $id)
+    {
+        return $this->getInstance()->find($id);
+    }
 
     /**
      * @param int $documentId
@@ -28,7 +36,6 @@ class CommentRepository extends BaseRepository implements ICommentRepository
     public function getCommentsByDocumentId(int $documentId, int $pageNumber, ITransformerStrategy $strategy)
     {
         $comments = $this->getPageCommentsByDocumentId($documentId, $pageNumber);
-        //dd($comments);
         $transformedComments = $strategy->make($comments);
         return $transformedComments;
     }
@@ -42,7 +49,7 @@ class CommentRepository extends BaseRepository implements ICommentRepository
     public function getCommentsByRootCommentId(int $commentId, int $pageNumber, ITransformerStrategy $strategy)
     {
         $comments = $this->getPageCommentsByRootCommentId($commentId, $pageNumber);
-        $transformedComments = $strategy->make($comments);
+        $transformedComments = $strategy->make($comments, $commentId);
         return $transformedComments;
     }
 
@@ -85,7 +92,6 @@ class CommentRepository extends BaseRepository implements ICommentRepository
             $comments = $comments->merge($lvlComments);
         }
 
-
         return $comments;
     }
 
@@ -102,8 +108,6 @@ class CommentRepository extends BaseRepository implements ICommentRepository
 
         $rootComment = $this->getInstance()
             ->where('id', $rootCommentId)
-            ->skip(($perPage*$pageNumber) - $perPage)
-            ->take($perPage)
             ->get();
 
         $lvlCommentIds = $rootComment->pluck('id');

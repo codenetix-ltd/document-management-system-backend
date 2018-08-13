@@ -4,7 +4,7 @@ namespace App\Services\Comments;
 
 abstract class BaseRepository implements IRepository
 {
-    abstract function getInstance();
+    abstract public function getInstance();
 
     public function all()
     {
@@ -23,11 +23,18 @@ abstract class BaseRepository implements IRepository
 
     public function update(array $data, int $id)
     {
-        return $this->getInstance()->update($data, $id);
+        $model = $this->getInstance()->findOrFail($id);
+        $model->fill($data);
+        $model->save();
+        return $model;
     }
 
     public function delete(int $id)
     {
-        return $this->getInstance()->delete($id);
+        $model = $this->getInstance()->find($id);
+        $deleted = $model->delete();
+        return $deleted;
     }
+
+
 }

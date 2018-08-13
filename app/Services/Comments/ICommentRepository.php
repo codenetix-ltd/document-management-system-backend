@@ -15,4 +15,6 @@ interface ICommentRepository extends IRepository
 
     public function getPageCommentsByRootCommentId(int $rootCommentId, int $pageNumber);
 
+    public function findModel(int $id);
+
 }

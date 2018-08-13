@@ -6,5 +6,5 @@ use Illuminate\Support\Collection;
 
 interface ITransformerStrategy
 {
-    public function make(Collection $comments): CommentsCollection;
+    public function make(Collection $comments, $currentParentId = null): CommentsCollection;
 }

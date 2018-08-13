@@ -239,7 +239,7 @@ class LazyComment implements IComment
      */
     public function addComment(IComment $comment): void
     {
-        $this->children[] = $comment;
+        $this->children->push($comment);
     }
 
     /**
@@ -247,9 +247,9 @@ class LazyComment implements IComment
      * @param IComment $comment
      * @return void
      */
-    public function removeComment(IComment $comment): void
+    public function removeComment(IComment $comment): void  // may be ($id) and $comment->id == $id; ???
     {
-        //TODO: with collection remove!!!
+        // TODO: id?
     }
 
     /**

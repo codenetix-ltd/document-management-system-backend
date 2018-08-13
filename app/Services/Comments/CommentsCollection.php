@@ -9,6 +9,11 @@ class CommentsCollection extends BaseCollection
 {
     public $pageNumber;
 
+    /**
+     * CommentsCollection constructor.
+     * @param array $items
+     * @param int $pageNumber
+     */
     public function __construct(array $items, int $pageNumber = 1)
     {
         parent::__construct($items);

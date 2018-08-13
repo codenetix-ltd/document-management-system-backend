@@ -13,7 +13,7 @@ $factory->define(App\Entities\Comment::class, function (Faker $faker) {
             return factory(Document::class)->create()->id;
         },
         'commentable_type' => 'document',
-        'parent_id' => $faker->numberBetween(1, config('comments.perPage')),
+        'parent_id' => $faker->numberBetween(1, 5),
         'body' => $faker->text($maxNbChars = 100)
     ];
 });

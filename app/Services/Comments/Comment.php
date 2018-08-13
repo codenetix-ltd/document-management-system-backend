@@ -2,14 +2,12 @@
 
 namespace App\Services\Comments;
 
-use App\Entities\Comment as CommentEntity;
-
 class Comment implements IComment
 {
     protected $id;
     protected $userId;
-    protected $entityId;
-    protected $entityType;
+    protected $commentableId;
+    protected $commentableType;
     protected $parentId;
     protected $message;
     protected $createdAt;
@@ -24,24 +22,6 @@ class Comment implements IComment
     public function __construct($pageNumber = 1)
     {
         $this->children = new CommentsCollection([], $pageNumber);
-    }
-
-    /**
-     * Set all comment property
-     * @param CommentEntity $comment
-     * @return void
-     */
-    public function setAllProperty(CommentEntity $comment): void
-    {
-        $this->setId($comment->id);
-        $this->setUserId($comment->user_id);
-        $this->setEntityId($comment->commentable_id);
-        $this->setEntityType($comment->commentable_type);
-        $this->setParentId($comment->parent_id);
-        $this->setMessage($comment->body);
-        $this->setCreatedAt($comment->created_at);
-        $this->setUpdatedAt($comment->updated_at);
-        $this->setDeletedAt($comment->deleted_at);
     }
 
     /**
@@ -84,12 +64,12 @@ class Comment implements IComment
 
     /**
      * Set comment commentable id
-     * @param int $entityId
+     * @param int $commentableId
      * @return void
      */
-    public function setEntityId(int $entityId): void
+    public function setEntityId(int $commentableId): void
     {
-        $this->entityId = $entityId;
+        $this->commentableId = $commentableId;
     }
 
     /**
@@ -98,17 +78,17 @@ class Comment implements IComment
      */
     public function getEntityId(): int
     {
-        return $this->entityId;
+        return $this->commentableId;
     }
 
     /**
      * Set comment commentable type
-     * @param string $entityType
+     * @param string $commentableType
      * @return void
      */
-    public function setEntityType(string $entityType): void
+    public function setEntityType(string $commentableType): void
     {
-        $this->entityType = $entityType;
+        $this->commentableType = $commentableType;
     }
 
     /**
@@ -117,7 +97,7 @@ class Comment implements IComment
      */
     public function getEntityType(): string
     {
-        return $this->entityType;
+        return $this->commentableType;
     }
 
     /**
@@ -240,9 +220,9 @@ class Comment implements IComment
      * @param IComment $comment
      * @return void
      */
-    public function removeComment(IComment $comment): void
+    public function removeComment(IComment $comment): void   // may be ($id) and $comment->id == $id; ???
     {
-        //TODO: with collection remove!!!
+        // TODO: id?
     }
 
     /**

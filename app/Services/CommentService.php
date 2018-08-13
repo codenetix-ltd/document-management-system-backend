@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Services\Comments\CommentTransformerTreeStrategy;
 use App\Services\Comments\ICommentRepository;
-use App\Services\Comments\ITransformerStrategy;
 
 class CommentService
 {
@@ -40,7 +39,7 @@ class CommentService
 
     public function delete(int $id)
     {
-        $comment = $this->repository->find($id);
+        $comment = $this->repository->findModel($id);
 
         if (is_null($comment)) {
             return 0;
@@ -51,23 +50,17 @@ class CommentService
 
     public function getCommentsTreeByDocumentId(int $documentId, int $pageNumber)
     {
-        $strategy = new CommentTransformerTreeStrategy();
+        $this->strategy = new CommentTransformerTreeStrategy();
 
-        $comments = $this->repository->getCommentsByDocumentId($documentId, $pageNumber, $strategy);
-
+        $comments = $this->repository->getCommentsByDocumentId($documentId, $pageNumber, $this->strategy);
         return $comments;
     }
 
-    public function getCommentsByRootCommentId(int $commentId, int $pageNumber)
+    public function getCommentsTreeByRootCommentId(int $commentId, int $pageNumber)
     {
-        $strategy = new CommentTransformerTreeStrategy();
+        $this->strategy = new CommentTransformerTreeStrategy();
 
-        $comments = $this->repository->getCommentsByRootCommentId($commentId, $pageNumber, $strategy);
+        $comments = $this->repository->getCommentsByRootCommentId($commentId, $pageNumber, $this->strategy);
         return $comments;
     }
 }
-
-
-//        uses???
-//        $this->repository->sync($comment->id, 'documents', array_get($data, 'document_id'));
-//        $this->repository->sync($comment->id, 'users', array_get($data, 'user_id'));

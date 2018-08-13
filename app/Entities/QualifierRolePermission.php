@@ -10,10 +10,10 @@ use Prettus\Repository\Traits\TransformableTrait;
 class QualifierRolePermission extends Pivot implements Transformable
 {
     use TransformableTrait;
-    use CamelCasing;
 
     protected $table = 'qualifier_role_permission';
     public $enforceCamelCase = false;
+
     public function accessType()
     {
         return $this->hasOne(AccessType::class, 'id', 'access_type');

@@ -91,21 +91,19 @@ class LogTest extends TestCase
 
     public function testLogListSortByBody()
     {
-
         factory(Log::class)->create(['body' => 'a', 'user_id' => $this->authUser->id]);
         factory(Log::class)->create(['body' => 'z', 'user_id' => $this->authUser->id]);
-
 
         $response = $this
             ->actingAs($this->authUser)
             ->json('GET', self::API_ROOT . 'logs?sort[body]=desc');
 
+        $response->assertStatus(Response::HTTP_OK);
+
         $this->assetJsonPaginationStructure($response);
 
         $decodedResponse = $response->decodeResponseJson();
 
-        $response->assertStatus(Response::HTTP_OK);
-        
         $this->assertEquals('z',$decodedResponse['data'][0]['body']);
         $this->assertEquals('a',$decodedResponse['data'][1]['body']);
 
@@ -121,14 +119,13 @@ class LogTest extends TestCase
 
         $response = $this
             ->actingAs($this->authUser)
-            ->json('GET', self::API_ROOT . 'logs?sort[user.full_name]=desc');
+            ->json('GET', self::API_ROOT . 'logs?sort[user.fullName]=desc');
 
+        $response->assertStatus(Response::HTTP_OK);
 
         $this->assetJsonPaginationStructure($response);
 
         $decodedResponse = $response->decodeResponseJson();
-
-        $response->assertStatus(Response::HTTP_OK);
 
         $this->assertEquals('z',$decodedResponse['data'][0]['user']['fullName']);
         $this->assertEquals('a',$decodedResponse['data'][1]['user']['fullName']);

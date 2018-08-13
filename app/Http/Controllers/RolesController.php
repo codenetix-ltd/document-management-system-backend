@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\RoleCreateRequest;
+use App\Http\Requests\RoleListRequest;
 use App\Http\Requests\RoleUpdateRequest;
 use App\Http\Resources\RoleCollectionResource;
 use App\Http\Resources\RoleResource;
 use App\Services\RoleService;
 use App\System\AuthBuilders\AuthorizerFactory;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Response;
 
 class RolesController extends Controller
@@ -27,17 +29,18 @@ class RolesController extends Controller
     }
 
     /**
+     * @param RoleListRequest $request
      * @return RoleCollectionResource
      */
-    public function index()
+    public function index(RoleListRequest $request)
     {
-        $roles = $this->service->paginate(true);
+        $roles = $this->service->paginate($request->queryParamsObject());
         return new RoleCollectionResource($roles);
     }
 
     /**
      * @param RoleCreateRequest $request
-     * @return RoleResource
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(RoleCreateRequest $request)
     {
@@ -45,7 +48,7 @@ class RolesController extends Controller
         $authorizer->authorize('role_create');
 
         $role = $this->service->create($request->all());
-        return new RoleResource($role);
+        return (new RoleResource($role))->response()->setStatusCode(Response::HTTP_CREATED);
     }
 
     /**
@@ -64,7 +67,7 @@ class RolesController extends Controller
 
     /**
      * @param RoleUpdateRequest $request
-     * @param integer           $id
+     * @param integer $id
      * @return RoleResource
      */
     public function update(RoleUpdateRequest $request, int $id)
@@ -85,12 +88,14 @@ class RolesController extends Controller
      */
     public function destroy(int $id)
     {
-        $role = $this->service->findModel($id);
-
-        if ($role) {
-            $authorizer = AuthorizerFactory::make('role', $role);
-            $authorizer->authorize('role_delete');
+        try {
+            $role = $this->service->find($id);
+        } catch (ModelNotFoundException $e) {
+            return response()->json([], Response::HTTP_NO_CONTENT);
         }
+
+        $authorizer = AuthorizerFactory::make('role', $role);
+        $authorizer->authorize('role_delete');
 
         $this->service->delete($id);
         return response()->json([], Response::HTTP_NO_CONTENT);

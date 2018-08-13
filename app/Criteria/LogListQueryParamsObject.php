@@ -21,6 +21,6 @@ class LogListQueryParamsObject extends QueryParamsObject
      */
     public function getAllowedFieldsToSort(): array
     {
-        return ['body', 'user.full_name'];
+        return ['body', 'user.fullName'];
     }
 }

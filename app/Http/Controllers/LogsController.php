@@ -34,12 +34,10 @@ class LogsController extends Controller
      */
     public function index(LogListRequest $request, Guard $guard)
     {
+        $authorizer = AuthorizerFactory::make('logs');
+        $authorizer->authorize('logs_view');
 
-        //dd($request->queryParamsObject()->getSortsData());
-//        $authorizer = AuthorizerFactory::make('logs');
-//        $authorizer->authorize('logs_view');
-
-        /** @var User $user */
+//        /** @var User $user */
 //        $user = $guard->user();
 //
 //        if ($user->hasAnyRole(RoleService::ROLE_ADMIN)) {

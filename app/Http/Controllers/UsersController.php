@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UserCreateRequest;
+use App\Http\Requests\UserListRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Http\Resources\UserCollectionResource;
 use App\Http\Resources\UserResource;
 use App\Services\UserService;
 use App\System\AuthBuilders\AuthorizerFactory;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
@@ -29,11 +31,12 @@ class UsersController extends Controller
 
     /**
      * Display a listing of the resource.
+     * @param UserListRequest $request
      * @return UserCollectionResource
      */
-    public function index()
+    public function index(UserListRequest $request)
     {
-        $users = $this->service->paginate(true);
+        $users = $this->service->paginate($request->queryParamsObject());
         return new UserCollectionResource($users);
     }
 
@@ -42,7 +45,7 @@ class UsersController extends Controller
      *
      * @param  UserCreateRequest $request
      *
-     * @return UserResource
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(UserCreateRequest $request)
     {
@@ -50,9 +53,10 @@ class UsersController extends Controller
         $authorizer->authorize('user_create');
 
         $data = $request->all();
-        $data['avatarFileId']= $request->get('avatarId');
+        $data['avatarFileId'] = $request->get('avatarId');
         $user = $this->service->create($data);
-        return new UserResource($user);
+
+        return (new UserResource($user))->response()->setStatusCode(Response::HTTP_CREATED);
     }
 
     /**
@@ -74,7 +78,7 @@ class UsersController extends Controller
 
     /**
      * @param UserUpdateRequest $request
-     * @param integer           $id
+     * @param integer $id
      * @return UserResource
      */
     public function update(UserUpdateRequest $request, int $id)
@@ -86,7 +90,7 @@ class UsersController extends Controller
         }
 
         $data = $request->all();
-        $data['avatarFileId']= $request->get('avatarId');
+        $data['avatarFileId'] = $request->get('avatarId');
         $user = $this->service->update($data, $id);
         return new UserResource($user);
     }
@@ -100,7 +104,11 @@ class UsersController extends Controller
      */
     public function destroy(int $id)
     {
-        $user = $this->service->findModel($id);
+        try {
+            $user = $this->service->find($id);
+        } catch (ModelNotFoundException $e) {
+            return response()->json([], Response::HTTP_NO_CONTENT);
+        }
 
         if ($user) {
             $authorizer = AuthorizerFactory::make('user', $user);

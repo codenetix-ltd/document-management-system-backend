@@ -81,4 +81,18 @@ abstract class BaseRepository
     public function all(){
         return $this->getInstance()->all();
     }
+
+    /**
+     * Sync relations
+     *
+     * @param $id
+     * @param $relation
+     * @param $attributes
+     * @param bool $detaching
+     * @return mixed
+     */
+    public function sync($id, $relation, $attributes, $detaching = true)
+    {
+        return $this->find($id)->{$relation}()->sync($attributes, $detaching);
+    }
 }

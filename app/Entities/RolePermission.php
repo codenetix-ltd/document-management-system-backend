@@ -18,6 +18,7 @@ class RolePermission extends Pivot implements Transformable
     use TransformableTrait;
 
     protected $table = 'role_permission';
+
     public $enforceCamelCase = false;
     /**
      * @return \Illuminate\Database\Eloquent\Relations\MorphTo

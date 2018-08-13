@@ -35,9 +35,9 @@ class TemplateTest extends TestCase
         factory(Template::class, 10)->create();
 
         $response = $this->json('GET', self::API_ROOT . 'templates');
-        $this->assetJsonPaginationStructure($response);
 
         $response->assertStatus(Response::HTTP_OK);
+        $this->assetJsonPaginationStructure($response);
     }
 
     /**

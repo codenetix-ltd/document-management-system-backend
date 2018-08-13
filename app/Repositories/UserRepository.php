@@ -3,51 +3,31 @@
 namespace App\Repositories;
 
 use App\Entities\User;
-use Prettus\Repository\Events\RepositoryEntityCreated;
-use Prettus\Validator\Contracts\ValidatorInterface;
 
 /**
  * Class DocumentRepositoryEloquent.
  *
  */
-class UserRepositoryEloquent extends BaseRepository
+class UserRepository extends BaseRepository
 {
 
     /**
      * Override method
      * For setting user password
      *
-     * @param array $attributes
-     *
+     * @param $data
      * @return mixed
-     *
      */
-    public function create(array $attributes)
+    public function create($data)
     {
-//        if (!is_null($this->validator)) {
-//            // we should pass data that has been casts by the model
-//            // to make sure data type are same because validator may need to use
-//            // this data to compare with data that fetch from database.
-//            if ($this->versionCompare($this->app->version(), "5.2.*", ">")) {
-//                $attributes = $this->model->newInstance()->forceFill($attributes)->makeVisible($this->model->getHidden())->toArray();
-//            } else {
-//                $model = $this->model->newInstance()->forceFill($attributes);
-//                $model->addVisible($this->model->getHidden());
-//                $attributes = $model->toArray();
-//            }
-//
-//            $this->validator->with($attributes)->passesOrFail(ValidatorInterface::RULE_CREATE);
-//        }
-
         /** @var User $model */
-        $model = $this->getInstance()->newInstance($attributes);
-        $model->password = $attributes['password'];
-        $model->save();
-        $this->resetModel();
+        $entry = $this->getInstance()->newInstance($data);
 
-        event(new RepositoryEntityCreated($this, $model));
+        // Save password manually because this field in not in fillable list
+        $entry->password = $data['password'];
+        $entry->save();
 
-        return $this->parserResult($model);
+        return $this->getInstance()->find($entry->id);
     }
 
     /**

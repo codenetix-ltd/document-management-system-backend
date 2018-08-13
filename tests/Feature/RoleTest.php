@@ -36,8 +36,8 @@ class RoleTest extends TestCase
 
         $response = $this->json('GET', self::API_ROOT . 'roles');
 
-        $this->assetJsonPaginationStructure($response);
         $response->assertStatus(200);
+        $this->assetJsonPaginationStructure($response);
     }
 
     /**

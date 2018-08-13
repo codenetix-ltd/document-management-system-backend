@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Criteria\IQueryParamsObject;
 use App\Entities\Template;
 use App\Repositories\TemplateRepository;
 
@@ -61,31 +62,17 @@ class TemplateService
      * @param integer $id
      * @return integer
      */
-    public function delete(int $id): int
+    public function delete(int $id): ?int
     {
-        $template = $this->repository->findModel($id);
-        if (is_null($template)) {
-            return 0;
-        }
-
         return $this->repository->delete($id);
     }
 
     /**
-     * @param bool $withCriteria
+     * @param IQueryParamsObject $queryParamsObject
      * @return mixed
      */
-    public function paginate($withCriteria = false)
+    public function paginate(IQueryParamsObject $queryParamsObject)
     {
-        return $this->repository->paginateList($withCriteria);
-    }
-
-    /**
-     * @param integer $id
-     * @return mixed
-     */
-    public function findModel(int $id)
-    {
-        return $this->repository->findModel($id);
+        return $this->repository->paginateList($queryParamsObject);
     }
 }

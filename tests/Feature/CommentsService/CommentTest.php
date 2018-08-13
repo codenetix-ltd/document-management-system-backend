@@ -149,21 +149,31 @@ class CommentTest extends TestCase
         ]);
 
         $response = $this->json('GET', self::API_ROOT . 'comments/' . $rootComment->id . '/children');
-        dd($response);
         $response
             ->assertJson([
                 [
-                    'id' => '',
-                    'user_id' => '',
-                    'commentable_id' => '',
-                    'commentable_type' => '',
-                    'parent_id' => '',
-                    'message' => '',
-                    'created_at' => '',
-                    'updated_at' => '',
-                    'deleted_at' => '',
+                    'id' => $firstLvlComment->id,
+                    'user_id' => $firstLvlComment->user_id,
+                    'commentable_id' => $firstLvlComment->commentable_id,
+                    'commentable_type' => $firstLvlComment->commentable_type,
+                    'parent_id' => $firstLvlComment->parent_id,
+                    'body' => $firstLvlComment->body,
+                    'created_at' => $firstLvlComment->created_at->timestamp,
+                    'updated_at' => $firstLvlComment->updated_at->timestamp,
+                    'deleted_at' => $firstLvlComment->deleted_at,
                     'children' => [
-
+                        [
+                            'id' => $secondLvlComment->id,
+                            'user_id' => $secondLvlComment->user_id,
+                            'commentable_id' => $secondLvlComment->commentable_id,
+                            'commentable_type' => $secondLvlComment->commentable_type,
+                            'parent_id' => $secondLvlComment->parent_id,
+                            'body' => $secondLvlComment->body,
+                            'created_at' => $secondLvlComment->created_at->timestamp,
+                            'updated_at' => $secondLvlComment->updated_at->timestamp,
+                            'deleted_at' => $secondLvlComment->deleted_at,
+                            'children' => []
+                        ]
                     ]
                 ],
             ])
@@ -176,7 +186,7 @@ class CommentTest extends TestCase
     public function testGetCommentsByDocumentId()
     {
         $document = factory(Document::class)->create();
-        factory(Comment::class, 5)->create([
+        factory(Comment::class, 3)->create([
             'parent_id' => null,
             'commentable_id' => $document->id
         ]);
@@ -186,23 +196,7 @@ class CommentTest extends TestCase
 
         $response = $this->json('GET', self::API_ROOT . 'documents/' . $document->id . '/comments/tree');
 
-        dd($response);
-
         $response
-            ->assertJson([
-                'data' => [
-                    'id',
-                    'userId',
-                    'commentableId',
-                    'commentableType',
-                    'parentId',
-                    'message',
-                    'createdAt',
-                    'updatedAt',
-                    'deletedAt',
-                    'children'
-                ],
-            ])
             ->assertStatus(Response::HTTP_OK);
     }
 }

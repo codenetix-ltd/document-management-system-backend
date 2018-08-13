@@ -17,7 +17,7 @@ class DocumentListQueryObject extends AQueryObject
         return [
             'name' => 'actualVersion.name',
             'labelIds' => 'actualVersion.labelIds',
-            'owner.fullName' => 'owner.full_name'
+            'owner.fullName' => 'owner.full_name',
         ];
     }
 
@@ -28,7 +28,6 @@ class DocumentListQueryObject extends AQueryObject
      */
     protected function applyJoin($model, $scope)
     {
-
         if ($scope === 'actualVersion') {
             return $model->join('document_versions as actualVersion', 'actualVersion.document_id', '=', 'documents.id')->where('actualVersion.is_actual', '=', '1');
         }

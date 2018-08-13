@@ -154,17 +154,4 @@ class DocumentService
         $this->documentVersionService->updateActual(false, $oldVersion->id);
         $this->documentVersionService->updateActual(true, $newVersion->id);
     }
-
-    /**
-     * @param integer $id
-     * @return mixed
-     */
-    public function findModel(int $id)
-    {
-        try {
-            return $this->repository->find($id);
-        } catch(ModelNotFoundException $e){
-            return null;
-        }
-    }
 }

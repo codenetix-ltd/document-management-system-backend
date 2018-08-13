@@ -2,14 +2,19 @@
 
 namespace App\Http\Requests;
 
+use App\Context\BlankAuthorizeContext;
 use App\Criteria\EmptyQueryParamsObject;
 use App\Criteria\IQueryParamsObject;
+use App\Services\Authorizers\AAuthorizer;
+use App\Services\Authorizers\DefaultAuthorizer;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Contracts\Validation\ValidatesWhenResolved;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Validation\Factory as ValidationFactory;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 abstract class ABaseAPIRequest extends Request implements ValidatesWhenResolved
 {
@@ -24,6 +29,7 @@ abstract class ABaseAPIRequest extends Request implements ValidatesWhenResolved
 
     protected $queryParamsObjectInstance;
 
+    protected $cachedModel = null;
 
     /**
      * Create the validator factory instance for the request.
@@ -138,6 +144,9 @@ abstract class ABaseAPIRequest extends Request implements ValidatesWhenResolved
      */
     public function validateResolved(): void
     {
+        if(!$this->authorize()){
+            throw new AccessDeniedHttpException();
+        }
 
         $factoryInstance = $this->createValidatorFactory();
         $bodyValidatorInstance = $this->createDefaultValidator($factoryInstance);
@@ -173,5 +182,40 @@ abstract class ABaseAPIRequest extends Request implements ValidatesWhenResolved
     protected function createQueryParamsObject(): IQueryParamsObject
     {
         return new EmptyQueryParamsObject([], [], [], []);
+    }
+
+    /**
+     * @return AAuthorizer
+     */
+    protected function getAuthorizer(){
+        return new DefaultAuthorizer(new BlankAuthorizeContext(Auth::user()));
+    }
+
+    /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool
+     */
+    public function authorize()
+    {
+        return false;
+    }
+
+    /**
+     * @return mixed|null
+     */
+    public function model(){
+        if(!$this->cachedModel && method_exists($this, 'getTargetModel')){
+            $this->cachedModel = $this->container->call([$this, 'getTargetModel']);
+        }
+
+        return $this->cachedModel;
+    }
+
+    /**
+     * @return array
+     */
+    public function rules(){
+        return [];
     }
 }

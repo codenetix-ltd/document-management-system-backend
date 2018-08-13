@@ -22,14 +22,11 @@ class AuthorizerFactory
     {
         switch ($type) {
             case 'document':
-                $documentAuthorizeContext = new DocumentAuthorizeContext(Auth::user(), $target);
-                return new DocumentAuthorizer($documentAuthorizeContext);
+                return new DocumentAuthorizer(new DocumentAuthorizeContext(Auth::user(), $target));
             case 'user':
-                $userAuthorizeContext = new UserAuthorizeContext(Auth::user(), $target);
-                return new UserAuthorizer($userAuthorizeContext);
+                return new UserAuthorizer(new UserAuthorizeContext(Auth::user(), $target));
             default:
-                $context = new BlankAuthorizeContext(Auth::user());
-                return new DefaultAuthorizer($context);
+                return new DefaultAuthorizer(new BlankAuthorizeContext(Auth::user()));
         }
     }
 }

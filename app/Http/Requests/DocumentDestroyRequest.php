@@ -3,12 +3,14 @@
 namespace App\Http\Requests;
 
 use App\Context\DocumentAuthorizeContext;
+use App\Services\Authorizers\AAuthorizer;
 use App\Services\Authorizers\DocumentAuthorizer;
 use App\Services\DocumentService;
 use Illuminate\Support\Facades\Auth;
 
-class DocumentPatchUpdateRequest extends ABaseAPIRequest
+class DocumentDestroyRequest extends ABaseAPIRequest
 {
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -16,13 +18,14 @@ class DocumentPatchUpdateRequest extends ABaseAPIRequest
      */
     public function authorize()
     {
-        return $this->getAuthorizer()->check('document_update');
+        return $this->getAuthorizer()->check('document_delete');
     }
 
     /**
-     * @return DocumentAuthorizer
+     * @return AAuthorizer
      */
-    protected function getAuthorizer(){
+    protected function getAuthorizer()
+    {
         return new DocumentAuthorizer(new DocumentAuthorizeContext(Auth::user(), $this->model()));
     }
 
@@ -32,20 +35,6 @@ class DocumentPatchUpdateRequest extends ABaseAPIRequest
      */
     public function getTargetModel(DocumentService $documentService)
     {
-        return $documentService->find($this->route()->parameter('id'));
-    }
-
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
-    public function rules()
-    {
-        return [
-            'ownerId' => 'integer|exists:users,id',
-            'substituteDocumentId' => 'integer|exists:documents,id',
-            'actualVersionId' => 'integer|exists:document_versions,id'
-        ];
+        return $documentService->find($this->route()->parameter('document'));
     }
 }

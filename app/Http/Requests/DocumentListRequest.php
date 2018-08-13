@@ -10,7 +10,12 @@ use App\Criteria\IQueryParamsObject;
  */
 class DocumentListRequest extends ABaseAPIRequest
 {
-    public function rules(): array
+    public function authorize()
+    {
+        return true;
+    }
+
+    public function rules()
     {
         return [];
     }

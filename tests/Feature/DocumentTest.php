@@ -41,6 +41,9 @@ class DocumentTest extends TestCase
         $stub = new DocumentStub();
 
         $response = $this->json('POST', self::PATH, $stub->buildRequest());
+
+        $response->assertStatus(Response::HTTP_CREATED);
+
         $responseArray = $response->decodeResponseJson();
 
         /** @var Document $model */
@@ -93,6 +96,7 @@ class DocumentTest extends TestCase
         $stub = (new DocumentStub([], true));
 
         $response = $this->json('GET', self::PATH .'/' . $stub->getModel()->id);
+        $response->assertStatus(Response::HTTP_OK);
         $response->assertExactJson($stub->buildResponse());
     }
 
@@ -266,7 +270,7 @@ class DocumentTest extends TestCase
     {
         /** @var Document $document */
         $response = $this->json('DELETE', self::PATH . '/' . 0);
-        $response->assertStatus(Response::HTTP_NO_CONTENT);
+        $response->assertStatus(Response::HTTP_NOT_FOUND);
     }
 
     /**
@@ -444,6 +448,8 @@ class DocumentTest extends TestCase
             })->toArray()
         );
 
+        $response->assertStatus(Response::HTTP_OK);
+
         $expected = $documentsStubCollection->map(function (DocumentStub $item) use ($documentSubstitute) {
             /** @var Document $d */
             $d = $item->getModel();
@@ -468,6 +474,6 @@ class DocumentTest extends TestCase
             self::PATH . '?ids=1,2',
             [[],[],[]]
         );
-        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
     }
 }

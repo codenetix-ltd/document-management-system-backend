@@ -2,18 +2,37 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Context\DocumentAuthorizeContext;
+use App\Services\Authorizers\DocumentAuthorizer;
+use App\Services\DocumentService;
+use Illuminate\Support\Facades\Auth;
 
-class DocumentUpdateRequest extends FormRequest
+class DocumentUpdateRequest extends ABaseAPIRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      *
-     * @return boolean
+     * @return bool
      */
     public function authorize()
     {
-        return true;
+        return $this->getAuthorizer()->check('document_update');
+    }
+
+    /**
+     * @return DocumentAuthorizer
+     */
+    protected function getAuthorizer(){
+        return new DocumentAuthorizer(new DocumentAuthorizeContext(Auth::user(), $this->model()));
+    }
+
+    /**
+     * @param DocumentService $documentService
+     * @return mixed
+     */
+    public function getTargetModel(DocumentService $documentService)
+    {
+        return $documentService->find($this->route()->parameter('id'));
     }
 
     /**

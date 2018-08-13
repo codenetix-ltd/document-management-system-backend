@@ -8,6 +8,7 @@ use App\FactoryMethods\DefaultPermissionFactoryMethod;
 
 class DefaultAuthorizer extends AAuthorizer
 {
+
     /**
      * DefaultAuthorizer constructor.
      * @param BlankAuthorizeContext $context
@@ -24,4 +25,5 @@ class DefaultAuthorizer extends AAuthorizer
     {
         return new DefaultPermissionFactoryMethod();
     }
+
 }

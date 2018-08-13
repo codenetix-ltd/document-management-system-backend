@@ -11,10 +11,10 @@ up_dev:
 	docker-compose -f docker-compose.yml -f docker-compose-dev.yml up -d backend-app
 
 init:
-	docker-compose up init
+	docker-compose exec backend-app ./init.sh
 
 init_dev:
-	docker-compose -f docker-compose.yml -f docker-compose-dev.yml up init
+	docker-compose -f docker-compose.yml -f docker-compose-dev.yml exec backend-app ./init.sh
 
 test:
 	docker exec -it dms-backend-app ./vendor/bin/phpunit tests/Feature

@@ -15,18 +15,6 @@ services:
     ports:
       - 80:80
 
-  init:
-    image: codenetix/laravel-dms-backend-platform
-    environment:
-      APP_ENV: local
-      APP_DEBUG: 'false'
-    volumes:
-      - ./:/var/www
-    command:
-      - ./init.sh
-    depends_on:
-      - mysql
-
   app-php-unit:
     image: codenetix/laravel-dms-backend-platform
     container_name: dms-app-php-unit

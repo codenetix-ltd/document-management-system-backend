@@ -157,6 +157,6 @@ class LabelTest extends TestCase
     {
         $response = $this->json('DELETE', self::API_ROOT . 'labels/' . 0);
 
-        $response->assertStatus(Response::HTTP_NO_CONTENT);
+        $response->assertStatus(Response::HTTP_NOT_FOUND);
     }
 }

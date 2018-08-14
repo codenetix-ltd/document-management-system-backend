@@ -1,18 +1,20 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Label;
 
 use App\Criteria\EmptyQueryParamsObject;
 use App\Criteria\IQueryParamsObject;
+use App\Http\Requests\ABaseAPIRequest;
 
 /**
  * Created by Andrew Sparrow <andrew.sprw@gmail.com>
  */
 class LabelListRequest extends ABaseAPIRequest
 {
-    public function rules(): array
+
+    public function authorize()
     {
-        return [];
+        return true;
     }
 
     protected function createQueryParamsObject(): IQueryParamsObject

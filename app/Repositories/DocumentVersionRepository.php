@@ -29,4 +29,8 @@ class DocumentVersionRepository extends BaseRepository
     {
         return $this->getInstance()->where('document_id', $documentId)->paginate();
     }
+
+    public function latestVersionByDocumentId(int $documentId){
+        return $this->getInstance()->where('document_id', $documentId)->orderBy('id', 'desc')->first();
+    }
 }

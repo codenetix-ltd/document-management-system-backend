@@ -25,6 +25,7 @@ use Prettus\Repository\Traits\TransformableTrait;
  * @property Carbon $createdAt
  * @property Carbon $updatedAt
  * @property Carbon $deletedAt
+ * @property mixed id
  */
 class Document extends BaseModel implements Transformable, IHasTitle
 {

@@ -2,15 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\DocumentVersionCreateRequest;
-use App\Http\Requests\DocumentVersionListRequest;
-use App\Http\Requests\DocumentVersionUpdateRequest;
-use App\Http\Resources\DocumentVersionCollectionResource;
+use App\Http\Requests\DocumentVersion\DocumentVersionDestroyRequest;
+use App\Http\Requests\DocumentVersion\DocumentVersionShowRequest;
+use App\Http\Requests\DocumentVersion\DocumentVersionStoreRequest;
+use App\Http\Requests\DocumentVersion\DocumentVersionUpdateRequest;
 use App\Http\Resources\DocumentVersionResource;
-use App\Services\DocumentService;
 use App\Services\DocumentVersionService;
-use App\System\AuthBuilders\AuthorizerFactory;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Response;
 
 class DocumentVersionsController extends Controller
@@ -30,95 +27,50 @@ class DocumentVersionsController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
-     *
-     * @param DocumentVersionListRequest $request
-     * @param integer $documentId
-     * @return DocumentVersionCollectionResource
-     */
-    public function index(DocumentVersionListRequest $request, int $documentId)
-    {
-        $documentVersions = $this->service->list($request->queryParamsObject(), $documentId);
-        return new DocumentVersionCollectionResource($documentVersions);
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
-     * @param integer $documentId
-     * @param  DocumentVersionCreateRequest $request
+     * @param  DocumentVersionStoreRequest $request
      *
-     * @param DocumentService $documentService
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(int $documentId, DocumentVersionCreateRequest $request, DocumentService $documentService)
+    public function store(DocumentVersionStoreRequest $request)
     {
-        $document = $documentService->find($documentId);
-
-        $authorizer = AuthorizerFactory::make('document', $document);
-        $authorizer->authorize('document_update');
-
-        $version = (int)$document->documentActualVersion->versionName + 1;
-
-        $documentVersion = $this->service->create($request->all(), $document->id, $version, false);
-
+        $documentVersion = $this->service->create($request->all(), false);
         return (new DocumentVersionResource($documentVersion))->response()->setStatusCode(Response::HTTP_CREATED);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param integer $documentId
+     * @param DocumentVersionShowRequest $request
      * @param integer $documentVersionId
      * @return DocumentVersionResource
      */
-    public function show(int $documentId, int $documentVersionId)
+    public function show(DocumentVersionShowRequest $request, int $documentVersionId)
     {
-        $documentVersion = $this->service->find($documentVersionId);
-
-        $authorizer = AuthorizerFactory::make('document', $documentVersion->document);
-        $authorizer->authorize('document_view');
-
-        return new DocumentVersionResource($documentVersion);
+        return new DocumentVersionResource($request->model());
     }
 
     /**
-     * @param integer                      $documentId
      * @param integer                      $documentVersionId
      * @param DocumentVersionUpdateRequest $request
      * @return DocumentVersionResource
      */
-    public function update(int $documentId, int $documentVersionId, DocumentVersionUpdateRequest $request)
+    public function update(DocumentVersionUpdateRequest $request, int $documentVersionId)
     {
-        $documentVersion = $this->service->find($documentVersionId);
-
-        $authorizer = AuthorizerFactory::make('document', $documentVersion->document);
-        $authorizer->authorize('document_update');
-
         $documentVersion = $this->service->update($request->all(), $documentVersionId);
         return new DocumentVersionResource($documentVersion);
     }
 
     /**
-     * @param integer $documentId
-     * @param integer $documentVersionId
+     * @param DocumentVersionDestroyRequest $request
+     * @param int $documentVersionId
      * @return \Illuminate\Http\JsonResponse
      * @throws \App\Exceptions\FailedDeleteActualDocumentVersion
      */
-    public function destroy(int $documentId, int $documentVersionId)
+    public function destroy(DocumentVersionDestroyRequest $request, int $documentVersionId)
     {
-        try {
-            $documentVersion = $this->service->findModel($documentVersionId);
-        } catch (ModelNotFoundException $e){
-            return response()->json([], Response::HTTP_NO_CONTENT);
-        }
-
-        if ($documentVersion) {
-            $authorizer = AuthorizerFactory::make('document', $documentVersion->document);
-            $authorizer->authorize('document_update');
-        }
-
         $this->service->delete($documentVersionId);
-        return response()->json([], Response::HTTP_NO_CONTENT);
+        return response()->json()->setStatusCode(Response::HTTP_NO_CONTENT);
     }
 }

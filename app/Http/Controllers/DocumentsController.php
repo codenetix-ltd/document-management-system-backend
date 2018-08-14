@@ -10,9 +10,12 @@ use App\Http\Requests\Document\DocumentListRequest;
 use App\Http\Requests\Document\DocumentPatchUpdateRequest;
 use App\Http\Requests\Document\DocumentShowRequest;
 use App\Http\Requests\Document\DocumentUpdateRequest;
+use App\Http\Requests\DocumentVersion\DocumentVersionListRequest;
 use App\Http\Resources\DocumentCollectionResource;
 use App\Http\Resources\DocumentResource;
+use App\Http\Resources\DocumentVersionCollectionResource;
 use App\Services\DocumentService;
+use App\Services\DocumentVersionService;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 
@@ -40,6 +43,20 @@ class DocumentsController extends Controller
     {
         $documents = $this->service->list($request->queryParamsObject());
         return new DocumentCollectionResource($documents);
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @param DocumentVersionListRequest $request
+     * @param DocumentVersionService $documentVersionService
+     * @param integer $documentId
+     * @return DocumentVersionCollectionResource
+     */
+    public function versions(DocumentVersionListRequest $request, DocumentVersionService $documentVersionService, int $documentId)
+    {
+        $documentVersions = $documentVersionService->list($request->queryParamsObject(), $documentId);
+        return new DocumentVersionCollectionResource($documentVersions);
     }
 
     /**

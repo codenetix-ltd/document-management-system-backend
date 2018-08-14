@@ -22,7 +22,7 @@ Route::prefix('v1')->middleware('auth:api')->group(function () {
 
     Route::get('templates/{templateId}/attributes', 'TemplatesController@attributes');
 
-    // Attribute
+    // Attributes
     Route::get('attributes/{attributeId}', 'AttributesController@show');
     Route::post('attributes', 'AttributesController@store');
     Route::match(['PUT', 'PATCH'], 'attributes/{attributeId}', 'AttributesController@update');
@@ -31,14 +31,20 @@ Route::prefix('v1')->middleware('auth:api')->group(function () {
     Route::apiResource('users', 'UsersController');
     Route::get('logs', 'LogsController@index');
 
-//Order is important (patch overrides apiResource)
+    //Documents, Order is important (patch overrides apiResource)
     Route::patch('documents/{id}', 'DocumentsController@patchUpdate');
     Route::put('documents/{id}', 'DocumentsController@update');
     Route::apiResource('documents', 'DocumentsController');
     Route::delete('documents', 'DocumentsController@bulkDestroy');
     Route::patch('documents', 'DocumentsController@bulkPatchUpdate');
+    Route::get('documents/{documentId}/versions', 'DocumentsController@versions');
 
-    Route::apiResource('documents/{documentId}/versions', 'DocumentVersionsController');
+    // Document versions
+    Route::get('document-versions/{documentVersionId}', 'DocumentVersionsController@show');
+    Route::post('document-versions', 'DocumentVersionsController@store');
+    Route::match(['PUT', 'PATCH'], 'document-versions/{documentVersionId}', 'DocumentVersionsController@update');
+    Route::delete('document-versions/{documentVersionId}', 'DocumentVersionsController@destroy');
+
 
     Route::post('files', 'FileController@uploadFile');
 

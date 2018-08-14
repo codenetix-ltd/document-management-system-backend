@@ -50,18 +50,28 @@ class DocumentVersionService
     }
 
     /**
-     * @param array   $data
-     * @param integer $documentId
-     * @param string  $versionName
+     * Generates next version name for specified document id
+     * @param int $documentId
+     * @param bool $increment
+     * @return int
+     */
+    public function generateVersionNameByDocumentId(int $documentId, bool $increment){
+        $latestDocumentVersion = $this->repository->latestVersionByDocumentId($documentId);
+        return $latestDocumentVersion ? (int)$latestDocumentVersion->versionName + ($increment ? 1 : 0) : 1;
+    }
+
+    /**
+     * @param array $data
      * @param boolean $isActual
-     *
+     * @param bool $incrementVersion
      * @return DocumentVersion
      */
-    public function create(array $data, int $documentId, string $versionName, bool $isActual)
+    public function create(array $data, bool $isActual, bool $incrementVersion = true)
     {
-        $data['documentId'] = $documentId;
-        $data['versionName'] = $versionName;
         $data['isActual'] = $isActual;
+        $data['versionName'] = $this->generateVersionNameByDocumentId($data['documentId'], $incrementVersion);
+
+        $this->repository->all();
 
         /** @var DocumentVersion $documentVersion */
         $documentVersion = $this->repository->create($data);
@@ -134,14 +144,5 @@ class DocumentVersionService
         }
 
         $this->repository->delete($id);
-    }
-
-    /**
-     * @param integer $id
-     * @return mixed
-     */
-    public function findModel(int $id)
-    {
-        return $this->repository->find($id);
     }
 }

@@ -198,6 +198,8 @@ class DocumentTest extends TestCase
             'actualVersion' => $newDocumentVersionStub->buildRequest()
         ]));
 
+        $response->assertStatus(Response::HTTP_OK);
+
         /** @var Document $updatedDocument */
         $updatedDocument = Document::find($document->id);
         $savedDocumentVersion = $updatedDocument->documentActualVersion;

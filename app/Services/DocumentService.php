@@ -65,7 +65,8 @@ class DocumentService
         /** @var Document $document */
         $document = $this->repository->create($data);
 
-        $this->documentVersionService->create($data['actualVersion'], $document->id, 1, true);
+        $data['actualVersion']['documentId'] = $document->id;
+        $this->documentVersionService->create($data['actualVersion'], true);
         Event::dispatch(new DocumentCreateEvent($document));
 
         return $document;
@@ -99,16 +100,14 @@ class DocumentService
     public function updateVersion(array $data, int $id)
     {
         $createNewVersion = $data['createNewVersion'];
-
         $document = $this->find($id);
-
         $oldActualVersion = $document->documentActualVersion;
 
+        $data['actualVersion']['documentId'] = $document->id;
         $this->documentVersionService->create(
             $data['actualVersion'],
-            $document->id,
-            (int)$oldActualVersion->versionName + ($createNewVersion ? 1 : 0),
-            true
+            true,
+            $createNewVersion
         );
 
         if ($createNewVersion) {

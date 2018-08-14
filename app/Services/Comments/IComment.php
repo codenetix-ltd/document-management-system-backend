@@ -15,7 +15,7 @@ interface IComment
     public function setEntityType(string $entityType): void;
     public function getEntityType(): string;
     public function setParentId($parentId): void;
-    public function getParentId(): int;
+    public function getParentId(): ?int;
     public function setMessage(string $message): void;
     public function getMessage(): string;
     public function setCreatedAt(int $createdAt): void;

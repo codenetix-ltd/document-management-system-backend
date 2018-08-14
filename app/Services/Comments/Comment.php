@@ -114,7 +114,7 @@ class Comment implements IComment
      * Get comment parent id
      * @return int
      */
-    public function getParentId(): int
+    public function getParentId(): ?int
     {
         return $this->parentId;
     }

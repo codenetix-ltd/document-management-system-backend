@@ -148,7 +148,13 @@ class CommentTest extends TestCase
             'parent_id' => $firstLvlComment->id
         ]);
 
+        $thirdLvlComment = factory(Comment::class)->create([
+            'commentable_id' => $document->id,
+            'parent_id' => $secondLvlComment->id
+        ]);
+
         $response = $this->json('GET', self::API_ROOT . 'comments/' . $rootComment->id . '/children');
+
         $response
             ->assertJson([
                 [
@@ -172,7 +178,20 @@ class CommentTest extends TestCase
                             'created_at' => $secondLvlComment->created_at->timestamp,
                             'updated_at' => $secondLvlComment->updated_at->timestamp,
                             'deleted_at' => $secondLvlComment->deleted_at,
-                            'children' => []
+                            'children' => [
+                                [
+                                    'id' => $thirdLvlComment->id,
+                                    'user_id' => $thirdLvlComment->user_id,
+                                    'commentable_id' => $thirdLvlComment->commentable_id,
+                                    'commentable_type' => $thirdLvlComment->commentable_type,
+                                    'parent_id' => $thirdLvlComment->parent_id,
+                                    'body' => $thirdLvlComment->body,
+                                    'created_at' => $thirdLvlComment->created_at->timestamp,
+                                    'updated_at' => $thirdLvlComment->updated_at->timestamp,
+                                    'deleted_at' => $thirdLvlComment->deleted_at,
+                                    'children' => []
+                                ]
+                            ]
                         ]
                     ]
                 ],
@@ -186,17 +205,78 @@ class CommentTest extends TestCase
     public function testGetCommentsByDocumentId()
     {
         $document = factory(Document::class)->create();
-        factory(Comment::class, 3)->create([
+
+        $rootComment = factory(Comment::class)->create([
             'parent_id' => null,
             'commentable_id' => $document->id
         ]);
-        factory(Comment::class, 10)->create([
-            'commentable_id' => $document->id,
+
+        $firstLvlComments = factory(Comment::class, 2)->create([
+            'parent_id' => $rootComment->id,
+            'commentable_id' => $document->id
+        ]);
+
+        $secondLvlComment = factory(Comment::class)->create([
+            'parent_id' => $firstLvlComments[1]->id,
+            'commentable_id' => $document->id
         ]);
 
         $response = $this->json('GET', self::API_ROOT . 'documents/' . $document->id . '/comments/tree');
 
         $response
+            ->assertJson([
+                [
+                    'id' => $rootComment->id,
+                    'user_id' => $rootComment->user_id,
+                    'commentable_id' => $rootComment->commentable_id,
+                    'commentable_type' => $rootComment->commentable_type,
+                    'parent_id' => $rootComment->parent_id,
+                    'body' => $rootComment->body,
+                    'created_at' => $rootComment->created_at->timestamp,
+                    'updated_at' => $rootComment->updated_at->timestamp,
+                    'deleted_at' => $rootComment->deleted_at,
+                    'children' => [
+                        [
+                            'id' => $firstLvlComments[0]->id,
+                            'user_id' => $firstLvlComments[0]->user_id,
+                            'commentable_id' => $firstLvlComments[0]->commentable_id,
+                            'commentable_type' => $firstLvlComments[0]->commentable_type,
+                            'parent_id' => $firstLvlComments[0]->parent_id,
+                            'body' => $firstLvlComments[0]->body,
+                            'created_at' => $firstLvlComments[0]->created_at->timestamp,
+                            'updated_at' => $firstLvlComments[0]->updated_at->timestamp,
+                            'deleted_at' => $firstLvlComments[0]->deleted_at,
+                            'children' => []
+                        ],
+
+                        [
+                            'id' => $firstLvlComments[1]->id,
+                            'user_id' => $firstLvlComments[1]->user_id,
+                            'commentable_id' => $firstLvlComments[1]->commentable_id,
+                            'commentable_type' => $firstLvlComments[1]->commentable_type,
+                            'parent_id' => $firstLvlComments[1]->parent_id,
+                            'body' => $firstLvlComments[1]->body,
+                            'created_at' => $firstLvlComments[1]->created_at->timestamp,
+                            'updated_at' => $firstLvlComments[1]->updated_at->timestamp,
+                            'deleted_at' => $firstLvlComments[1]->deleted_at,
+                            'children' => [
+                                [
+                                    'id' => $secondLvlComment->id,
+                                    'user_id' => $secondLvlComment->user_id,
+                                    'commentable_id' => $secondLvlComment->commentable_id,
+                                    'commentable_type' => $secondLvlComment->commentable_type,
+                                    'parent_id' => $secondLvlComment->parent_id,
+                                    'body' => $secondLvlComment->body,
+                                    'created_at' => $secondLvlComment->created_at->timestamp,
+                                    'updated_at' => $secondLvlComment->updated_at->timestamp,
+                                    'deleted_at' => $secondLvlComment->deleted_at,
+                                    'children' => []
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
+            ])
             ->assertStatus(Response::HTTP_OK);
     }
 }

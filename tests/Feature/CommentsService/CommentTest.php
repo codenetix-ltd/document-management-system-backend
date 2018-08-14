@@ -154,7 +154,6 @@ class CommentTest extends TestCase
         ]);
 
         $response = $this->json('GET', self::API_ROOT . 'comments/' . $rootComment->id . '/children');
-
         $response
             ->assertJson([
                 [
@@ -222,7 +221,6 @@ class CommentTest extends TestCase
         ]);
 
         $response = $this->json('GET', self::API_ROOT . 'documents/' . $document->id . '/comments/tree');
-
         $response
             ->assertJson([
                 [

@@ -28,13 +28,15 @@ class CommentsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  CommentCreateRequest  $request
-     * @return CommentResource
+     * @param  CommentCreateRequest $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(CommentCreateRequest $request)
     {
         $comment = $this->service->create($request->all());
-        return new CommentResource($comment);
+        return (new CommentResource($comment))
+            ->response()
+            ->setStatusCode(201);
     }
 
     /**
@@ -59,7 +61,6 @@ class CommentsController extends Controller
     public function update(CommentUpdateRequest $request, int $id)
     {
         $comment = $this->service->update($request->all(), $id);
-
         return new CommentResource($comment);
     }
 

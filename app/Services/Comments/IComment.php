@@ -27,5 +27,5 @@ interface IComment
     public function setChildren(CommentsCollection $children): void;
     public function addComment(IComment $comment): void;
     public function getComments(): CommentsCollection;
-    public function removeComment(IComment $comment): void;
+    public function removeCommentById(int $id): void;
 }

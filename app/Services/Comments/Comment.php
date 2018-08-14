@@ -4,16 +4,16 @@ namespace App\Services\Comments;
 
 class Comment implements IComment
 {
-    protected $id;
-    protected $userId;
-    protected $commentableId;
-    protected $commentableType;
-    protected $parentId;
-    protected $message;
-    protected $createdAt;
-    protected $updatedAt;
-    protected $deletedAt;
-    protected $children;
+    private $id;
+    private $userId;
+    private $commentableId;
+    private $commentableType;
+    private $parentId;
+    private $message;
+    private $createdAt;
+    private $updatedAt;
+    private $deletedAt;
+    private $children;
 
     /**
      * Comment constructor.
@@ -217,12 +217,12 @@ class Comment implements IComment
 
     /**
      * Remove comment from tree
-     * @param IComment $comment
+     * @param int $id
      * @return void
      */
-    public function removeComment(IComment $comment): void   // may be ($id) and $comment->id == $id; ???
+    public function removeCommentById(int $id): void
     {
-        // TODO: id?
+        $this->children->where('id', $id)->forget($id);
     }
 
     /**

@@ -27,40 +27,28 @@ class CommentService
 
     public function create(array $data)
     {
-        $comment = $this->repository->create($data);
-        return $comment;
+        return $this->repository->create($data);
     }
 
     public function update(array $data, int $id)
     {
-        $comment = $this->repository->update($data, $id);
-        return $comment;
+        return $this->repository->update($data, $id);
     }
 
     public function delete(int $id)
     {
-        $comment = $this->repository->findModel($id);
-
-        if (is_null($comment)) {
-            return 0;
-        }
-
         return $this->repository->delete($id);
     }
 
     public function getCommentsTreeByDocumentId(int $documentId, int $pageNumber)
     {
         $this->strategy = new CommentTransformerTreeStrategy();
-
-        $comments = $this->repository->getCommentsByDocumentId($documentId, $pageNumber, $this->strategy);
-        return $comments;
+        return $this->repository->paginateCommentsByDocumentId($documentId, $pageNumber, $this->strategy);
     }
 
     public function getCommentsTreeByRootCommentId(int $commentId, int $pageNumber)
     {
         $this->strategy = new CommentTransformerTreeStrategy();
-
-        $comments = $this->repository->getCommentsByRootCommentId($commentId, $pageNumber, $this->strategy);
-        return $comments;
+        return $this->repository->paginateCommentsByRootCommentId($commentId, $pageNumber, $this->strategy);
     }
 }

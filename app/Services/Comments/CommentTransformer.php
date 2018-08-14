@@ -4,9 +4,9 @@ namespace App\Services\Comments;
 
 use App\Entities\Comment as CommentModel;
 
-class CommentTransformer
+class CommentTransformer implements ITransformer
 {
-    public function transform(CommentModel $commentModel)
+    public function transform(CommentModel $commentModel): Comment
     {
         $comment = new Comment();
         $comment->setId($commentModel->id);

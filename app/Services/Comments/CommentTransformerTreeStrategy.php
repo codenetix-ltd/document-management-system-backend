@@ -8,28 +8,30 @@ class CommentTransformerTreeStrategy implements ITransformerStrategy
 {
     /**
      * @param Collection $commentModels
+     * @param int $pageNumber
      * @param int $currentParentId
      * @return CommentsCollection
      */
-    public function make(Collection $commentModels, $currentParentId = null): CommentsCollection
+    public function make(Collection $commentModels, int $pageNumber = 1, int $currentParentId = null): CommentsCollection
     {
         $transformer = new CommentTransformer();
-        return $this->toTree($commentModels, $transformer, $currentParentId);
+        return $this->toTree($commentModels, $transformer, $pageNumber, $currentParentId);
     }
 
     /**
      * @param Collection $commentModels
-     * @param CommentTransformer $transformer
-     * @param null $currentParentId
+     * @param ITransformer $transformer
+     * @param int $pageNumber
+     * @param int $currentParentId
      * @return CommentsCollection
      */
-    public function toTree(Collection $commentModels, CommentTransformer $transformer, $currentParentId = null): CommentsCollection
+    private function toTree(Collection $commentModels, ITransformer $transformer, int $pageNumber, int $currentParentId = null): CommentsCollection
     {
-        $resultCollection = new CommentsCollection([]);
+        $resultCollection = new CommentsCollection([], $pageNumber);
         foreach ($commentModels as $currentCommentModel) {
             $commentEntity = $transformer->transform($currentCommentModel);
             if ($currentCommentModel->parent_id == $currentParentId) {
-                $branchCollection = $this->toTree($commentModels, $transformer, $commentEntity->getId());
+                $branchCollection = $this->toTree($commentModels, $transformer, $pageNumber, $commentEntity->getId());
                 $commentEntity->setChildren($branchCollection);
                 $resultCollection->push($commentEntity);
             }

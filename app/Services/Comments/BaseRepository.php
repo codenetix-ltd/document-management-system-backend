@@ -18,22 +18,19 @@ abstract class BaseRepository implements IRepository
 
     public function create(array $data)
     {
-        return $this->getInstance()->create($data);
+        $model = $this->getInstance()->create($data);
+        return $this->getInstance()->findOrFail($model->id);
     }
 
     public function update(array $data, int $id)
     {
-        $model = $this->getInstance()->findOrFail($id);
-        $model->fill($data);
-        $model->save();
-        return $model;
+        $this->getInstance()->where('id', $id)->update($data);
+        return $this->getInstance()->findOrFail($id);
     }
 
     public function delete(int $id)
     {
-        $model = $this->getInstance()->find($id);
-        $deleted = $model->delete();
-        return $deleted;
+        return $this->getInstance()->where('id', $id)->delete();
     }
 
 

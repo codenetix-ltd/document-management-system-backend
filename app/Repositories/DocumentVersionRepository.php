@@ -2,8 +2,8 @@
 
 namespace App\Repositories;
 
-use App\Criteria\DocumentIdCriteria;
-use App\Criteria\IQueryParamsObject;
+use App\QueryParams\DocumentIdCriteria;
+use App\QueryParams\IQueryParamsObject;
 use App\Entities\DocumentVersion;
 use App\QueryObject\DocumentListQueryObject;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;

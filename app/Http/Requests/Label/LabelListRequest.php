@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests\Label;
 
-use App\Criteria\EmptyQueryParamsObject;
-use App\Criteria\IQueryParamsObject;
+use App\QueryParams\EmptyQueryParamsObject;
+use App\QueryParams\IQueryParamsObject;
 use App\Http\Requests\ABaseAPIRequest;
 
 /**

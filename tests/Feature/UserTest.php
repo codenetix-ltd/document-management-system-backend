@@ -163,7 +163,7 @@ class UserTest extends TestCase
     public function testUserDeleteWhichDoesNotExist()
     {
         $response = $this->json('DELETE', self::API_ROOT . 'users/' . 0);
-        $response->assertStatus(Response::HTTP_NO_CONTENT);
+        $response->assertStatus(Response::HTTP_NOT_FOUND);
     }
 
     /**

@@ -14,13 +14,21 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::prefix('v1')->middleware('auth:api')->group(function () {
+    // Templates
     Route::resource('templates', 'TemplatesController');
-    Route::resource('labels', 'LabelsController');
-    Route::apiResource('types', 'TypesController', ['only' => ['index']]);
-    Route::get('permission-groups', 'PermissionGroupsController@index');
-    Route::apiResource('roles', 'RolesController');
-
     Route::get('templates/{templateId}/attributes', 'TemplatesController@attributes');
+
+    // Labels
+    Route::resource('labels', 'LabelsController');
+
+    // Types
+    Route::apiResource('types', 'TypesController', ['only' => ['index']]);
+
+    // Permission groups
+    Route::get('permission-groups', 'PermissionGroupsController@index');
+
+    // Roles
+    Route::apiResource('roles', 'RolesController');
 
     // Attributes
     Route::get('attributes/{attributeId}', 'AttributesController@show');
@@ -28,10 +36,13 @@ Route::prefix('v1')->middleware('auth:api')->group(function () {
     Route::match(['PUT', 'PATCH'], 'attributes/{attributeId}', 'AttributesController@update');
     Route::delete('attributes/{attributeId}', 'AttributesController@destroy');
 
+    // Users
     Route::apiResource('users', 'UsersController');
+
+    // Logs
     Route::get('logs', 'LogsController@index');
 
-    //Documents, Order is important (patch overrides apiResource)
+    // Documents, Order is important (patch overrides apiResource)
     Route::patch('documents/{id}', 'DocumentsController@patchUpdate');
     Route::put('documents/{id}', 'DocumentsController@update');
     Route::apiResource('documents', 'DocumentsController');
@@ -45,8 +56,9 @@ Route::prefix('v1')->middleware('auth:api')->group(function () {
     Route::match(['PUT', 'PATCH'], 'document-versions/{documentVersionId}', 'DocumentVersionsController@update');
     Route::delete('document-versions/{documentVersionId}', 'DocumentVersionsController@destroy');
 
-
+    // Files
     Route::post('files', 'FileController@uploadFile');
 
+    // Common
     Route::post('oauth/logout', 'Auth\LoginController@logout');
 });

@@ -158,6 +158,6 @@ class TemplateTest extends TestCase
     public function testTemplateDeleteWhichDoesNotExist()
     {
         $response = $this->json('DELETE', self::API_ROOT . 'templates/' . 0);
-        $response->assertStatus(Response::HTTP_NO_CONTENT);
+        $response->assertStatus(Response::HTTP_NOT_FOUND);
     }
 }

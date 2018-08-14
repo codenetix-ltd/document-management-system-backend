@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Criteria\IQueryParamsObject;
+use App\QueryParams\IQueryParamsObject;
 use App\Entities\DocumentVersion;
 use App\Exceptions\FailedDeleteActualDocumentVersion;
 use App\Repositories\DocumentVersionRepository;

@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Criteria\IQueryParamsObject;
+use App\QueryParams\IQueryParamsObject;
 
 abstract class BaseRepository
 {

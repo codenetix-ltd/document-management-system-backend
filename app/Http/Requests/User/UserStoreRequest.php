@@ -1,10 +1,13 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\User;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Context\UserAuthorizeContext;
+use App\Http\Requests\ABaseAPIRequest;
+use App\Services\Authorizers\UserAuthorizer;
+use Illuminate\Support\Facades\Auth;
 
-class UserCreateRequest extends FormRequest
+class UserStoreRequest extends ABaseAPIRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +16,15 @@ class UserCreateRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return $this->getAuthorizer()->check('user_create');
+    }
+
+    /**
+     * @return UserAuthorizer
+     */
+    protected function getAuthorizer()
+    {
+        return new UserAuthorizer(new UserAuthorizeContext(Auth::user()));
     }
 
     /**

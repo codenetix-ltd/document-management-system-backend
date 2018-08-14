@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Role;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\ABaseAPIRequest;
 
-class RoleUpdateRequest extends FormRequest
+class RoleStoreRequest extends ABaseAPIRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      *
-     * @return boolean
+     * @return bool
      */
     public function authorize()
     {
-        return true;
+        return $this->getAuthorizer()->check('role_create');
     }
 
     /**
@@ -24,12 +24,11 @@ class RoleUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'sometimes|required|string|unique:roles,name,'.$this->route('role'),
+            'name' => 'required|string',
             'templatesIds' => 'array',
             'templatesIds.*' => 'integer|exists:templates,id',
 
-            //TODO rules for permissionValues.*
-            'permissionValues' => 'array'
+            'permissionValues' => 'array'//TODO - add custom validation rule
         ];
     }
 }

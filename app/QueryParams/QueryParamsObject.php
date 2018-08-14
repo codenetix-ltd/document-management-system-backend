@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Criteria;
+namespace App\QueryParams;
 
 use Symfony\Component\HttpFoundation\Request;
 

@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Criteria\IQueryParamsObject;
+use App\QueryParams\IQueryParamsObject;
 use App\Entities\Attribute;
 use App\Entities\TableTypeColumn;
 use App\Entities\TableTypeRow;
@@ -95,15 +95,15 @@ class AttributeService
     }
 
     /**
-     * @param integer $templateId
      * @param array   $ids
      * @return void
      */
-    public function updateOrderOfAttributes(int $templateId, array $ids)
+    public function updateOrderOfAttributes(array $ids)
     {
         foreach ($ids as $attributeOrder => $attributeId) {
+            //@TODO what a fucking shit is going above? Why global exception handler is there!?
             try {
-                $this->update($templateId, $attributeId, ['order' => $attributeOrder]);
+                $this->update($attributeId, ['order' => $attributeOrder]);
             } catch (Exception $e) {
             }
         }

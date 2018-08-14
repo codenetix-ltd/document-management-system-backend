@@ -2,7 +2,7 @@
 
 namespace App\QueryObject;
 
-use App\Criteria\IQueryParamsObject;
+use App\QueryParams\IQueryParamsObject;
 use Illuminate\Database\Eloquent\Builder;
 
 abstract class AQueryObject

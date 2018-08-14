@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Contracts\Helpers\ILogger;
-use App\Criteria\IQueryParamsObject;
+use App\QueryParams\IQueryParamsObject;
 use App\Repositories\LogRepository;
 
 class LogService implements ILogger

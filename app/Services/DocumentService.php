@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Criteria\IQueryParamsObject;
+use App\QueryParams\IQueryParamsObject;
 use App\Entities\Document;
 use App\Entities\DocumentVersion;
 use App\Events\Document\DocumentCreateEvent;

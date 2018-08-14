@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Criteria\IQueryParamsObject;
+use App\QueryParams\IQueryParamsObject;
 use App\Entities\Document;
 use App\QueryObject\DocumentListQueryObject;
 

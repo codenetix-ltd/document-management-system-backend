@@ -3,8 +3,8 @@
 namespace App\Http\Requests;
 
 use App\Context\BlankAuthorizeContext;
-use App\Criteria\EmptyQueryParamsObject;
-use App\Criteria\IQueryParamsObject;
+use App\QueryParams\EmptyQueryParamsObject;
+use App\QueryParams\IQueryParamsObject;
 use App\Services\Authorizers\AAuthorizer;
 use App\Services\Authorizers\DefaultAuthorizer;
 use Illuminate\Contracts\Container\Container;

@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Criteria\IQueryParamsObject;
+use App\QueryParams\IQueryParamsObject;
 use App\Entities\Label;
 use App\Events\Label\LabelCreateEvent;
 use App\Events\Label\LabelDeleteEvent;

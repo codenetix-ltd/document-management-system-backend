@@ -162,6 +162,6 @@ class RoleTest extends TestCase
     public function testRoleDeleteWhichDoesNotExist()
     {
         $response = $this->json('DELETE', self::API_ROOT . 'roles/' . 0);
-        $response->assertStatus(Response::HTTP_NO_CONTENT);
+        $response->assertStatus(Response::HTTP_NOT_FOUND);
     }
 }

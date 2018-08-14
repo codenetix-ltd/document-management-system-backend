@@ -1,18 +1,19 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\User;
 
-use App\Criteria\EmptyQueryParamsObject;
-use App\Criteria\IQueryParamsObject;
+use App\QueryParams\EmptyQueryParamsObject;
+use App\QueryParams\IQueryParamsObject;
+use App\Http\Requests\ABaseAPIRequest;
 
 /**
  * Created by Andrew Sparrow <andrew.sprw@gmail.com>
  */
 class UserListRequest extends ABaseAPIRequest
 {
-    public function rules(): array
+    public function authorize()
     {
-        return [];
+        return true;
     }
 
     protected function createQueryParamsObject(): IQueryParamsObject

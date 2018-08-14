@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests\Document;
 
-use App\Criteria\DocumentListQueryParamsObject;
-use App\Criteria\IQueryParamsObject;
+use App\QueryParams\DocumentListQueryParamsObject;
+use App\QueryParams\IQueryParamsObject;
 use App\Http\Requests\ABaseAPIRequest;
 
 /**

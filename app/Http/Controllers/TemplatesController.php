@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Attribute\AttributeListRequest;
 use App\Http\Requests\TemplateCreateRequest;
 use App\Http\Requests\TemplateListRequest;
 use App\Http\Requests\TemplateUpdateRequest;
+use App\Http\Resources\AttributeCollectionResource;
 use App\Http\Resources\TemplateCollectionResource;
 use App\Http\Resources\TemplateResource;
 use App\Services\AttributeService;
@@ -45,6 +47,19 @@ class TemplatesController extends Controller
         $templates = $this->service->paginate($request->queryParamsObject());
 
         return new TemplateCollectionResource($templates);
+    }
+
+    /**
+     * @param AttributeListRequest $request
+     * @param AttributeService $attributesService
+     * @param integer $templateId
+     * @return AttributeCollectionResource
+     */
+    public function attributes(AttributeListRequest $request, AttributeService $attributesService, int $templateId)
+    {
+        $attributes = $attributesService->paginateAttributes($request->queryParamsObject(), $templateId);
+
+        return (new AttributeCollectionResource($attributes, $attributesService));
     }
 
     /**

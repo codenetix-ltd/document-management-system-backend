@@ -1,17 +1,20 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Attribute;
 
-class AttributeCreateRequest extends ABaseFormRequest
+use App\Http\Requests\ABaseAPIRequest;
+
+class AttributeUpdateRequest extends ABaseAPIRequest
 {
+
     /**
      * Determine if the user is authorized to make this request.
      *
-     * @return boolean
+     * @return bool
      */
     public function authorize()
     {
-        return true;
+        return $this->getAuthorizer()->check('template_update');
     }
 
     /**
@@ -22,8 +25,7 @@ class AttributeCreateRequest extends ABaseFormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255',
-            'typeId' => "required|integer|exists:types,id",
+            'name' => 'sometimes|required|string|max:255',
             'data' => 'sometimes|nullable|array'
         ];
     }

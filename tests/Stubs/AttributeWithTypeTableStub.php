@@ -27,7 +27,8 @@ class AttributeWithTypeTableStub extends AbstractStub
         return [
             'name' => $this->model->name,
             'typeId' => $this->model->typeId,
-            'data' => $this->buildAttributeData()
+            'data' => $this->buildAttributeData(),
+            'templateId' => $this->model->templateId
         ];
     }
 

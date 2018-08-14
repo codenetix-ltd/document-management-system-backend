@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Document;
 
 use App\Criteria\DocumentListQueryParamsObject;
 use App\Criteria\IQueryParamsObject;
+use App\Http\Requests\ABaseAPIRequest;
 
 /**
  * Created by Andrew Sparrow <andrew.sprw@gmail.com>

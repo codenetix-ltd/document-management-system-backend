@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Document;
 
 use App\Context\DocumentAuthorizeContext;
+use App\Http\Requests\ABaseAPIRequest;
 use App\Services\Authorizers\AAuthorizer;
 use App\Services\Authorizers\DocumentAuthorizer;
 use App\Services\DocumentService;

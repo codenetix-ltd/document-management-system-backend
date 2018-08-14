@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\DocumentBulkDestroyRequest;
-use App\Http\Requests\DocumentBulkPatchUpdateRequest;
-use App\Http\Requests\DocumentCreateRequest;
-use App\Http\Requests\DocumentDestroyRequest;
-use App\Http\Requests\DocumentListRequest;
-use App\Http\Requests\DocumentPatchUpdateRequest;
-use App\Http\Requests\DocumentShowRequest;
-use App\Http\Requests\DocumentUpdateRequest;
+use App\Http\Requests\Document\DocumentBulkDestroyRequest;
+use App\Http\Requests\Document\DocumentBulkPatchUpdateRequest;
+use App\Http\Requests\Document\DocumentCreateRequest;
+use App\Http\Requests\Document\DocumentDestroyRequest;
+use App\Http\Requests\Document\DocumentListRequest;
+use App\Http\Requests\Document\DocumentPatchUpdateRequest;
+use App\Http\Requests\Document\DocumentShowRequest;
+use App\Http\Requests\Document\DocumentUpdateRequest;
 use App\Http\Resources\DocumentCollectionResource;
 use App\Http\Resources\DocumentResource;
 use App\Services\DocumentService;

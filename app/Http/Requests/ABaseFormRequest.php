@@ -10,12 +10,4 @@ abstract class ABaseFormRequest extends FormRequest
      * @return array
      */
     abstract public function rules(): array;
-
-    /**
-     * @return array
-     */
-    public function getInputData()
-    {
-        return $this->only(array_keys($this->rules()));
-    }
 }

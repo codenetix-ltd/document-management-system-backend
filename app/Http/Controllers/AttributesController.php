@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\AttributeCreateRequest;
-use App\Http\Requests\AttributeListRequest;
-use App\Http\Requests\AttributeUpdateRequest;
+use App\Http\Requests\Attribute\AttributeDestroyRequest;
+use App\Http\Requests\Attribute\AttributeListRequest;
+use App\Http\Requests\Attribute\AttributeShowRequest;
+use App\Http\Requests\Attribute\AttributeStoreRequest;
+use App\Http\Requests\Attribute\AttributeUpdateRequest;
 use App\Http\Resources\AttributeCollectionResource;
 use App\Http\Resources\AttributeResource;
 use App\Services\AttributeService;
@@ -20,87 +22,61 @@ class AttributesController extends Controller
     protected $service;
 
     /**
-     * @var TemplateService
-     */
-    protected $templateService;
-
-    /**
      * AttributesController constructor.
      * @param AttributeService $service
-     * @param TemplateService  $templateService
      */
-    public function __construct(AttributeService $service, TemplateService $templateService)
+    public function __construct(AttributeService $service)
     {
         $this->service = $service;
-        $this->templateService = $templateService;
     }
 
     /**
-     * @param AttributeListRequest $request
-     * @param integer $templateId
-     * @return AttributeCollectionResource
-     */
-    public function index(AttributeListRequest $request, int $templateId)
-    {
-        $this->templateService->find($templateId);
-        $attributes = $this->service->paginateAttributes($request->queryParamsObject(), $templateId);
-
-        return (new AttributeCollectionResource($attributes, $this->service));
-    }
-
-    /**
-     * @param integer                $templateId
-     * @param AttributeCreateRequest $request
+     * @param AttributeStoreRequest $request
      * @return JsonResponse
      * @throws \App\Exceptions\FailedAttributeCreateException
      * @throws \App\Exceptions\InvalidAttributeDataStructureException
      * @throws \App\Exceptions\InvalidAttributeTypeException
      */
-    public function store(int $templateId, AttributeCreateRequest $request)
+    public function store(AttributeStoreRequest $request)
     {
-        $attribute = $this->service->create($templateId, $request->all());
+        $attribute = $this->service->create($request->all());
 
         return (new AttributeResource($attribute, $this->service))->response()->setStatusCode(201);
     }
 
     /**
-     * @param integer $templateId
+     * @param AttributeShowRequest $request
      * @param integer $id
      * @return AttributeResource
      */
-    public function show(int $templateId, int $id)
+    public function show(AttributeShowRequest $request, int $id)
     {
-        $this->templateService->find($templateId);
-        $attribute = $this->service->find($id);
-        return new AttributeResource($attribute, $this->service);
+        return new AttributeResource($request->model(), $this->service);
     }
 
     /**
-     * @param integer                $templateId
-     * @param integer                $id
      * @param AttributeUpdateRequest $request
+     * @param integer $id
      * @return AttributeResource
      * @throws \App\Exceptions\FailedAttributeCreateException
      * @throws \App\Exceptions\InvalidAttributeDataStructureException
      * @throws \App\Exceptions\InvalidAttributeTypeException
      */
-    public function update(int $templateId, int $id, AttributeUpdateRequest $request)
+    public function update(AttributeUpdateRequest $request, int $id)
     {
-        $attribute = $this->service->update($templateId, $id, $request->getInputData());
+        $attribute = $this->service->update($id, $request->filtered());
         return new AttributeResource($attribute, $this->service);
     }
 
     /**
-     * @param integer $templateId
+     * @param AttributeDestroyRequest $request
      * @param integer $id
      * @return JsonResponse
      * @throws \App\Exceptions\FailedAttributeDeleteException
      */
-    public function destroy(int $templateId, int $id)
+    public function destroy(AttributeDestroyRequest $request, int $id)
     {
-        $this->templateService->find($templateId);
         $this->service->delete($id);
-
-        return response()->json([], Response::HTTP_NO_CONTENT);
+        return response()->json()->setStatusCode(Response::HTTP_NO_CONTENT);
     }
 }

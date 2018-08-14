@@ -56,17 +56,15 @@ class AttributeService
     }
 
     /**
-     * @param integer $templateId
      * @param array   $data
      * @return Attribute
      * @throws FailedAttributeCreateException
      * @throws InvalidAttributeDataStructureException
      * @throws InvalidAttributeTypeException
      */
-    public function create(int $templateId, array $data)
+    public function create(array $data)
     {
-        $data['templateId'] = $templateId;
-        $data['order'] = $this->getNextAttributeOrderByTemplateId($templateId);
+        $data['order'] = $this->getNextAttributeOrderByTemplateId($data['templateId']);
 
         if (empty($data['data'])) {
             $attribute = $this->repository->create($data);
@@ -78,7 +76,6 @@ class AttributeService
     }
 
     /**
-     * @param integer $templateId
      * @param integer $id
      * @param array   $data
      * @return Attribute
@@ -86,7 +83,7 @@ class AttributeService
      * @throws InvalidAttributeDataStructureException
      * @throws InvalidAttributeTypeException
      */
-    public function update(int $templateId, int $id, array $data)
+    public function update(int $id, array $data)
     {
         if (empty($data['data'])) {
             $attribute = $this->repository->update($data, $id);

@@ -144,7 +144,7 @@ abstract class ABaseAPIRequest extends Request implements ValidatesWhenResolved
      */
     public function validateResolved(): void
     {
-        if(!$this->authorize()){
+        if(!$this->authorize($this->model())){
             throw new AccessDeniedHttpException();
         }
 
@@ -217,5 +217,13 @@ abstract class ABaseAPIRequest extends Request implements ValidatesWhenResolved
      */
     public function rules(){
         return [];
+    }
+
+    /**
+     * @return array
+     */
+    public function filtered()
+    {
+        return $this->only(array_keys($this->rules()));
     }
 }

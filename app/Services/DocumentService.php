@@ -122,16 +122,16 @@ class DocumentService
 
     /**
      * @param integer $id
-     * @return integer
+     * @return bool
      */
-    public function delete(int $id): ?int
+    public function delete(int $id): bool
     {
         try {
             $document = $this->repository->find($id);
             Event::dispatch(new DocumentDeleteEvent($document));
             return $this->repository->delete($id);
         } catch(ModelNotFoundException $e){
-            return null;
+            return false;
         }
     }
 

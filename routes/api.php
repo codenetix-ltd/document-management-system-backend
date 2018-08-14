@@ -20,11 +20,13 @@ Route::prefix('v1')->middleware('auth:api')->group(function () {
     Route::get('permission-groups', 'PermissionGroupsController@index');
     Route::apiResource('roles', 'RolesController');
 
-    Route::post('templates/{templateId}/attributes', 'AttributesController@store');
-    Route::get('templates/{templateId}/attributes', 'AttributesController@index');
-    Route::get('templates/{templateId}/attributes/{id}', 'AttributesController@show');
-    Route::match(['PUT', 'PATCH'], 'templates/{templateId}/attributes/{id}', 'AttributesController@update');
-    Route::delete('templates/{templateId}/attributes/{id}', 'AttributesController@destroy');
+    Route::get('templates/{templateId}/attributes', 'TemplatesController@attributes');
+
+    // Attribute
+    Route::get('attributes/{attributeId}', 'AttributesController@show');
+    Route::post('attributes', 'AttributesController@store');
+    Route::match(['PUT', 'PATCH'], 'attributes/{attributeId}', 'AttributesController@update');
+    Route::delete('attributes/{attributeId}', 'AttributesController@destroy');
 
     Route::apiResource('users', 'UsersController');
     Route::get('logs', 'LogsController@index');

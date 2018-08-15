@@ -3,14 +3,13 @@
 namespace App\Http\Resources;
 
 use App\Entities\AccessType;
-use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * Class AccessTypeResource
  * @package App\Http\Resources
  * @property AccessType $resource
  */
-class AccessTypeResource extends JsonResource
+class AccessTypeResource extends AbstractSingularResource
 {
     /**
      * Transform the resource into an array.

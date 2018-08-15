@@ -21,7 +21,6 @@ class PermissionGroupTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        Resource::withoutWrapping();
     }
 
     /**

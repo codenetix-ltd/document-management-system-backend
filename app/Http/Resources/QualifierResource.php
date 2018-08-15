@@ -3,7 +3,6 @@
 namespace App\Http\Resources;
 
 use App\Entities\Qualifier;
-use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * Class QualifierResource
@@ -11,7 +10,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *
  * @property Qualifier $resource
  */
-class QualifierResource extends JsonResource
+class QualifierResource extends AbstractSingularResource
 {
     /**
      * Transform the resource into an array.

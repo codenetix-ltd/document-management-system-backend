@@ -17,6 +17,7 @@ use Prettus\Repository\Traits\TransformableTrait;
  * @property int $substituteDocumentId
  *
  * @property User $owner
+ * @property Comment $comments
  * @property Document $substituteDocument
  * @property DocumentVersion $documentActualVersion
  * @property Collection|DocumentVersion[] $documentVersions
@@ -79,5 +80,10 @@ class Document extends BaseModel implements Transformable, IHasTitle
     public function getTitle(): string
     {
         return $this->documentActualVersion->name;
+    }
+
+    public function comments()
+    {
+        return $this->morphMany(Comment::class, 'commentable');
     }
 }

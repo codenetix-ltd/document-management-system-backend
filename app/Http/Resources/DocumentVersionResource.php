@@ -3,7 +3,6 @@
 namespace App\Http\Resources;
 
 use App\Entities\DocumentVersion;
-use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * Class DocumentVersionResource
@@ -11,7 +10,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *
  * @property DocumentVersion $resource
  */
-class DocumentVersionResource extends JsonResource
+class DocumentVersionResource extends AbstractSingularResource
 {
     /**
      * Transform the resource into an array.

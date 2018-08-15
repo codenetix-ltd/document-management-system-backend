@@ -41,7 +41,7 @@ class AttributeWithTypeStringStub extends AbstractStub
         return [
             'typeId' => $this->model->typeId,
             'name' => $this->model->name,
-            'data' => null,
+            'attributeData' => null,
             'isLocked' => $this->model->isLocked,
             'order' => $this->model->order,
             'templateId' => $this->model->templateId,

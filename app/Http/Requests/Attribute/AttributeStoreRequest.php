@@ -27,7 +27,7 @@ class AttributeStoreRequest extends ABaseAPIRequest
         return [
             'name' => 'required|string|max:255',
             'typeId' => "required|integer|exists:types,id",
-            'data' => 'sometimes|nullable|array',
+            'attributeData' => 'sometimes|nullable|array',
             'templateId' => 'required|integer'
         ];
     }

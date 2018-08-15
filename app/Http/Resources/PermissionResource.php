@@ -3,13 +3,12 @@
 namespace App\Http\Resources;
 
 use App\Entities\Permission;
-use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * Class PermissionResource
  * @property Permission $resource
  */
-class PermissionResource extends JsonResource
+class PermissionResource extends AbstractSingularResource
 {
     /**
      * @param \Illuminate\Http\Request $request

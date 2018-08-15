@@ -2,9 +2,7 @@
 
 namespace App\Http\Resources;
 
-use Illuminate\Http\Resources\Json\JsonResource;
-
-class PermissionValueResource extends JsonResource
+class PermissionValueResource extends AbstractSingularResource
 {
     /**
      * Transform the resource into an array.

@@ -27,7 +27,7 @@ class AttributeWithTypeTableStub extends AbstractStub
         return [
             'name' => $this->model->name,
             'typeId' => $this->model->typeId,
-            'data' => $this->buildAttributeData(),
+            'attributeData' => $this->buildAttributeData(),
             'templateId' => $this->model->templateId
         ];
     }
@@ -40,7 +40,7 @@ class AttributeWithTypeTableStub extends AbstractStub
         return [
             'typeId' => $this->model->typeId,
             'name' => $this->model->name,
-            'data' => $this->buildAttributeData(),
+            'attributeData' => $this->buildAttributeData(),
             'isLocked' => false,
             'order' => 0,
             'templateId' => $this->model->templateId,

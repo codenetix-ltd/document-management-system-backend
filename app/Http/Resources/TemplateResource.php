@@ -5,7 +5,6 @@ namespace App\Http\Resources;
 use App\Entities\Template;
 use App\Facades\AuthPermissions;
 use App\Services\AttributeService;
-use Illuminate\Http\Resources\Json\Resource;
 
 /**
  * Class TemplateResource
@@ -13,7 +12,7 @@ use Illuminate\Http\Resources\Json\Resource;
  *
  * @property Template $resource
  */
-class TemplateResource extends Resource
+class TemplateResource extends AbstractSingularResource
 {
     /**
      * Transform the resource into an array.

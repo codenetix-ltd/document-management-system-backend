@@ -26,7 +26,7 @@ class AttributeUpdateRequest extends ABaseAPIRequest
     {
         return [
             'name' => 'sometimes|required|string|max:255',
-            'data' => 'sometimes|nullable|array'
+            'attributeData' => 'sometimes|nullable|array'
         ];
     }
 }

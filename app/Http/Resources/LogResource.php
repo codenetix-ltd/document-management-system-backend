@@ -3,7 +3,6 @@
 namespace App\Http\Resources;
 
 use App\Entities\Log;
-use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * Class LogResource
@@ -11,7 +10,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *
  * @property Log $resource
  */
-class LogResource extends JsonResource
+class LogResource extends AbstractSingularResource
 {
     /**
      * Transform the resource into an array.

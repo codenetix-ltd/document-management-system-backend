@@ -3,13 +3,12 @@
 namespace App\Http\Resources;
 
 use App\Entities\File;
-use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;
 
 /**
  * @property File $resource
  */
-class FileResource extends JsonResource
+class FileResource extends AbstractSingularResource
 {
     /**
      * Transform the resource into an array.

@@ -4,7 +4,6 @@ namespace App\Http\Resources;
 
 use App\Entities\Attribute;
 use App\Services\AttributeService;
-use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * Class AttributeResource
@@ -12,7 +11,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *
  * @property Attribute $resource
  */
-class AttributeResource extends JsonResource
+class AttributeResource extends AbstractSingularResource
 {
     /**
      * @var AttributeService
@@ -42,7 +41,7 @@ class AttributeResource extends JsonResource
             'id' => $this->resource->id,
             'typeId' => $this->resource->typeId,
             'name' => $this->resource->name,
-            'data' => $this->attributeService->buildData($this->resource),
+            'attributeData' => $this->attributeService->buildData($this->resource),
             'isLocked' => $this->resource->isLocked,
             'order' => $this->resource->order,
             'templateId' => $this->resource->templateId,

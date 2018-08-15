@@ -31,7 +31,6 @@ class AttributeTest extends TestCase
     {
         parent::setUp();
         $this->attributeService = $this->app->make(AttributeService::class);
-        Resource::withoutWrapping();
     }
 
     /**
@@ -176,16 +175,16 @@ class AttributeTest extends TestCase
         $response = $this->json('POST', self::API_ROOT . 'attributes', $attributeStub->buildRequest());
         $createdAttribute = $response->decodeResponseJson();
 
-        unset($createdAttribute['data']['rows'][1]);
+        unset($createdAttribute['attributeData']['rows'][1]);
 
-        $dataForUpdate = $createdAttribute['data'];
+        $dataForUpdate = $createdAttribute['attributeData'];
         $nameForUpdate = 'new name of attribute';
 
         $requestData = $attributeStub->buildRequest([
             'name' => $nameForUpdate,
             'typeId' => null
         ]);
-        $requestData['data'] = $dataForUpdate;
+        $requestData['attributeData'] = $dataForUpdate;
         $attributeModel = Attribute::find($response->decodeResponseJson('id'));
 
         $response = $this->json('PUT', self::API_ROOT . 'attributes/' . $attributeModel->id, $requestData);
@@ -196,7 +195,7 @@ class AttributeTest extends TestCase
             'createdAt' => $response->decodeResponseJson('createdAt'),
             'updatedAt' => $response->decodeResponseJson('updatedAt')
         ]);
-        $stubResponse['data'] = $dataForUpdate;
+        $stubResponse['attributeData'] = $dataForUpdate;
 
         $response
             ->assertStatus(Response::HTTP_OK)

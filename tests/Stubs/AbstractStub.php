@@ -9,14 +9,46 @@ use Illuminate\Database\Eloquent\Model;
  */
 abstract class AbstractStub
 {
-    /** @var Model */
+    /**
+     * @var Model
+     */
     protected $model;
 
-    /** @var boolean */
+    /**
+     * @var boolean
+     */
     protected $persisted;
 
-    /** @var boolean */
+    /**
+     * @var boolean
+     */
     protected $replaceTimeStamps = false;
+
+    /**
+     * @var bool
+     */
+    protected $metaStyle = false;
+
+    /**
+     * @var array
+     */
+    protected $metaData = [];
+
+    public function setMetaOn($data = [])
+    {
+        $this->metaStyle = true;
+        $this->metaData = $data;
+
+        return $this;
+    }
+
+    public function setMetaOff()
+    {
+        $this->metaStyle = false;
+        $this->metaData = [];
+
+        return $this;
+    }
 
     /**
      * @return string
@@ -80,7 +112,16 @@ abstract class AbstractStub
             }
         }
 
-        return array_replace_recursive($response, $valuesToOverride);
+        $result = array_replace_recursive($response, $valuesToOverride);
+
+        if($this->metaStyle) {
+            return [
+                'meta' => $this->metaData,
+                'data' => $result
+            ];
+        }
+
+        return $result;
     }
 
     /**

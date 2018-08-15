@@ -3,7 +3,6 @@
 namespace App\Http\Resources;
 
 use App\Entities\PermissionGroup;
-use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * Class PermissionGroupResource
@@ -11,7 +10,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *
  * @property PermissionGroup $resource
  */
-class PermissionGroupResource extends JsonResource
+class PermissionGroupResource extends AbstractSingularResource
 {
     /**
      * Transform the resource into an array.

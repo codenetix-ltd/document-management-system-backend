@@ -3,7 +3,6 @@
 namespace App\Http\Resources;
 
 use App\Entities\Type;
-use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * Class TypeResource
@@ -11,7 +10,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *
  * @property Type $resource
  */
-class TypeResource extends JsonResource
+class TypeResource extends AbstractSingularResource
 {
     /**
      * Transform the resource into an array.

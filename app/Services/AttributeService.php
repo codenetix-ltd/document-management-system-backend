@@ -66,7 +66,7 @@ class AttributeService
     {
         $data['order'] = $this->getNextAttributeOrderByTemplateId($data['templateId']);
 
-        if (empty($data['data'])) {
+        if (empty($data['attributeData'])) {
             $attribute = $this->repository->create($data);
         } else {
             $attribute = $this->createComplexAttribute($data);
@@ -85,7 +85,7 @@ class AttributeService
      */
     public function update(int $id, array $data)
     {
-        if (empty($data['data'])) {
+        if (empty($data['attributeData'])) {
             $attribute = $this->repository->update($data, $id);
         } else {
             $attribute = $this->updateComplexAttribute($data, $id);
@@ -208,7 +208,7 @@ class AttributeService
      */
     private function validateTable(array $data): bool
     {
-        $tableData = $data['data'];
+        $tableData = $data['attributeData'];
 
         if (!key_exists('headers', $tableData)) {
             throw new InvalidAttributeDataStructureException('Headers properties not found');
@@ -249,7 +249,7 @@ class AttributeService
     private function createAttributeWithTableType(array $data): Attribute
     {
         try {
-            $tableData = $data['data'];
+            $tableData = $data['attributeData'];
             $parentAttribute = $this->repository->create($data);
 
             $columns = $this->createTableTypeColumns($tableData['headers'], $parentAttribute->id);
@@ -348,7 +348,7 @@ class AttributeService
     private function updateAttributeWithTableType(array $data, int $id): Attribute
     {
         try {
-            $tableData = $data['data'];
+            $tableData = $data['attributeData'];
 
             $this->repository->update($data, $id);
             $parentAttribute = $this->repository->find($id);

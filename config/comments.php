@@ -2,5 +2,5 @@
 
 return [
     'perPage' => 10,
-    'lvlDepth' => 3
+    'levelDepth' => 3
 ];

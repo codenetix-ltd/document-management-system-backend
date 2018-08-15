@@ -26,8 +26,8 @@ class CommentUpdateRequest extends FormRequest
         return [
             'user_id' => 'integer|required|exists:users,id',
             'commentable_id' => 'integer|required|exists:documents,id',
-            'commentable_type' => 'string|required',
-            'parent_id' => 'nullable|integer',
+            'commentable_type' => 'string|required|in:document',
+            'parent_id' => 'nullable|integer|exists:comments,id',
             'body' => 'string|required|max:7999'
         ];
     }

@@ -79,9 +79,9 @@ class CommentRepository extends BaseRepository implements ICommentRepository
     public function paginateCommentsByDocumentId(int $documentId, int $pageNumber, ITransformerStrategy $strategy)
     {
         $perPage = $this->config->get('comments.perPage');
+        $levelDepth = ($this->config->get('comments.levelDepth') - 1);
         $comments = $this->container->make(Collection::class);
-
-        $lvlComments = $this->getInstance()
+        $rootLevelComments = $this->getInstance()
             ->whereNull('parent_id')
             ->where([
                 'commentable_type' => 'document',
@@ -91,46 +91,46 @@ class CommentRepository extends BaseRepository implements ICommentRepository
             ->take($perPage)
             ->get();
 
-        $lvlCommentIds = $lvlComments->pluck('id');
-        $comments = $comments->merge($lvlComments)->merge($this->paginateComments($pageNumber, $lvlCommentIds));
+        $rootLevelCommentIds = $rootLevelComments->pluck('id');
+        $comments = $comments->merge($rootLevelComments)->merge($this->paginateChildrenByRootCommentId($pageNumber, $rootLevelCommentIds, $levelDepth));
         return $strategy->make($comments);
     }
 
     /**
-     * @param int $commentId
+     * @param int $rootCommentId
      * @param int $pageNumber
      * @param ITransformerStrategy $strategy
      * @return mixed
      */
-    public function paginateCommentsByRootCommentId(int $commentId, int $pageNumber, ITransformerStrategy $strategy)
+    public function paginateCommentsByRootCommentId(int $rootCommentId, int $pageNumber, ITransformerStrategy $strategy)
     {
-        $rootComment = $this->getInstance()
-            ->where('id', $commentId)
-            ->get();
-
-        $lvlCommentIds = $rootComment->pluck('id');
-        $comments = $this->paginateComments($pageNumber, $lvlCommentIds);
-
-        return $strategy->make($comments, $commentId, $pageNumber);
+        $levelDepth = $this->config->get('comments.levelDepth');
+        $rootCommentIdCollection = $this->container->make(Collection::class);
+        $rootCommentIdCollection->push($rootCommentId);
+        $comments = $this->paginateChildrenByRootCommentId($pageNumber, $rootCommentIdCollection, $levelDepth);
+        return $strategy->make($comments, $rootCommentId, $pageNumber);
     }
-    
-    private function paginateComments(int $pageNumber, Collection $lvlCommentIds): Collection
+
+    /**
+     * @param int $pageNumber
+     * @param Collection $rootLevelCommentsIds
+     * @param int $levelDepth
+     * @return Collection
+     */
+    private function paginateChildrenByRootCommentId(int $pageNumber, Collection $rootLevelCommentsIds, int $levelDepth): Collection
     {
         $perPage = $this->config->get('comments.perPage');
-        $lvlDepth = $this->config->get('comments.lvlDepth');
         $comments = $this->container->make(Collection::class);
-
-        for ($i = 0; $i < $lvlDepth; $i++)
+        for ($i = 0; $i < $levelDepth; $i++)
         {
-            $lvlComments = $this->getInstance()
-                ->whereIn('parent_id', $lvlCommentIds)
+            $currentChildLevelComments = $this->getInstance()
+                ->whereIn('parent_id', $rootLevelCommentsIds)
                 ->skip(($perPage*$pageNumber) - $perPage)
                 ->take($perPage)
                 ->get();
 
-            $lvlCommentIds = $lvlComments->pluck('id');
-
-            $comments = $comments->merge($lvlComments);
+            $rootLevelCommentsIds = $currentChildLevelComments->pluck('id');
+            $comments = $comments->merge($currentChildLevelComments);
         }
 
         return $comments;

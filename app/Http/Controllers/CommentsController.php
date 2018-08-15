@@ -98,7 +98,7 @@ class CommentsController extends Controller
      * @param int $documentId
      * @return CommentCollectionResource
      */
-    public function getCommentsByDocumentId(CommentMakeTreeStructureRequest $request, int $documentId) // tree structure return
+    public function getCommentsByDocumentId(CommentMakeTreeStructureRequest $request, int $documentId)
     {
         $comments = $this->service->getCommentsTreeByDocumentId($documentId, $request->query('pageNumber', 1));
         return new CommentCollectionResource($comments);

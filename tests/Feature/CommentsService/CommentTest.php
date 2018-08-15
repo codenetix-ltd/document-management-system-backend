@@ -54,12 +54,13 @@ class CommentTest extends TestCase
     public function testCommentStore()
     {
         $user = factory(User::class)->create();
+        $comment = factory(Comment::class)->create();
         $document = factory(Document::class)->create();
         $data = [
             'user_id' => $user->id,
             'commentable_id' => $document->id,
             'commentable_type' => 'document',
-            'parent_id' => $this->faker->randomDigitNotNull,
+            'parent_id' => $comment->id,
             'body' => $this->faker->text($maxNbChars = 200)
         ];
 
@@ -85,7 +86,7 @@ class CommentTest extends TestCase
             'user_id' => $user->id,
             'commentable_id' => $document->id,
             'commentable_type' => 'document',
-            'parent_id' => $this->faker->randomDigitNotNull,
+            'parent_id' => null,
             'body' => $this->faker->text($maxNbChars = 200)
         ];
 
@@ -157,7 +158,6 @@ class CommentTest extends TestCase
         ]);
 
         $response = $this->json('GET', self::API_ROOT . 'comments/' . $rootComment->id . '/children');
-        dd($response);
         $response
             ->assertJson([
                 [
@@ -280,5 +280,12 @@ class CommentTest extends TestCase
                 ],
             ])
             ->assertStatus(Response::HTTP_OK);
+    }
+
+    public function testGetCommentsWithIncorrectPageNumber()
+    {
+        $document = factory(Document::class)->create();
+        $response = $this->json('GET', self::API_ROOT . 'documents/' . $document->id . '/comments/tree?pageNumber=-4');
+        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 }

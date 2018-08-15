@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CommentCreateRequest;
+use App\Http\Requests\CommentMakeTreeStructureRequest;
 use App\Http\Requests\CommentUpdateRequest;
 use App\Http\Resources\CommentCollectionResource;
 use App\Http\Resources\CommentResource;
 use App\Services\CommentService;
-use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class CommentsController extends Controller
 {
@@ -36,7 +37,7 @@ class CommentsController extends Controller
         $comment = $this->service->create($request->all());
         return (new CommentResource($comment))
             ->response()
-            ->setStatusCode(201);
+            ->setStatusCode(Response::HTTP_CREATED);
     }
 
     /**
@@ -73,17 +74,17 @@ class CommentsController extends Controller
     public function destroy(int $id)
     {
         $this->service->delete($id);
-        return response()->json([], 204); // Response::HTTP_NO_CONTENT == 204
+        return response()->json([], Response::HTTP_NO_CONTENT);
     }
 
     /**
      * Display comments in defined page and rootComment.
      *
-     * @param Request $request
+     * @param CommentMakeTreeStructureRequest $request
      * @param int $rootCommentId
      * @return CommentCollectionResource
      */
-    public function getCommentsByRootCommentId(Request $request, int $rootCommentId)
+    public function getCommentsByRootCommentId(CommentMakeTreeStructureRequest $request, int $rootCommentId)
     {
         $comments = $this->service->getCommentsTreeByRootCommentId($rootCommentId, $request->query('pageNumber', 1));
         return new CommentCollectionResource($comments);
@@ -93,11 +94,11 @@ class CommentsController extends Controller
     /**
      * Display comments in defined page and document.
      *
-     * @param Request $request
+     * @param CommentMakeTreeStructureRequest $request
      * @param int $documentId
      * @return CommentCollectionResource
      */
-    public function getCommentsByDocumentId(Request $request, int $documentId) // tree structure return
+    public function getCommentsByDocumentId(CommentMakeTreeStructureRequest $request, int $documentId) // tree structure return
     {
         $comments = $this->service->getCommentsTreeByDocumentId($documentId, $request->query('pageNumber', 1));
         return new CommentCollectionResource($comments);

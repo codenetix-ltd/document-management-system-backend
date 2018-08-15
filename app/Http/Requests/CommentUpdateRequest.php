@@ -24,11 +24,11 @@ class CommentUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'user_id' => 'integer|required',
-            'commentable_id' => 'integer|required',
+            'user_id' => 'integer|required|exists:users,id',
+            'commentable_id' => 'integer|required|exists:documents,id',
             'commentable_type' => 'string|required',
-            'parent_id' => 'nullable',
-            'body' => 'string|required|max:255'
+            'parent_id' => 'nullable|integer',
+            'body' => 'string|required|max:7999'
         ];
     }
 }

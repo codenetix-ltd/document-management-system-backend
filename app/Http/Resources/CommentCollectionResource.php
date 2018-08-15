@@ -7,7 +7,7 @@ class CommentCollectionResource extends AbstractCollectionResource
 
     /**
      * @param $item
-     * @return CommentResource|mixed
+     * @return CommentResource
      */
     protected function transformSingle($item)
     {

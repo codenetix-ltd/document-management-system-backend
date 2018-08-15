@@ -4,6 +4,7 @@ namespace Tests\Feature\CommentsService;
 
 use App\Entities\Comment;
 use App\Entities\Document;
+use App\Entities\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Resources\Json\Resource;
 use Illuminate\Http\Response;
@@ -52,9 +53,10 @@ class CommentTest extends TestCase
      */
     public function testCommentStore()
     {
+        $user = factory(User::class)->create();
         $document = factory(Document::class)->create();
         $data = [
-            'user_id' => $this->faker->randomDigitNotNull,
+            'user_id' => $user->id,
             'commentable_id' => $document->id,
             'commentable_type' => 'document',
             'parent_id' => $this->faker->randomDigitNotNull,
@@ -74,12 +76,13 @@ class CommentTest extends TestCase
      */
     public function testCommentUpdate()
     {
+        $user = factory(User::class)->create();
         $document = factory(Document::class)->create();
         $comment = factory(Comment::class)->create([
             'commentable_id' => $document->id
         ]);
         $data = [
-            'user_id' => $this->faker->randomDigitNotNull,
+            'user_id' => $user->id,
             'commentable_id' => $document->id,
             'commentable_type' => 'document',
             'parent_id' => $this->faker->randomDigitNotNull,
@@ -154,6 +157,7 @@ class CommentTest extends TestCase
         ]);
 
         $response = $this->json('GET', self::API_ROOT . 'comments/' . $rootComment->id . '/children');
+        dd($response);
         $response
             ->assertJson([
                 [

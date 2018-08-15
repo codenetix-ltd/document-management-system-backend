@@ -3,6 +3,8 @@
 namespace App\Services\Comments;
 
 use App\Entities\Comment;
+use Illuminate\Config\Repository;
+use Illuminate\Container\Container;
 use Illuminate\Support\Collection;
 
 /**
@@ -10,20 +12,17 @@ use Illuminate\Support\Collection;
  */
 class CommentRepository extends BaseRepository implements ICommentRepository
 {
-    private $transformer;
-    private $collection;
+    private $container;
     private $config;
 
     /**
      * CommentRepository constructor.
-     * @param ITransformer $transformer
-     * @param \Illuminate\Config\Repository $config
-     * @param \Illuminate\Support\Collection $collection
+     * @param Repository $config
+     * @param Container $container
      */
-    public function __construct(ITransformer $transformer, \Illuminate\Config\Repository $config, \Illuminate\Support\Collection $collection)
+    public function __construct(Repository $config, Container $container)
     {
-        $this->transformer = $transformer;
-        $this->collection = $collection;
+        $this->container = $container;
         $this->config = $config;
     }
 
@@ -41,8 +40,9 @@ class CommentRepository extends BaseRepository implements ICommentRepository
      */
     public function find(int $id)
     {
+        $transformer = $this->container->make(CommentTransformer::class);
         $model = $this->getInstance()->findOrFail($id);
-        return $this->transformer->transform($model);
+        return $transformer->transform($model);
     }
 
     /**
@@ -51,9 +51,10 @@ class CommentRepository extends BaseRepository implements ICommentRepository
      */
     public function create(array $data)
     {
+        $transformer = $this->container->make(CommentTransformer::class);
         $model = $this->getInstance()->create($data);
         $model = $this->getInstance()->findOrFail($model->id);
-        return $this->transformer->transform($model);
+        return $transformer->transform($model);
     }
 
     /**
@@ -63,9 +64,10 @@ class CommentRepository extends BaseRepository implements ICommentRepository
      */
     public function update(array $data, int $id)
     {
+        $transformer = $this->container->make(CommentTransformer::class);
         $this->getInstance()->where('id', $id)->update($data);
         $model = $this->getInstance()->findOrFail($id);
-        return $this->transformer->transform($model);
+        return $transformer->transform($model);
     }
 
     /**
@@ -77,7 +79,7 @@ class CommentRepository extends BaseRepository implements ICommentRepository
     public function paginateCommentsByDocumentId(int $documentId, int $pageNumber, ITransformerStrategy $strategy)
     {
         $perPage = $this->config->get('comments.perPage');
-        $comments = $this->collection;
+        $comments = $this->container->make(Collection::class);
 
         $lvlComments = $this->getInstance()
             ->whereNull('parent_id')
@@ -116,7 +118,7 @@ class CommentRepository extends BaseRepository implements ICommentRepository
     {
         $perPage = $this->config->get('comments.perPage');
         $lvlDepth = $this->config->get('comments.lvlDepth');
-        $comments = $this->collection;
+        $comments = $this->container->make(Collection::class);
 
         for ($i = 0; $i < $lvlDepth; $i++)
         {

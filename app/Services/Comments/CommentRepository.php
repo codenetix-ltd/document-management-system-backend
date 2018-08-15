@@ -79,7 +79,7 @@ class CommentRepository extends BaseRepository implements ICommentRepository
     public function paginateCommentsByDocumentId(int $documentId, int $pageNumber, ITransformerStrategy $strategy)
     {
         $perPage = $this->config->get('comments.perPage');
-        $levelDepth = ($this->config->get('comments.levelDepth') - 1);
+        $maxLevelDepth = ($this->config->get('comments.levelDepth') - 1);
         $comments = $this->container->make(Collection::class);
         $rootLevelComments = $this->getInstance()
             ->whereNull('parent_id')
@@ -92,7 +92,7 @@ class CommentRepository extends BaseRepository implements ICommentRepository
             ->get();
 
         $rootLevelCommentIds = $rootLevelComments->pluck('id');
-        $comments = $comments->merge($rootLevelComments)->merge($this->paginateChildrenByRootCommentId($pageNumber, $rootLevelCommentIds, $levelDepth));
+        $comments = $comments->merge($rootLevelComments)->merge($this->paginateChildrenByRootCommentId($pageNumber, $rootLevelCommentIds, $maxLevelDepth));
         return $strategy->make($comments);
     }
 
@@ -104,10 +104,10 @@ class CommentRepository extends BaseRepository implements ICommentRepository
      */
     public function paginateCommentsByRootCommentId(int $rootCommentId, int $pageNumber, ITransformerStrategy $strategy)
     {
-        $levelDepth = $this->config->get('comments.levelDepth');
+        $maxLevelDepth = $this->config->get('comments.levelDepth');
         $rootCommentIdCollection = $this->container->make(Collection::class);
         $rootCommentIdCollection->push($rootCommentId);
-        $comments = $this->paginateChildrenByRootCommentId($pageNumber, $rootCommentIdCollection, $levelDepth);
+        $comments = $this->paginateChildrenByRootCommentId($pageNumber, $rootCommentIdCollection, $maxLevelDepth);
         return $strategy->make($comments, $rootCommentId, $pageNumber);
     }
 

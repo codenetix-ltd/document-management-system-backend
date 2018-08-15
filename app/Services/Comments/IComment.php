@@ -6,6 +6,7 @@ interface IComment
 {
     /**
      * @param integer $id
+     * @return void
      */
     public function setId(int $id): void;
 
@@ -27,6 +28,7 @@ interface IComment
 
     /**
      * @param integer $entityId
+     * @return void
      */
     public function setEntityId(int $entityId): void;
 
@@ -47,7 +49,7 @@ interface IComment
     public function getEntityType(): string;
 
     /**
-     * @param $parentId
+     * @param integer|null $parentId
      * @return void
      */
     public function setParentId(?int $parentId): void;

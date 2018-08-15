@@ -1,13 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Sparrow
- * Date: 15/08/2018
- * Time: 10:47
- */
-
 namespace App\Services;
-
 
 use Illuminate\Support\Facades\Event;
 use App\QueryParams\IQueryParamsObject;
@@ -17,55 +9,80 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 trait CRUDServiceTrait
 {
+
+    /**
+     * @var mixed
+     */
     private $repository;
 
+    /**
+     * @var string
+     */
     private $modelGetEventClass;
+
+    /**
+     * @var string
+     */
     private $modelUpdateEventClass;
+
+    /**
+     * @var string
+     */
     private $modelCreateEventClass;
+
+    /**
+     * @var string
+     */
     private $modelDeleteEventClass;
 
     /**
-     * @param mixed $modelGetEventClass
+     * @param string $modelGetEventClass
+     * @return void
      */
-    public function setModelGetEventClass($modelGetEventClass): void
+    public function setModelGetEventClass(string $modelGetEventClass): void
     {
         $this->modelGetEventClass = $modelGetEventClass;
     }
 
     /**
-     * @param mixed $modelDeleteEventClass
+     * @param string $modelDeleteEventClass
+     * @return void
      */
-    public function setModelDeleteEventClass($modelDeleteEventClass): void
+    public function setModelDeleteEventClass(string $modelDeleteEventClass): void
     {
         $this->modelDeleteEventClass = $modelDeleteEventClass;
     }
 
     /**
-     * @param mixed $modelCreateEventClass
+     * @param string $modelCreateEventClass
+     * @return void
      */
-    public function setModelCreateEventClass($modelCreateEventClass): void
+    public function setModelCreateEventClass(string $modelCreateEventClass): void
     {
         $this->modelCreateEventClass = $modelCreateEventClass;
     }
 
     /**
-     * @param mixed $modelUpdateEventClass
+     * @param string $modelUpdateEventClass
+     * @return void
      */
-    public function setModelUpdateEventClass($modelUpdateEventClass): void
+    public function setModelUpdateEventClass(string $modelUpdateEventClass): void
     {
         $this->modelUpdateEventClass = $modelUpdateEventClass;
     }
 
     /**
-     * @param $repository
+     * @param mixed $repository
+     * @return void
      */
-    public function setRepository($repository){
+    public function setRepository($repository)
+    {
         $this->repository = $repository;
     }
 
     /**
      * @param IQueryParamsObject $queryParamsObject
-     * @return mixed
+     * @return Collection
      */
     public function paginate(IQueryParamsObject $queryParamsObject)
     {
@@ -80,7 +97,7 @@ trait CRUDServiceTrait
     {
         $model = $this->repository->find($id);
 
-        if($this->modelGetEventClass){
+        if ($this->modelGetEventClass) {
             Event::dispatch(new $this->modelGetEventClass($model));
         }
 
@@ -104,7 +121,7 @@ trait CRUDServiceTrait
         /** @var Model $model */
         $model = $this->repository->create($data);
 
-        if($this->modelCreateEventClass){
+        if ($this->modelCreateEventClass) {
             Event::dispatch(new $this->modelCreateEventClass($model));
         }
 
@@ -112,7 +129,7 @@ trait CRUDServiceTrait
     }
 
     /**
-     * @param array $data
+     * @param array   $data
      * @param integer $id
      * @return Model
      */
@@ -121,7 +138,7 @@ trait CRUDServiceTrait
         /** @var Model $model */
         $model = $this->repository->update($data, $id);
 
-        if($this->modelUpdateEventClass){
+        if ($this->modelUpdateEventClass) {
             Event::dispatch(new $this->modelUpdateEventClass($model));
         }
 
@@ -130,9 +147,9 @@ trait CRUDServiceTrait
 
     /**
      * @param integer $id
-     * @return integer
+     * @return boolean
      */
-    public function delete(int $id): ?int
+    public function delete(int $id): ?bool
     {
         try {
             $model = $this->repository->find($id);
@@ -140,7 +157,7 @@ trait CRUDServiceTrait
             return null;
         }
 
-        if($this->modelDeleteEventClass){
+        if ($this->modelDeleteEventClass) {
             Event::dispatch(new $this->modelDeleteEventClass($model));
         }
 

@@ -11,16 +11,26 @@ use App\Http\Requests\ABaseAPIRequest;
  */
 class DocumentVersionListRequest extends ABaseAPIRequest
 {
+
+    /**
+     * @return array
+     */
     public function rules(): array
     {
         return [];
     }
 
-    public function authorize()
+    /**
+     * @return boolean
+     */
+    public function authorize(): bool
     {
         return true;
     }
 
+    /**
+     * @return IQueryParamsObject
+     */
     protected function createQueryParamsObject(): IQueryParamsObject
     {
         return EmptyQueryParamsObject::makeFromRequest($this);

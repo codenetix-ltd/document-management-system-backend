@@ -11,12 +11,18 @@ use App\Http\Requests\ABaseAPIRequest;
  */
 class RoleListRequest extends ABaseAPIRequest
 {
-    //@TODO fix this shit
-    public function authorize()
+    /**
+     * @return boolean
+     */
+    public function authorize(): bool
     {
+        //@TODO fix this shit
         return true;
     }
 
+    /**
+     * @return IQueryParamsObject
+     */
     protected function createQueryParamsObject(): IQueryParamsObject
     {
         return EmptyQueryParamsObject::makeFromRequest($this);

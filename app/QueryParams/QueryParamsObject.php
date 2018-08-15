@@ -10,22 +10,34 @@ use Symfony\Component\HttpFoundation\Request;
 abstract class QueryParamsObject implements IQueryParamsObject
 {
 
+    /**
+     * @var array
+     */
     protected $filterData;
 
+    /**
+     * @var array
+     */
     protected $sortData;
 
+    /**
+     * @var array
+     */
     protected $includeData;
 
+    /**
+     * @var array
+     */
     protected $paginationData;
 
     /**
      * QueryParamsObject constructor.
-     * @param $filterData
-     * @param $sortData
-     * @param $includeData
-     * @param $paginationData
+     * @param array $filterData
+     * @param array $sortData
+     * @param array $includeData
+     * @param array $paginationData
      */
-    public function __construct($filterData, $sortData, $includeData, $paginationData)
+    public function __construct(array $filterData, array $sortData, array $includeData, array $paginationData)
     {
         $this->filterData = $filterData;
         $this->sortData = $sortData;
@@ -33,7 +45,11 @@ abstract class QueryParamsObject implements IQueryParamsObject
         $this->paginationData = $paginationData;
     }
 
-    public static function makeFromRequest(Request $request)
+    /**
+     * @param Request $request
+     * @return QueryParamsObject
+     */
+    public static function makeFromRequest(Request $request): self
     {
         $rawFilterData = $request->query('filter', []);
 

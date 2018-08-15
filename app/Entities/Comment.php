@@ -25,7 +25,14 @@ class Comment extends BaseEntity implements Transformable
     use SoftDeletes;
     use TransformableTrait;
 
+    /**
+     * @var string
+     */
     protected $table = 'comments';
+
+    /**
+     * @var array
+     */
     protected $dates = ['deleted_at'];
 
     protected $fillable = [

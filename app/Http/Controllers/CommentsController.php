@@ -43,7 +43,7 @@ class CommentsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  integer $id
      * @return CommentResource
      */
     public function show(int $id)
@@ -56,7 +56,7 @@ class CommentsController extends Controller
      * Update the specified resource in storage.
      *
      * @param  CommentUpdateRequest $request
-     * @param  int  $id
+     * @param  integer              $id
      * @return CommentResource
      */
     public function update(CommentUpdateRequest $request, int $id)
@@ -68,7 +68,7 @@ class CommentsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  integer $id
      * @return \Illuminate\Http\Response
      */
     public function destroy(int $id)
@@ -81,7 +81,7 @@ class CommentsController extends Controller
      * Display comments in defined page and rootComment.
      *
      * @param CommentMakeTreeStructureRequest $request
-     * @param int $rootCommentId
+     * @param integer                         $rootCommentId
      * @return CommentCollectionResource
      */
     public function getCommentsByRootCommentId(CommentMakeTreeStructureRequest $request, int $rootCommentId)
@@ -95,7 +95,7 @@ class CommentsController extends Controller
      * Display comments in defined page and document.
      *
      * @param CommentMakeTreeStructureRequest $request
-     * @param int $documentId
+     * @param integer                         $documentId
      * @return CommentCollectionResource
      */
     public function getCommentsByDocumentId(CommentMakeTreeStructureRequest $request, int $documentId)

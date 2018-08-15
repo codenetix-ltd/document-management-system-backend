@@ -32,6 +32,4 @@ abstract class BaseRepository implements IRepository
     {
         return $this->getInstance()->where('id', $id)->delete();
     }
-
-
 }

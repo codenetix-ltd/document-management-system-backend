@@ -7,22 +7,22 @@ use App\QueryParams\IQueryParamsObject;
 use App\Entities\DocumentVersion;
 use App\QueryObject\DocumentListQueryObject;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Model;
 use Prettus\Repository\Exceptions\RepositoryException;
-
 
 class DocumentVersionRepository extends BaseRepository
 {
     /**
-     * @return mixed
+     * @return Model
      */
-    protected function getInstance()
+    protected function getInstance(): Model
     {
         return new DocumentVersion;
     }
 
     /**
      * @param IQueryParamsObject $queryParamsObject
-     * @param integer $documentId
+     * @param integer            $documentId
      * @return LengthAwarePaginator
      */
     public function paginateByDocumentId(IQueryParamsObject $queryParamsObject, int $documentId): LengthAwarePaginator
@@ -30,7 +30,12 @@ class DocumentVersionRepository extends BaseRepository
         return $this->getInstance()->where('document_id', $documentId)->paginate();
     }
 
-    public function latestVersionByDocumentId(int $documentId){
+    /**
+     * @param integer $documentId
+     * @return Model|null
+     */
+    public function latestVersionByDocumentId(int $documentId): ?Model
+    {
         return $this->getInstance()->where('document_id', $documentId)->orderBy('id', 'desc')->first();
     }
 }

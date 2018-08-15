@@ -49,8 +49,8 @@ class DocumentsController extends Controller
      * Display a listing of the resource.
      *
      * @param DocumentVersionListRequest $request
-     * @param DocumentVersionService $documentVersionService
-     * @param integer $documentId
+     * @param DocumentVersionService     $documentVersionService
+     * @param integer                    $documentId
      * @return DocumentVersionCollectionResource
      */
     public function versions(DocumentVersionListRequest $request, DocumentVersionService $documentVersionService, int $documentId)
@@ -80,7 +80,7 @@ class DocumentsController extends Controller
 
     /**
      * @param DocumentUpdateRequest $request
-     * @param integer $id
+     * @param integer               $id
      * @return DocumentResource
      * @throws \App\Exceptions\FailedDeleteActualDocumentVersion
      */
@@ -92,7 +92,7 @@ class DocumentsController extends Controller
 
     /**
      * @param DocumentPatchUpdateRequest $request
-     * @param integer $id
+     * @param integer                    $id
      * @return DocumentResource
      */
     public function patchUpdate(DocumentPatchUpdateRequest $request, int $id)
@@ -105,7 +105,7 @@ class DocumentsController extends Controller
      * Remove the specified resource from storage.
      *
      * @param DocumentDestroyRequest $request
-     * @param  integer $id
+     * @param  integer                $id
      *
      * @return \Illuminate\Http\Response
      */
@@ -117,7 +117,7 @@ class DocumentsController extends Controller
 
     /**
      * @param DocumentBulkPatchUpdateRequest $request
-     * @param DocumentService $service
+     * @param DocumentService                $service
      *
      * @return DocumentCollectionResource
      */
@@ -136,7 +136,7 @@ class DocumentsController extends Controller
 
     /**
      * @param DocumentBulkDestroyRequest $request
-     * @param DocumentService $documentService
+     * @param DocumentService            $documentService
      * @return \Illuminate\Http\JsonResponse
      */
     public function bulkDestroy(DocumentBulkDestroyRequest $request, DocumentService $documentService)

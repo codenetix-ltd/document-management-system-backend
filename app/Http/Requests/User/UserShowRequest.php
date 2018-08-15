@@ -4,8 +4,10 @@ namespace App\Http\Requests\User;
 
 use App\Context\UserAuthorizeContext;
 use App\Http\Requests\ABaseAPIRequest;
+use App\Services\Authorizers\AAuthorizer;
 use App\Services\Authorizers\UserAuthorizer;
 use App\Services\UserService;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
 class UserShowRequest extends ABaseAPIRequest
@@ -15,7 +17,7 @@ class UserShowRequest extends ABaseAPIRequest
      *
      * @return boolean
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return $this->getAuthorizer()->check('user_view');
     }
@@ -23,16 +25,16 @@ class UserShowRequest extends ABaseAPIRequest
     /**
      * @return UserAuthorizer
      */
-    protected function getAuthorizer()
+    protected function getAuthorizer(): AAuthorizer
     {
         return new UserAuthorizer(new UserAuthorizeContext(Auth::user(), $this->model()));
     }
 
     /**
      * @param UserService $userService
-     * @return mixed
+     * @return Model
      */
-    public function getTargetModel(UserService $userService)
+    public function getTargetModel(UserService $userService): Model
     {
         $id = $this->route()->parameter('user');
 

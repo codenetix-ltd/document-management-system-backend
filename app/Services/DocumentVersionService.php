@@ -31,7 +31,7 @@ class DocumentVersionService
 
     /**
      * @param IQueryParamsObject $queryParamsObject
-     * @param int $documentId
+     * @param integer            $documentId
      * @return mixed
      */
     public function list(IQueryParamsObject $queryParamsObject, int $documentId)
@@ -41,19 +41,20 @@ class DocumentVersionService
 
     /**
      * Generates next version name for specified document id
-     * @param int $documentId
-     * @param bool $increment
-     * @return int
+     * @param integer $documentId
+     * @param boolean $increment
+     * @return integer
      */
-    public function generateVersionNameByDocumentId(int $documentId, bool $increment){
+    public function generateVersionNameByDocumentId(int $documentId, bool $increment)
+    {
         $latestDocumentVersion = $this->repository->latestVersionByDocumentId($documentId);
         return $latestDocumentVersion ? (int)$latestDocumentVersion->versionName + ($increment ? 1 : 0) : 1;
     }
 
     /**
-     * @param array $data
+     * @param array   $data
      * @param boolean $isActual
-     * @param bool $incrementVersion
+     * @param boolean $incrementVersion
      * @return DocumentVersion
      */
     public function create(array $data, bool $isActual, bool $incrementVersion = true)
@@ -116,8 +117,8 @@ class DocumentVersionService
     }
 
     /**
-     * @param int $id
-     * @param bool $force
+     * @param integer $id
+     * @param boolean $force
      * @return void
      * @throws FailedDeleteActualDocumentVersion
      */
@@ -125,7 +126,7 @@ class DocumentVersionService
     {
         try {
             $documentVersion = $this->repository->find($id);
-        } catch (ModelNotFoundException $e){
+        } catch (ModelNotFoundException $e) {
             return;
         }
 

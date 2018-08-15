@@ -37,7 +37,7 @@ class AttributeService
     }
 
     /**
-     * @param array   $data
+     * @param array $data
      * @return Attribute
      * @throws FailedAttributeCreateException
      * @throws InvalidAttributeDataStructureException
@@ -76,7 +76,7 @@ class AttributeService
     }
 
     /**
-     * @param array   $ids
+     * @param array $ids
      * @return void
      */
     public function updateOrderOfAttributes(array $ids)
@@ -92,7 +92,7 @@ class AttributeService
 
     /**
      * @param IQueryParamsObject $queryParamsObject
-     * @param integer $templateId
+     * @param integer            $templateId
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
     public function paginateAttributes(IQueryParamsObject $queryParamsObject, int $templateId)
@@ -289,7 +289,7 @@ class AttributeService
     {
         try {
             $attribute = $this->repository->find($id);
-        } catch (ModelNotFoundException $e){
+        } catch (ModelNotFoundException $e) {
             return null;
         }
 

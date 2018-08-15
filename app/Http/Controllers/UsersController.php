@@ -59,7 +59,7 @@ class UsersController extends Controller
      * Display the specified resource.
      *
      * @param UserShowRequest $request
-     * @param  integer|string $id
+     * @param  integer|string  $id
      *
      * @return UserResource
      */
@@ -70,7 +70,7 @@ class UsersController extends Controller
 
     /**
      * @param UserUpdateRequest $request
-     * @param integer $id
+     * @param integer           $id
      * @return UserResource
      */
     public function update(UserUpdateRequest $request, int $id)
@@ -85,7 +85,7 @@ class UsersController extends Controller
      * Remove the specified resource from storage.
      *
      * @param UserDestroyRequest $request
-     * @param  integer $id
+     * @param  integer            $id
      *
      * @return \Illuminate\Http\Response
      */

@@ -65,6 +65,5 @@ Route::prefix('v1')->middleware('auth:api')->group(function () {
     // Comments
     Route::apiResource('comments', 'CommentsController', ['only' => ['store', 'show', 'update', 'destroy']]);
     Route::get('documents/{documentId}/comments/tree', 'CommentsController@getCommentsByDocumentId');
-    Route::get('comments/{commentId}/children','CommentsController@getCommentsByRootCommentId');
-
+    Route::get('comments/{commentId}/children', 'CommentsController@getCommentsByRootCommentId');
 });

@@ -85,6 +85,9 @@ class LogTest extends TestCase
         $this->assertCount(10, $decodedResponse['data']);
     }
 
+    /**
+     * @return void
+     */
     public function testLogListSortByBody()
     {
         factory(Log::class)->create(['body' => 'a', 'user_id' => $this->authUser->id]);
@@ -100,11 +103,13 @@ class LogTest extends TestCase
 
         $decodedResponse = $response->decodeResponseJson();
 
-        $this->assertEquals('z',$decodedResponse['data'][0]['body']);
-        $this->assertEquals('a',$decodedResponse['data'][1]['body']);
-
+        $this->assertEquals('z', $decodedResponse['data'][0]['body']);
+        $this->assertEquals('a', $decodedResponse['data'][1]['body']);
     }
 
+    /**
+     * @return void
+     */
     public function testLogListSortByUser()
     {
         $u1 = (new UserStub(['full_name' => 'a'], true))->getModel();
@@ -123,8 +128,8 @@ class LogTest extends TestCase
 
         $decodedResponse = $response->decodeResponseJson();
 
-        $this->assertEquals('z',$decodedResponse['data'][0]['user']['fullName']);
-        $this->assertEquals('a',$decodedResponse['data'][1]['user']['fullName']);
+        $this->assertEquals('z', $decodedResponse['data'][0]['user']['fullName']);
+        $this->assertEquals('a', $decodedResponse['data'][1]['user']['fullName']);
     }
 
     /**

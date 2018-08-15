@@ -12,9 +12,9 @@ use App\Http\Requests\ABaseAPIRequest;
 class AttributeListRequest extends ABaseAPIRequest
 {
     /**
-     * @return bool
+     * @return boolean
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }

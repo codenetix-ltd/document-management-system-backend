@@ -16,7 +16,7 @@ class UserAuthorizeContext extends AAuthorizeContext implements IHasSubjectUser
     /**
      * UserAuthorizeContext constructor.
      * @param Authenticatable $user
-     * @param User|null $subjectUser
+     * @param User|null       $subjectUser
      */
     public function __construct(Authenticatable $user, User $subjectUser = null)
     {

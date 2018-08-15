@@ -15,6 +15,9 @@ class CommentTest extends TestCase
 {
     use RefreshDatabase;
 
+    /**
+     * @var Faker $faker
+     */
     protected $faker;
 
     /**
@@ -132,7 +135,8 @@ class CommentTest extends TestCase
     }
 
     /**
-     *
+     * Get comments by root comment id
+     * @return void
      */
     public function testGetCommentsByRootCommentId()
     {
@@ -203,7 +207,8 @@ class CommentTest extends TestCase
     }
 
     /**
-     *
+     * Test getting comments by document id
+     * @return void
      */
     public function testGetCommentsByDocumentId()
     {
@@ -282,6 +287,9 @@ class CommentTest extends TestCase
             ->assertStatus(Response::HTTP_OK);
     }
 
+    /**
+     * @return void
+     */
     public function testGetCommentsWithIncorrectPageNumber()
     {
         $document = factory(Document::class)->create();

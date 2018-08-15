@@ -14,9 +14,9 @@ class DocumentCreateRequest extends ABaseAPIRequest
     /**
      * Determine if the user is authorized to make this request.
      *
-     * @return bool
+     * @return boolean
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return $this->getAuthorizer()->check('document_create');
     }
@@ -24,7 +24,8 @@ class DocumentCreateRequest extends ABaseAPIRequest
     /**
      * @return AAuthorizer
      */
-    protected function getAuthorizer(){
+    protected function getAuthorizer(): AAuthorizer
+    {
         return new DocumentAuthorizer(new DocumentAuthorizeContext(Auth::user(), null));
     }
 
@@ -33,7 +34,7 @@ class DocumentCreateRequest extends ABaseAPIRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'ownerId' => 'integer|required',

@@ -9,9 +9,9 @@ class LabelUpdateRequest extends ABaseAPIRequest
     /**
      * Determine if the user is authorized to make this request.
      *
-     * @return bool
+     * @return boolean
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return $this->getAuthorizer()->check('label_update');
     }
@@ -21,7 +21,7 @@ class LabelUpdateRequest extends ABaseAPIRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'name' => 'string|required|max:255|unique:labels,name,'.$this->route('label')

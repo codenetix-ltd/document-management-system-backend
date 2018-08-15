@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\Label;
 
-
 use App\Http\Requests\ABaseAPIRequest;
 
 class LabelStoreRequest extends ABaseAPIRequest
@@ -10,9 +9,9 @@ class LabelStoreRequest extends ABaseAPIRequest
     /**
      * Determine if the user is authorized to make this request.
      *
-     * @return bool
+     * @return boolean
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return $this->getAuthorizer()->check('label_create');
     }
@@ -22,7 +21,7 @@ class LabelStoreRequest extends ABaseAPIRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'name' => 'string|required|max:255|unique:labels'

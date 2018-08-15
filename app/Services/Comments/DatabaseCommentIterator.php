@@ -24,7 +24,6 @@ class DatabaseCommentIterator implements ArrayAccess, Countable, Iterator
         $this->comments = Comment::where([
 
         ]);
-
     }
 
     /**
@@ -64,9 +63,9 @@ class DatabaseCommentIterator implements ArrayAccess, Countable, Iterator
      * @param mixed $offset <p>
      * The offset to assign the value to.
      * </p>
-     * @param mixed $value <p>
-     * The value to set.
-     * </p>
+     * @param mixed $value  <p>
+     *  The value to set.
+     *  </p>
      * @return void
      * @since 5.0.0
      */
@@ -96,7 +95,7 @@ class DatabaseCommentIterator implements ArrayAccess, Countable, Iterator
     /**
      * Count elements of an object
      * @link http://php.net/manual/en/countable.count.php
-     * @return int The custom count as an integer.
+     * @return integer The custom count as an integer.
      * </p>
      * <p>
      * The return value is cast to an integer.

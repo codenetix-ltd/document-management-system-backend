@@ -11,12 +11,19 @@ use App\Http\Requests\ABaseAPIRequest;
  */
 class TemplateListRequest extends ABaseAPIRequest
 {
-    public function authorize()
+
+    /**
+     * @return boolean
+     */
+    public function authorize(): bool
     {
         //@TODO fix this shit
         return true;
     }
 
+    /**
+     * @return IQueryParamsObject
+     */
     protected function createQueryParamsObject(): IQueryParamsObject
     {
         return EmptyQueryParamsObject::makeFromRequest($this);

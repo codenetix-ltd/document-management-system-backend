@@ -37,7 +37,6 @@ class LabelTest extends TestCase
             ->json('GET', self::API_ROOT . 'labels')
             ->assertStatus(Response::HTTP_OK);
         $this->assetJsonPaginationStructure($response);
-
     }
 
     /**

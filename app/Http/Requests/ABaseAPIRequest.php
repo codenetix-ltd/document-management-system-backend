@@ -10,6 +10,7 @@ use App\Services\Authorizers\DefaultAuthorizer;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Contracts\Validation\ValidatesWhenResolved;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Validation\Factory as ValidationFactory;
 use Illuminate\Support\Facades\Auth;
@@ -26,9 +27,14 @@ abstract class ABaseAPIRequest extends Request implements ValidatesWhenResolved
      */
     protected $container;
 
-
+    /**
+     * @var IQueryParamsObject
+     */
     protected $queryParamsObjectInstance;
 
+    /**
+     * @var null|Model
+     */
     protected $cachedModel = null;
 
     /**
@@ -42,32 +48,32 @@ abstract class ABaseAPIRequest extends Request implements ValidatesWhenResolved
     }
 
     /**
-     * Create the default validator instance.
-     *
-     * @param  \Illuminate\Contracts\Validation\Factory  $factory
-     * @return \Illuminate\Contracts\Validation\Validator
+     * @param ValidationFactory $factory
+     * @return Validator
      */
     protected function createDefaultValidator(ValidationFactory $factory): Validator
     {
         return $factory->make(
-            $this->post(), $this->container->call([$this, 'rules']),
-            $this->messages(), $this->attributes()
+            $this->post(),
+            $this->container->call([$this, 'rules']),
+            $this->messages(),
+            $this->attributes()
         );
     }
 
     /**
-     * Create the default validator instance.
-     *
-     * @param  \Illuminate\Contracts\Validation\Factory  $factory
-     * @return \Illuminate\Contracts\Validation\Validator
+     * @param ValidationFactory $factory
+     * @return Validator
      */
     protected function createQueryParamsValidator(ValidationFactory $factory): Validator
     {
         $queryParamsObject = $this->queryParamsObject();
 
         return $factory->make(
-            $this->query(), $this->extractsQueryParamsRulesFromObject($queryParamsObject),
-            $this->messages(), $this->attributes()
+            $this->query(),
+            $this->extractsQueryParamsRulesFromObject($queryParamsObject),
+            $this->messages(),
+            $this->attributes()
         );
     }
 
@@ -75,14 +81,15 @@ abstract class ABaseAPIRequest extends Request implements ValidatesWhenResolved
      * @param IQueryParamsObject $queryParamsObject
      * @return array
      */
-    public function extractsQueryParamsRulesFromObject(IQueryParamsObject $queryParamsObject):array {
+    public function extractsQueryParamsRulesFromObject(IQueryParamsObject $queryParamsObject):array
+    {
         $rules = [];
 
-        foreach ($queryParamsObject->getAllowedFieldsToSort() as $key){
+        foreach ($queryParamsObject->getAllowedFieldsToSort() as $key) {
             $rules['sort.'.$key] = ['in:desc,asc'];
         }
 
-        foreach ($queryParamsObject->getAllowedFieldsToFilter() as $key => $currentRules){
+        foreach ($queryParamsObject->getAllowedFieldsToFilter() as $key => $currentRules) {
             $rules['filter.'.$key] = $currentRules;
         }
 
@@ -126,7 +133,7 @@ abstract class ABaseAPIRequest extends Request implements ValidatesWhenResolved
     /**
      * Set the container implementation.
      *
-     * @param  \Illuminate\Contracts\Container\Container  $container
+     * @param  \Illuminate\Contracts\Container\Container $container
      * @return $this
      */
     public function setContainer(Container $container): self
@@ -144,7 +151,7 @@ abstract class ABaseAPIRequest extends Request implements ValidatesWhenResolved
      */
     public function validateResolved(): void
     {
-        if(!$this->authorize($this->model())){
+        if (!$this->authorize($this->model())) {
             throw new AccessDeniedHttpException();
         }
 
@@ -154,7 +161,7 @@ abstract class ABaseAPIRequest extends Request implements ValidatesWhenResolved
 
         if (! $bodyValidatorInstance->passes()) {
             $this->failedValidation($bodyValidatorInstance);
-        } elseif(! $queryValidatorInstance->passes()){
+        } elseif (! $queryValidatorInstance->passes()) {
             $this->failedValidation($queryValidatorInstance);
         }
     }
@@ -162,6 +169,7 @@ abstract class ABaseAPIRequest extends Request implements ValidatesWhenResolved
     /**
      * @param Validator $validator
      * @throws ValidationException
+     * @return void
      */
     protected function failedValidation(Validator $validator)
     {
@@ -187,16 +195,17 @@ abstract class ABaseAPIRequest extends Request implements ValidatesWhenResolved
     /**
      * @return AAuthorizer
      */
-    protected function getAuthorizer(){
+    protected function getAuthorizer(): AAuthorizer
+    {
         return new DefaultAuthorizer(new BlankAuthorizeContext(Auth::user()));
     }
 
     /**
      * Determine if the user is authorized to make this request.
      *
-     * @return bool
+     * @return boolean
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return false;
     }
@@ -204,8 +213,9 @@ abstract class ABaseAPIRequest extends Request implements ValidatesWhenResolved
     /**
      * @return mixed|null
      */
-    public function model(){
-        if(!$this->cachedModel && method_exists($this, 'getTargetModel')){
+    public function model(): ?Model
+    {
+        if (!$this->cachedModel && method_exists($this, 'getTargetModel')) {
             $this->cachedModel = $this->container->call([$this, 'getTargetModel']);
         }
 
@@ -215,14 +225,15 @@ abstract class ABaseAPIRequest extends Request implements ValidatesWhenResolved
     /**
      * @return array
      */
-    public function rules(){
+    public function rules(): array
+    {
         return [];
     }
 
     /**
      * @return array
      */
-    public function filtered()
+    public function filtered(): array
     {
         return $this->only(array_keys($this->rules()));
     }

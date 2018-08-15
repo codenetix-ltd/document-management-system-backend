@@ -46,7 +46,7 @@ class AttributesController extends Controller
 
     /**
      * @param AttributeShowRequest $request
-     * @param integer $id
+     * @param integer              $id
      * @return AttributeResource
      */
     public function show(AttributeShowRequest $request, int $id)
@@ -56,7 +56,7 @@ class AttributesController extends Controller
 
     /**
      * @param AttributeUpdateRequest $request
-     * @param integer $id
+     * @param integer                $id
      * @return AttributeResource
      * @throws \App\Exceptions\FailedAttributeCreateException
      * @throws \App\Exceptions\InvalidAttributeDataStructureException
@@ -70,7 +70,7 @@ class AttributesController extends Controller
 
     /**
      * @param AttributeDestroyRequest $request
-     * @param integer $id
+     * @param integer                 $id
      * @return JsonResponse
      * @throws \App\Exceptions\FailedAttributeDeleteException
      */

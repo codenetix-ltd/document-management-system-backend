@@ -25,7 +25,7 @@ abstract class AbstractStub
     protected $replaceTimeStamps = false;
 
     /**
-     * @var bool
+     * @var boolean
      */
     protected $metaStyle = false;
 
@@ -34,7 +34,11 @@ abstract class AbstractStub
      */
     protected $metaData = [];
 
-    public function setMetaOn($data = [])
+    /**
+     * @param array $data
+     * @return $this
+     */
+    public function enableMeta(array $data = []): self
     {
         $this->metaStyle = true;
         $this->metaData = $data;
@@ -42,7 +46,10 @@ abstract class AbstractStub
         return $this;
     }
 
-    public function setMetaOff()
+    /**
+     * @return AbstractStub
+     */
+    public function disableMeta(): self
     {
         $this->metaStyle = false;
         $this->metaData = [];
@@ -114,7 +121,7 @@ abstract class AbstractStub
 
         $result = array_replace_recursive($response, $valuesToOverride);
 
-        if($this->metaStyle) {
+        if ($this->metaStyle) {
             return [
                 'meta' => $this->metaData,
                 'data' => $result

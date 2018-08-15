@@ -25,5 +25,4 @@ class DefaultAuthorizer extends AAuthorizer
     {
         return new DefaultPermissionFactoryMethod();
     }
-
 }

@@ -98,7 +98,7 @@ class AttributeRepository extends BaseRepository
 
     /**
      * @param IQueryParamsObject $queryParamsObject
-     * @param integer $templateId
+     * @param integer            $templateId
      * @return LengthAwarePaginator
      */
     public function paginateAttributes(IQueryParamsObject $queryParamsObject, int $templateId): LengthAwarePaginator
@@ -126,10 +126,11 @@ class AttributeRepository extends BaseRepository
     }
 
     /**
-     * @param int $templateId
+     * @param integer $templateId
      * @return mixed
      */
-    public function getMaxOrderValueOfAttributeByTemplateId(int $templateId): ?int {
+    public function getMaxOrderValueOfAttributeByTemplateId(int $templateId): ?int
+    {
         return $this->getInstance()->whereTemplateId($templateId)->whereNull('parent_attribute_id')->max('order');
     }
 }

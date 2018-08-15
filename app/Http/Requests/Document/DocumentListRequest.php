@@ -11,16 +11,25 @@ use App\Http\Requests\ABaseAPIRequest;
  */
 class DocumentListRequest extends ABaseAPIRequest
 {
-    public function authorize()
+    /**
+     * @return boolean
+     */
+    public function authorize(): bool
     {
         return true;
     }
 
-    public function rules()
+    /**
+     * @return array
+     */
+    public function rules(): array
     {
         return [];
     }
 
+    /**
+     * @return IQueryParamsObject
+     */
     protected function createQueryParamsObject(): IQueryParamsObject
     {
         return DocumentListQueryParamsObject::makeFromRequest($this);

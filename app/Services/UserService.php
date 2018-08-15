@@ -44,7 +44,7 @@ class UserService
     }
 
     /**
-     * @param array $data
+     * @param array   $data
      * @param integer $id
      * @return User
      */

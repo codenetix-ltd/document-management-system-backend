@@ -14,13 +14,16 @@ class LogListRequest extends ABaseAPIRequest
     /**
      * Determine if the user is authorized to make this request.
      *
-     * @return bool
+     * @return boolean
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return $this->getAuthorizer()->check('logs_view');
     }
 
+    /**
+     * @return IQueryParamsObject
+     */
     protected function createQueryParamsObject(): IQueryParamsObject
     {
         return LogListQueryParamsObject::makeFromRequest($this);

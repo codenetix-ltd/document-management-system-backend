@@ -2,50 +2,45 @@
 
 namespace App\Services;
 
+use App\Services\Comments\CommentsCollection;
 use App\Services\Comments\CommentTransformerTreeStrategy;
 use App\Services\Comments\ICommentRepository;
+use App\Services\Comments\ITransformerStrategy;
 
 class CommentService
 {
-    protected $repository;
+    use CRUDServiceTrait;
+
+    /**
+     * @var ITransformerStrategy
+     */
     protected $strategy;
 
+    /**
+     * CommentService constructor.
+     * @param ICommentRepository $repository
+     */
     public function __construct(ICommentRepository $repository)
     {
-        $this->repository = $repository;
+        $this->setRepository($repository);
     }
 
-    public function list()
-    {
-        $this->repository->all();
-    }
-
-    public function find(int $id)
-    {
-        return $this->repository->find($id);
-    }
-
-    public function create(array $data)
-    {
-        return $this->repository->create($data);
-    }
-
-    public function update(array $data, int $id)
-    {
-        return $this->repository->update($data, $id);
-    }
-
-    public function delete(int $id)
-    {
-        return $this->repository->delete($id);
-    }
-
+    /**
+     * @param integer $documentId
+     * @param integer $pageNumber
+     * @return CommentsCollection
+     */
     public function getCommentsTreeByDocumentId(int $documentId, int $pageNumber)
     {
         $this->strategy = new CommentTransformerTreeStrategy();
         return $this->repository->paginateCommentsByDocumentId($documentId, $pageNumber, $this->strategy);
     }
 
+    /**
+     * @param integer $commentId
+     * @param integer $pageNumber
+     * @return CommentsCollection
+     */
     public function getCommentsTreeByRootCommentId(int $commentId, int $pageNumber)
     {
         $this->strategy = new CommentTransformerTreeStrategy();

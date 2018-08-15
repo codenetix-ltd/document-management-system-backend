@@ -11,12 +11,17 @@ use App\Http\Requests\ABaseAPIRequest;
  */
 class LabelListRequest extends ABaseAPIRequest
 {
-
-    public function authorize()
+    /**
+     * @return boolean
+     */
+    public function authorize(): bool
     {
         return true;
     }
 
+    /**
+     * @return IQueryParamsObject
+     */
     protected function createQueryParamsObject(): IQueryParamsObject
     {
         return EmptyQueryParamsObject::makeFromRequest($this);

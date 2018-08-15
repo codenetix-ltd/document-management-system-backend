@@ -50,7 +50,7 @@ class RolesController extends Controller
 
     /**
      * @param RoleShowRequest $request
-     * @param integer $id
+     * @param integer         $id
      * @return RoleResource
      */
     public function show(RoleShowRequest $request, int $id)
@@ -60,7 +60,7 @@ class RolesController extends Controller
 
     /**
      * @param RoleUpdateRequest $request
-     * @param integer $id
+     * @param integer           $id
      * @return RoleResource
      */
     public function update(RoleUpdateRequest $request, int $id)
@@ -72,7 +72,7 @@ class RolesController extends Controller
     /**
      * Remove the specified resource from storage.
      * @param RoleDestroyRequest $request
-     * @param  integer $id
+     * @param  integer            $id
      * @return \Illuminate\Http\Response
      */
     public function destroy(RoleDestroyRequest $request, int $id)

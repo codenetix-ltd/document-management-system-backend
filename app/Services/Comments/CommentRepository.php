@@ -12,13 +12,21 @@ use Illuminate\Support\Collection;
  */
 class CommentRepository extends BaseRepository implements ICommentRepository
 {
+
+    /**
+     * @var Container
+     */
     private $container;
+
+    /**
+     * @var Repository
+     */
     private $config;
 
     /**
      * CommentRepository constructor.
      * @param Repository $config
-     * @param Container $container
+     * @param Container  $container
      */
     public function __construct(Repository $config, Container $container)
     {
@@ -35,7 +43,7 @@ class CommentRepository extends BaseRepository implements ICommentRepository
     }
 
     /**
-     * @param int $id
+     * @param integer $id
      * @return mixed
      */
     public function find(int $id)
@@ -58,8 +66,8 @@ class CommentRepository extends BaseRepository implements ICommentRepository
     }
 
     /**
-     * @param array $data
-     * @param int $id
+     * @param array   $data
+     * @param integer $id
      * @return mixed
      */
     public function update(array $data, int $id)
@@ -71,8 +79,8 @@ class CommentRepository extends BaseRepository implements ICommentRepository
     }
 
     /**
-     * @param int $documentId
-     * @param int $pageNumber
+     * @param integer              $documentId
+     * @param integer              $pageNumber
      * @param ITransformerStrategy $strategy
      * @return mixed
      */
@@ -97,8 +105,8 @@ class CommentRepository extends BaseRepository implements ICommentRepository
     }
 
     /**
-     * @param int $rootCommentId
-     * @param int $pageNumber
+     * @param integer              $rootCommentId
+     * @param integer              $pageNumber
      * @param ITransformerStrategy $strategy
      * @return mixed
      */
@@ -112,17 +120,16 @@ class CommentRepository extends BaseRepository implements ICommentRepository
     }
 
     /**
-     * @param int $pageNumber
+     * @param integer    $pageNumber
      * @param Collection $rootLevelCommentsIds
-     * @param int $levelDepth
+     * @param integer    $levelDepth
      * @return Collection
      */
     private function paginateChildrenByRootCommentId(int $pageNumber, Collection $rootLevelCommentsIds, int $levelDepth): Collection
     {
         $perPage = $this->config->get('comments.perPage');
         $comments = $this->container->make(Collection::class);
-        for ($i = 0; $i < $levelDepth; $i++)
-        {
+        for ($i = 0; $i < $levelDepth; $i++) {
             $currentChildLevelComments = $this->getInstance()
                 ->whereIn('parent_id', $rootLevelCommentsIds)
                 ->skip(($perPage*$pageNumber) - $perPage)

@@ -2,23 +2,44 @@
 
 namespace App\QueryParams;
 
-
 /**
  * Created by Andrew Sparrow <andrew.sprw@gmail.com>
  */
 interface IQueryParamsObject
 {
-    public function getAllowedFieldsToFilter();
 
-    public function getAllowedIncludes();
+    /**
+     * @return array
+     */
+    public function getAllowedFieldsToFilter(): array;
 
-    public function getAllowedFieldsToSort();
+    /**
+     * @return array
+     */
+    public function getAllowedIncludes(): array;
 
-    public function getFiltersData();
+    /**
+     * @return array
+     */
+    public function getAllowedFieldsToSort(): array;
 
-    public function getSortsData();
+    /**
+     * @return array
+     */
+    public function getFiltersData(): array;
 
-    public function getIncludeData();
+    /**
+     * @return array
+     */
+    public function getSortsData(): array;
 
-    public function getPaginationData();
+    /**
+     * @return array
+     */
+    public function getIncludeData(): array;
+
+    /**
+     * @return array
+     */
+    public function getPaginationData(): array;
 }

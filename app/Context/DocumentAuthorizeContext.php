@@ -16,8 +16,8 @@ class DocumentAuthorizeContext extends AAuthorizeContext implements IHasDocument
 
     /**
      * DocumentAuthorizeContext constructor.
-     * @param Authenticatable          $user
-     * @param Document|null $document
+     * @param Authenticatable $user
+     * @param Document|null   $document
      */
     public function __construct(Authenticatable $user, Document $document = null)
     {

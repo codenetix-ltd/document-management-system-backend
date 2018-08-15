@@ -11,8 +11,8 @@ class CommentsCollection extends BaseCollection
 
     /**
      * CommentsCollection constructor.
-     * @param array $items
-     * @param int $pageNumber
+     * @param array   $items
+     * @param integer $pageNumber
      */
     public function __construct(array $items, int $pageNumber = 1)
     {

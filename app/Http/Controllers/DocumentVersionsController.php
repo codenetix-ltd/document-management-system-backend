@@ -43,7 +43,7 @@ class DocumentVersionsController extends Controller
      * Display the specified resource.
      *
      * @param DocumentVersionShowRequest $request
-     * @param integer $documentVersionId
+     * @param integer                    $documentVersionId
      * @return DocumentVersionResource
      */
     public function show(DocumentVersionShowRequest $request, int $documentVersionId)
@@ -52,8 +52,8 @@ class DocumentVersionsController extends Controller
     }
 
     /**
-     * @param integer                      $documentVersionId
      * @param DocumentVersionUpdateRequest $request
+     * @param integer                      $documentVersionId
      * @return DocumentVersionResource
      */
     public function update(DocumentVersionUpdateRequest $request, int $documentVersionId)
@@ -64,7 +64,7 @@ class DocumentVersionsController extends Controller
 
     /**
      * @param DocumentVersionDestroyRequest $request
-     * @param int $documentVersionId
+     * @param integer                       $documentVersionId
      * @return \Illuminate\Http\JsonResponse
      * @throws \App\Exceptions\FailedDeleteActualDocumentVersion
      */

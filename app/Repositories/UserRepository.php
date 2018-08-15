@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Entities\User;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class DocumentRepositoryEloquent.
@@ -15,10 +16,10 @@ class UserRepository extends BaseRepository
      * Override method
      * For setting user password
      *
-     * @param $data
-     * @return mixed
+     * @param array $data
+     * @return Model
      */
-    public function create($data)
+    public function create(array $data): Model
     {
         /** @var User $model */
         $entry = $this->getInstance()->newInstance($data);
@@ -31,7 +32,7 @@ class UserRepository extends BaseRepository
     }
 
     /**
-     * @return mixed
+     * @return Model
      */
     protected function getInstance()
     {

@@ -8,8 +8,8 @@ class CommentTransformerTreeStrategy implements ITransformerStrategy
 {
     /**
      * @param Collection $commentModels
-     * @param int $pageNumber
-     * @param int $currentParentId
+     * @param integer    $pageNumber
+     * @param integer    $currentParentId
      * @return CommentsCollection
      */
     public function make(Collection $commentModels, int $pageNumber = 1, int $currentParentId = null): CommentsCollection
@@ -19,10 +19,10 @@ class CommentTransformerTreeStrategy implements ITransformerStrategy
     }
 
     /**
-     * @param Collection $commentModels
+     * @param Collection   $commentModels
      * @param ITransformer $transformer
-     * @param int $pageNumber
-     * @param int $currentParentId
+     * @param integer      $pageNumber
+     * @param integer      $currentParentId
      * @return CommentsCollection
      */
     private function toTree(Collection $commentModels, ITransformer $transformer, int $pageNumber, int $currentParentId = null): CommentsCollection

@@ -9,9 +9,9 @@ class TemplateUpdateRequest extends ABaseAPIRequest
     /**
      * Determine if the user is authorized to make this request.
      *
-     * @return bool
+     * @return boolean
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return $this->getAuthorizer()->check('template_update');
     }
@@ -21,7 +21,7 @@ class TemplateUpdateRequest extends ABaseAPIRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'name' => 'string|required|max:255|unique:templates,name,'.$this->route('template'),

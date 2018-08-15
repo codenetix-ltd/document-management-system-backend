@@ -2,27 +2,34 @@
 
 namespace App\QueryParams;
 
-
 /**
  * Created by Andrew Sparrow <andrew.sprw@gmail.com>
  */
 class EmptyQueryParamsObject extends QueryParamsObject
 {
-
+    /**
+     * @var array
+     */
     protected $allowedFieldsToFilter = [];
 
+    /**
+     * @var array
+     */
     protected $allowedIncludes = [];
 
+    /**
+     * @var array
+     */
     protected $allowedFieldsToSort = [];
 
     /**
      * EmptyQueryParamsObject constructor.
-     * @param $filterData
-     * @param $sortData
-     * @param $includeData
-     * @param $paginationData
+     * @param array $filterData
+     * @param array $sortData
+     * @param array $includeData
+     * @param array $paginationData
      */
-    public function __construct($filterData, $sortData, $includeData, $paginationData)
+    public function __construct(array $filterData, array $sortData, array $includeData, array $paginationData)
     {
         parent::__construct($filterData, $sortData, $includeData, $paginationData);
     }
@@ -52,10 +59,10 @@ class EmptyQueryParamsObject extends QueryParamsObject
     }
 
     /**
-     * @param mixed $allowedFieldsToFilter
+     * @param array $allowedFieldsToFilter
      * @return EmptyQueryParamsObject
      */
-    public function setAllowedFieldsToFilter($allowedFieldsToFilter): EmptyQueryParamsObject
+    public function setAllowedFieldsToFilter(array $allowedFieldsToFilter): EmptyQueryParamsObject
     {
         $this->allowedFieldsToFilter = $allowedFieldsToFilter;
 
@@ -63,10 +70,10 @@ class EmptyQueryParamsObject extends QueryParamsObject
     }
 
     /**
-     * @param mixed $allowedIncludes
+     * @param array $allowedIncludes
      * @return EmptyQueryParamsObject
      */
-    public function setAllowedIncludes($allowedIncludes): EmptyQueryParamsObject
+    public function setAllowedIncludes(array $allowedIncludes): EmptyQueryParamsObject
     {
         $this->allowedIncludes = $allowedIncludes;
 
@@ -74,10 +81,10 @@ class EmptyQueryParamsObject extends QueryParamsObject
     }
 
     /**
-     * @param mixed $allowedFieldsToSort
+     * @param array $allowedFieldsToSort
      * @return EmptyQueryParamsObject
      */
-    public function setAllowedFieldsToSort($allowedFieldsToSort): EmptyQueryParamsObject
+    public function setAllowedFieldsToSort(array $allowedFieldsToSort): EmptyQueryParamsObject
     {
         $this->allowedFieldsToSort = $allowedFieldsToSort;
 

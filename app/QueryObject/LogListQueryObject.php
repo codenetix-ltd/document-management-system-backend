@@ -19,11 +19,11 @@ class LogListQueryObject extends AQueryObject
     }
 
     /**
-     * @param $model
-     * @param $scope
-     * @return mixed
+     * @param \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model $model
+     * @param string                                                                    $scope
+     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model|Builder
      */
-    protected function applyJoin($model, $scope)
+    protected function applyJoin($model, string $scope)
     {
         if ($scope === 'owner') {
             return $model->leftJoin('users as owner', 'logs.user_id', '=', 'owner.id');

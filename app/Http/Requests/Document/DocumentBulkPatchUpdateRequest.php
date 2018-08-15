@@ -13,22 +13,22 @@ class DocumentBulkPatchUpdateRequest extends ABaseAPIRequest
     /**
      * Determine if the user is authorized to make this request.
      *
-     * @return bool
+     * @return boolean
      */
-    public function authorize()
+    public function authorize(): bool
     {
         $ids = explode(',', $this->get('ids', ''));
 
-        if(count($ids) !== $this->json()->count()){
+        if (count($ids) !== $this->json()->count()) {
             return false;
         }
 
         $service = $this->container->make(DocumentService::class);
 
-        foreach ($ids as $key => $currentId){
+        foreach ($ids as $key => $currentId) {
             $document = $service->find($currentId);
-            if(!(new DocumentAuthorizer(new DocumentAuthorizeContext(Auth::user(), $document)))
-                ->check('document_update')){
+            if (!(new DocumentAuthorizer(new DocumentAuthorizeContext(Auth::user(), $document)))
+                ->check('document_update')) {
                 return false;
             }
         }
@@ -39,7 +39,7 @@ class DocumentBulkPatchUpdateRequest extends ABaseAPIRequest
     /**
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         $rules = parent::rules();
         $bulkRules = [

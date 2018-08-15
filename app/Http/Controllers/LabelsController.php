@@ -51,7 +51,7 @@ class LabelsController extends Controller
 
     /**
      * @param LabelShowRequest $request
-     * @param integer $id
+     * @param integer          $id
      * @return LabelResource
      */
     public function show(LabelShowRequest $request, int $id)
@@ -74,7 +74,7 @@ class LabelsController extends Controller
      * Remove the specified resource from storage.
      *
      * @param LabelDestroyRequest $request
-     * @param  integer $id
+     * @param  integer             $id
      *
      * @return \Illuminate\Http\Response
      */

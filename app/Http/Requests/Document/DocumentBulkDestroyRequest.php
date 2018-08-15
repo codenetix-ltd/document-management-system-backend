@@ -36,9 +36,9 @@ class DocumentBulkDestroyRequest extends ABaseAPIRequest
     /**
      * Determine if the user is authorized to make this request.
      *
-     * @return bool
+     * @return boolean
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
@@ -46,7 +46,7 @@ class DocumentBulkDestroyRequest extends ABaseAPIRequest
     /**
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         $rules = parent::rules();
         $bulkRules = [

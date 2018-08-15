@@ -4,8 +4,10 @@ namespace App\Http\Requests\Document;
 
 use App\Context\DocumentAuthorizeContext;
 use App\Http\Requests\ABaseAPIRequest;
+use App\Services\Authorizers\AAuthorizer;
 use App\Services\Authorizers\DocumentAuthorizer;
 use App\Services\DocumentService;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
 class DocumentUpdateRequest extends ABaseAPIRequest
@@ -13,25 +15,26 @@ class DocumentUpdateRequest extends ABaseAPIRequest
     /**
      * Determine if the user is authorized to make this request.
      *
-     * @return bool
+     * @return boolean
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return $this->getAuthorizer()->check('document_update');
     }
 
     /**
-     * @return DocumentAuthorizer
+     * @return AAuthorizer
      */
-    protected function getAuthorizer(){
+    protected function getAuthorizer(): AAuthorizer
+    {
         return new DocumentAuthorizer(new DocumentAuthorizeContext(Auth::user(), $this->model()));
     }
 
     /**
      * @param DocumentService $documentService
-     * @return mixed
+     * @return Model
      */
-    public function getTargetModel(DocumentService $documentService)
+    public function getTargetModel(DocumentService $documentService): Model
     {
         return $documentService->find($this->route()->parameter('id'));
     }
@@ -41,7 +44,7 @@ class DocumentUpdateRequest extends ABaseAPIRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'createNewVersion' => 'boolean|required',

@@ -21,9 +21,9 @@ class LazyComment implements IComment
 
     /**
      * LazyComment constructor.
-     * @param IComment $comment
+     * @param IComment       $comment
      * @param CommentService $service
-     * @param int $pageNumber
+     * @param integer        $pageNumber
      */
     public function __construct(IComment $comment, CommentService $service, $pageNumber = 1)
     {
@@ -34,7 +34,7 @@ class LazyComment implements IComment
 
     /**
      * Set comment id
-     * @param int $id
+     * @param integer $id
      * @return void
      */
     public function setId(int $id): void
@@ -44,7 +44,7 @@ class LazyComment implements IComment
 
     /**
      * Get comment id
-     * @return int
+     * @return integer
      */
     public function getId(): int
     {
@@ -53,7 +53,7 @@ class LazyComment implements IComment
 
     /**
      * Set comment user id
-     * @param int $userId
+     * @param integer $userId
      * @return void
      */
     public function setUserId(int $userId): void
@@ -63,7 +63,7 @@ class LazyComment implements IComment
 
     /**
      * Get comment user id
-     * @return int
+     * @return integer
      */
     public function getUserId(): int
     {
@@ -72,7 +72,7 @@ class LazyComment implements IComment
 
     /**
      * Set comment commentable id
-     * @param int $commentableId
+     * @param integer $commentableId
      * @return void
      */
     public function setEntityId(int $commentableId): void
@@ -82,7 +82,7 @@ class LazyComment implements IComment
 
     /**
      * Get comment commentable id
-     * @return int
+     * @return integer
      */
     public function getEntityId(): int
     {
@@ -120,7 +120,7 @@ class LazyComment implements IComment
 
     /**
      * Get comment parent id
-     * @return int
+     * @return integer
      */
     public function getParentId(): ?int
     {
@@ -158,7 +158,7 @@ class LazyComment implements IComment
 
     /**
      * Get created time
-     * @return int
+     * @return integer
      */
     public function getCreatedAt(): int
     {
@@ -177,7 +177,7 @@ class LazyComment implements IComment
 
     /**
      * Get updated time
-     * @return int
+     * @return integer
      */
     public function getUpdatedAt(): int
     {
@@ -196,7 +196,7 @@ class LazyComment implements IComment
 
     /**
      * Get deleted time
-     * @return int
+     * @return integer
      */
     public function getDeletedAt(): ?int
     {
@@ -225,7 +225,7 @@ class LazyComment implements IComment
 
     /**
      * Remove comment from tree
-     * @param int $id
+     * @param integer $id
      * @return void
      */
     public function removeCommentById(int $id): void

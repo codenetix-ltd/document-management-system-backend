@@ -6,6 +6,11 @@ use App\Entities\Comment as CommentModel;
 
 class CommentTransformer implements ITransformer
 {
+
+    /**
+     * @param CommentModel $commentModel
+     * @return Comment
+     */
     public function transform(CommentModel $commentModel): Comment
     {
         $comment = new Comment();
@@ -21,4 +26,3 @@ class CommentTransformer implements ITransformer
         return $comment;
     }
 }
-

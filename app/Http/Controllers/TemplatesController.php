@@ -51,8 +51,8 @@ class TemplatesController extends Controller
 
     /**
      * @param AttributeListRequest $request
-     * @param AttributeService $attributesService
-     * @param integer $templateId
+     * @param AttributeService     $attributesService
+     * @param integer              $templateId
      * @return AttributeCollectionResource
      */
     public function attributes(AttributeListRequest $request, AttributeService $attributesService, int $templateId)
@@ -74,7 +74,7 @@ class TemplatesController extends Controller
 
     /**
      * @param TemplateShowRequest $request
-     * @param integer $id
+     * @param integer             $id
      * @return TemplateResource
      */
     public function show(TemplateShowRequest $request, int $id)
@@ -102,7 +102,7 @@ class TemplatesController extends Controller
      * Remove the specified resource from storage.
      *
      * @param TemplateDestroyRequest $request
-     * @param  integer $id
+     * @param  integer                $id
      *
      * @return \Illuminate\Http\Response
      */

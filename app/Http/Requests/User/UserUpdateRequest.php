@@ -4,8 +4,10 @@ namespace App\Http\Requests\User;
 
 use App\Context\UserAuthorizeContext;
 use App\Http\Requests\ABaseAPIRequest;
+use App\Services\Authorizers\AAuthorizer;
 use App\Services\Authorizers\UserAuthorizer;
 use App\Services\UserService;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
 class UserUpdateRequest extends ABaseAPIRequest
@@ -15,7 +17,7 @@ class UserUpdateRequest extends ABaseAPIRequest
      *
      * @return boolean
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return $this->getAuthorizer()->check('user_update');
     }
@@ -23,7 +25,7 @@ class UserUpdateRequest extends ABaseAPIRequest
     /**
      * @return UserAuthorizer
      */
-    protected function getAuthorizer()
+    protected function getAuthorizer(): AAuthorizer
     {
         return new UserAuthorizer(new UserAuthorizeContext(Auth::user(), $this->model()));
     }
@@ -32,7 +34,7 @@ class UserUpdateRequest extends ABaseAPIRequest
      * @param UserService $userService
      * @return mixed
      */
-    public function getTargetModel(UserService $userService)
+    public function getTargetModel(UserService $userService): Model
     {
         return $userService->find($this->route()->parameter('user'));
     }
@@ -41,7 +43,7 @@ class UserUpdateRequest extends ABaseAPIRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'fullName' => 'required|string|max:255',

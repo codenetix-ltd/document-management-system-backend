@@ -4,20 +4,60 @@ namespace App\Services\Comments;
 
 class Comment implements IComment
 {
+
+    /**
+     * @var integer
+     */
     private $id;
+
+    /**
+     * @var integer
+     */
     private $userId;
+
+    /**
+     * @var integer
+     */
     private $commentableId;
+
+    /**
+     * @var string
+     */
     private $commentableType;
+
+    /**
+     * @var int|null
+     */
     private $parentId;
+
+    /**
+     * @var string
+     */
     private $message;
+
+    /**
+     * @var integer
+     */
     private $createdAt;
+
+    /**
+     * @var integer
+     */
     private $updatedAt;
+
+    /**
+     * @var integer
+     */
     private $deletedAt;
+
+    /**
+     * @var CommentsCollection
+     */
     private $children;
 
     /**
      * Comment constructor.
-     * @param int $pageNumber
+     * @param integer $pageNumber
      */
     public function __construct($pageNumber = 1)
     {
@@ -26,7 +66,7 @@ class Comment implements IComment
 
     /**
      * Set comment id
-     * @param int $id
+     * @param integer $id
      * @return void
      */
     public function setId(int $id): void
@@ -36,7 +76,7 @@ class Comment implements IComment
 
     /**
      * Get comment id
-     * @return int
+     * @return integer
      */
     public function getId(): int
     {
@@ -45,7 +85,7 @@ class Comment implements IComment
 
     /**
      * Set comment user id
-     * @param int $userId
+     * @param integer $userId
      * @return void
      */
     public function setUserId(int $userId): void
@@ -55,7 +95,7 @@ class Comment implements IComment
 
     /**
      * Get comment user id
-     * @return int
+     * @return integer
      */
     public function getUserId(): int
     {
@@ -64,7 +104,7 @@ class Comment implements IComment
 
     /**
      * Set comment commentable id
-     * @param int $commentableId
+     * @param integer $commentableId
      * @return void
      */
     public function setEntityId(int $commentableId): void
@@ -74,7 +114,7 @@ class Comment implements IComment
 
     /**
      * Get comment commentable id
-     * @return int
+     * @return integer
      */
     public function getEntityId(): int
     {
@@ -102,17 +142,17 @@ class Comment implements IComment
 
     /**
      * Set comment parent id
-     * @param $parentId
+     * @param integer|null $parentId
      * @return void
      */
-    public function setParentId($parentId): void
+    public function setParentId(?int $parentId): void
     {
         $this->parentId = $parentId;
     }
 
     /**
      * Get comment parent id
-     * @return int
+     * @return integer
      */
     public function getParentId(): ?int
     {
@@ -150,7 +190,7 @@ class Comment implements IComment
 
     /**
      * Get created time
-     * @return int
+     * @return integer
      */
     public function getCreatedAt(): int
     {
@@ -169,7 +209,7 @@ class Comment implements IComment
 
     /**
      * Get updated time
-     * @return int
+     * @return integer
      */
     public function getUpdatedAt(): int
     {
@@ -188,7 +228,7 @@ class Comment implements IComment
 
     /**
      * Get deleted time
-     * @return int
+     * @return integer
      */
     public function getDeletedAt(): ?int
     {
@@ -217,7 +257,7 @@ class Comment implements IComment
 
     /**
      * Remove comment from tree
-     * @param int $id
+     * @param integer $id
      * @return void
      */
     public function removeCommentById(int $id): void

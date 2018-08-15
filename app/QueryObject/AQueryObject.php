@@ -4,6 +4,7 @@ namespace App\QueryObject;
 
 use App\QueryParams\IQueryParamsObject;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 
 abstract class AQueryObject
 {
@@ -12,20 +13,37 @@ abstract class AQueryObject
      */
     private $baseQuery;
 
+    /**
+     * AQueryObject constructor.
+     * @param Builder $baseQuery
+     */
     public function __construct(Builder $baseQuery)
     {
         $this->baseQuery = $baseQuery;
     }
 
-    protected function getQuery(){
+    /**
+     * @return Builder
+     */
+    protected function getQuery(): Builder
+    {
         return $this->baseQuery;
     }
 
-    protected function map(){
+    /**
+     * @return array
+     */
+    protected function map()
+    {
         return [];
     }
 
-    private function applyJoins($path, $model)
+    /**
+     * @param array         $path
+     * @param Model|Builder $model
+     * @return Model|Builder
+     */
+    private function applyJoins(array $path, $model)
     {
         array_pop($path);
 
@@ -38,6 +56,10 @@ abstract class AQueryObject
         return $model;
     }
 
+    /**
+     * @param IQueryParamsObject $queryParamsObject
+     * @return Model|Builder
+     */
     public function applyQueryParams(IQueryParamsObject $queryParamsObject)
     {
         $model = $this->getQuery()->select($this->getQuery()->getModel()->getTable().'.*');
@@ -67,28 +89,29 @@ abstract class AQueryObject
             } else {
                 $model = $this->applyWhere($model, $scope, $value, $scope);
             }
-
         }
 
         return $model;
     }
 
     /**
-     * @param $model
-     * @param $field
-     * @param $value
-     * @return mixed
+     * @param Model|Builder $model
+     * @param string        $field
+     * @param string|array  $value
+     * @param string        $scope
+     * @return Model|Builder
      */
-    protected function applyWhere($model, $field, $value, $scope) {
+    protected function applyWhere($model, string $field, $value, string $scope)
+    {
         return $model->where($field, 'LIKE', $value . '%');
     }
 
     /**
-     * @param $model
-     * @param $scope
-     * @return mixed
+     * @param Model|Builder $model
+     * @param string        $scope
+     * @return Model|Builder
      */
-    protected function applyJoin($model, $scope)
+    protected function applyJoin($model, string $scope)
     {
         return $model;
     }

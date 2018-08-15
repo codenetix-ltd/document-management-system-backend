@@ -10,10 +10,8 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class DocumentVersionService
 {
-    /**
-     * @var DocumentVersionRepository
-     */
-    protected $repository;
+    use CRUDServiceTrait;
+
     /**
      * @var AttributeValueService
      */
@@ -26,8 +24,9 @@ class DocumentVersionService
      */
     public function __construct(DocumentVersionRepository $repository, AttributeValueService $attributeValueService)
     {
-        $this->repository = $repository;
         $this->attributeValueService = $attributeValueService;
+
+        $this->setRepository($repository);
     }
 
     /**
@@ -38,15 +37,6 @@ class DocumentVersionService
     public function list(IQueryParamsObject $queryParamsObject, int $documentId)
     {
         return $this->repository->paginateByDocumentId($queryParamsObject, $documentId);
-    }
-
-    /**
-     * @param integer $id
-     * @return DocumentVersion
-     */
-    public function find(int $id)
-    {
-        return $this->repository->find($id);
     }
 
     /**

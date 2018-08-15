@@ -41,7 +41,7 @@ class DocumentsController extends Controller
      */
     public function index(DocumentListRequest $request)
     {
-        $documents = $this->service->list($request->queryParamsObject());
+        $documents = $this->service->paginate($request->queryParamsObject());
         return new DocumentCollectionResource($documents);
     }
 

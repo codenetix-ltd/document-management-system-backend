@@ -15,10 +15,8 @@ use Illuminate\Support\Facades\Event;
 
 class DocumentService
 {
-    /**
-     * @var DocumentRepository
-     */
-    protected $repository;
+    use CRUDServiceTrait;
+
     /**
      * @var DocumentVersionService
      */
@@ -31,29 +29,10 @@ class DocumentService
      */
     public function __construct(DocumentRepository $repository, DocumentVersionService $documentVersionService)
     {
-        $this->repository = $repository;
+        $this->setRepository($repository);
+        $this->setModelGetEventClass(DocumentReadEvent::class);
+        $this->setModelDeleteEventClass(DocumentDeleteEvent::class);
         $this->documentVersionService = $documentVersionService;
-    }
-
-    /**
-     * @param IQueryParamsObject $queryParamsObject
-     * @return mixed
-     */
-    public function list(IQueryParamsObject $queryParamsObject)
-    {
-        return $this->repository->paginateList($queryParamsObject);
-    }
-
-    /**
-     * @param integer $id
-     * @return Document
-     */
-    public function find(int $id)
-    {
-        $document = $this->repository->find($id);
-        Event::dispatch(new DocumentReadEvent($document));
-
-        return $document;
     }
 
     /**
@@ -117,21 +96,6 @@ class DocumentService
         }
 
         return $this->update($data, $id);
-    }
-
-    /**
-     * @param integer $id
-     * @return bool
-     */
-    public function delete(int $id): bool
-    {
-        try {
-            $document = $this->repository->find($id);
-            Event::dispatch(new DocumentDeleteEvent($document));
-            return $this->repository->delete($id);
-        } catch(ModelNotFoundException $e){
-            return false;
-        }
     }
 
     /**

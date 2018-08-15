@@ -7,10 +7,7 @@ use App\Repositories\AttributeValueRepository;
 
 class AttributeValueService
 {
-    /**
-     * @var AttributeValueRepository
-     */
-    protected $repository;
+    use CRUDServiceTrait;
 
     /**
      * LabelService constructor.
@@ -18,65 +15,6 @@ class AttributeValueService
      */
     public function __construct(AttributeValueRepository $repository)
     {
-        $this->repository = $repository;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function list()
-    {
-        return $this->repository->all();
-    }
-
-    /**
-     * @param integer $id
-     * @return AttributeValue
-     */
-    public function find(int $id)
-    {
-        return $this->repository->find($id);
-    }
-
-    /**
-     * @param array $data
-     * @return AttributeValue
-     */
-    public function create(array $data)
-    {
-        return $this->repository->create($data);
-    }
-
-    /**
-     * @param array   $data
-     * @param integer $id
-     * @return AttributeValue
-     */
-    public function update(array $data, int $id)
-    {
-        return $this->repository->update($data, $id);
-    }
-
-    /**
-     * @param integer $id
-     * @return integer
-     */
-    public function delete(int $id): int
-    {
-        $value = $this->repository->findWhere([['id', '=', $id]])->first();
-        if (is_null($value)) {
-            return 0;
-        }
-
-        $this->repository->delete($id);
-    }
-
-    /**
-     * @param bool $withCriteria
-     * @return mixed
-     */
-    public function paginate($withCriteria = false)
-    {
-        return $this->repository->paginateList($withCriteria);
+        $this->setRepository($repository);
     }
 }

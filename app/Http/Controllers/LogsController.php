@@ -28,7 +28,7 @@ class LogsController extends Controller
      */
     public function index(LogListRequest $request)
     {
-        $logs = $this->service->list($request->queryParamsObject());
+        $logs = $this->service->paginate($request->queryParamsObject());
 
         return new LogCollectionResource($logs);
     }

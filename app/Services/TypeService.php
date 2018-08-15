@@ -6,15 +6,12 @@ use App\Repositories\TypeRepository;
 
 class TypeService
 {
+    use CRUDServiceTrait;
+
     const TYPE_STRING = 'string';
     const TYPE_NUMERIC = 'numeric';
     const TYPE_BOOLEAN = 'boolean';
     const TYPE_TABLE = 'table';
-
-    /**
-     * @var TypeRepository
-     */
-    protected $repository;
 
     /**
      * TypeService constructor.
@@ -22,14 +19,6 @@ class TypeService
      */
     public function __construct(TypeRepository $repository)
     {
-        $this->repository = $repository;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function list()
-    {
-        return $this->repository->all();
+        $this->setRepository($repository);
     }
 }

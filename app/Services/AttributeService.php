@@ -17,10 +17,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class AttributeService
 {
-    /**
-     * @var AttributeRepository
-     */
-    protected $repository;
+    use CRUDServiceTrait;
 
     /**
      * @var TypeRepository
@@ -34,25 +31,9 @@ class AttributeService
      */
     public function __construct(AttributeRepository $repository, TypeRepository $typeRepository)
     {
-        $this->repository = $repository;
         $this->typeRepository = $typeRepository;
-    }
 
-    /**
-     * @return mixed
-     */
-    public function list()
-    {
-        return $this->repository->all();
-    }
-
-    /**
-     * @param integer $id
-     * @return Attribute
-     */
-    public function find(int $id)
-    {
-        return $this->repository->find($id);
+        $this->setRepository($repository);
     }
 
     /**

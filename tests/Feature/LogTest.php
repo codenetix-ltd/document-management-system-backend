@@ -58,12 +58,11 @@ class LogTest extends TestCase
 
         $response = $this
             ->actingAs($this->authUser)
-            ->json('GET', self::API_ROOT. 'logs?sort[body]=desc');
+            ->json('GET', self::API_ROOT. 'logs?sort[body]=desc')
+            ->assertStatus(Response::HTTP_OK);
 
         $this->assetJsonPaginationStructure($response);
-
         $decodedResponse = $response->decodeResponseJson();
-
         $item = $decodedResponse['data'][0];
 
         $response->assertJsonStructure([
@@ -83,8 +82,6 @@ class LogTest extends TestCase
             'createdAt',
             'updatedAt'
         ], $item);
-
-        $response->assertStatus(Response::HTTP_OK);
 
         $this->assertCount(10, $decodedResponse['data']);
     }

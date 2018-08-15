@@ -8,10 +8,7 @@ use App\Repositories\LogRepository;
 
 class LogService implements ILogger
 {
-    /**
-     * @var LogRepository
-     */
-    protected $repository;
+    use CRUDServiceTrait;
 
     /**
      * LogService constructor.
@@ -19,16 +16,7 @@ class LogService implements ILogger
      */
     public function __construct(LogRepository $repository)
     {
-        $this->repository = $repository;
-    }
-
-    /**
-     * @param IQueryParamsObject $queryParamsObject
-     * @return mixed
-     */
-    public function list(IQueryParamsObject $queryParamsObject)
-    {
-        return $this->repository->paginateList($queryParamsObject);
+        $this->setRepository($repository);
     }
 
     /**

@@ -6,10 +6,7 @@ use App\Repositories\PermissionGroupRepository;
 
 class PermissionGroupService
 {
-    /**
-     * @var PermissionGroupRepository
-     */
-    protected $repository;
+    use CRUDServiceTrait;
 
     /**
      * PermissionGroupService constructor.
@@ -17,14 +14,6 @@ class PermissionGroupService
      */
     public function __construct(PermissionGroupRepository $repository)
     {
-        $this->repository = $repository;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function list()
-    {
-        return $this->repository->all();
+        $this->setRepository($repository);
     }
 }

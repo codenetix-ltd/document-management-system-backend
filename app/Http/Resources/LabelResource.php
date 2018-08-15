@@ -4,7 +4,6 @@ namespace App\Http\Resources;
 
 use App\Entities\Label;
 use App\Facades\AuthPermissions;
-use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * Class LabelResource
@@ -12,7 +11,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *
  * @property Label $resource
  */
-class LabelResource extends JsonResource
+class LabelResource extends AbstractSingularResource
 {
     /**
      * Transform the resource into an array.

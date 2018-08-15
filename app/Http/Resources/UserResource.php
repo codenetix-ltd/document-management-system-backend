@@ -5,7 +5,6 @@ namespace App\Http\Resources;
 use App\Entities\User;
 use App\Facades\AuthPermissions;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * Class UserResource
@@ -13,7 +12,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *
  * @property User $resource
  */
-class UserResource extends JsonResource
+class UserResource extends AbstractSingularResource
 {
     /**
      * Transform the resource into an array.

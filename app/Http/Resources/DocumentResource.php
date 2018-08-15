@@ -4,7 +4,6 @@ namespace App\Http\Resources;
 
 use App\Entities\Document;
 use App\Facades\AuthPermissions;
-use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * Class DocumentResource
@@ -12,7 +11,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *
  * @property Document $resource
  */
-class DocumentResource extends JsonResource
+class DocumentResource extends AbstractSingularResource
 {
     /**
      * Transform the resource into an array.

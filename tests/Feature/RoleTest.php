@@ -23,7 +23,6 @@ class RoleTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        Resource::withoutWrapping();
     }
 
     /**

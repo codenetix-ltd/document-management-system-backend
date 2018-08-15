@@ -4,7 +4,6 @@ namespace App\Http\Resources;
 
 use App\Entities\Role;
 use App\Facades\AuthPermissions;
-use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * Class RoleResource
@@ -12,7 +11,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *
  * @property Role $resource
  */
-class RoleResource extends JsonResource
+class RoleResource extends AbstractSingularResource
 {
     /**
      * Transform the resource into an array.

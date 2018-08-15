@@ -22,7 +22,6 @@ class TypeTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        Resource::withoutWrapping();
     }
 
     /**

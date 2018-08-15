@@ -6,6 +6,8 @@ use App\Entities\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Foundation\Testing\TestResponse;
+use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Resources\Json\Resource;
 use Laravel\Passport\Passport;
 
 /**
@@ -35,6 +37,7 @@ abstract class TestCase extends BaseTestCase
 
         $this->authUser = User::whereFullName('admin')->first();
         Passport::actingAs($this->authUser);
+        Resource::withoutWrapping();
     }
 
     /**

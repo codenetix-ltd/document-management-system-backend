@@ -4,12 +4,11 @@ namespace App\Http\Resources;
 
 use App\Entities\AttributeValue;
 use App\Services\AttributeTypeCaster;
-use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * @property AttributeValue $resource
  */
-class AttributeValueResource extends JsonResource
+class AttributeValueResource extends AbstractSingularResource
 {
     /**
      * Transform the resource into an array.

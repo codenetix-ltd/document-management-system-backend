@@ -35,9 +35,9 @@ class TemplateTest extends TestCase
         factory(Template::class, 10)->create();
 
         $response = $this->json('GET', self::API_ROOT . 'templates');
-        $this->assetJsonPaginationStructure($response);
 
         $response->assertStatus(Response::HTTP_OK);
+        $this->assetJsonPaginationStructure($response);
     }
 
     /**
@@ -158,6 +158,6 @@ class TemplateTest extends TestCase
     public function testTemplateDeleteWhichDoesNotExist()
     {
         $response = $this->json('DELETE', self::API_ROOT . 'templates/' . 0);
-        $response->assertStatus(Response::HTTP_NO_CONTENT);
+        $response->assertStatus(Response::HTTP_NOT_FOUND);
     }
 }

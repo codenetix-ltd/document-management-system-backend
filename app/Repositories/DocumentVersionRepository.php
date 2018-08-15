@@ -2,22 +2,35 @@
 
 namespace App\Repositories;
 
-use Prettus\Repository\Contracts\RepositoryInterface;
+use App\QueryParams\DocumentIdCriteria;
+use App\QueryParams\IQueryParamsObject;
+use App\Entities\DocumentVersion;
+use App\QueryObject\DocumentListQueryObject;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Prettus\Repository\Exceptions\RepositoryException;
 
-/**
- * Interface DocumentVersionRepository.
- */
-interface DocumentVersionRepository extends RepositoryInterface
+
+class DocumentVersionRepository extends BaseRepository
 {
     /**
-     * @param integer $documentId
      * @return mixed
      */
-    public function paginateByDocument(int $documentId);
+    protected function getInstance()
+    {
+        return new DocumentVersion;
+    }
 
     /**
-     * @param integer $id
-     * @return mixed
+     * @param IQueryParamsObject $queryParamsObject
+     * @param integer $documentId
+     * @return LengthAwarePaginator
      */
-    public function findModel(int $id);
+    public function paginateByDocumentId(IQueryParamsObject $queryParamsObject, int $documentId): LengthAwarePaginator
+    {
+        return $this->getInstance()->where('document_id', $documentId)->paginate();
+    }
+
+    public function latestVersionByDocumentId(int $documentId){
+        return $this->getInstance()->where('document_id', $documentId)->orderBy('id', 'desc')->first();
+    }
 }

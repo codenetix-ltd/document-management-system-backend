@@ -36,8 +36,8 @@ class RoleTest extends TestCase
 
         $response = $this->json('GET', self::API_ROOT . 'roles');
 
-        $this->assetJsonPaginationStructure($response);
         $response->assertStatus(200);
+        $this->assetJsonPaginationStructure($response);
     }
 
     /**
@@ -59,7 +59,8 @@ class RoleTest extends TestCase
                 'templatesIds' => [],
                 'permissionValues' => [],
                 'createdAt' => $role->createdAt->timestamp,
-                'updatedAt' => $role->updatedAt->timestamp
+                'updatedAt' => $role->updatedAt->timestamp,
+                'authPermissions' => ['role_view' , 'role_update',  'role_delete', 'role_create', 'role_toggle']
             ]);
     }
 
@@ -161,6 +162,6 @@ class RoleTest extends TestCase
     public function testRoleDeleteWhichDoesNotExist()
     {
         $response = $this->json('DELETE', self::API_ROOT . 'roles/' . 0);
-        $response->assertStatus(Response::HTTP_NO_CONTENT);
+        $response->assertStatus(Response::HTTP_NOT_FOUND);
     }
 }

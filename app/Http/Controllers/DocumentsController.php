@@ -2,19 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\DocumentBulkPatchUpdateRequest;
-use App\Http\Requests\DocumentCreateRequest;
-use App\Http\Requests\DocumentPatchUpdateRequest;
-use App\Http\Requests\DocumentUpdateRequest;
+use App\Http\Requests\Document\DocumentBulkDestroyRequest;
+use App\Http\Requests\Document\DocumentBulkPatchUpdateRequest;
+use App\Http\Requests\Document\DocumentCreateRequest;
+use App\Http\Requests\Document\DocumentDestroyRequest;
+use App\Http\Requests\Document\DocumentListRequest;
+use App\Http\Requests\Document\DocumentPatchUpdateRequest;
+use App\Http\Requests\Document\DocumentShowRequest;
+use App\Http\Requests\Document\DocumentUpdateRequest;
+use App\Http\Requests\DocumentVersion\DocumentVersionListRequest;
 use App\Http\Resources\DocumentCollectionResource;
 use App\Http\Resources\DocumentResource;
+use App\Http\Resources\DocumentVersionCollectionResource;
 use App\Services\DocumentService;
-use App\System\AuthBuilders\AuthorizerFactory;
-use Illuminate\Http\Request;
+use App\Services\DocumentVersionService;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
-use Exception;
-use Illuminate\Validation\ValidationException;
 
 class DocumentsController extends Controller
 {
@@ -33,70 +36,67 @@ class DocumentsController extends Controller
     }
 
     /**
+     * @param DocumentListRequest $request
      * @return DocumentCollectionResource
      */
-    public function index()
+    public function index(DocumentListRequest $request)
     {
-        $documents = $this->service->list();
+        $documents = $this->service->list($request->queryParamsObject());
         return new DocumentCollectionResource($documents);
     }
 
     /**
-     * @param DocumentCreateRequest $request
-     * @return DocumentResource
+     * Display a listing of the resource.
+     *
+     * @param DocumentVersionListRequest $request
+     * @param DocumentVersionService $documentVersionService
+     * @param integer $documentId
+     * @return DocumentVersionCollectionResource
      */
-    public function store(DocumentCreateRequest $request)
+    public function versions(DocumentVersionListRequest $request, DocumentVersionService $documentVersionService, int $documentId)
     {
-        $authorizer = AuthorizerFactory::make('document');
-        $authorizer->authorize('document_create');
-
-        $document = $this->service->create($request->all());
-        return new DocumentResource($document);
+        $documentVersions = $documentVersionService->list($request->queryParamsObject(), $documentId);
+        return new DocumentVersionCollectionResource($documentVersions);
     }
 
     /**
-     * @param integer $id
+     * @param DocumentCreateRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function store(DocumentCreateRequest $request)
+    {
+        $document = $this->service->create($request->all());
+        return (new DocumentResource($document))->response()->setStatusCode(Response::HTTP_CREATED);
+    }
+
+    /**
+     * @param DocumentShowRequest $request
      * @return DocumentResource
      */
-    public function show(int $id)
+    public function show(DocumentShowRequest $request)
     {
-        $document = $this->service->find($id);
-
-        $authorizer = AuthorizerFactory::make('document', $document);
-        $authorizer->authorize('document_view');
-
-        return new DocumentResource($document);
+        return new DocumentResource($request->model());
     }
 
     /**
      * @param DocumentUpdateRequest $request
-     * @param integer               $id
+     * @param integer $id
      * @return DocumentResource
+     * @throws \App\Exceptions\FailedDeleteActualDocumentVersion
      */
     public function update(DocumentUpdateRequest $request, int $id)
     {
-        $document = $this->service->find($id);
-
-        $authorizer = AuthorizerFactory::make('document', $document);
-        $authorizer->authorize('document_update');
-
         $document = $this->service->updateVersion($request->all(), $id);
-
         return new DocumentResource($document);
     }
 
     /**
      * @param DocumentPatchUpdateRequest $request
-     * @param integer                    $id
+     * @param integer $id
      * @return DocumentResource
      */
     public function patchUpdate(DocumentPatchUpdateRequest $request, int $id)
     {
-        $document = $this->service->find($id);
-
-        $authorizer = AuthorizerFactory::make('document', $document);
-        $authorizer->authorize('document_update');
-
         $document = $this->service->update($request->all(), $id);
         return new DocumentResource($document);
     }
@@ -104,80 +104,47 @@ class DocumentsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
+     * @param DocumentDestroyRequest $request
      * @param  integer $id
      *
      * @return \Illuminate\Http\Response
      */
-    public function destroy(int $id)
+    public function destroy(DocumentDestroyRequest $request, int $id)
     {
-        $document = $this->service->findModel($id);
-
-        if ($document) {
-            $authorizer = AuthorizerFactory::make('document', $document);
-            $authorizer->authorize('document_delete');
-        }
-
         $this->service->delete($id);
-        return response()->json([], Response::HTTP_NO_CONTENT);
+        return response()->json()->setStatusCode(Response::HTTP_NO_CONTENT);
     }
 
     /**
      * @param DocumentBulkPatchUpdateRequest $request
-     * @param DocumentService                $service
+     * @param DocumentService $service
      *
      * @return DocumentCollectionResource
-     * @throws ValidationException
      */
     public function bulkPatchUpdate(DocumentBulkPatchUpdateRequest $request, DocumentService $service)
     {
         $ids = explode(',', $request->get('ids', ''));
-
         $data = $request->json()->all();
 
-        if (count($ids) != count($data)) {
-            $request->failValidation();
-        }
-
         $collection = new Collection();
-        for ($i = 0; $i < count($ids); ++$i) {
-            try {
-                $document = $this->service->find($ids[$i]);
-                $authorizer = AuthorizerFactory::make('document', $document);
-                try {
-                    $authorizer->authorize('document_update');
-                } catch (Exception $e) {
-                }
-
-                $collection->push($service->update($data[$i], $ids[$i]));
-            } catch (Exception $e) {
-            }
+        foreach ($ids as $currentKey => $currentId) {
+            $collection->push($service->update($data[$currentKey], $currentId));
         }
 
         return new DocumentCollectionResource($collection);
     }
 
     /**
-     * @param Request         $request
+     * @param DocumentBulkDestroyRequest $request
      * @param DocumentService $documentService
      * @return \Illuminate\Http\JsonResponse
      */
-    public function bulkDestroy(Request $request, DocumentService $documentService)
+    public function bulkDestroy(DocumentBulkDestroyRequest $request, DocumentService $documentService)
     {
-        $ids = explode(',', $request->get('ids', ''));
-
-        foreach ($ids as $id) {
-            $document = $this->service->findModel($id);
-            if ($document) {
-                $authorizer = AuthorizerFactory::make('document', $document);
-                try {
-                    $authorizer->authorize('document_delete');
-                } catch (Exception $e) {
-                }
-            }
-
+        foreach ($request->getFilteredIds() as $id) {
             $documentService->delete($id);
         }
 
-        return response()->json([], Response::HTTP_NO_CONTENT);
+        return response()->json()->setStatusCode(Response::HTTP_NO_CONTENT);
     }
 }

@@ -2,11 +2,14 @@
 
 namespace App\Services;
 
+use App\QueryParams\IQueryParamsObject;
 use App\Entities\Label;
 use App\Events\Label\LabelCreateEvent;
 use App\Events\Label\LabelDeleteEvent;
 use App\Events\Label\LabelUpdateEvent;
 use App\Repositories\LabelRepository;
+use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Event;
 
 class LabelService
@@ -71,31 +74,25 @@ class LabelService
      * @param integer $id
      * @return integer
      */
-    public function delete(int $id): int
+    public function delete(int $id): ?int
     {
-        $label = $this->repository->findModel($id);
-        if (is_null($label)) {
-            return 0;
+        try {
+            $label = $this->repository->find($id);
+        } catch (ModelNotFoundException $e) {
+            return null;
         }
 
         Event::dispatch(new LabelDeleteEvent($label));
+
         return $this->repository->delete($id);
     }
 
     /**
+     * @param IQueryParamsObject $queryParamsObject
      * @return mixed
      */
-    public function paginate()
+    public function paginate(IQueryParamsObject $queryParamsObject)
     {
-        return $this->repository->paginate();
-    }
-
-    /**
-     * @param integer $id
-     * @return mixed
-     */
-    public function findModel(int $id)
-    {
-        return $this->repository->findModel($id);
+        return $this->repository->paginateList($queryParamsObject);
     }
 }

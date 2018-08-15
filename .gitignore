@@ -13,3 +13,4 @@ yarn-error.log
 .env
 /data
 tests/_reports
+docker-compose-local.yml

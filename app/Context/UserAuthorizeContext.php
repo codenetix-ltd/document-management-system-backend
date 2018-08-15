@@ -4,6 +4,7 @@ namespace App\Context;
 
 use App\Contracts\Entity\IHasSubjectUser;
 use App\Entities\User;
+use Illuminate\Contracts\Auth\Authenticatable;
 
 class UserAuthorizeContext extends AAuthorizeContext implements IHasSubjectUser
 {
@@ -14,10 +15,10 @@ class UserAuthorizeContext extends AAuthorizeContext implements IHasSubjectUser
 
     /**
      * UserAuthorizeContext constructor.
-     * @param User      $user
+     * @param Authenticatable $user
      * @param User|null $subjectUser
      */
-    public function __construct(User $user, User $subjectUser = null)
+    public function __construct(Authenticatable $user, User $subjectUser = null)
     {
         parent::__construct($user);
         $this->subjectUser = $subjectUser;

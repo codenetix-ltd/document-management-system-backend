@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Entities\Document;
 use App\Entities\DocumentVersion;
 use App\Entities\Label;
+use App\Entities\Template;
 use App\Entities\User;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
@@ -40,6 +41,9 @@ class DocumentTest extends TestCase
         $stub = new DocumentStub();
 
         $response = $this->json('POST', self::PATH, $stub->buildRequest());
+
+        $response->assertStatus(Response::HTTP_CREATED);
+
         $responseArray = $response->decodeResponseJson();
 
         /** @var Document $model */
@@ -92,9 +96,79 @@ class DocumentTest extends TestCase
         $stub = (new DocumentStub([], true));
 
         $response = $this->json('GET', self::PATH .'/' . $stub->getModel()->id);
-
+        $response->assertStatus(Response::HTTP_OK);
         $response->assertExactJson($stub->buildResponse());
     }
+
+    /**
+     * List of documents
+     * @return void
+     */
+    public function testListOfDocumentsWithPaginationSortingNameSuccess()
+    {
+        factory(DocumentVersion::class)->create(['name' => 'abc']);
+        /** @var DocumentVersion $dv */
+        $dv = factory(DocumentVersion::class)->create(['name' => 'xyz', 'is_actual' => false]);
+        factory(DocumentVersion::class)->create(['name' => 'eyz', 'document_id' => $dv->documentId ,'version_name' => 2, 'is_actual' => true]);
+
+        $response = $this->json('GET', self::PATH . '?sort[actualVersion.name]=desc');
+
+        $this->assetJsonPaginationStructure($response);
+        $response->assertStatus(Response::HTTP_OK);
+
+        $respArray = $response->decodeResponseJson()['data'];
+
+        $this->assertEquals('eyz', $respArray[0]['actualVersion']['name']);
+        $this->assertEquals('abc', $respArray[1]['actualVersion']['name']);
+    }
+
+    /**
+     * List of documents
+     * @return void
+     */
+    public function testListOfDocumentsWithPaginationSortingOwnerNameSuccess()
+    {
+        $u1 = factory(User::class)->create(['full_name' => 'abc']);
+        $u2 = factory(User::class)->create(['full_name' => 'xyz']);
+
+        (new DocumentStub(['owner_id' => $u1->id], true));
+        (new DocumentStub(['owner_id' => $u2->id], true));
+        $response = $this->json('GET', self::PATH . '?sort[owner.fullName]=desc');
+
+        $this->assetJsonPaginationStructure($response);
+        $response->assertStatus(Response::HTTP_OK);
+
+        $respArray = $response->decodeResponseJson()['data'];
+
+        $this->assertEquals('xyz', $respArray[0]['owner']['fullName']);
+        $this->assertEquals('abc', $respArray[1]['owner']['fullName']);
+    }
+
+    /**
+     * List of documents
+     * @return void
+     */
+    public function testListOfDocumentsWithPaginationSortingVersionTemplateNameSuccess()
+    {
+        $t1 = factory(Template::class)->create(['name' => 'abc']);
+        $t2 = factory(Template::class)->create(['name' => 'xyz']);
+
+        factory(DocumentVersion::class)->create(['template_id' => $t1->id]);
+        /** @var DocumentVersion $dv */
+        $dv = factory(DocumentVersion::class)->create(['is_actual' => false, 'template_id' => $t1->id]);
+        factory(DocumentVersion::class)->create(['document_id' => $dv->documentId ,'version_name' => 2, 'is_actual' => true, 'template_id' => $t2->id]);
+
+        $response = $this->json('GET', self::PATH . '?sort[actualVersion.template.name]=desc');
+
+        $this->assetJsonPaginationStructure($response);
+        $response->assertStatus(Response::HTTP_OK);
+
+        $respArray = $response->decodeResponseJson()['data'];
+
+        $this->assertEquals('xyz', $respArray[0]['actualVersion']['template']['name']);
+        $this->assertEquals('abc', $respArray[1]['actualVersion']['template']['name']);
+    }
+
 
     /**
      * Document not found
@@ -103,6 +177,7 @@ class DocumentTest extends TestCase
     public function testDocumentGetNotFound()
     {
         $response = $this->json('GET', self::PATH .'/0');
+
         $response->assertStatus(404);
     }
 
@@ -122,10 +197,14 @@ class DocumentTest extends TestCase
             'createNewVersion' => false,
             'actualVersion' => $newDocumentVersionStub->buildRequest()
         ]));
+
+        $response->assertStatus(Response::HTTP_OK);
+
         /** @var Document $updatedDocument */
         $updatedDocument = Document::find($document->id);
         $savedDocumentVersion = $updatedDocument->documentActualVersion;
 
+        $this->assertCount(1, $updatedDocument->documentVersions);
         $response->assertExactJson($documentStub->buildResponse([
             'updatedAt' => $updatedDocument->updatedAt->timestamp,
             'version' => $oldVersion->versionName,
@@ -135,8 +214,6 @@ class DocumentTest extends TestCase
                 'createdAt' => $savedDocumentVersion->createdAt->timestamp,
             ]),
         ]));
-
-        $this->assertCount(1, $updatedDocument->documentVersions);
     }
 
     /**
@@ -180,7 +257,7 @@ class DocumentTest extends TestCase
     public function testDeleteDocumentSuccess()
     {
         /** @var Document $document */
-        $document = (new DocumentVersionStub([], true))->getModel();
+        $document = (new DocumentStub([], true))->getModel();
         $response = $this->json('DELETE', self::PATH . '/' . $document->id);
         $response->assertStatus(Response::HTTP_NO_CONTENT);
 
@@ -195,7 +272,7 @@ class DocumentTest extends TestCase
     {
         /** @var Document $document */
         $response = $this->json('DELETE', self::PATH . '/' . 0);
-        $response->assertStatus(Response::HTTP_NO_CONTENT);
+        $response->assertStatus(Response::HTTP_NOT_FOUND);
     }
 
     /**
@@ -227,7 +304,7 @@ class DocumentTest extends TestCase
         factory(DocumentVersion::class)->create(['name'=> 'match_1']);
         factory(DocumentVersion::class)->create(['name'=> 'match_2']);
 
-        $responseArr = $this->json('GET', self::PATH . '?filters[name]=match')->decodeResponseJson();
+        $responseArr = $this->json('GET', self::PATH . '?filter[name]=match')->decodeResponseJson();
 
         $this->assertCount(2, $responseArr['data']);
         $this->assertEquals('match_1', $responseArr['data'][0]['actualVersion']['name']);
@@ -254,11 +331,24 @@ class DocumentTest extends TestCase
         $dv2->labels()->sync([$label1->id]);
         $dv3->labels()->sync([$label3->id]);
 
-        $responseArr = $this->json('GET', self::PATH . '?filters[labelIds]='.$label1->id.','.$label2->id)->decodeResponseJson();
-
-        $this->assertCount(2, $responseArr['data']);
-        $this->assertEquals($dv1->id, $responseArr['data'][0]['actualVersion']['id']);
-        $this->assertEquals($dv2->id, $responseArr['data'][1]['actualVersion']['id']);
+        $this
+            ->json('GET', self::PATH . '?filter[labelIds]='.$label1->id.','.$label2->id)
+            ->assertStatus(200)
+            ->assertJsonCount(2, 'data')
+            ->assertJson([
+                'data' => [
+                    [
+                        'actualVersion' => [
+                            'id' => $dv2->id
+                        ]
+                    ],
+                    [
+                        'actualVersion' => [
+                            'id' => $dv1->id
+                        ]
+                    ]
+                ]
+            ]);
     }
 
     /**
@@ -305,9 +395,8 @@ class DocumentTest extends TestCase
         $request = $stub->buildRequest(['substituteDocumentId' => 'string']);
         unset($request['actualVersion']['templateId']);
 
-        $response = $this->json('POST', self::PATH, $request);
-
-        $response
+        $this
+            ->json('POST', self::PATH, $request)
             ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
             ->assertJsonValidationErrors(['substituteDocumentId', 'actualVersion.templateId']);
     }
@@ -324,8 +413,9 @@ class DocumentTest extends TestCase
             $docCollection->push((new DocumentStub([], true))->getModel());
         }
 
-        $response = $this->json('DELETE', self::PATH.'?ids='.$docCollection->implode('id', ','));
-        $response->assertStatus(204);
+        $this
+            ->json('DELETE', self::PATH.'?ids='.$docCollection->implode('id', ','))
+            ->assertStatus(204);
 
         $docCollection->each(function (Document $item) {
             $this->assertSoftDeleted('documents', ['id' => $item->id]);
@@ -360,7 +450,7 @@ class DocumentTest extends TestCase
             })->toArray()
         );
 
-        $response->decodeResponseJson();
+        $response->assertStatus(Response::HTTP_OK);
 
         $expected = $documentsStubCollection->map(function (DocumentStub $item) use ($documentSubstitute) {
             /** @var Document $d */
@@ -386,6 +476,6 @@ class DocumentTest extends TestCase
             self::PATH . '?ids=1,2',
             [[],[],[]]
         );
-        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
     }
 }

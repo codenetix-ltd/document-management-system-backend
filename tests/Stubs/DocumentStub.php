@@ -39,7 +39,7 @@ class DocumentStub extends AbstractStub
 
         $this->actualDocumentVersionStub = new DocumentVersionStub([
             'document_id' => $this->model->id,
-            'is_actual' => 1,
+            'is_actual' => true,
         ], $persisted);
     }
 

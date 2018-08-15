@@ -2,16 +2,22 @@
 
 namespace App\Repositories;
 
-use Prettus\Repository\Contracts\RepositoryInterface;
+use App\QueryParams\IQueryParamsObject;
+use App\Entities\Log;
+use App\QueryObject\LogListQueryObject;
 
-/**
- * Interface LogRepository.
- */
-interface LogRepository extends RepositoryInterface
+class LogRepository extends BaseRepository
 {
+    protected function getInstance()
+    {
+        return new Log();
+    }
+
     /**
-     * @param integer $userId
-     * @return mixed
+     * @param IQueryParamsObject $queryParamsObject
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function paginateByUser(int $userId);
+    public function paginateList(IQueryParamsObject $queryParamsObject){
+        return (new LogListQueryObject($this->getInstance()->newQuery()))->applyQueryParams($queryParamsObject)->paginate();
+    }
 }

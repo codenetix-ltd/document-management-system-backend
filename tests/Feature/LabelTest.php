@@ -34,10 +34,11 @@ class LabelTest extends TestCase
     {
         factory(Label::class, 10)->create();
 
-        $response = $this->json('GET', self::API_ROOT . 'labels');
+        $response = $this
+            ->json('GET', self::API_ROOT . 'labels')
+            ->assertStatus(Response::HTTP_OK);
         $this->assetJsonPaginationStructure($response);
 
-        $response->assertStatus(Response::HTTP_OK);
     }
 
     /**
@@ -156,6 +157,6 @@ class LabelTest extends TestCase
     {
         $response = $this->json('DELETE', self::API_ROOT . 'labels/' . 0);
 
-        $response->assertStatus(Response::HTTP_NO_CONTENT);
+        $response->assertStatus(Response::HTTP_NOT_FOUND);
     }
 }

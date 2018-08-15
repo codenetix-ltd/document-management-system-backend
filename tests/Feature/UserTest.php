@@ -37,9 +37,8 @@ class UserTest extends TestCase
 
         $response = $this->json('GET', self::API_ROOT . 'users');
 
-        $this->assetJsonPaginationStructure($response);
-
         $response->assertStatus(Response::HTTP_OK);
+        $this->assetJsonPaginationStructure($response);
     }
 
     /**
@@ -164,7 +163,7 @@ class UserTest extends TestCase
     public function testUserDeleteWhichDoesNotExist()
     {
         $response = $this->json('DELETE', self::API_ROOT . 'users/' . 0);
-        $response->assertStatus(Response::HTTP_NO_CONTENT);
+        $response->assertStatus(Response::HTTP_NOT_FOUND);
     }
 
     /**

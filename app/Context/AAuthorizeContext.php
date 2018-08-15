@@ -4,6 +4,7 @@ namespace App\Context;
 
 use App\Contracts\Entity\IHasUser;
 use App\Entities\User;
+use Illuminate\Contracts\Auth\Authenticatable;
 
 abstract class AAuthorizeContext implements IHasUser
 {
@@ -14,9 +15,9 @@ abstract class AAuthorizeContext implements IHasUser
 
     /**
      * AAuthorizeContext constructor.
-     * @param User $user
+     * @param Authenticatable $user
      */
-    public function __construct(User $user)
+    public function __construct(Authenticatable $user)
     {
         $this->user = $user;
     }

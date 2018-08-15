@@ -28,11 +28,11 @@ class UserResource extends JsonResource
             'fullName' => $this->resource->fullName,
             'email' => $this->resource->email,
             'templatesIds' => $this->resource->templates->pluck('id')->toArray(),
-            'avatar' => new FileResource($this->resource->avatar),
-            'avatarId' => $this->resource->avatar->id,
+            'avatar' => $this->resource->avatar ? new FileResource($this->resource->avatar) : null,
+            'avatarId' => $this->resource->avatar ? $this->resource->avatar->id : null,
             'rolesIds' => $this->resource->roles->pluck('id'),
             'roles' => $request->route('user') == 'current' ? RoleResource::collection($this->resource->roles) : null,
-            'authPermissions' => AuthPermissions::getList('user', $this->resource)
+            'authPermissions' => AuthPermissions::getList('user', $this->resource),
         ];
     }
 }

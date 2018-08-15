@@ -19,12 +19,12 @@ use Prettus\Repository\Traits\TransformableTrait;
  * @property Carbon $createdAt
  * @property Carbon $updatedAt
  */
-class Role extends BaseEntity implements Transformable
+class Role extends BaseModel implements Transformable
 {
     use TransformableTrait;
 
     protected $fillable = ['name'];
-
+    public $enforceCamelCase = false;
     public function permissions()
     {
         return $this->belongsToMany(Permission::class, "role_permission")->using(RolePermission::class)->withPivot(['id', 'entity_id', 'entity_type', 'access_type']);

@@ -28,7 +28,8 @@ class AttributeWithTypeStringStub extends AbstractStub
     {
         return [
             'name' => $this->model->name,
-            'typeId' => $this->model->typeId
+            'typeId' => $this->model->typeId,
+            'templateId' => $this->model->templateId
         ];
     }
 

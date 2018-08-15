@@ -51,18 +51,19 @@ class LogTest extends TestCase
      * @throws \Exception The exception that triggered the error response (if applicable).
      * @return void
      */
-    public function testLogList()
+    public function testLogListWithoutArgs()
     {
         factory(Log::class, 5)->create(['user_id' => $this->authUser->id]);
         factory(Log::class, 5)->create(['user_id' => factory(User::class)->create()->id]);
 
         $response = $this
             ->actingAs($this->authUser)
-            ->json('GET', self::API_ROOT . 'logs');
+            ->json('GET', self::API_ROOT. 'logs?sort[body]=desc');
 
         $this->assetJsonPaginationStructure($response);
 
         $decodedResponse = $response->decodeResponseJson();
+
         $item = $decodedResponse['data'][0];
 
         $response->assertJsonStructure([
@@ -72,7 +73,7 @@ class LogTest extends TestCase
                 'fullName',
                 'email',
             ],
-            'action',
+            'body',
             'referenceId',
             'referenceType',
             'link' => [
@@ -86,6 +87,48 @@ class LogTest extends TestCase
         $response->assertStatus(Response::HTTP_OK);
 
         $this->assertCount(10, $decodedResponse['data']);
+    }
+
+    public function testLogListSortByBody()
+    {
+        factory(Log::class)->create(['body' => 'a', 'user_id' => $this->authUser->id]);
+        factory(Log::class)->create(['body' => 'z', 'user_id' => $this->authUser->id]);
+
+        $response = $this
+            ->actingAs($this->authUser)
+            ->json('GET', self::API_ROOT . 'logs?sort[body]=desc');
+
+        $response->assertStatus(Response::HTTP_OK);
+
+        $this->assetJsonPaginationStructure($response);
+
+        $decodedResponse = $response->decodeResponseJson();
+
+        $this->assertEquals('z',$decodedResponse['data'][0]['body']);
+        $this->assertEquals('a',$decodedResponse['data'][1]['body']);
+
+    }
+
+    public function testLogListSortByUser()
+    {
+        $u1 = (new UserStub(['full_name' => 'a'], true))->getModel();
+        $u2 = (new UserStub(['full_name' => 'z'], true))->getModel();
+        
+        factory(Log::class)->create(['user_id' => $u1->id]);
+        factory(Log::class)->create(['user_id' => $u2->id]);
+
+        $response = $this
+            ->actingAs($this->authUser)
+            ->json('GET', self::API_ROOT . 'logs?sort[user.fullName]=desc');
+
+        $response->assertStatus(Response::HTTP_OK);
+
+        $this->assetJsonPaginationStructure($response);
+
+        $decodedResponse = $response->decodeResponseJson();
+
+        $this->assertEquals('z',$decodedResponse['data'][0]['user']['fullName']);
+        $this->assertEquals('a',$decodedResponse['data'][1]['user']['fullName']);
     }
 
     /**

@@ -2,13 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Entities\User;
+use App\Http\Requests\Log\LogListRequest;
 use App\Http\Resources\LogCollectionResource;
 use App\Services\LogService;
-use App\Services\RoleService;
-use App\System\AuthBuilders\AuthorizerFactory;
-use Illuminate\Contracts\Auth\Guard;
-use Illuminate\Http\Request;
 
 class LogsController extends Controller
 {
@@ -18,38 +14,21 @@ class LogsController extends Controller
     protected $service;
 
     /**
-     * @var RoleService
-     */
-    protected $roleService;
-
-    /**
      * LogsController constructor.
-     * @param LogService  $service
-     * @param RoleService $roleService
+     * @param LogService $service
      */
-    public function __construct(LogService $service, RoleService $roleService)
+    public function __construct(LogService $service)
     {
         $this->service = $service;
     }
 
     /**
-     * @param Request $request
-     * @param Guard   $guard
+     * @param LogListRequest $request
      * @return LogCollectionResource
      */
-    public function index(Request $request, Guard $guard)
+    public function index(LogListRequest $request)
     {
-        $authorizer = AuthorizerFactory::make('logs');
-        $authorizer->authorize('logs_view');
-
-        /** @var User $user */
-        $user = $guard->user();
-
-        if ($user->hasAnyRole(RoleService::ROLE_ADMIN)) {
-            $logs = $this->service->list(null);
-        } else {
-            $logs = $this->service->list($user->getAuthIdentifier());
-        }
+        $logs = $this->service->list($request->queryParamsObject());
 
         return new LogCollectionResource($logs);
     }

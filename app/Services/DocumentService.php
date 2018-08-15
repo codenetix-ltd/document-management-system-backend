@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\QueryParams\IQueryParamsObject;
 use App\Entities\Document;
 use App\Entities\DocumentVersion;
 use App\Events\Document\DocumentCreateEvent;
@@ -35,11 +36,12 @@ class DocumentService
     }
 
     /**
+     * @param IQueryParamsObject $queryParamsObject
      * @return mixed
      */
-    public function list()
+    public function list(IQueryParamsObject $queryParamsObject)
     {
-        return $this->repository->paginate();
+        return $this->repository->paginateList($queryParamsObject);
     }
 
     /**
@@ -63,7 +65,8 @@ class DocumentService
         /** @var Document $document */
         $document = $this->repository->create($data);
 
-        $this->documentVersionService->create($data['actualVersion'], $document->id, 1, true);
+        $data['actualVersion']['documentId'] = $document->id;
+        $this->documentVersionService->create($data['actualVersion'], true);
         Event::dispatch(new DocumentCreateEvent($document));
 
         return $document;
@@ -92,26 +95,25 @@ class DocumentService
      * @param array   $data
      * @param integer $id
      * @return Document
+     * @throws \App\Exceptions\FailedDeleteActualDocumentVersion
      */
     public function updateVersion(array $data, int $id)
     {
         $createNewVersion = $data['createNewVersion'];
-
         $document = $this->find($id);
-
         $oldActualVersion = $document->documentActualVersion;
 
+        $data['actualVersion']['documentId'] = $document->id;
         $this->documentVersionService->create(
             $data['actualVersion'],
-            $document->id,
-            (int)$oldActualVersion->versionName + ($createNewVersion ? 1 : 0),
-            true
+            true,
+            $createNewVersion
         );
 
         if ($createNewVersion) {
             $this->documentVersionService->updateActual(false, $oldActualVersion->id);
         } else {
-            $this->documentVersionService->delete($oldActualVersion->id);
+            $this->documentVersionService->delete($oldActualVersion->id, true);
         }
 
         return $this->update($data, $id);
@@ -119,19 +121,17 @@ class DocumentService
 
     /**
      * @param integer $id
-     * @return integer
+     * @return bool
      */
-    public function delete(int $id): int
+    public function delete(int $id): bool
     {
-        $document = $this->repository->findModel($id);
-
-        if (is_null($document)) {
-            return 0;
+        try {
+            $document = $this->repository->find($id);
+            Event::dispatch(new DocumentDeleteEvent($document));
+            return $this->repository->delete($id);
+        } catch(ModelNotFoundException $e){
+            return false;
         }
-
-        Event::dispatch(new DocumentDeleteEvent($document));
-
-        return $this->repository->delete($id);
     }
 
     /**
@@ -152,14 +152,5 @@ class DocumentService
 
         $this->documentVersionService->updateActual(false, $oldVersion->id);
         $this->documentVersionService->updateActual(true, $newVersion->id);
-    }
-
-    /**
-     * @param integer $id
-     * @return mixed
-     */
-    public function findModel(int $id)
-    {
-        return $this->repository->findModel($id);
     }
 }

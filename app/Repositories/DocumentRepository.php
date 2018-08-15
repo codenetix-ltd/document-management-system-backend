@@ -2,16 +2,27 @@
 
 namespace App\Repositories;
 
-use Prettus\Repository\Contracts\RepositoryInterface;
+use App\QueryParams\IQueryParamsObject;
+use App\Entities\Document;
+use App\QueryObject\DocumentListQueryObject;
 
-/**
- * Interface DocumentRepository.
- */
-interface DocumentRepository extends RepositoryInterface
+class DocumentRepository extends BaseRepository
 {
+
     /**
-     * @param integer $id
-     * @return mixed
+     * @return Document|mixed
      */
-    public function findModel(int $id);
+    protected function getInstance()
+    {
+        return new Document();
+    }
+
+    /**
+     * @param IQueryParamsObject $queryParamsObject
+     * @return null
+     */
+    public function paginateList(IQueryParamsObject $queryParamsObject)
+    {
+        return (new DocumentListQueryObject($this->getQuery()))->applyQueryParams($queryParamsObject)->paginate();
+    }
 }

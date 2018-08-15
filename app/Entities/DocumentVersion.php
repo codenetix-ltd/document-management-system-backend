@@ -3,6 +3,7 @@
 namespace App\Entities;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
@@ -15,6 +16,7 @@ use Prettus\Repository\Traits\TransformableTrait;
  * @property string $comment
  * @property int $templateId
  * @property int $documentId
+ * @property bool $isActual
  *
  * @property Document $document
  * @property Template $template
@@ -25,9 +27,11 @@ use Prettus\Repository\Traits\TransformableTrait;
  * @property Carbon $createdAt
  * @property Carbon $updatedAt
  */
-class DocumentVersion extends BaseEntity implements Transformable
+class DocumentVersion extends BaseModel implements Transformable
 {
     use TransformableTrait;
+
+    public $enforceCamelCase = false;
 
     /**
      * The attributes that are mass assignable.
@@ -36,6 +40,10 @@ class DocumentVersion extends BaseEntity implements Transformable
      */
     protected $fillable = [
         'isActual', 'templateId', 'documentId', 'versionName', 'name', 'comment', 'fileId'
+    ];
+
+    protected $casts = [
+        'is_actual' => 'boolean'
     ];
 
     public function document()

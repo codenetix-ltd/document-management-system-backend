@@ -5,6 +5,7 @@ namespace App\Context;
 use App\Contracts\Entity\IHasDocumentModel;
 use App\Entities\Document;
 use App\Entities\User;
+use Illuminate\Contracts\Auth\Authenticatable;
 
 class DocumentAuthorizeContext extends AAuthorizeContext implements IHasDocumentModel
 {
@@ -15,10 +16,10 @@ class DocumentAuthorizeContext extends AAuthorizeContext implements IHasDocument
 
     /**
      * DocumentAuthorizeContext constructor.
-     * @param User          $user
+     * @param Authenticatable          $user
      * @param Document|null $document
      */
-    public function __construct(User $user, Document $document = null)
+    public function __construct(Authenticatable $user, Document $document = null)
     {
         parent::__construct($user);
         $this->document = $document;

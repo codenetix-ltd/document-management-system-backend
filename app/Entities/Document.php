@@ -4,6 +4,7 @@ namespace App\Entities;
 
 use App\Contracts\Entity\IHasTitle;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Collection;
 use Prettus\Repository\Contracts\Transformable;
@@ -25,8 +26,9 @@ use Prettus\Repository\Traits\TransformableTrait;
  * @property Carbon $createdAt
  * @property Carbon $updatedAt
  * @property Carbon $deletedAt
+ * @property mixed id
  */
-class Document extends BaseEntity implements Transformable, IHasTitle
+class Document extends BaseModel implements Transformable, IHasTitle
 {
     use TransformableTrait;
     use SoftDeletes;
@@ -39,6 +41,8 @@ class Document extends BaseEntity implements Transformable, IHasTitle
     protected $fillable = [
         'ownerId', 'substituteDocumentId'
     ];
+
+    public $enforceCamelCase = false;
 
     /**
      * @var array

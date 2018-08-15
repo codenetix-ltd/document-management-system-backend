@@ -3,12 +3,11 @@
 namespace App\Providers;
 
 use App\Contracts\Helpers\ILogger;
-use App\Entities\Document;
+use App\Http\Requests\ABaseAPIRequest;
 use App\Services\AuthPermissions;
-use App\Services\Comments\CommentTransformer;
-use App\Services\Comments\ITransformer;
+use App\Services\Comments\CommentRepository;
+use App\Services\Comments\ICommentRepository;
 use App\Services\LogService;
-use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\Resources\Json\Resource;
 use Illuminate\Support\ServiceProvider;
 
@@ -33,6 +32,10 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind(ILogger::class, LogService::class);
         $this->app->bind('AuthPermissions', AuthPermissions::class);
-        $this->app->bind(ITransformer::class, CommentTransformer::class);
+        $this->app->resolving(ABaseAPIRequest::class, function ($request, $app) {
+            $request = ABaseAPIRequest::createFrom($app['request'], $request);
+            $request->setContainer($app);
+        });
+        $this->app->bind(ICommentRepository::class, CommentRepository::class);
     }
 }

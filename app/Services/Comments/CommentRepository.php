@@ -108,7 +108,7 @@ class CommentRepository extends BaseRepository implements ICommentRepository
         $rootCommentIdCollection = $this->container->make(Collection::class);
         $rootCommentIdCollection->push($rootCommentId);
         $comments = $this->paginateChildrenByRootCommentId($pageNumber, $rootCommentIdCollection, $maxLevelDepth);
-        return $strategy->make($comments, $rootCommentId, $pageNumber);
+        return $strategy->make($comments, $pageNumber, $rootCommentId);
     }
 
     /**

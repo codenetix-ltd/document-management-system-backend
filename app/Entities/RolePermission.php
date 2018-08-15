@@ -2,6 +2,8 @@
 
 namespace App\Entities;
 
+use Eloquence\Behaviours\CamelCasing;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
 
@@ -11,12 +13,13 @@ use Prettus\Repository\Traits\TransformableTrait;
  *
  * @property int $id
  */
-class RolePermission extends BasePivotEntity implements Transformable
+class RolePermission extends Pivot implements Transformable
 {
     use TransformableTrait;
 
     protected $table = 'role_permission';
 
+    public $enforceCamelCase = false;
     /**
      * @return \Illuminate\Database\Eloquent\Relations\MorphTo
      */

@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\LabelCreateRequest;
-use App\Http\Requests\LabelUpdateRequest;
+use App\Http\Requests\Label\LabelDestroyRequest;
+use App\Http\Requests\Label\LabelShowRequest;
+use App\Http\Requests\Label\LabelListRequest;
+use App\Http\Requests\Label\LabelStoreRequest;
+use App\Http\Requests\Label\LabelUpdateRequest;
 use App\Http\Resources\LabelCollectionResource;
 use App\Http\Resources\LabelResource;
 use App\Services\LabelService;
-use App\System\AuthBuilders\AuthorizerFactory;
 use Illuminate\Http\Response;
 
 class LabelsController extends Controller
@@ -27,39 +29,34 @@ class LabelsController extends Controller
     }
 
     /**
+     * @param LabelListRequest $request
      * @return LabelCollectionResource
      */
-    public function index()
+    public function index(LabelListRequest $request)
     {
-        $labels = $this->service->paginate();
+        $labels = $this->service->paginate($request->queryParamsObject());
+
         return new LabelCollectionResource($labels);
     }
 
     /**
-     * @param LabelCreateRequest $request
-     * @return LabelResource
+     * @param LabelStoreRequest $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function store(LabelCreateRequest $request)
+    public function store(LabelStoreRequest $request)
     {
-        $authorizer = AuthorizerFactory::make('label');
-        $authorizer->authorize('label_create');
-
         $label = $this->service->create($request->all());
-        return new LabelResource($label);
+        return (new LabelResource($label))->response()->setStatusCode(Response::HTTP_CREATED);
     }
 
     /**
+     * @param LabelShowRequest $request
      * @param integer $id
      * @return LabelResource
      */
-    public function show(int $id)
+    public function show(LabelShowRequest $request, int $id)
     {
-        $label = $this->service->find($id);
-
-        $authorizer = AuthorizerFactory::make('label', $label);
-        $authorizer->authorize('label_view');
-
-        return new LabelResource($label);
+        return new LabelResource($request->model());
     }
 
     /**
@@ -69,11 +66,6 @@ class LabelsController extends Controller
      */
     public function update(LabelUpdateRequest $request, int $id)
     {
-        $label = $this->service->find($id);
-
-        $authorizer = AuthorizerFactory::make('label', $label);
-        $authorizer->authorize('label_update');
-
         $label = $this->service->update($request->all(), $id);
         return new LabelResource($label);
     }
@@ -81,20 +73,14 @@ class LabelsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
+     * @param LabelDestroyRequest $request
      * @param  integer $id
      *
      * @return \Illuminate\Http\Response
      */
-    public function destroy(int $id)
+    public function destroy(LabelDestroyRequest $request, int $id)
     {
-        $label = $this->service->findModel($id);
-
-        if ($label) {
-            $authorizer = AuthorizerFactory::make('label', $label);
-            $authorizer->authorize('label_delete');
-        }
-
         $this->service->delete($id);
-        return response()->json([], Response::HTTP_NO_CONTENT);
+        return response()->json()->setStatusCode(Response::HTTP_NO_CONTENT);
     }
 }

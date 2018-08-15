@@ -2,8 +2,18 @@
 
 namespace App\Repositories;
 
-use Prettus\Repository\Contracts\RepositoryInterface;
+use App\Entities\AttributeValue;
 
-interface AttributeValueRepository extends RepositoryInterface
+/**
+ * Class DocumentRepositoryEloquent.
+ */
+class AttributeValueRepository extends BaseRepository
 {
+    /**
+     * @return mixed
+     */
+    protected function getInstance()
+    {
+        return new AttributeValue();
+    }
 }

@@ -2,8 +2,10 @@
 
 namespace App\Services;
 
+use App\QueryParams\IQueryParamsObject;
 use App\Entities\Role;
 use App\Repositories\RoleRepository;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class RoleService
 {
@@ -41,11 +43,12 @@ class RoleService
     }
 
     /**
+     * @param IQueryParamsObject $queryParamsObject
      * @return mixed
      */
-    public function paginate()
+    public function paginate(IQueryParamsObject $queryParamsObject)
     {
-        return $this->repository->paginate();
+        return $this->repository->paginateList($queryParamsObject);
     }
 
     /**
@@ -83,12 +86,14 @@ class RoleService
      * @param integer $id
      * @return integer
      */
-    public function delete(int $id): int
+    public function delete(int $id): ?int
     {
-        $label = $this->repository->findModel($id);
-        if (is_null($label)) {
-            return 0;
+        try {
+            $this->repository->find($id);
+        } catch (ModelNotFoundException $e) {
+            return null;
         }
+
 
         return $this->repository->delete($id);
     }
@@ -114,27 +119,21 @@ class RoleService
      */
     private function attachPermission(Role $role, array $permissionValue): void
     {
+        /**
+         * @TODO: fix cases
+         */
         $rolePermission = $this->repository->createRolePermission([
-            'roleId' => $role->id,
-            'permissionId' => $permissionValue['id'],
-            'accessType' => $permissionValue['accessTypeId']
+            'role_id' => $role->id,
+            'permission_id' => $permissionValue['id'],
+            'access_type' => $permissionValue['accessTypeId']
         ]);
 
         if ($permissionValue['accessTypeId'] == AccessTypeService::TYPE_BY_QUALIFIERS && !empty($permissionValue['qualifiers'])) {
             foreach ($permissionValue['qualifiers'] as $qualifier) {
                 $this->repository->attachQualifierToRolePermission($rolePermission, [
-                    $qualifier['id'] => ['accessType' => $qualifier['accessTypeId']]
+                    $qualifier['id'] => ['access_type' => $qualifier['accessTypeId']]
                 ]);
             }
         }
-    }
-
-    /**
-     * @param integer $id
-     * @return mixed
-     */
-    public function findModel(int $id)
-    {
-        return $this->repository->findModel($id);
     }
 }

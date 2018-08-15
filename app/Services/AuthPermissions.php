@@ -33,8 +33,8 @@ class AuthPermissions
 
         $permissions = $this->permissionGroupRepository->getPermissionsName($type);
 
-        return $permissions->map(function ($item) use ($authorizer) {
-            if ($authorizer->isAuthorize($item)) {
+        return $permissions->filter(function (&$item) use ($authorizer) {
+            if ($authorizer->check($item)) {
                 return $item;
             }
         })->toArray();

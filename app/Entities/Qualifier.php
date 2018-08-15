@@ -2,6 +2,7 @@
 
 namespace App\Entities;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
@@ -17,10 +18,10 @@ use Prettus\Repository\Traits\TransformableTrait;
  * @property Collection|AccessType[] $accessTypes
  * @property PermissionGroup $permissionGroup
  */
-class Qualifier extends BaseEntity implements Transformable
+class Qualifier extends BaseModel implements Transformable
 {
     use TransformableTrait;
-
+    public $enforceCamelCase = false;
     public function permissionGroup()
     {
         return $this->belongsTo(PermissionGroup::class);

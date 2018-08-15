@@ -10,6 +10,9 @@ use Illuminate\Database\Eloquent\Model;
  */
 class BaseEntity extends Model
 {
+    public $fieldMap = [];
+    public $relationMap = [];
+    
     /**
      * @param string $key
      * @return mixed

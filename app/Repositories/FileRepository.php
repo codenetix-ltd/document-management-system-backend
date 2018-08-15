@@ -2,9 +2,18 @@
 
 namespace App\Repositories;
 
-use Prettus\Repository\Contracts\RepositoryInterface;
+use App\Entities\File;
 
-interface FileRepository extends RepositoryInterface
+/**
+ * Class DocumentRepositoryEloquent.
+ */
+class FileRepository extends BaseRepository
 {
-
+    /**
+     * @return mixed
+     */
+    protected function getInstance()
+    {
+        return new File();
+    }
 }

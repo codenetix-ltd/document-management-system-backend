@@ -14,12 +14,14 @@ use Prettus\Repository\Traits\TransformableTrait;
  * @property Carbon $createdAt
  * @property Carbon $updatedAt
  */
-class AccessType extends BaseEntity implements Transformable
+class AccessType extends BaseModel implements Transformable
 {
     use TransformableTrait;
 
     protected $primaryKey = 'id';
     public $incrementing = false;
+    public $enforceCamelCase = false;
+
 
     public function permissions()
     {

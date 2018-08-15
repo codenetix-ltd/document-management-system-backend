@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\QueryParams\IQueryParamsObject;
 use App\Entities\Attribute;
 use App\Entities\TableTypeColumn;
 use App\Entities\TableTypeRow;
@@ -12,6 +13,7 @@ use App\Exceptions\InvalidAttributeTypeException;
 use App\Repositories\AttributeRepository;
 use App\Repositories\TypeRepository;
 use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class AttributeService
 {
@@ -54,17 +56,15 @@ class AttributeService
     }
 
     /**
-     * @param integer $templateId
      * @param array   $data
      * @return Attribute
      * @throws FailedAttributeCreateException
      * @throws InvalidAttributeDataStructureException
      * @throws InvalidAttributeTypeException
      */
-    public function create(int $templateId, array $data)
+    public function create(array $data)
     {
-        $data['templateId'] = $templateId;
-        $data['order'] = $this->getDefaultAttributeOrderByTemplateId($templateId);
+        $data['order'] = $this->getNextAttributeOrderByTemplateId($data['templateId']);
 
         if (empty($data['data'])) {
             $attribute = $this->repository->create($data);
@@ -76,7 +76,6 @@ class AttributeService
     }
 
     /**
-     * @param integer $templateId
      * @param integer $id
      * @param array   $data
      * @return Attribute
@@ -84,7 +83,7 @@ class AttributeService
      * @throws InvalidAttributeDataStructureException
      * @throws InvalidAttributeTypeException
      */
-    public function update(int $templateId, int $id, array $data)
+    public function update(int $id, array $data)
     {
         if (empty($data['data'])) {
             $attribute = $this->repository->update($data, $id);
@@ -96,45 +95,39 @@ class AttributeService
     }
 
     /**
-     * @param integer $templateId
      * @param array   $ids
      * @return void
      */
-    public function updateOrderOfAttributes(int $templateId, array $ids)
+    public function updateOrderOfAttributes(array $ids)
     {
         foreach ($ids as $attributeOrder => $attributeId) {
+            //@TODO what a fucking shit is going above? Why global exception handler is there!?
             try {
-                $this->update($templateId, $attributeId, ['order' => $attributeOrder]);
+                $this->update($attributeId, ['order' => $attributeOrder]);
             } catch (Exception $e) {
             }
         }
     }
 
     /**
+     * @param IQueryParamsObject $queryParamsObject
      * @param integer $templateId
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function paginateAttributes(int $templateId)
+    public function paginateAttributes(IQueryParamsObject $queryParamsObject, int $templateId)
     {
-        return $this->repository->paginateAttributes($templateId);
+        return $this->repository->paginateAttributes($queryParamsObject, $templateId);
     }
 
     /**
      * @param integer $templateId
      * @return integer
      */
-    private function getDefaultAttributeOrderByTemplateId(int $templateId): int
+    private function getNextAttributeOrderByTemplateId(int $templateId): int
     {
-        $maxOrder = $this->repository->findWhere([
-            ['template_id', '=', $templateId],
-            ['parent_attribute_id', '=', null]
-        ])->max('order');
+        $maxOrder = $this->repository->getMaxOrderValueOfAttributeByTemplateId($templateId);
 
-        if (is_null($maxOrder)) {
-            return 0;
-        } else {
-            return $maxOrder + 1;
-        }
+        return $maxOrder === null ? 0 : ($maxOrder + 1);
     }
 
     /**
@@ -311,11 +304,12 @@ class AttributeService
      * @return integer
      * @throws FailedAttributeDeleteException
      */
-    public function delete(int $id): int
+    public function delete(int $id): ?int
     {
-        $attribute = $this->repository->findWhere([['id', '=', $id]])->first();
-        if (is_null($attribute)) {
-            return 0;
+        try {
+            $attribute = $this->repository->find($id);
+        } catch (ModelNotFoundException $e){
+            return null;
         }
 
         if ($attribute->parent_attribute_id) {

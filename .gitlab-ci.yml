@@ -28,7 +28,7 @@ test:
   script:
     - composer install
     - vendor/bin/phpcs --standard=phpcs.xml --runtime-set ignore_warnings_on_exit true
-    - vendor/bin/phpunit tests/Feature -c phpunit.xml --coverage-text --colors=never
+    - vendor/bin/phpunit tests/Feature -c phpunit.xml
   tags:
     - docker-build
 

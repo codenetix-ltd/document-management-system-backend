@@ -19,8 +19,6 @@ use App\Events\User\UserCreateEvent;
 use App\Events\User\UserDeleteEvent;
 use App\Events\User\UserUpdateEvent;
 use App\Services\DocumentService;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Http\Resources\Json\Resource;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\App;
 use Tests\Stubs\DocumentStub;
@@ -28,14 +26,14 @@ use Tests\Stubs\LabelStub;
 use Tests\Stubs\TemplateStub;
 use Tests\Stubs\UserStub;
 use Tests\TestCase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 /**
  * Created by Codenetix team <support@codenetix.com>
  */
 class LogTest extends TestCase
 {
-    use RefreshDatabase;
-
+    use DatabaseTransactions;
     /**
      * Setup the test environment.
      * @return void
@@ -43,6 +41,15 @@ class LogTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
+    }
+
+    /**
+     * Clean up the testing environment before the next test.
+     * @return void
+     */
+    public function tearDown()
+    {
+        parent::tearDown();
     }
 
     /**

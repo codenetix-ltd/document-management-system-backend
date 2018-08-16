@@ -3,8 +3,7 @@
 namespace Tests\Feature;
 
 use App\Entities\Type;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Http\Resources\Json\Resource;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
 /**
@@ -12,7 +11,7 @@ use Tests\TestCase;
  */
 class TypeTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseTransactions;
 
     /**
      * Setup the test environment.
@@ -22,6 +21,15 @@ class TypeTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
+    }
+
+    /**
+     * Clean up the testing environment before the next test.
+     * @return void
+     */
+    public function tearDown()
+    {
+        parent::tearDown();
     }
 
     /**

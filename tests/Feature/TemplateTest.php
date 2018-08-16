@@ -3,8 +3,7 @@
 namespace Tests\Feature;
 
 use App\Entities\Template;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Http\Resources\Json\Resource;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\Response;
 use Tests\Stubs\TemplateStub;
 use Tests\TestCase;
@@ -14,8 +13,7 @@ use Tests\TestCase;
  */
 class TemplateTest extends TestCase
 {
-    use RefreshDatabase;
-
+    use DatabaseTransactions;
     /**
      * Setup the test environment.
      * @return void
@@ -23,6 +21,15 @@ class TemplateTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
+    }
+
+    /**
+     * Clean up the testing environment before the next test.
+     * @return void
+     */
+    public function tearDown()
+    {
+        parent::tearDown();
     }
 
     /**

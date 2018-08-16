@@ -4,8 +4,7 @@ namespace Tests\Feature;
 
 use App\Entities\Template;
 use App\Entities\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Http\Resources\Json\Resource;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\Response;
 use Tests\Stubs\UserStub;
 use Tests\TestCase;
@@ -15,8 +14,7 @@ use Tests\TestCase;
  */
 class UserTest extends TestCase
 {
-    use RefreshDatabase;
-
+    use DatabaseTransactions;
     /**
      * Setup the test environment.
      * @return void
@@ -24,6 +22,15 @@ class UserTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
+    }
+
+    /**
+     * Clean up the testing environment before the next test.
+     * @return void
+     */
+    public function tearDown()
+    {
+        parent::tearDown();
     }
 
     /**

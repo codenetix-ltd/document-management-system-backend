@@ -5,10 +5,8 @@ namespace Tests\Feature;
 use App\Entities\Attribute;
 use App\Entities\Template;
 use App\Services\AttributeService;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Http\Resources\Json\Resource;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\Response;
-use Laravel\Passport\Passport;
 use Tests\Stubs\AttributeWithTypeStringStub;
 use Tests\Stubs\AttributeWithTypeTableStub;
 use Tests\TestCase;
@@ -18,7 +16,7 @@ use Tests\TestCase;
  */
 class AttributeTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseTransactions;
 
     /** @var AttributeService $attributeService*/
     private $attributeService;
@@ -31,6 +29,15 @@ class AttributeTest extends TestCase
     {
         parent::setUp();
         $this->attributeService = $this->app->make(AttributeService::class);
+    }
+
+    /**
+     * Clean up the testing environment before the next test.
+     * @return void
+     */
+    public function tearDown()
+    {
+        parent::tearDown();
     }
 
     /**

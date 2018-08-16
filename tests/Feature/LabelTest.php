@@ -3,8 +3,7 @@
 namespace Tests\Feature;
 
 use App\Entities\Label;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Http\Resources\Json\Resource;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\Response;
 use Tests\Stubs\LabelStub;
 use Tests\TestCase;
@@ -14,7 +13,7 @@ use Tests\TestCase;
  */
 class LabelTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseTransactions;
 
     /**
      * Setup the test environment.
@@ -23,6 +22,15 @@ class LabelTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
+    }
+
+    /**
+     * Clean up the testing environment before the next test.
+     * @return void
+     */
+    public function tearDown()
+    {
+        parent::tearDown();
     }
 
     /**

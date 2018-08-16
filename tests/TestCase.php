@@ -3,20 +3,17 @@
 namespace Tests;
 
 use App\Entities\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Foundation\Testing\TestResponse;
-use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\Json\Resource;
 use Laravel\Passport\Passport;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class TestCase
  */
 abstract class TestCase extends BaseTestCase
 {
-    use RefreshDatabase;
-
     use CreatesApplication;
 
     const API_ROOT = '/api/v1/';
@@ -31,13 +28,21 @@ abstract class TestCase extends BaseTestCase
     protected function setUp()
     {
         parent::setUp();
-
-        $this->artisan("db:seed", ['--class' => 'InitDataSeeder']);
-        $this->artisan("db:seed", ['--class' => 'PermissionsSeeder']);
+        DB::beginTransaction();
 
         $this->authUser = User::whereFullName('admin')->first();
         Passport::actingAs($this->authUser);
         Resource::withoutWrapping();
+    }
+
+    /**
+     * Clean up the testing environment before the next test.
+     * @return void
+     */
+    protected function tearDown()
+    {
+        DB::rollBack();
+        parent::tearDown();
     }
 
     /**

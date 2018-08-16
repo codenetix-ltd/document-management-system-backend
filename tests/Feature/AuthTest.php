@@ -3,7 +3,7 @@
 namespace Tests\Feature;
 
 use App\Entities\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\Resources\Json\Resource;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Http\Response;
@@ -13,9 +13,8 @@ use Tests\CreatesApplication;
 
 class AuthTest extends BaseTestCase
 {
-    use RefreshDatabase;
-
     use CreatesApplication;
+    use DatabaseTransactions;
 
     /**
      * Setup the test environment.
@@ -26,8 +25,16 @@ class AuthTest extends BaseTestCase
         parent::setUp();
         Resource::withoutWrapping();
 
-        $this->artisan("db:seed");
         $this->artisan("dms:passport-init", []);
+    }
+
+    /**
+     * Clean up the testing environment before the next test.
+     * @return void
+     */
+    public function tearDown()
+    {
+        parent::tearDown();
     }
 
     /**

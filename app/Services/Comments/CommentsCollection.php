@@ -7,6 +7,9 @@ use Traversable;
 
 class CommentsCollection extends BaseCollection
 {
+    /**
+     * @var integer
+     */
     public $pageNumber;
 
     /**

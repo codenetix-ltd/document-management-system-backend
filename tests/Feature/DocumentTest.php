@@ -331,24 +331,14 @@ class DocumentTest extends TestCase
         $dv2->labels()->sync([$label1->id]);
         $dv3->labels()->sync([$label3->id]);
 
-        $this
+        $response = $this
             ->json('GET', self::PATH . '?filter[labelIds]='.$label1->id.','.$label2->id)
             ->assertStatus(200)
             ->assertJsonCount(2, 'data')
-            ->assertJson([
-                'data' => [
-                    [
-                        'actualVersion' => [
-                            'id' => $dv2->id
-                        ]
-                    ],
-                    [
-                        'actualVersion' => [
-                            'id' => $dv1->id
-                        ]
-                    ]
-                ]
-            ]);
+            ->decodeResponseJson();
+
+        $this->assertContains($response['data'][0]['actualVersion']['id'], [$dv1->id, $dv2->id]);
+        $this->assertContains($response['data'][1]['actualVersion']['id'], [$dv1->id, $dv2->id]);
     }
 
     /**

@@ -47,19 +47,16 @@ return [
             'driver' => 'local',
             'root' => storage_path('app'),
         ],
-
-        'public' => [
+        'document_attachments' => [
             'driver' => 'local',
-            'root' => storage_path('app/public'),
-            'url' => env('APP_URL').'/storage',
+            'root' => storage_path('app/document_attachments'),
+            'url' => env('APP_URL').'/storage/document_attachments',
             'visibility' => 'public',
         ],
-
         'seed' => [
             'driver' => 'local',
             'root' => base_path('database/seeds')
         ],
-
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_KEY'),
@@ -67,7 +64,6 @@ return [
             'region' => env('AWS_REGION'),
             'bucket' => env('AWS_BUCKET'),
         ],
-
     ],
 
     'paths' => [

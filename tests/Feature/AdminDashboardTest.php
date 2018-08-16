@@ -4,9 +4,11 @@ namespace Tests\Feature;
 
 use App\Entities\Document;
 use App\Entities\User;
+use App\Services\FileService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Resources\Json\Resource;
 use Illuminate\Http\Response;
+use Illuminate\Support\Carbon;
 use Tests\TestCase;
 
 class AdminDashboardTest extends TestCase
@@ -83,12 +85,12 @@ class AdminDashboardTest extends TestCase
 
         //@TODO disable some users
 
-        // 6 users already exists
+        // 2 users already exists
         $this
             ->json('GET', self::API_ROOT . 'dashboards/user?include=activeUsersTotal')
             ->assertStatus(Response::HTTP_OK)
             ->assertExactJson([
-                'activeUsersTotal' => 6
+                'activeUsersTotal' => 8
             ]);
     }
 
@@ -97,16 +99,88 @@ class AdminDashboardTest extends TestCase
      */
     public function testIncludeUniqueVisitorsTodayTotalGreaterThanZero()
     {
-        factory(User::class, 6)->create();
+        $users = factory(User::class, 6)->create();
 
-        //@TODO disable some users
-
-        // 6 users already exists
         $this
             ->json('GET', self::API_ROOT . 'dashboards/user?include=uniqueVisitorsTodayTotal')
             ->assertStatus(Response::HTTP_OK)
             ->assertExactJson([
-                'activeUsersTotal' => 6
+                'uniqueVisitorsTodayTotal' => 1
+            ]);
+
+        $users[0]->update(['lastActivityAt' => Carbon::yesterday()]);
+        $users->slice(2,2)->each(function($user){
+            $user->update(['lastActivityAt' => Carbon::now()]);
+        });
+
+        $this
+            ->json('GET', self::API_ROOT . 'dashboards/user?include=uniqueVisitorsTodayTotal')
+            ->assertStatus(Response::HTTP_OK)
+            ->assertExactJson([
+                'uniqueVisitorsTodayTotal' => 3
             ]);
     }
+
+    /**
+     * @return void
+     */
+    public function testIncludeDiskSpaceUsedTotalZero()
+    {
+        $disk = 'document_attachments';
+
+        /**
+         * @var $fileService FileService
+         */
+        $fileService = app()->make(FileService::class);
+        $fileService->cleanDisk($disk);
+
+        $this
+            ->json('GET', self::API_ROOT . 'dashboards/user?include=diskSpaceUsedTotal')
+            ->assertStatus(Response::HTTP_OK)
+            ->assertExactJson([
+                'diskSpaceUsedTotal' => 0
+            ]);
+    }
+
+    /**
+     * @return void
+     */
+    public function testIncludeDiskSpaceUsedTotalGreaterThanZero()
+    {
+        $disk = 'document_attachments';
+        $fakeFilePath = base_path('tests/FakeFiles/test.pdf');
+        $fakeFileSize = ceil(filesize($fakeFilePath) / 1024);
+
+        /**
+         * @var $fileService FileService
+         */
+        $fileService = app()->make(FileService::class);
+        $fileService->cleanDisk($disk);
+
+        copy($fakeFilePath, $fileService->getDiskPath($disk).'/1.pdf');
+        copy($fakeFilePath, $fileService->getDiskPath($disk).'/2.pdf');
+
+        $this
+            ->json('GET', self::API_ROOT . 'dashboards/user?include=diskSpaceUsedTotal')
+            ->assertStatus(Response::HTTP_OK)
+            ->assertExactJson([
+                'diskSpaceUsedTotal' => $fakeFileSize * 2
+            ]);
+    }
+
+    /**
+     * @return void
+     */
+    public function testIncludeActivitiesChart()
+    {
+        $this
+            ->json('GET', self::API_ROOT . 'dashboards/user?include=activitiesChart')
+            ->assertStatus(Response::HTTP_OK)
+            ->assertExactJson([
+                'activitiesChart' => [
+
+                ]
+            ]);
+    }
+
 }

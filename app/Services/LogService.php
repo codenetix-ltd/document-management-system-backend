@@ -3,8 +3,10 @@
 namespace App\Services;
 
 use App\Contracts\Helpers\ILogger;
+use App\Entities\User;
 use App\QueryParams\IQueryParamsObject;
 use App\Repositories\LogRepository;
+use Carbon\Carbon;
 
 class LogService implements ILogger
 {
@@ -17,6 +19,19 @@ class LogService implements ILogger
     public function __construct(LogRepository $repository)
     {
         $this->setRepository($repository);
+    }
+
+    /**
+     * @param User $user
+     * @param Carbon $date
+     * @return integer
+     */
+    public function getActionsTotal(Carbon $date, User $user = null): int {
+        if($user){
+            return $this->repository->getActionsTotalByUserIdAndDate($user->id, $date);
+        } else {
+            return $this->repository->getActionsTotalByDate($date);
+        }
     }
 
     /**

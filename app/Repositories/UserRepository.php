@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Entities\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -29,6 +30,23 @@ class UserRepository extends BaseRepository
         $entry->save();
 
         return $this->getInstance()->find($entry->id);
+    }
+
+    /**
+     * @param Carbon $date
+     * @return integer
+     */
+    public function getUniqueUsersTotalByDate(Carbon $date): int
+    {
+        return $this->getInstance()->where('last_activity_at', '>', $date)->count();
+    }
+
+    /**
+     * @param int $id
+     * @return Model|null
+     */
+    public function touchLastActivityDateTimeByUserId(int $id){
+        return $this->update(['lastActivityAt' => Carbon::now()], $id);
     }
 
     /**

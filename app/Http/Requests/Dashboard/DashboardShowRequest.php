@@ -25,6 +25,12 @@ class DashboardShowRequest extends ABaseAPIRequest
     protected function createQueryParamsObject(): IQueryParamsObject
     {
         return EmptyQueryParamsObject::makeFromRequest($this)
-            ->setAllowedIncludes(['activeDocumentsTotal', 'activeUsersTotal']);
+            ->setAllowedIncludes([
+                'activeDocumentsTotal',
+                'activeUsersTotal',
+                'uniqueVisitorsTodayTotal',
+                'diskSpaceUsedTotal',
+                'activitiesChart'
+            ]);
     }
 }

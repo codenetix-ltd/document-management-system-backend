@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\TouchCurrentUserLastActivityDateTime;
 use App\Http\Middleware\TrimStrings;
 use Illuminate\Auth\Middleware\Authenticate;
 use Illuminate\Auth\Middleware\AuthenticateWithBasicAuth;
@@ -28,6 +29,7 @@ class Kernel extends HttpKernel
         CheckForMaintenanceMode::class,
         ValidatePostSize::class,
         TrimStrings::class,
+        TouchCurrentUserLastActivityDateTime::class
         //\Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
     ];
 

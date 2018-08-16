@@ -33,12 +33,18 @@ class User extends Authenticatable implements Transformable, IHasTitle
      * @var array
      */
     protected $fillable = [
-        'fullName', 'email', 'avatarFileId'
+        'fullName', 'email', 'avatarFileId', 'lastActivityAt'
     ];
 
     protected $hidden = [
         'password'
     ];
+
+    /**
+     * @var array
+     */
+    protected $dates = ['lastActivityAt'];
+
 
     public function roles()
     {

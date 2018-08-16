@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\QueryParams\IQueryParamsObject;
 use App\Entities\Log;
 use App\QueryObject\LogListQueryObject;
+use Carbon\Carbon;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Model;
 
@@ -26,5 +27,22 @@ class LogRepository extends BaseRepository
     public function paginateList(IQueryParamsObject $queryParamsObject): LengthAwarePaginator
     {
         return (new LogListQueryObject($this->getInstance()->newQuery()))->applyQueryParams($queryParamsObject)->paginate();
+    }
+
+    /**
+     * @param int $userId
+     * @param Carbon $date
+     * @return mixed
+     */
+    public function getActionsTotalByUserIdAndDate(int $userId, Carbon $date): int {
+        return $this->getInstance()->where('user_id', $userId)->whereDate('created_at', $date)->count();
+    }
+
+    /**
+     * @param Carbon $date
+     * @return mixed
+     */
+    public function getActionsTotalByDate(Carbon $date): int {
+        return $this->getInstance()->whereDate('created_at', $date)->count();
     }
 }

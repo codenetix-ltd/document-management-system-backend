@@ -7,6 +7,7 @@ use App\Events\User\UserCreateEvent;
 use App\Events\User\UserDeleteEvent;
 use App\Events\User\UserUpdateEvent;
 use App\Repositories\UserRepository;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Event;
 
 class UserService
@@ -44,7 +45,7 @@ class UserService
     }
 
     /**
-     * @param array   $data
+     * @param array $data
      * @param integer $id
      * @return User
      */
@@ -59,5 +60,21 @@ class UserService
         Event::dispatch(new UserUpdateEvent($user));
 
         return $user;
+    }
+
+    /**
+     * @return integer
+     */
+    public function getUniqueVisitorsTodayTotal(): int
+    {
+        return $this->repository->getUniqueUsersTotalByDate(Carbon::today());
+    }
+
+    /**
+     * @param User $user
+     * @return
+     */
+    public function touchUserLastActivityDateTime(User $user){
+        return $this->repository->touchLastActivityDateTimeByUserId($user->id);
     }
 }

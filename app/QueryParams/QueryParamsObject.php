@@ -64,7 +64,10 @@ abstract class QueryParamsObject implements IQueryParamsObject
         }
 
         $sortData = $request->query('sort', []);
-        $includeData = $request->query('include', []);
+
+        $rawIncludeData = $request->query('include', '');
+        $includeData = explode(',', $rawIncludeData);
+
         $paginationData = $request->query('pagination', []);
 
         return new static($filterData, $sortData, $includeData, $paginationData);
@@ -115,7 +118,7 @@ abstract class QueryParamsObject implements IQueryParamsObject
      */
     public function getIncludeData(): array
     {
-        return array_intersect_assoc($this->includeData, $this->getAllowedIncludes());
+        return array_intersect($this->includeData, $this->getAllowedIncludes());
     }
 
     /**

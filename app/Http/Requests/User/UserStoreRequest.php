@@ -4,6 +4,7 @@ namespace App\Http\Requests\User;
 
 use App\Context\UserAuthorizeContext;
 use App\Http\Requests\ABaseAPIRequest;
+use App\Services\Authorizers\AAuthorizer;
 use App\Services\Authorizers\UserAuthorizer;
 use Illuminate\Support\Facades\Auth;
 
@@ -14,15 +15,15 @@ class UserStoreRequest extends ABaseAPIRequest
      *
      * @return boolean
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return $this->getAuthorizer()->check('user_create');
     }
 
     /**
-     * @return UserAuthorizer
+     * @return AAuthorizer
      */
-    protected function getAuthorizer()
+    protected function getAuthorizer(): AAuthorizer
     {
         return new UserAuthorizer(new UserAuthorizeContext(Auth::user()));
     }
@@ -32,7 +33,7 @@ class UserStoreRequest extends ABaseAPIRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'password' => 'required|string|max:255|min:6',

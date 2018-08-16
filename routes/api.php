@@ -14,6 +14,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::prefix('v1')->middleware('auth:api')->group(function () {
+    // Dashboards
+    Route::get('dashboards/{typeId}', 'DashboardsController@show');
+
     // Templates
     Route::resource('templates', 'TemplatesController');
     Route::get('templates/{templateId}/attributes', 'TemplatesController@attributes');

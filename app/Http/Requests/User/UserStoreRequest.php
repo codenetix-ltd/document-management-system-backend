@@ -21,7 +21,7 @@ class UserStoreRequest extends ABaseAPIRequest
     }
 
     /**
-     * @return UserAuthorizer
+     * @return AAuthorizer
      */
     protected function getAuthorizer(): AAuthorizer
     {

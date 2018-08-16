@@ -6,17 +6,64 @@ use App\Services\CommentService;
 
 class LazyComment implements IComment
 {
+    /**
+     * @var integer
+     */
     private $id;
+
+    /**
+     * @var integer
+     */
     private $userId;
+
+    /**
+     * @var integer
+     */
     private $commentableId;
+
+    /**
+     * @var string
+     */
     private $commentableType;
+
+    /**
+     * @var integer
+     */
     private $parentId;
+
+    /**
+     * @var string
+     */
     private $message;
+
+    /**
+     * @var integer
+     */
     private $createdAt;
+
+    /**
+     * @var integer
+     */
     private $updatedAt;
+
+    /**
+     * @var integer
+     */
     private $deletedAt;
+
+    /**
+     * @var CommentsCollection
+     */
     private $children;
+
+    /**
+     * @var IComment
+     */
     private $comment;
+
+    /**
+     * @var CommentService
+     */
     private $service;
 
     /**
@@ -25,7 +72,7 @@ class LazyComment implements IComment
      * @param CommentService $service
      * @param integer        $pageNumber
      */
-    public function __construct(IComment $comment, CommentService $service, $pageNumber = 1)
+    public function __construct(IComment $comment, CommentService $service, int $pageNumber = 1)
     {
         $this->service = $service;
         $this->comment = $comment;
@@ -110,10 +157,10 @@ class LazyComment implements IComment
 
     /**
      * Set comment parent id
-     * @param $parentId
+     * @param integer $parentId
      * @return void
      */
-    public function setParentId($parentId): void
+    public function setParentId(?int $parentId): void
     {
         $this->parentId = $parentId;
     }
@@ -129,7 +176,7 @@ class LazyComment implements IComment
 
     /**
      * Set comment message
-     * @param $message
+     * @param string $message
      * @return void
      */
     public function setMessage(string $message): void
@@ -148,7 +195,7 @@ class LazyComment implements IComment
 
     /**
      * Set created time
-     * @param $createdAt
+     * @param integer $createdAt
      * @return void
      */
     public function setCreatedAt(int $createdAt): void
@@ -167,7 +214,7 @@ class LazyComment implements IComment
 
     /**
      * Set updated time
-     * @param $updatedAt
+     * @param integer $updatedAt
      * @return void
      */
     public function setUpdatedAt(int $updatedAt): void
@@ -186,7 +233,7 @@ class LazyComment implements IComment
 
     /**
      * Set deleted time
-     * @param $deletedAt
+     * @param integer $deletedAt
      * @return void
      */
     public function setDeletedAt(?int $deletedAt): void
@@ -205,7 +252,7 @@ class LazyComment implements IComment
 
     /**
      * Set comment children
-     * @param CommentsCollection
+     * @param CommentsCollection $children
      * @return void
      */
     public function setChildren(CommentsCollection $children): void

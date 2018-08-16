@@ -28,7 +28,7 @@ Route::prefix('v1')->middleware('auth:api')->group(function () {
     Route::apiResource('types', 'TypesController', ['only' => ['index']]);
 
     // Permission groups
-    Route::get('permission-groups', 'PermissionGroupsController@index');
+    Route::get('permissionGroups', 'PermissionGroupsController@index');
 
     // Roles
     Route::apiResource('roles', 'RolesController');
@@ -54,10 +54,10 @@ Route::prefix('v1')->middleware('auth:api')->group(function () {
     Route::get('documents/{documentId}/versions', 'DocumentsController@versions');
 
     // Document versions
-    Route::get('document-versions/{documentVersionId}', 'DocumentVersionsController@show');
-    Route::post('document-versions', 'DocumentVersionsController@store');
-    Route::match(['PUT', 'PATCH'], 'document-versions/{documentVersionId}', 'DocumentVersionsController@update');
-    Route::delete('document-versions/{documentVersionId}', 'DocumentVersionsController@destroy');
+    Route::get('documentVersions/{documentVersionId}', 'DocumentVersionsController@show');
+    Route::post('documentVersions', 'DocumentVersionsController@store');
+    Route::match(['PUT', 'PATCH'], 'documentVersions/{documentVersionId}', 'DocumentVersionsController@update');
+    Route::delete('documentVersions/{documentVersionId}', 'DocumentVersionsController@destroy');
 
     // Files
     Route::post('files', 'FileController@uploadFile');

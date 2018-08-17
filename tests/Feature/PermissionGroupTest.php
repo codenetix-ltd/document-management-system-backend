@@ -30,7 +30,7 @@ class PermissionGroupTest extends TestCase
      */
     public function testPermissionGroupList()
     {
-        $response = $this->json('GET', self::API_ROOT . 'permission-groups');
+        $response = $this->json('GET', self::API_ROOT . 'permissionGroups');
         $response->assertStatus(200);
     }
 }

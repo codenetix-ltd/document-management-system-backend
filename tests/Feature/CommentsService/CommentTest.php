@@ -106,6 +106,7 @@ class CommentTest extends TestCase
             ->assertStatus(Response::HTTP_OK)
             ->assertJson($data);
     }
+
     /**
      * Comment not found
      * @return void

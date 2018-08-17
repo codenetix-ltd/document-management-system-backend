@@ -18,7 +18,7 @@ class AttributeTest extends TestCase
 {
     use DatabaseTransactions;
 
-    /** @var AttributeService $attributeService*/
+    /** @var AttributeService $attributeService */
     private $attributeService;
 
     /**

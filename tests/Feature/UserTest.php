@@ -15,6 +15,7 @@ use Tests\TestCase;
 class UserTest extends TestCase
 {
     use DatabaseTransactions;
+
     /**
      * Setup the test environment.
      * @return void
@@ -92,7 +93,7 @@ class UserTest extends TestCase
     {
         /** @var User $user */
         $userStub = new UserStub();
-        $response = $this->json('POST', self::API_ROOT.'users', $userStub->buildRequest([
+        $response = $this->json('POST', self::API_ROOT . 'users', $userStub->buildRequest([
             'password' => 'uSERpAsSWOrd',
             'passwordConfirmation' => 'uSERpAsSWOrd',
         ]));

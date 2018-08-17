@@ -11,6 +11,7 @@ use Tests\TestCase;
 class PermissionGroupTest extends TestCase
 {
     use DatabaseTransactions;
+
     /**
      * Setup the test environment.
      *

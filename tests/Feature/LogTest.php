@@ -34,6 +34,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 class LogTest extends TestCase
 {
     use DatabaseTransactions;
+
     /**
      * Setup the test environment.
      * @return void
@@ -64,7 +65,7 @@ class LogTest extends TestCase
 
         $response = $this
             ->actingAs($this->authUser)
-            ->json('GET', self::API_ROOT. 'logs?sort[body]=desc')
+            ->json('GET', self::API_ROOT . 'logs?sort[body]=desc')
             ->assertStatus(Response::HTTP_OK);
 
         $this->assetJsonPaginationStructure($response);
@@ -121,7 +122,7 @@ class LogTest extends TestCase
     {
         $u1 = (new UserStub(['full_name' => 'a'], true))->getModel();
         $u2 = (new UserStub(['full_name' => 'z'], true))->getModel();
-        
+
         factory(Log::class)->create(['user_id' => $u1->id]);
         factory(Log::class)->create(['user_id' => $u2->id]);
 

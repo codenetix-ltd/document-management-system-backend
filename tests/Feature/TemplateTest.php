@@ -14,6 +14,7 @@ use Tests\TestCase;
 class TemplateTest extends TestCase
 {
     use DatabaseTransactions;
+
     /**
      * Setup the test environment.
      * @return void

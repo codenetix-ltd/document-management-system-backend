@@ -1,6 +1,6 @@
 <?php
 
-namespace App\System\AuthBuilders;
+namespace App\Services\System\AuthBuilders;
 
 use App\Context\BlankAuthorizeContext;
 use App\Context\DocumentAuthorizeContext;

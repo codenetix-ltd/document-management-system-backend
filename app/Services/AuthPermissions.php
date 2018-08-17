@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Repositories\PermissionGroupRepository;
-use App\System\AuthBuilders\AuthorizerFactory;
+use App\Services\System\AuthBuilders\AuthorizerFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class AuthPermissions

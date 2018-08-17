@@ -5,8 +5,6 @@ namespace App\Entities;
 use App\Contracts\Entity\IHasTitle;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
-use Prettus\Repository\Contracts\Transformable;
-use Prettus\Repository\Traits\TransformableTrait;
 
 /**
  * Class Label.
@@ -16,9 +14,8 @@ use Prettus\Repository\Traits\TransformableTrait;
  * @property Carbon $createdAt
  * @property Carbon $updatedAt
  */
-class Label extends BaseModel implements Transformable, IHasTitle
+class Label extends BaseModel implements IHasTitle
 {
-    use TransformableTrait;
 
     /**
      * The attributes that are mass assignable.

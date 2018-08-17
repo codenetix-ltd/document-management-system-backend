@@ -2,10 +2,7 @@
 
 namespace App\Entities;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
-use Prettus\Repository\Contracts\Transformable;
-use Prettus\Repository\Traits\TransformableTrait;
 
 /**
  * Class Permission
@@ -17,9 +14,8 @@ use Prettus\Repository\Traits\TransformableTrait;
  * @property Collection|AccessType[] $accessTypes
  * @property Collection|Role[] $roles
  */
-class Permission extends BaseModel implements Transformable
+class Permission extends BaseModel
 {
-    use TransformableTrait;
 
     public $timestamps = false;
     public $enforceCamelCase = false;

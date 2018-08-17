@@ -6,8 +6,6 @@ use App\Contracts\Entity\IHasTitle;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
-use Prettus\Repository\Contracts\Transformable;
-use Prettus\Repository\Traits\TransformableTrait;
 
 /**
  * Class Template.
@@ -18,9 +16,8 @@ use Prettus\Repository\Traits\TransformableTrait;
  * @property Carbon $createdAt
  * @property Carbon $updatedAt
  */
-class Template extends BaseModel implements Transformable, IHasTitle
+class Template extends BaseModel implements IHasTitle
 {
-    use TransformableTrait;
     public $enforceCamelCase = false;
     /**
      * The attributes that are mass assignable.

@@ -4,8 +4,7 @@ namespace App\Entities;
 
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
-use Prettus\Repository\Contracts\Transformable;
-use Prettus\Repository\Traits\TransformableTrait;
+
 
 /**
  * Class Role.
@@ -19,9 +18,8 @@ use Prettus\Repository\Traits\TransformableTrait;
  * @property Carbon $createdAt
  * @property Carbon $updatedAt
  */
-class Role extends BaseModel implements Transformable
+class Role extends BaseModel
 {
-    use TransformableTrait;
 
     protected $fillable = ['name'];
     public $enforceCamelCase = false;

@@ -4,8 +4,6 @@ namespace App\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
-use Prettus\Repository\Contracts\Transformable;
-use Prettus\Repository\Traits\TransformableTrait;
 
 /**
  * Class PermissionGroup.
@@ -13,9 +11,8 @@ use Prettus\Repository\Traits\TransformableTrait;
  * @property Collection|Permission[] $permissions
  * @property Collection|Qualifier[] $qualifiers
  */
-class PermissionGroup extends BaseModel implements Transformable
+class PermissionGroup extends BaseModel
 {
-    use TransformableTrait;
 
     public $timestamps = false;
 

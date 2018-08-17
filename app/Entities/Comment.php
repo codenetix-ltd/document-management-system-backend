@@ -4,8 +4,6 @@ namespace App\Entities;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Prettus\Repository\Contracts\Transformable;
-use Prettus\Repository\Traits\TransformableTrait;
 
 /**
  * Class Comment.
@@ -20,10 +18,9 @@ use Prettus\Repository\Traits\TransformableTrait;
  * @property Carbon $updated_at
  * @property Carbon $deleted_at
  */
-class Comment extends BaseEntity implements Transformable
+class Comment extends BaseEntity
 {
     use SoftDeletes;
-    use TransformableTrait;
 
     /**
      * @var string

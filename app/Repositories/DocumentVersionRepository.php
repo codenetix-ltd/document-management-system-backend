@@ -5,10 +5,8 @@ namespace App\Repositories;
 use App\QueryParams\DocumentIdCriteria;
 use App\QueryParams\IQueryParamsObject;
 use App\Entities\DocumentVersion;
-use App\QueryObject\DocumentListQueryObject;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Model;
-use Prettus\Repository\Exceptions\RepositoryException;
 
 class DocumentVersionRepository extends BaseRepository
 {

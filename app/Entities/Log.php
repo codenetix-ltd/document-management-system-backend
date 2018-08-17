@@ -3,9 +3,6 @@
 namespace App\Entities;
 
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Model;
-use Prettus\Repository\Contracts\Transformable;
-use Prettus\Repository\Traits\TransformableTrait;
 
 /**
  * Class Log.
@@ -20,9 +17,8 @@ use Prettus\Repository\Traits\TransformableTrait;
  * @property Carbon $createdAt
  * @property Carbon $updatedAt
  */
-class Log extends BaseModel implements Transformable
+class Log extends BaseModel
 {
-    use TransformableTrait;
 
     /**
      * The attributes that are mass assignable.

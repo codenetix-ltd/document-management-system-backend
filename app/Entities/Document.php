@@ -4,11 +4,8 @@ namespace App\Entities;
 
 use App\Contracts\Entity\IHasTitle;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Collection;
-use Prettus\Repository\Contracts\Transformable;
-use Prettus\Repository\Traits\TransformableTrait;
 
 /**
  * Class Document.
@@ -28,9 +25,8 @@ use Prettus\Repository\Traits\TransformableTrait;
  * @property Carbon $deletedAt
  * @property mixed id
  */
-class Document extends BaseModel implements Transformable, IHasTitle
+class Document extends BaseModel implements IHasTitle
 {
-    use TransformableTrait;
     use SoftDeletes;
 
     /**

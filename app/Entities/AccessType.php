@@ -3,8 +3,6 @@
 namespace App\Entities;
 
 use Carbon\Carbon;
-use Prettus\Repository\Contracts\Transformable;
-use Prettus\Repository\Traits\TransformableTrait;
 
 /**
  * Class AccessType
@@ -14,10 +12,8 @@ use Prettus\Repository\Traits\TransformableTrait;
  * @property Carbon $createdAt
  * @property Carbon $updatedAt
  */
-class AccessType extends BaseModel implements Transformable
+class AccessType extends BaseModel
 {
-    use TransformableTrait;
-
     protected $primaryKey = 'id';
     public $incrementing = false;
     public $enforceCamelCase = false;

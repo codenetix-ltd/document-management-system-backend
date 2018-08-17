@@ -32,6 +32,15 @@ class DocumentTest extends TestCase
     }
 
     /**
+     * Clean up the testing environment before the next test.
+     * @return void
+     */
+    public function tearDown()
+    {
+        parent::tearDown();
+    }
+
+    /**
      * Save document
      * @throws \Exception The exception that triggered the error response (if applicable).
      * @return void
@@ -73,7 +82,7 @@ class DocumentTest extends TestCase
         /** @var User $newOwner */
         $newOwner = factory(User::class)->create();
 
-        $response = $this->json('PATCH', self::PATH .'/' . $stub->getModel()->id, $stub->buildRequest([
+        $response = $this->json('PATCH', self::PATH . '/' . $stub->getModel()->id, $stub->buildRequest([
             'ownerId' => $newOwner->id
         ]));
 
@@ -95,7 +104,7 @@ class DocumentTest extends TestCase
     {
         $stub = (new DocumentStub([], true));
 
-        $response = $this->json('GET', self::PATH .'/' . $stub->getModel()->id);
+        $response = $this->json('GET', self::PATH . '/' . $stub->getModel()->id);
         $response->assertStatus(Response::HTTP_OK);
         $response->assertExactJson($stub->buildResponse());
     }
@@ -109,7 +118,7 @@ class DocumentTest extends TestCase
         factory(DocumentVersion::class)->create(['name' => 'abc']);
         /** @var DocumentVersion $dv */
         $dv = factory(DocumentVersion::class)->create(['name' => 'xyz', 'is_actual' => false]);
-        factory(DocumentVersion::class)->create(['name' => 'eyz', 'document_id' => $dv->documentId ,'version_name' => 2, 'is_actual' => true]);
+        factory(DocumentVersion::class)->create(['name' => 'eyz', 'document_id' => $dv->documentId, 'version_name' => 2, 'is_actual' => true]);
 
         $response = $this->json('GET', self::PATH . '?sort[actualVersion.name]=desc');
 
@@ -156,7 +165,7 @@ class DocumentTest extends TestCase
         factory(DocumentVersion::class)->create(['template_id' => $t1->id]);
         /** @var DocumentVersion $dv */
         $dv = factory(DocumentVersion::class)->create(['is_actual' => false, 'template_id' => $t1->id]);
-        factory(DocumentVersion::class)->create(['document_id' => $dv->documentId ,'version_name' => 2, 'is_actual' => true, 'template_id' => $t2->id]);
+        factory(DocumentVersion::class)->create(['document_id' => $dv->documentId, 'version_name' => 2, 'is_actual' => true, 'template_id' => $t2->id]);
 
         $response = $this->json('GET', self::PATH . '?sort[actualVersion.template.name]=desc');
 
@@ -176,7 +185,7 @@ class DocumentTest extends TestCase
      */
     public function testDocumentGetNotFound()
     {
-        $response = $this->json('GET', self::PATH .'/0');
+        $response = $this->json('GET', self::PATH . '/0');
 
         $response->assertStatus(404);
     }
@@ -193,7 +202,7 @@ class DocumentTest extends TestCase
         $oldVersion = $document->documentActualVersion;
         $newDocumentVersionStub = new DocumentVersionStub();
 
-        $response = $this->json('PUT', self::PATH .'/' . $document->id, $documentStub->buildRequest([
+        $response = $this->json('PUT', self::PATH . '/' . $document->id, $documentStub->buildRequest([
             'createNewVersion' => false,
             'actualVersion' => $newDocumentVersionStub->buildRequest()
         ]));
@@ -228,7 +237,7 @@ class DocumentTest extends TestCase
         $oldVersion = $document->documentActualVersion;
         $newDocumentVersionStub = new DocumentVersionStub();
 
-        $response = $this->json('PUT', self::PATH .'/' . $document->id, $documentStub->buildRequest([
+        $response = $this->json('PUT', self::PATH . '/' . $document->id, $documentStub->buildRequest([
             'createNewVersion' => true,
             'actualVersion' => $newDocumentVersionStub->buildRequest()
         ]));
@@ -297,12 +306,12 @@ class DocumentTest extends TestCase
     public function testListOfDocumentsWithPaginationWithFiltersSuccess()
     {
 
-        factory(DocumentVersion::class)->create(['name'=> 'not_match']);
-        factory(DocumentVersion::class)->create(['name'=> 'not_match_1']);
-        factory(DocumentVersion::class)->create(['name'=> 'not_match_2']);
+        factory(DocumentVersion::class)->create(['name' => 'not_match']);
+        factory(DocumentVersion::class)->create(['name' => 'not_match_1']);
+        factory(DocumentVersion::class)->create(['name' => 'not_match_2']);
 
-        factory(DocumentVersion::class)->create(['name'=> 'match_1']);
-        factory(DocumentVersion::class)->create(['name'=> 'match_2']);
+        factory(DocumentVersion::class)->create(['name' => 'match_1']);
+        factory(DocumentVersion::class)->create(['name' => 'match_2']);
 
         $responseArr = $this->json('GET', self::PATH . '?filter[name]=match')->decodeResponseJson();
 
@@ -332,7 +341,7 @@ class DocumentTest extends TestCase
         $dv3->labels()->sync([$label3->id]);
 
         $response = $this
-            ->json('GET', self::PATH . '?filter[labelIds]='.$label1->id.','.$label2->id)
+            ->json('GET', self::PATH . '?filter[labelIds]=' . $label1->id . ',' . $label2->id)
             ->assertStatus(200)
             ->assertJsonCount(2, 'data')
             ->decodeResponseJson();
@@ -359,7 +368,7 @@ class DocumentTest extends TestCase
         /** @var DocumentVersion $documentVersion */
         $documentVersion = $documentVersionStub->getModel();
 
-        $response = $this->json('PATCH', self::PATH .'/' . $document->id, [
+        $response = $this->json('PATCH', self::PATH . '/' . $document->id, [
             'actualVersionId' => $documentVersion->id,
         ]);
         /** @var Document $updatedDocument */
@@ -399,12 +408,12 @@ class DocumentTest extends TestCase
     {
         $docCollection = new Collection();
 
-        for ($i=0; $i<3; ++$i) {
+        for ($i = 0; $i < 3; ++$i) {
             $docCollection->push((new DocumentStub([], true))->getModel());
         }
 
         $this
-            ->json('DELETE', self::PATH.'?ids='.$docCollection->implode('id', ','))
+            ->json('DELETE', self::PATH . '?ids=' . $docCollection->implode('id', ','))
             ->assertStatus(204);
 
         $docCollection->each(function (Document $item) {
@@ -421,7 +430,7 @@ class DocumentTest extends TestCase
     {
         $documentsStubCollection = new Collection();
 
-        for ($i=0; $i<3; ++$i) {
+        for ($i = 0; $i < 3; ++$i) {
             $documentsStubCollection->push(new DocumentStub([], true));
         }
 
@@ -464,7 +473,7 @@ class DocumentTest extends TestCase
         $response = $this->json(
             'PATCH',
             self::PATH . '?ids=1,2',
-            [[],[],[]]
+            [[], [], []]
         );
         $response->assertStatus(Response::HTTP_FORBIDDEN);
     }

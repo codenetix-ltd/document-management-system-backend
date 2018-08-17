@@ -23,6 +23,15 @@ class FileTest extends TestCase
     }
 
     /**
+     * Clean up the testing environment before the next test.
+     * @return void
+     */
+    public function tearDown()
+    {
+        parent::tearDown();
+    }
+
+    /**
      * Upload file
      * @throws \Exception The exception that triggered the error response (if applicable).
      * @return void

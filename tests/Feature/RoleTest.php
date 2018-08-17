@@ -3,8 +3,7 @@
 namespace Tests\Feature;
 
 use App\Entities\Role;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Http\Resources\Json\Resource;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\Response;
 use Tests\Stubs\RoleStub;
 use Tests\TestCase;
@@ -14,7 +13,7 @@ use Tests\TestCase;
  */
 class RoleTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseTransactions;
 
     /**
      * Setup the test environment.
@@ -23,6 +22,15 @@ class RoleTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
+    }
+
+    /**
+     * Clean up the testing environment before the next test.
+     * @return void
+     */
+    public function tearDown()
+    {
+        parent::tearDown();
     }
 
     /**
@@ -59,7 +67,7 @@ class RoleTest extends TestCase
                 'permissionValues' => [],
                 'createdAt' => $role->createdAt->timestamp,
                 'updatedAt' => $role->updatedAt->timestamp,
-                'authPermissions' => ['role_view' , 'role_update',  'role_delete', 'role_create', 'role_toggle']
+                'authPermissions' => ['role_view', 'role_update', 'role_delete', 'role_create', 'role_toggle']
             ]);
     }
 

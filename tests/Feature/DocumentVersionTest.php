@@ -4,8 +4,7 @@ namespace Tests\Feature;
 
 use App\Entities\Document;
 use App\Entities\DocumentVersion;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Http\Resources\Json\Resource;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\Response;
 use Tests\Stubs\DocumentStub;
 use Tests\Stubs\DocumentVersionStub;
@@ -16,7 +15,7 @@ use Tests\TestCase;
  */
 class DocumentVersionTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseTransactions;
 
     /**
      * Setup the test environment.
@@ -25,6 +24,15 @@ class DocumentVersionTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
+    }
+
+    /**
+     * Clean up the testing environment before the next test.
+     * @return void
+     */
+    public function tearDown()
+    {
+        parent::tearDown();
     }
 
     /**

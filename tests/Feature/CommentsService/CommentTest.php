@@ -5,7 +5,7 @@ namespace Tests\Feature\CommentsService;
 use App\Entities\Comment;
 use App\Entities\Document;
 use App\Entities\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\Resources\Json\Resource;
 use Illuminate\Http\Response;
 use Tests\TestCase;
@@ -13,8 +13,7 @@ use Faker\Factory as Faker;
 
 class CommentTest extends TestCase
 {
-    use RefreshDatabase;
-
+    use DatabaseTransactions;
     /**
      * @var Faker $faker
      */
@@ -29,6 +28,15 @@ class CommentTest extends TestCase
         parent::setUp();
         $this->faker = Faker::create();
         Resource::withoutWrapping();
+    }
+
+    /**
+     * Clean up the testing environment before the next test.
+     * @return void
+     */
+    public function tearDown()
+    {
+        parent::tearDown();
     }
 
     /**
@@ -98,6 +106,7 @@ class CommentTest extends TestCase
             ->assertStatus(Response::HTTP_OK)
             ->assertJson($data);
     }
+
     /**
      * Comment not found
      * @return void

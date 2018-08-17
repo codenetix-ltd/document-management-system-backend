@@ -19,8 +19,6 @@ use App\Events\User\UserCreateEvent;
 use App\Events\User\UserDeleteEvent;
 use App\Events\User\UserUpdateEvent;
 use App\Services\DocumentService;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Http\Resources\Json\Resource;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\App;
 use Tests\Stubs\DocumentStub;
@@ -28,13 +26,14 @@ use Tests\Stubs\LabelStub;
 use Tests\Stubs\TemplateStub;
 use Tests\Stubs\UserStub;
 use Tests\TestCase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 /**
  * Created by Codenetix team <support@codenetix.com>
  */
 class LogTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseTransactions;
 
     /**
      * Setup the test environment.
@@ -43,6 +42,15 @@ class LogTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
+    }
+
+    /**
+     * Clean up the testing environment before the next test.
+     * @return void
+     */
+    public function tearDown()
+    {
+        parent::tearDown();
     }
 
     /**
@@ -57,7 +65,7 @@ class LogTest extends TestCase
 
         $response = $this
             ->actingAs($this->authUser)
-            ->json('GET', self::API_ROOT. 'logs?sort[body]=desc')
+            ->json('GET', self::API_ROOT . 'logs?sort[body]=desc')
             ->assertStatus(Response::HTTP_OK);
 
         $this->assetJsonPaginationStructure($response);
@@ -114,7 +122,7 @@ class LogTest extends TestCase
     {
         $u1 = (new UserStub(['full_name' => 'a'], true))->getModel();
         $u2 = (new UserStub(['full_name' => 'z'], true))->getModel();
-        
+
         factory(Log::class)->create(['user_id' => $u1->id]);
         factory(Log::class)->create(['user_id' => $u2->id]);
 

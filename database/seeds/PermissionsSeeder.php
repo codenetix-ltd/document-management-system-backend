@@ -18,6 +18,16 @@ class PermissionsSeeder extends Seeder
      */
     public function run()
     {
+
+        Protector::accessLevelGroups(['name' => 'simple'], function(){
+            
+        });
+
+        Protector::group(['name' => 'document'], function($protector){
+            $protector->permission('update')->label('Update document');
+        });
+
+
         $permissionService = app()->make(PermissionService::class);
         $permissionGroups = $permissionService->getPermissionsGroupsFromConfig();
 
